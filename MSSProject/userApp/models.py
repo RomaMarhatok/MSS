@@ -17,7 +17,7 @@ class UserPersonalInfo(models.Model):
     image = models.ImageField("user image", upload_to="")
     first_name = models.CharField("first name", max_length=100)
     second_name = models.CharField("second name", max_length=100)
-    patronymic = models.CharField("patronymic", max_length=100)
+    patronymic = models.CharField("patronymic", max_length=100, blank=True)
     email = models.EmailField("email", max_length=100)
 
 
