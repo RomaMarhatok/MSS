@@ -11,6 +11,7 @@ djangorestframework = "^3.13.1"
 django-cors-headers = "^3.13.0"
 psycopg2-binary = "^2.9.5"
 load-dotenv = "^0.1.0"
+Pillow = "^9.3.0"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^5.0.4"
