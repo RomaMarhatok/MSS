@@ -12,6 +12,8 @@ django-cors-headers = "^3.13.0"
 psycopg2-binary = "^2.9.5"
 load-dotenv = "^0.1.0"
 Pillow = "^9.3.0"
+Faker = "^15.3.2"
+factory-boy = "^3.2.1"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^5.0.4"
