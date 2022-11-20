@@ -9,7 +9,7 @@ from ..factories.user_factory import UserFactory
 fake = Faker()
 
 
-class UserDocument(DjangoModelFactory):
+class UserDocumentFactory(DjangoModelFactory):
     class Meta:
         model = DocumentType
 
