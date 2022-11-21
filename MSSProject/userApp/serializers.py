@@ -18,7 +18,7 @@ class DocumentTypeSerializer(ModelSerializer):
 class UserSerializer(ModelSerializer):
     class Meta:
         model = User
-        fields = ("username", "login", "password")
+        fields = ("username", "login", "password", "role")
 
 
 class UserPersonalInfoSerializer(ModelSerializer):
