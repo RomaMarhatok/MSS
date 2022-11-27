@@ -2,7 +2,7 @@ from factory import SubFactory
 from factory.django import DjangoModelFactory
 from faker import Faker
 
-from ...models import (Doctors, DoctorTypes, ImageForAnalyzes, Patients, Roles,
+from ...models import (Doctor, DoctorTypes, ImageForAnalyzes, Patient, Roles,
                        TreatmentsHistory, User, UserDocument, UserPersonalInfo)
 
 fake = Faker()
@@ -57,7 +57,7 @@ class DoctorTypesFactory(DjangoModelFactory):
 
 class DoctorsFactory(DjangoModelFactory):
     class Meta:
-        model = Doctors
+        model = Doctor
         django_get_or_create = ("user",)
 
     user = SubFactory(UserFactory)
@@ -66,13 +66,13 @@ class DoctorsFactory(DjangoModelFactory):
 
 class PatinesFactory(DjangoModelFactory):
     class Meta:
-        model = Patients
+        model = Patient
         django_get_or_create = ("user",)
 
     user = SubFactory(UserFactory)
 
 
-class ImageForAnalyzes(DjangoModelFactory):
+class ImageForAnalyzesFactory(DjangoModelFactory):
     class Meta:
         model = ImageForAnalyzes
 
@@ -80,14 +80,12 @@ class ImageForAnalyzes(DjangoModelFactory):
     description = fake.text()
 
 
-class TreatmentsHistory(DjangoModelFactory):
+class TreatmentsHistoryFactory(DjangoModelFactory):
     class Meta:
         model = TreatmentsHistory
-        django_get_or_create = (
-            "doctors",
-            "user",
-        )
+        django_get_or_create = ("doctor", "patient", "image")
 
     description = fake.text()
     doctor = SubFactory(DoctorsFactory)
-    user = SubFactory(UserFactory)
+    patient = SubFactory(Patient)
+    image = SubFactory(ImageForAnalyzesFactory)
