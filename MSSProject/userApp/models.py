@@ -50,3 +50,4 @@ class TreatmentsHistory(models.Model):
     description = models.TextField()
     doctor = models.ForeignKey(Doctors, on_delete=models.SET_NULL, null=True)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    image = models.ForeignKey(ImageForAnalyzes, on_delete=models.SET_NULL, null=True)
