@@ -3,12 +3,14 @@ from typing import Any, Optional
 from django.core.management.base import BaseCommand
 from faker import Faker
 
-from ...tests.factories.document_type_factory import DocumentTypeFactory
-from ...tests.factories.role_factory import RoleFactory
-from ...tests.factories.user_document_factory import UserDocumentFactory
-from ...tests.factories.user_factory import UserFactory
-from ...tests.factories.user_personal_info_factory import \
-    UserPersonalInfoFactory
+from ...tests.factories.user_app_factories import (DoctorsFactory,
+                                                   DoctorTypesFactory,
+                                                   ImageForAnalyzesFactory,
+                                                   PatinesFactory, RoleFactory,
+                                                   TreatmentsHistoryFactory,
+                                                   UserDocumentFactory,
+                                                   UserFactory,
+                                                   UserPersonalInfoFactory)
 
 fake = Faker()
 
@@ -25,7 +27,6 @@ class Command(BaseCommand):
                 password=fake.password(),
                 role=role,
             )
-            document_type = DocumentTypeFactory(document_type=fake.pystr())
             UserPersonalInfoFactory(
                 user=user,
                 image=fake.image_url(),
@@ -34,4 +35,25 @@ class Command(BaseCommand):
                 patronymic=fake.last_name(),
                 email=fake.email(),
             )
-            UserDocumentFactory(content=fake.pystr(), doctype=document_type, user=user)
+            UserDocumentFactory(content=fake.pystr(), user=user)
+            doctor_type = DoctorTypesFactory(doctor_type=fake.pystr())
+
+            doctor_user = UserFactory(
+                username=fake.profile()["username"],
+                login=fake.pystr(),
+                password=fake.password(),
+                role=role,
+            )
+
+            doctor = DoctorsFactory(user=doctor_user, doctor_type=doctor_type)
+            patient = PatinesFactory(user=user)
+
+            img_for_analyzes = ImageForAnalyzesFactory(
+                image=fake.image_url(), description=fake.text()
+            )
+            TreatmentsHistoryFactory(
+                description=fake.text(),
+                doctor=doctor,
+                patient=patient,
+                image=img_for_analyzes,
+            )
