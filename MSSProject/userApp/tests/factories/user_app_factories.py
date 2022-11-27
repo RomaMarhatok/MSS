@@ -2,8 +2,17 @@ from factory import SubFactory
 from factory.django import DjangoModelFactory
 from faker import Faker
 
-from ...models import (Doctor, DoctorTypes, ImageForAnalyzes, Patient, Roles,
-                       TreatmentsHistory, User, UserDocument, UserPersonalInfo)
+from ...models import (
+    Doctor,
+    DoctorTypes,
+    ImageForAnalyzes,
+    Patient,
+    Roles,
+    TreatmentsHistory,
+    User,
+    UserDocument,
+    UserPersonalInfo,
+)
 
 fake = Faker()
 
@@ -20,7 +29,6 @@ class UserFactory(DjangoModelFactory):
         model = User
         django_get_or_create = ("role",)
 
-    username = fake.profile()["username"]
     login = fake.pystr()
     password = fake.password()
     role = SubFactory(RoleFactory)

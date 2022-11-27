@@ -6,8 +6,7 @@ class Roles(models.Model):
 
 
 class User(models.Model):
-    username = models.CharField("user name", max_length=100, unique=True)
-    login = models.CharField("user login", max_length=100)
+    login = models.CharField("user login", max_length=100, unique=True)
     password = models.CharField("user password", max_length=100)
     role = models.ForeignKey(Roles, on_delete=models.SET_NULL, null=True)
 
