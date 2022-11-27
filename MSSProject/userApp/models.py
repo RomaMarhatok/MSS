@@ -27,7 +27,9 @@ class UserDocument(models.Model):
 
 
 class DoctorTypes(models.Model):
-    doctor_type = models.TextField("doctor profession")
+    doctor_type = models.CharField(
+        "doctor profession name", max_length=100, unique=True
+    )
 
 
 class Doctors(models.Model):
