@@ -1,15 +1,15 @@
 from django.db import models
 
 
+class Roles(models.Model):
+    name = models.CharField("role name", max_length=100, unique=True)
+
+
 class User(models.Model):
     username = models.CharField("user name", max_length=100, unique=True)
     login = models.CharField("user login", max_length=100)
     password = models.CharField("user password", max_length=100)
-    role = models.ForeignKey("Roles", on_delete=models.SET_NULL, null=True)
-
-
-class Roles(models.Model):
-    name = models.CharField("role name", max_length=100, unique=True)
+    role = models.ForeignKey(Roles, on_delete=models.SET_NULL, null=True)
 
 
 class UserPersonalInfo(models.Model):
@@ -21,13 +21,32 @@ class UserPersonalInfo(models.Model):
     email = models.EmailField("email", max_length=100)
 
 
-class DocumentType(models.Model):
-    document_type = models.CharField("document type", max_length=20)
-
-
 class UserDocument(models.Model):
     content = models.TextField("document content")
-    doctype = models.ForeignKey(
-        DocumentType, on_delete=models.SET_NULL, null=True, blank=True
-    )
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+
+class DoctorTypes(models.Model):
+    doctor_type = models.TextField("doctor profession")
+
+
+class Doctors(models.Model):
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    doctor_type_id = models.ForeignKey(
+        DoctorTypes, on_delete=models.SET_NULL, null=True
+    )
+
+
+class Patients(models.Model):
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+
+
+class ImageForAnalyzes(models.Model):
+    image = models.ImageField()
+    description = models.TextField()
+
+
+class TreatmentsHistory(models.Model):
+    description = models.TextField()
+    doctor_id = models.ForeignKey(Doctors, on_delete=models.SET_NULL, null=True)
+    user_id = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
