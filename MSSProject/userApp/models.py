@@ -32,12 +32,12 @@ class DoctorTypes(models.Model):
     )
 
 
-class Doctors(models.Model):
+class Doctor(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     doctor_type = models.ForeignKey(DoctorTypes, on_delete=models.SET_NULL, null=True)
 
 
-class Patients(models.Model):
+class Patient(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
@@ -48,6 +48,6 @@ class ImageForAnalyzes(models.Model):
 
 class TreatmentsHistory(models.Model):
     description = models.TextField()
-    doctor = models.ForeignKey(Doctors, on_delete=models.SET_NULL, null=True)
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    doctor = models.ForeignKey(Doctor, on_delete=models.SET_NULL, null=True)
+    patient = models.ForeignKey(Patient, on_delete=models.SET_NULL, null=True)
     image = models.ForeignKey(ImageForAnalyzes, on_delete=models.SET_NULL, null=True)
