@@ -27,18 +27,18 @@ class UserDocument(models.Model):
 
 
 class DoctorTypes(models.Model):
-    doctor_type = models.TextField("doctor profession")
-
-
-class Doctors(models.Model):
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    doctor_type_id = models.ForeignKey(
-        DoctorTypes, on_delete=models.SET_NULL, null=True
+    doctor_type = models.CharField(
+        "doctor profession name", max_length=100, unique=True
     )
 
 
-class Patients(models.Model):
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+class Doctor(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    doctor_type = models.ForeignKey(DoctorTypes, on_delete=models.SET_NULL, null=True)
+
+
+class Patient(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
 class ImageForAnalyzes(models.Model):
@@ -48,5 +48,6 @@ class ImageForAnalyzes(models.Model):
 
 class TreatmentsHistory(models.Model):
     description = models.TextField()
-    doctor_id = models.ForeignKey(Doctors, on_delete=models.SET_NULL, null=True)
-    user_id = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    doctor = models.ForeignKey(Doctor, on_delete=models.SET_NULL, null=True)
+    patient = models.ForeignKey(Patient, on_delete=models.SET_NULL, null=True)
+    image = models.ForeignKey(ImageForAnalyzes, on_delete=models.SET_NULL, null=True)
