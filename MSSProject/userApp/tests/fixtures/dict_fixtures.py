@@ -12,7 +12,6 @@ def role_fixture() -> dict:
 @pytest.fixture
 def user_fixture(role_fixture) -> dict:
     return {
-        "username": fake.profile()["username"],
         "login": fake.pystr(),
         "password": fake.password(),
         "role": role_fixture,
@@ -46,7 +45,10 @@ def doctor_types_fixture():
 
 @pytest.fixture
 def doctor_fixture(user_fixture, doctor_types_fixture):
-    return {"user": user_fixture, "doctor_type": doctor_types_fixture}
+    return {
+        "user": user_fixture,
+        "doctor_type": [doctor_types_fixture, {"doctor_type": fake.pystr()}],
+    }
 
 
 @pytest.fixture

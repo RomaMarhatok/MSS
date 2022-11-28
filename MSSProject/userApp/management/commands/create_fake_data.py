@@ -3,14 +3,17 @@ from typing import Any, Optional
 from django.core.management.base import BaseCommand
 from faker import Faker
 
-from ...tests.factories.user_app_factories import (DoctorsFactory,
-                                                   DoctorTypesFactory,
-                                                   ImageForAnalyzesFactory,
-                                                   PatinesFactory, RoleFactory,
-                                                   TreatmentsHistoryFactory,
-                                                   UserDocumentFactory,
-                                                   UserFactory,
-                                                   UserPersonalInfoFactory)
+from ...tests.factories.user_app_factories import (
+    DoctorsFactory,
+    DoctorTypesFactory,
+    ImageForAnalyzesFactory,
+    PatinesFactory,
+    RoleFactory,
+    TreatmentsHistoryFactory,
+    UserDocumentFactory,
+    UserFactory,
+    UserPersonalInfoFactory,
+)
 
 fake = Faker()
 
@@ -22,7 +25,6 @@ class Command(BaseCommand):
         for _ in range(100):
             role = RoleFactory(name=fake.pystr())
             user = UserFactory(
-                username=fake.profile()["username"],
                 login=fake.pystr(),
                 password=fake.password(),
                 role=role,

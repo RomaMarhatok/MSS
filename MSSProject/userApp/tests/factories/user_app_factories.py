@@ -4,11 +4,11 @@ from faker import Faker
 
 from ...models import (
     Doctor,
-    DoctorTypes,
+    DoctorType,
     ImageForAnalyzes,
     Patient,
     Roles,
-    TreatmentsHistory,
+    TreatmentHistory,
     User,
     UserDocument,
     UserPersonalInfo,
@@ -58,7 +58,7 @@ class UserDocumentFactory(DjangoModelFactory):
 
 class DoctorTypesFactory(DjangoModelFactory):
     class Meta:
-        model = DoctorTypes
+        model = DoctorType
 
     doctor_type = fake.pystr()
 
@@ -90,7 +90,7 @@ class ImageForAnalyzesFactory(DjangoModelFactory):
 
 class TreatmentsHistoryFactory(DjangoModelFactory):
     class Meta:
-        model = TreatmentsHistory
+        model = TreatmentHistory
         django_get_or_create = ("doctor", "patient", "image")
 
     description = fake.text()
