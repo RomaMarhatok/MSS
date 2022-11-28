@@ -1,6 +1,10 @@
 from django.db import models
 
 
+def content_product_file_path(instance, filename):
+    return "/".join(["products", instance.pk, "%Y", "%m", "%d", filename])
+
+
 class Roles(models.Model):
     name = models.CharField("role name", max_length=100, unique=True)
 
@@ -13,7 +17,9 @@ class User(models.Model):
 
 class UserPersonalInfo(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    image = models.ImageField("user image", upload_to="")
+    image = models.ImageField(
+        "user image", upload_to=content_product_file_path, null=True, blank=True
+    )
     first_name = models.CharField("first name", max_length=100)
     second_name = models.CharField("second name", max_length=100)
     patronymic = models.CharField("patronymic", max_length=100, blank=True)
@@ -33,7 +39,7 @@ class DoctorType(models.Model):
 
 class Doctor(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    doctor_type = models.ManyToManyField(DoctorType)
+    doctor_type = models.ForeignKey(DoctorType, on_delete=models.SET_NULL, null=True)
 
 
 class Patient(models.Model):
@@ -41,7 +47,9 @@ class Patient(models.Model):
 
 
 class ImageForAnalyzes(models.Model):
-    image = models.ImageField()
+    image = models.ImageField(
+        "user image", upload_to=content_product_file_path, null=True, blank=True
+    )
     description = models.TextField()
 
 
