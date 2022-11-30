@@ -7,11 +7,13 @@ from ...models import (
     DoctorType,
     ImageForAnalyzes,
     Patient,
-    Roles,
+    Role,
     TreatmentHistory,
     User,
     UserDocument,
     UserPersonalInfo,
+    DoctorDoctorTypes,
+    TreatmentHistoryImageForAnalyzes,
 )
 
 fake = Faker()
@@ -19,7 +21,7 @@ fake = Faker()
 
 class RoleFactory(DjangoModelFactory):
     class Meta:
-        model = Roles
+        model = Role
 
     name = fake.pystr()
 
@@ -63,13 +65,20 @@ class DoctorTypesFactory(DjangoModelFactory):
     doctor_type = fake.pystr()
 
 
-class DoctorsFactory(DjangoModelFactory):
+class DoctorFactory(DjangoModelFactory):
     class Meta:
         model = Doctor
         django_get_or_create = ("user",)
 
     user = SubFactory(UserFactory)
-    doctor_type = SubFactory(DoctorTypesFactory)
+
+
+class DoctorDoctorTypesFactory(DjangoModelFactory):
+    class Meta:
+        model = DoctorDoctorTypes
+
+    doctor = SubFactory(DoctorFactory)
+    doctor_type = SubFactory(DoctorType)
 
 
 class PatinesFactory(DjangoModelFactory):
@@ -91,9 +100,17 @@ class ImageForAnalyzesFactory(DjangoModelFactory):
 class TreatmentsHistoryFactory(DjangoModelFactory):
     class Meta:
         model = TreatmentHistory
-        django_get_or_create = ("doctor", "patient", "image")
+        django_get_or_create = ("doctor", "patient")
 
     description = fake.text()
-    doctor = SubFactory(DoctorsFactory)
+    doctor = SubFactory(DoctorFactory)
     patient = SubFactory(Patient)
-    image = SubFactory(ImageForAnalyzesFactory)
+
+
+class TreatmentHistoryImageForAnalyzesFactory(DjangoModelFactory):
+    class Meta:
+        model = TreatmentHistoryImageForAnalyzes
+        django_get_or_create = ("treatment_history", "image_for_analyzes")
+
+    treatment_history = SubFactory(TreatmentHistory)
+    image_for_analyzes = SubFactory(ImageForAnalyzes)
