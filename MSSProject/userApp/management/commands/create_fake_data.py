@@ -2,9 +2,9 @@ from typing import Any, Optional
 
 from django.core.management.base import BaseCommand
 from faker import Faker
-
+from ...utils.image_utils import load_image_from_url_to_file
 from ...tests.factories.user_app_factories import (
-    DoctorsFactory,
+    DoctorFactory,
     DoctorTypesFactory,
     ImageForAnalyzesFactory,
     PatinesFactory,
@@ -13,6 +13,8 @@ from ...tests.factories.user_app_factories import (
     UserDocumentFactory,
     UserFactory,
     UserPersonalInfoFactory,
+    DoctorDoctorTypesFactory,
+    TreatmentHistoryImageForAnalyzesFactory,
 )
 
 fake = Faker()
@@ -47,15 +49,19 @@ class Command(BaseCommand):
                 role=role,
             )
 
-            doctor = DoctorsFactory(user=doctor_user, doctor_type=doctor_type)
+            doctor = DoctorFactory(user=doctor_user)
+            DoctorDoctorTypesFactory(doctor=doctor, doctor_type=doctor_type)
             patient = PatinesFactory(user=user)
 
             img_for_analyzes = ImageForAnalyzesFactory(
-                image=fake.image_url(), description=fake.text()
+                image=fake.image_url(),
+                description=fake.text(),
             )
-            TreatmentsHistoryFactory(
+            treatment = TreatmentsHistoryFactory(
                 description=fake.text(),
                 doctor=doctor,
                 patient=patient,
-                image=img_for_analyzes,
+            )
+            TreatmentHistoryImageForAnalyzesFactory(
+                treatment_history=treatment, image_for_analyzes=img_for_analyzes
             )
