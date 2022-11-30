@@ -6,7 +6,7 @@ from .patient_serializer import PatientSerializer
 from .image_for_analyze_serializer import ImageForAnlyzeSerializer
 
 
-class TreatmenstHistorySerializer(ModelSerializer):
+class TreatmentHistorySerializer(ModelSerializer):
     doctor = DoctorSerializer(many=False, required=True)
     patient = PatientSerializer(many=False, required=True)
     image = ImageForAnlyzeSerializer(many=True, required=True)
