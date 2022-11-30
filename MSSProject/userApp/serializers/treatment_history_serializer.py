@@ -3,13 +3,11 @@ from typing import OrderedDict
 from ..models import TreatmentHistory, Doctor, Patient
 from .doctor_serializer import DoctorSerializer
 from .patient_serializer import PatientSerializer
-from .image_for_analyze_serializer import ImageForAnlyzeSerializer
 
 
 class TreatmentHistorySerializer(ModelSerializer):
     doctor = DoctorSerializer(many=False, required=True)
     patient = PatientSerializer(many=False, required=True)
-    image = ImageForAnlyzeSerializer(many=True, required=True)
 
     class Meta:
         model = TreatmentHistory
@@ -23,15 +21,14 @@ class TreatmentHistorySerializer(ModelSerializer):
             "patient": {"validators": []},
         }
 
-    def create(self, validated_data: OrderedDict):
+    def create(self, validated_data: OrderedDict) -> TreatmentHistory:
         doctor = Doctor.objects.get(
             user__login=validated_data["doctor"]["user"]["login"]
         )
-        validated_data.pop("doctor")
         patient = Patient.objects.get(
-            user__login=validated_data["doctor"]["user"]["login"]
+            user__login=validated_data["patient"]["user"]["login"]
         )
-        validated_data.pop("patient")
-        return TreatmentHistory.objects.create(
-            **validated_data, doctor=doctor, patient=patient
+        instance, _ = TreatmentHistory.objects.get_or_create(
+            description=validated_data["description"], doctor=doctor, patient=patient
         )
+        return instance

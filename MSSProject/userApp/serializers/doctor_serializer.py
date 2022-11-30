@@ -19,15 +19,16 @@ class DoctorSerializer(ModelSerializer):
         fields = ("user",)
         extra_kwargs = {"user": {"validators": []}}
 
-    def create(self, validated_data: OrderedDict):
+    def create(self, validated_data: OrderedDict) -> Doctor:
         user = User.objects.get(login=validated_data["user"]["login"])
         validated_data.pop("user")
-        return Doctor.objects.get_or_create(user=user)
+        instance, _ = Doctor.objects.get_or_create(user=user)
+        return instance
 
-    def to_representation(self, instance: Doctor):
+    def to_representation(self, instance: Doctor) -> dict[User, list[DoctorType]]:
         user_from_instance = instance.user
         doctor_types = [
-            DoctorTypeSerializer(data=doctor_doctor_type.doctor_type).data
+            DoctorTypeSerializer(instance=doctor_doctor_type.doctor_type).data
             for doctor_doctor_type in DoctorDoctorTypes.objects.filter(
                 doctor__pk=user_from_instance.pk
             )

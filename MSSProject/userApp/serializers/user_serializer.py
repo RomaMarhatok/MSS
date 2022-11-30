@@ -20,10 +20,11 @@ class UserSerializer(ModelSerializer):
             }
         }
 
-    def create(self, validated_data: OrderedDict):
+    def create(self, validated_data: OrderedDict) -> User:
         role = Role.objects.get(name=validated_data["role"]["name"])
         validated_data.pop("role")
-        return User.objects.get_or_create(**validated_data, role=role)
+        instance, _ = User.objects.get_or_create(**validated_data, role=role)
+        return instance
 
 
 class UserPersonalInfoSerializer(ModelSerializer):
@@ -40,10 +41,13 @@ class UserPersonalInfoSerializer(ModelSerializer):
             "email",
         )
 
-    def create(self, validated_data: OrderedDict):
+    def create(self, validated_data: OrderedDict) -> UserPersonalInfo:
         user = User.objects.get(login=validated_data["user"]["login"])
         validated_data.pop("user")
-        return UserPersonalInfo.objects.get_or_create(**validated_data, user=user)
+        instance, _ = UserPersonalInfo.objects.get_or_create(
+            **validated_data, user=user
+        )
+        return instance
 
 
 class UserDocumentSerializer(ModelSerializer):
@@ -57,7 +61,8 @@ class UserDocumentSerializer(ModelSerializer):
         )
         extra_kwargs = {"user": {"validators": []}}
 
-    def create(self, validated_data: OrderedDict):
+    def create(self, validated_data: OrderedDict) -> UserDocument:
         user = User.objects.get(login=validated_data["user"]["login"])
         validated_data.pop("user")
-        return UserDocument.objects.create(**validated_data, user=user)
+        instance, _ = UserDocument.objects.get_or_create(**validated_data, user=user)
+        return instance

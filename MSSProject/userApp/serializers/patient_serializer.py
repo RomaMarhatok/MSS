@@ -12,6 +12,7 @@ class PatientSerializer(ModelSerializer):
         fields = ("user",)
         extra_kwargs = {"user": {"validators": []}}
 
-    def create(self, validated_data: OrderedDict):
+    def create(self, validated_data: OrderedDict) -> Patient:
         user = User.objects.get(login=validated_data["user"]["login"])
-        return Patient.objects.create(user=user)
+        instance, _ = Patient.objects.get_or_create(user=user)
+        return instance
