@@ -1,11 +1,11 @@
-from rest_framework.serializers import HyperlinkedModelSerializer
+from rest_framework.serializers import ModelSerializer
 from typing import OrderedDict
 from ..models import TreatmentHistory, Doctor, Patient
 from .doctor_serializer import DoctorSerializer
 from .patient_serializer import PatientSerializer
 
 
-class TreatmentHistorySerializer(HyperlinkedModelSerializer):
+class TreatmentHistorySerializer(ModelSerializer):
     doctor = DoctorSerializer(many=False, required=True)
     patient = PatientSerializer(many=False, required=True)
 
