@@ -89,7 +89,7 @@ def factory_treatment_history_fixture(
 @pytest.fixture
 def factory_treatment_history_image_for_analyzes(
     factory_treatment_history_fixture, factory_image_for_analyzes_fixture
-) -> TreatmentHistoryImageForAnalyzesFactory:
+) -> TreatmentHistoryImageForAnalyzes:
     return TreatmentHistoryImageForAnalyzesFactory.create(
         treatment_history=factory_treatment_history_fixture,
         image_for_analyzes=factory_image_for_analyzes_fixture,

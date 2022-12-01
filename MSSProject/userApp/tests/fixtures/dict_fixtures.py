@@ -50,7 +50,7 @@ def user_document_fixture(user_fixture) -> dict:
 
 
 @pytest.fixture
-def doctor_types_fixture() -> dict:
+def doctor_type_fixture() -> dict:
     return {"doctor_type": fake.pystr()}
 
 

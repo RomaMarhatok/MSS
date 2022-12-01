@@ -1,24 +1,22 @@
 import pytest
-from userApp.serializers.role_serializer import RoleSerializer
-from userApp.models import Role
+from userApp.serializers.doctor_type_serializer import DoctorTypeSerializer
+from userApp.models import DoctorType
 
 
 @pytest.mark.django_db
-def test_serialization(role_fixture):
-    serializer = RoleSerializer(data=role_fixture)
+def test_serialization(doctor_type_fixture):
+    serializer = DoctorTypeSerializer(data=doctor_type_fixture)
     assert serializer.is_valid(raise_exception=True)
     instance = serializer.save()
-
-    assert Role.objects.all().count() == 1
-    assert isinstance(instance, Role)
+    assert isinstance(instance, DoctorType)
     assert hasattr(instance, "slug")
     assert instance.slug != "default"
     assert instance.slug != ""
 
 
 @pytest.mark.django_db
-def test_deserialization(factory_role_fixture):
-    serializer = RoleSerializer(instance=factory_role_fixture)
+def test_desrialization(factory_doctor_type_fixture):
+    serializer = DoctorTypeSerializer(instance=factory_doctor_type_fixture)
     assert isinstance(serializer.data, dict)
     assert "slug" in serializer.data
     assert serializer.data["slug"] != "default"

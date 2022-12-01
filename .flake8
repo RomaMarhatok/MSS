@@ -1,6 +1,5 @@
 [flake8]
-
-ignore = F401,VNE003,SIM115,FNE003
+ignore = F401,VNE003,SIM115,FNE003,W503
 exclude = .git,__pycache__
 max-line-length = 100
 max-complexity = 18
