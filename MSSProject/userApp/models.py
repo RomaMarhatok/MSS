@@ -75,10 +75,6 @@ class DoctorType(models.Model):
         "doctor profession name", max_length=100, unique=True
     )
 
-    def save(self, *args, **kwargs):
-        self.slug = slugify(self.doctor_type)
-        return super(DoctorType, self).save(*args, **kwargs)
-
     class Meta:
         db_table = "doctor_type"
 
@@ -134,9 +130,7 @@ class TreatmentHistory(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.SET_NULL, null=True)
 
     def save(self, *args, **kwargs):
-        self.slug = generate_slug_from_str(
-            self.patient.user.login
-        ) + generate_slug_from_str(self.doctor.user.login)
+        self.slug = self.patient.user.slug + self.doctor.user.slug
         return super(TreatmentHistory, self).save(*args, **kwargs)
 
     class Meta:
