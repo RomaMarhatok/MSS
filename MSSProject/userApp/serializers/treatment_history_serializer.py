@@ -15,10 +15,12 @@ class TreatmentHistorySerializer(ModelSerializer):
             "description",
             "doctor",
             "patient",
+            "slug",
         )
         extra_kwargs = {
             "doctor": {"validators": []},
             "patient": {"validators": []},
+            "slug": {"required": False},
         }
 
     def create(self, validated_data: OrderedDict) -> TreatmentHistory:
