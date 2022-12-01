@@ -1,8 +1,8 @@
-from rest_framework.serializers import HyperlinkedModelSerializer
+from rest_framework.serializers import ModelSerializer
 from ..models import Role
 
 
-class RoleSerializer(HyperlinkedModelSerializer):
+class RoleSerializer(ModelSerializer):
     class Meta:
         model = Role
         fields = (
