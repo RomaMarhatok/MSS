@@ -44,8 +44,3 @@ def test_deserialization(factory_treatment_history_fixture):
     assert "slug" in serializer.data
     assert serializer.data["slug"] != ""
     assert serializer.data["slug"] != "default"
-    slug = (
-        serializer.data["doctor"]["user"]["slug"]
-        + serializer.data["patient"]["user"]["slug"]
-    )
-    assert serializer.data["slug"] == slug

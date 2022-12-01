@@ -1,9 +1,8 @@
 import pytest
 from userApp.serializers.role_serializer import RoleSerializer
 from userApp.serializers.user_serializer import UserSerializer
-from userApp.serializers.doctor_serializer import DoctorSerializer, DoctorTypeSerializer
-from userApp.models import Doctor, DoctorType
-from pprint import pprint
+from userApp.serializers.doctor_serializer import DoctorSerializer
+from userApp.models import Doctor
 
 
 @pytest.mark.django_db
