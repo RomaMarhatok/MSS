@@ -18,3 +18,6 @@ def test_serialization(user_fixture):
 def test_deserialization(factory_user_fixture):
     serializer = UserSerializer(instance=factory_user_fixture)
     assert isinstance(serializer.data, dict)
+    assert "slug" in serializer.data
+    assert serializer.data["slug"] != "default"
+    assert serializer.data["slug"] != ""

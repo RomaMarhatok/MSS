@@ -20,8 +20,11 @@ def test_serialize(patient_fixture):
     assert serializer.is_valid(raise_exception=True)
     instance = serializer.save()
 
-    assert Patient.objects.all().count()
+    assert Patient.objects.all().count() == 1
     assert isinstance(instance, Patient)
+    assert hasattr(instance.user, "slug")
+    assert instance.user.slug != ""
+    assert instance.user.slug != "default"
 
 
 @pytest.mark.django_db
@@ -29,3 +32,6 @@ def test_deserialize(factory_patient_fixture):
     serializer = PatientSerializer(instance=factory_patient_fixture)
     assert isinstance(serializer.data, dict)
     assert "user" in serializer.data
+    assert "slug" in serializer.data["user"]
+    assert serializer.data["user"]["slug"] != "default"
+    assert serializer.data["user"]["slug"] != ""
