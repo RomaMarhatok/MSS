@@ -1,16 +1,19 @@
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import HyperlinkedModelSerializer
 from typing import OrderedDict
 from .doctor_serializer import UserSerializer
 from ..models import Patient, User
 
 
-class PatientSerializer(ModelSerializer):
+class PatientSerializer(HyperlinkedModelSerializer):
     user = UserSerializer(many=False, required=True)
 
     class Meta:
         model = Patient
         fields = ("user",)
-        extra_kwargs = {"user": {"validators": []}}
+        extra_kwargs = {
+            "user": {"validators": []},
+            "url": {"lookup_field": "user"},
+        }
 
     def create(self, validated_data: OrderedDict) -> Patient:
         user = User.objects.get(login=validated_data["user"]["login"])

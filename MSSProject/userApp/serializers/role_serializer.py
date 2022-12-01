@@ -1,8 +1,8 @@
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import HyperlinkedModelSerializer
 from ..models import Role
 
 
-class RoleSerializer(ModelSerializer):
+class RoleSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = Role
         fields = (
@@ -14,4 +14,5 @@ class RoleSerializer(ModelSerializer):
                 "validators": [],
             },
             "slug": {"required": False},
+            "url": {"lookup_field": "slug"},
         }
