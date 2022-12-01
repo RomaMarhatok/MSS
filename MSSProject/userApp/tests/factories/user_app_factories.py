@@ -2,15 +2,26 @@ from factory import SubFactory
 from factory.django import DjangoModelFactory
 from faker import Faker
 
-from ...models import (Doctor, DoctorTypes, ImageForAnalyzes, Patient, Roles,
-                       TreatmentsHistory, User, UserDocument, UserPersonalInfo)
+from ...models import (
+    Doctor,
+    DoctorType,
+    ImageForAnalyzes,
+    Patient,
+    Role,
+    TreatmentHistory,
+    User,
+    UserDocument,
+    UserPersonalInfo,
+    DoctorDoctorTypes,
+    TreatmentHistoryImageForAnalyzes,
+)
 
 fake = Faker()
 
 
 class RoleFactory(DjangoModelFactory):
     class Meta:
-        model = Roles
+        model = Role
 
     name = fake.pystr()
 
@@ -20,7 +31,6 @@ class UserFactory(DjangoModelFactory):
         model = User
         django_get_or_create = ("role",)
 
-    username = fake.profile()["username"]
     login = fake.pystr()
     password = fake.password()
     role = SubFactory(RoleFactory)
@@ -50,18 +60,25 @@ class UserDocumentFactory(DjangoModelFactory):
 
 class DoctorTypesFactory(DjangoModelFactory):
     class Meta:
-        model = DoctorTypes
+        model = DoctorType
 
     doctor_type = fake.pystr()
 
 
-class DoctorsFactory(DjangoModelFactory):
+class DoctorFactory(DjangoModelFactory):
     class Meta:
         model = Doctor
         django_get_or_create = ("user",)
 
     user = SubFactory(UserFactory)
-    doctor_type = SubFactory(DoctorTypesFactory)
+
+
+class DoctorDoctorTypesFactory(DjangoModelFactory):
+    class Meta:
+        model = DoctorDoctorTypes
+
+    doctor = SubFactory(DoctorFactory)
+    doctor_type = SubFactory(DoctorType)
 
 
 class PatinesFactory(DjangoModelFactory):
@@ -82,10 +99,18 @@ class ImageForAnalyzesFactory(DjangoModelFactory):
 
 class TreatmentsHistoryFactory(DjangoModelFactory):
     class Meta:
-        model = TreatmentsHistory
-        django_get_or_create = ("doctor", "patient", "image")
+        model = TreatmentHistory
+        django_get_or_create = ("doctor", "patient")
 
     description = fake.text()
-    doctor = SubFactory(DoctorsFactory)
+    doctor = SubFactory(DoctorFactory)
     patient = SubFactory(Patient)
-    image = SubFactory(ImageForAnalyzesFactory)
+
+
+class TreatmentHistoryImageForAnalyzesFactory(DjangoModelFactory):
+    class Meta:
+        model = TreatmentHistoryImageForAnalyzes
+        django_get_or_create = ("treatment_history", "image_for_analyzes")
+
+    treatment_history = SubFactory(TreatmentHistory)
+    image_for_analyzes = SubFactory(ImageForAnalyzes)
