@@ -25,6 +25,14 @@ def test_serialize(doctor_fixture):
 
 
 @pytest.mark.django_db
+def test_multiply_serialization(factory_doctor_fixture):
+    serializer = DoctorSerializer(
+        instance=[factory_doctor_fixture, factory_doctor_fixture], many=True
+    )
+    assert isinstance(serializer.data, list)
+
+
+@pytest.mark.django_db
 def test_deserialize(factory_doctor_fixture):
     serializer = DoctorSerializer(instance=factory_doctor_fixture)
     assert isinstance(serializer.data, dict)
