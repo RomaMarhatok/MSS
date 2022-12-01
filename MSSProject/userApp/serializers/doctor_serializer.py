@@ -2,13 +2,7 @@ from rest_framework.serializers import ModelSerializer
 from typing import OrderedDict
 from ..models import DoctorType, Doctor, User, DoctorDoctorTypes
 from .user_serializer import UserSerializer
-
-
-class DoctorTypeSerializer(ModelSerializer):
-    class Meta:
-        model = DoctorType
-        fields = ("doctor_type",)
-        extra_kwargs = {"doctor_type": {"validators": []}}
+from .doctor_type_serializer import DoctorTypeSerializer
 
 
 class DoctorSerializer(ModelSerializer):
@@ -17,7 +11,10 @@ class DoctorSerializer(ModelSerializer):
     class Meta:
         model = Doctor
         fields = ("user",)
-        extra_kwargs = {"user": {"validators": []}}
+        extra_kwargs = {
+            "user": {"validators": []},
+            "url": {"lookup_field": "user"},
+        }
 
     def create(self, validated_data: OrderedDict) -> Doctor:
         user = User.objects.get(login=validated_data["user"]["login"])

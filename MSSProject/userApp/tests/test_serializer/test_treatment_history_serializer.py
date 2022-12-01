@@ -32,9 +32,15 @@ def test_serialization(treatment_history_fixture):
     instance = serializer.save()
     assert TreatmentHistory.objects.all().count() == 1
     assert isinstance(instance, TreatmentHistory)
+    assert hasattr(instance, "slug")
+    assert instance.slug != ""
+    assert instance.slug != "default"
 
 
 @pytest.mark.django_db
 def test_deserialization(factory_treatment_history_fixture):
     serializer = TreatmentHistorySerializer(instance=factory_treatment_history_fixture)
     assert isinstance(serializer.data, dict)
+    assert "slug" in serializer.data
+    assert serializer.data["slug"] != ""
+    assert serializer.data["slug"] != "default"

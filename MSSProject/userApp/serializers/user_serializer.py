@@ -12,12 +12,14 @@ class UserSerializer(ModelSerializer):
         fields = (
             "login",
             "password",
+            "slug",
             "role",
         )
         extra_kwargs = {
             "login": {
                 "validators": [],
-            }
+            },
+            "slug": {"required": False},
         }
 
     def create(self, validated_data: OrderedDict) -> User:
