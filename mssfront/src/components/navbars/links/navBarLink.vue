@@ -9,7 +9,7 @@ const props = defineProps({
     <a href="" class="button__a">{{ props.text }}</a>
   </div>
 </template>
-<style>
+<style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Fira+Sans&display=swap');
 
 .navbar__button {

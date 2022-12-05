@@ -8,7 +8,7 @@ import frontPageNavBar from "../navbars/frontPageNavBar.vue";
     <front-page-nav-bar />
   </header>
 </template>
-<style>
+<style scoped>
 .header {
   display: flex;
   flex-direction: row;

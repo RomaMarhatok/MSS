@@ -11,7 +11,3 @@ import frontPageDoctorImageSection from "@/components/sections/frontPage/frontPa
 import frontPageCardsSection from "@/components/sections/frontPage/frontPageCardsSection.vue";
 import frontPageFooter from "@/components/footers/frontPageFooter.vue";
 </script>
-
-<style>
-
-</style>

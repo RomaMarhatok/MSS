@@ -11,7 +11,7 @@ const text = ref("Lorem Ipsum is simply dummy text of the printing and typesetti
         <front-page-card :text="text" :title="title" />
     </div>
 </template>
-<style>
+<style scoped>
 .cards__container {
     padding-left: 5%;
     padding-right: 5%;

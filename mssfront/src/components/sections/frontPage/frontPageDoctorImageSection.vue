@@ -14,7 +14,7 @@
     <img class="container__img" src="@/assets/frontPageDoctorImage.svg" alt="doctor image" />
   </div>
 </template>
-<style>
+<style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Fira+Sans&display=swap');
 
 .main__container {

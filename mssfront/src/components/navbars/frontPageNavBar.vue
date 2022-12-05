@@ -14,7 +14,7 @@ const login = ref("Login");
     <nav-bar-link :text="login" />
   </nav>
 </template>
-<style>
+<style scoped>
 .header__navbar {
   width: 100%;
   display: flex;
