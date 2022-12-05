@@ -13,9 +13,6 @@ const login = ref("")
         <registrationFormEmailInput v-model="login" />
         <registrationFormPasswordInput v-model="password" />
         <registrationFormSubmitButton />
-        <p class="a">{{ password }}</p>
-        <p class="a">{{ login }}</p>
-
     </form>
 </template>
 <style scoped>
