@@ -11,6 +11,11 @@ def role_fixture() -> dict:
 
 
 @pytest.fixture
+def patient_role_fixture() -> dict:
+    return {"name": "patient"}
+
+
+@pytest.fixture
 def user_fixture(role_fixture) -> dict:
     return {
         "login": fake.pystr(),

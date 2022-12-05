@@ -5,7 +5,7 @@ from ..models import User, Role, UserPersonalInfo, UserDocument
 
 
 class UserSerializer(ModelSerializer):
-    role = RoleSerializer(many=False)
+    role = RoleSerializer(many=False, required=False)
 
     class Meta:
         model = User
@@ -23,10 +23,18 @@ class UserSerializer(ModelSerializer):
         }
 
     def create(self, validated_data: OrderedDict) -> User:
-        role = Role.objects.get(name=validated_data["role"]["name"])
-        validated_data.pop("role")
+        role, validated_data = self.__get_role(validated_data)
         instance, _ = User.objects.get_or_create(**validated_data, role=role)
         return instance
+
+    def __get_role(self, validated_data: OrderedDict) -> Role:
+        role = None
+        if "role" in validated_data:
+            role = Role.objects.get(name=validated_data["role"]["name"])
+            validated_data.pop("role")
+        else:
+            role = Role.objects.get(name="patient")
+        return role, validated_data
 
 
 class UserPersonalInfoSerializer(ModelSerializer):

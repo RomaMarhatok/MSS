@@ -22,6 +22,8 @@ def test_serialize(doctor_fixture):
     assert Doctor.objects.all().count() == 1
     assert isinstance(instance, Doctor)
     assert hasattr(instance.user, "slug")
+    assert hasattr(instance.user, "role")
+    assert instance.user.role != ""
     assert instance.user.slug != ""
     assert instance.user.slug != "default"
 

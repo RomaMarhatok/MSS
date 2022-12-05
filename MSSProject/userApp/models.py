@@ -2,6 +2,7 @@ from datetime import datetime
 from django.db import models
 from django.template.defaultfilters import slugify
 from .utils.slug_utils import generate_slug_from_str
+from django.contrib.auth.models import AbstractUser
 
 
 class Role(models.Model):
@@ -16,7 +17,7 @@ class Role(models.Model):
         db_table = "role"
 
 
-class User(models.Model):
+class User(AbstractUser):
     slug = models.SlugField(max_length=100)
     login = models.CharField("user login", max_length=100, unique=True)
     password = models.CharField("user password", max_length=100)
@@ -24,6 +25,7 @@ class User(models.Model):
 
     def save(self, *args, **kwargs):
         self.slug = generate_slug_from_str(self.login)
+        self.username = self.login
         return super(User, self).save(*args, **kwargs)
 
     class Meta:
@@ -100,6 +102,9 @@ class DoctorDoctorTypes(models.Model):
 
 class Patient(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "patient"
 
 
 def media_path_builder_for_analyzes_images(instance, filename):

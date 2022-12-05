@@ -33,8 +33,18 @@ def factory_role_fixture() -> Role:
 
 
 @pytest.fixture
+def factory_patient_role_fixture() -> Role:
+    return RoleFactory.create(name="patient")
+
+
+@pytest.fixture
 def factory_user_fixture(factory_role_fixture) -> User:
     return UserFactory.create(role=factory_role_fixture)
+
+
+@pytest.fixture
+def factory_user_with_role_patient_fixture(factory_patient_role_fixture) -> User:
+    return UserFactory.create(role=factory_patient_role_fixture)
 
 
 @pytest.fixture
