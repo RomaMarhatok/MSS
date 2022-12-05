@@ -25,6 +25,7 @@ class User(AbstractUser):
 
     def save(self, *args, **kwargs):
         self.slug = generate_slug_from_str(self.login)
+        self.username = self.login
         return super(User, self).save(*args, **kwargs)
 
     class Meta:
