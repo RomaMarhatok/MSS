@@ -23,10 +23,18 @@ class UserSerializer(ModelSerializer):
         }
 
     def create(self, validated_data: OrderedDict) -> User:
-        role = Role.objects.get(name=validated_data["role"]["name"])
+        role = self.__get_role(validated_data)
         validated_data.pop("role")
         instance, _ = User.objects.get_or_create(**validated_data, role=role)
         return instance
+
+    def __get_role(self, validated_data: OrderedDict) -> Role:
+        role = None
+        if "role" in validated_data:
+            role = Role.objects.get(name=validated_data["role"]["name"])
+        else:
+            role = Role.objects.get(name="patient")
+        return role
 
 
 class UserPersonalInfoSerializer(ModelSerializer):
