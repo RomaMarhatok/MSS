@@ -23,6 +23,8 @@ def test_serialize(patient_fixture):
     assert Patient.objects.all().count() == 1
     assert isinstance(instance, Patient)
     assert hasattr(instance.user, "slug")
+    assert hasattr(instance.user, "role")
+    assert instance.user.role != ""
     assert instance.user.slug != ""
     assert instance.user.slug != "default"
 
