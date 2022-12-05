@@ -102,6 +102,9 @@ class DoctorDoctorTypes(models.Model):
 class Patient(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
+    class Meta:
+        db_table = "patient"
+
 
 def media_path_builder_for_analyzes_images(instance, filename):
     now_date = datetime.now().strftime("%Y/%m/%d")
