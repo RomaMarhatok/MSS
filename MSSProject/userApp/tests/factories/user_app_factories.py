@@ -22,6 +22,7 @@ fake = Faker()
 class RoleFactory(DjangoModelFactory):
     class Meta:
         model = Role
+        django_get_or_create = ("name",)
 
     name = fake.pystr()
 
@@ -29,7 +30,6 @@ class RoleFactory(DjangoModelFactory):
 class UserFactory(DjangoModelFactory):
     class Meta:
         model = User
-        django_get_or_create = ("role",)
 
     login = fake.pystr()
     password = fake.password()
@@ -39,7 +39,6 @@ class UserFactory(DjangoModelFactory):
 class UserPersonalInfoFactory(DjangoModelFactory):
     class Meta:
         model = UserPersonalInfo
-        django_get_or_create = ("user",)
 
     user = SubFactory(UserFactory)
     image = fake.image_url()
@@ -52,7 +51,6 @@ class UserPersonalInfoFactory(DjangoModelFactory):
 class UserDocumentFactory(DjangoModelFactory):
     class Meta:
         model = UserDocument
-        django_get_or_create = ("user",)
 
     content = fake.text()
     user = SubFactory(UserFactory)
@@ -68,7 +66,6 @@ class DoctorTypesFactory(DjangoModelFactory):
 class DoctorFactory(DjangoModelFactory):
     class Meta:
         model = Doctor
-        django_get_or_create = ("user",)
 
     user = SubFactory(UserFactory)
 
@@ -84,7 +81,6 @@ class DoctorDoctorTypesFactory(DjangoModelFactory):
 class PatinesFactory(DjangoModelFactory):
     class Meta:
         model = Patient
-        django_get_or_create = ("user",)
 
     user = SubFactory(UserFactory)
 
@@ -100,7 +96,6 @@ class ImageForAnalyzesFactory(DjangoModelFactory):
 class TreatmentsHistoryFactory(DjangoModelFactory):
     class Meta:
         model = TreatmentHistory
-        django_get_or_create = ("doctor", "patient")
 
     description = fake.text()
     doctor = SubFactory(DoctorFactory)
@@ -110,7 +105,6 @@ class TreatmentsHistoryFactory(DjangoModelFactory):
 class TreatmentHistoryImageForAnalyzesFactory(DjangoModelFactory):
     class Meta:
         model = TreatmentHistoryImageForAnalyzes
-        django_get_or_create = ("treatment_history", "image_for_analyzes")
 
     treatment_history = SubFactory(TreatmentHistory)
     image_for_analyzes = SubFactory(ImageForAnalyzes)
