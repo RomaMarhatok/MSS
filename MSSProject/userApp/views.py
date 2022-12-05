@@ -4,8 +4,7 @@ from .models import Doctor, Patient, User
 from .serializers.doctor_serializer import DoctorSerializer
 from .serializers.user_serializer import UserSerializer
 from .serializers.patient_serializer import PatientSerializer
-from django.http import JsonResponse
-from django.http import HttpRequest
+from django.http import JsonResponse, HttpRequest, HttpResponse
 from rest_framework.authtoken.models import Token
 from django.db.models import QuerySet
 from rest_framework.permissions import AllowAny
@@ -47,16 +46,15 @@ class TokenRegistrationView(APIView):
             users: QuerySet = User.objects.filter(**request.POST)
             if users.exists():
                 return JsonResponse(data={"errors": ["user already exist"]}, status=400)
-            if not users.exists():
+            else:
                 serializer = UserSerializer(data=request.POST)
-                if serializer.is_valid():
-                    user = serializer.save()
-                    Token.objects.create(user=user)
-                    return JsonResponse(
-                        data={"message": "user was successful registrated"}, status=200
-                    )
+                if not serializer.is_valid():
+                    return JsonResponse(data={"errors": serializer.errors}, status=400)
+                user = serializer.save()
+                Token.objects.create(user=user)
+                Patient.objects.create(user=user)
                 return JsonResponse(
-                    data={"errors": list(serializer.errors)}, status=400
+                    data={"message": "user was successful registrated"}, status=200
                 )
 
 
@@ -64,4 +62,19 @@ class TokenAuthenticationView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request: HttpRequest):
-        pass
+        if request.method == "POST":
+            users: QuerySet = User.objects.filter(
+                login=request.POST["login"], password=request.POST["password"]
+            )
+            if users.exists():
+                user = users.first()
+                user_auth_token_key = Token.objects.filter(user=user).first().key
+                return JsonResponse(
+                    data={
+                        "message": "user successful authenticated",
+                        "token": user_auth_token_key,
+                        "user_role": user.role.name,
+                    },
+                    status=200,
+                )
+            return JsonResponse(data={"errors": "user don't exist"}, status=400)
