@@ -24,12 +24,13 @@ class Command(BaseCommand):
     help: str = "create fake data from tests"
 
     def handle(self, *args: Any, **options: Any) -> Optional[str]:
-        for _ in range(100):
-            role = RoleFactory(name=fake.pystr())
+        patient_role = RoleFactory(name="patient")
+        doctor_role = RoleFactory(name="doctor")
+        for _ in range(1, 100):
             user = UserFactory(
                 login=fake.pystr(),
                 password=fake.password(),
-                role=role,
+                role=patient_role,
             )
             UserPersonalInfoFactory(
                 user=user,
@@ -46,7 +47,7 @@ class Command(BaseCommand):
                 username=fake.profile()["username"],
                 login=fake.pystr(),
                 password=fake.password(),
-                role=role,
+                role=doctor_role,
             )
 
             doctor = DoctorFactory(user=doctor_user)
