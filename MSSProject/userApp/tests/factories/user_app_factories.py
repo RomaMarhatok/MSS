@@ -1,7 +1,7 @@
 from factory import SubFactory
 from factory.django import DjangoModelFactory
 from faker import Faker
-
+from ...utils.string_utls import generate_valid_password, generate_valid_login
 from ...models import (
     Doctor,
     DoctorType,
@@ -31,8 +31,8 @@ class UserFactory(DjangoModelFactory):
     class Meta:
         model = User
 
-    login = fake.pystr()
-    password = fake.password()
+    login = generate_valid_login()
+    password = generate_valid_password()
     role = SubFactory(RoleFactory)
 
 
