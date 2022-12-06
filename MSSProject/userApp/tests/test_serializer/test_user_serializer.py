@@ -35,6 +35,24 @@ def test_password_validator(user_fixture):
     serializer = UserSerializer(data=user_fixture)
     with pytest.raises(ValidationError):
         assert serializer.is_valid(raise_exception=True)
+    user_fixture["password"] = "#dmaskldm^_"
+    serializer = UserSerializer(data=user_fixture)
+    with pytest.raises(ValidationError):
+        assert serializer.is_valid(raise_exception=True)
+
+
+@pytest.mark.django_db
+def test_login_validator(user_fixture):
+    user_fixture.pop("role")
+    Role.objects.create(name="patient")
+    user_fixture["login"] = ""
+    serializer = UserSerializer(data=user_fixture)
+    with pytest.raises(ValidationError):
+        assert serializer.is_valid(raise_exception=True)
+    user_fixture["login"] = "#dmaskldm^_"
+    serializer = UserSerializer(data=user_fixture)
+    with pytest.raises(ValidationError):
+        assert serializer.is_valid(raise_exception=True)
 
 
 @pytest.mark.django_db
