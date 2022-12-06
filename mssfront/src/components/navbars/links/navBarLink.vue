@@ -2,11 +2,12 @@
 import { defineProps } from "vue";
 const props = defineProps({
   text: String,
+  link: String,
 });
 </script>
 <template>
   <div class="navbar__button">
-    <a href="" class="button__a">{{ props.text }}</a>
+    <a :href="props.link" class="button__a">{{ props.text }}</a>
   </div>
 </template>
 <style scoped>
