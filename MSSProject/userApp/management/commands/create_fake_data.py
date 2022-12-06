@@ -16,6 +16,7 @@ from ...tests.factories.user_app_factories import (
     DoctorDoctorTypesFactory,
     TreatmentHistoryImageForAnalyzesFactory,
 )
+from ...utils.string_utls import generate_valid_password
 
 fake = Faker()
 
@@ -29,7 +30,7 @@ class Command(BaseCommand):
         for _ in range(1, 100):
             user = UserFactory(
                 login=fake.pystr(),
-                password=fake.password(),
+                password=generate_valid_password(),
                 role=patient_role,
             )
             UserPersonalInfoFactory(
