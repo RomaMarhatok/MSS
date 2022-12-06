@@ -1,17 +1,29 @@
 <script setup>
 import navBarLink from "./links/navBarLink.vue";
-import { ref } from "vue";
-const about = ref("About");
-const contacts = ref("Contacts");
-const home = ref("Home");
-const login = ref("Login");
+import { reactive } from "vue";
+const aboutLink = reactive({
+  text: "about",
+  link: "#/",
+})
+const contactsLink = reactive({
+  text: "contacts",
+  link: "#/",
+})
+const homeLink = reactive({
+  text: "home",
+  link: "#/"
+})
+const loginLink = reactive({
+  text: "login",
+  link: "#/registration/",
+})
 </script>
 <template>
   <nav class="header__navbar">
-    <nav-bar-link :text="about" />
-    <nav-bar-link :text="contacts" />
-    <nav-bar-link :text="home" />
-    <nav-bar-link :text="login" />
+    <nav-bar-link :text="aboutLink.text" :link="aboutLink.link" />
+    <nav-bar-link :text="contactsLink.text" :link="contactsLink.link" />
+    <nav-bar-link :text="homeLink.text" :link="homeLink.link" />
+    <nav-bar-link :text="loginLink.text" :link="loginLink.link" />
   </nav>
 </template>
 <style scoped>
