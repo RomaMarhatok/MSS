@@ -1,6 +1,7 @@
 import pytest
 from userApp.serializers.user_serializer import UserSerializer
 from userApp.models import User, Role
+from rest_framework.serializers import ValidationError
 
 
 @pytest.mark.django_db
@@ -24,6 +25,16 @@ def test_serialization_without_role(user_fixture):
     assert len(serializer.errors) == 0
     assert User.objects.all().count() == 1
     assert isinstance(instance, User)
+
+
+@pytest.mark.django_db
+def test_password_validator(user_fixture):
+    user_fixture.pop("role")
+    Role.objects.create(name="patient")
+    user_fixture["password"] = "1"
+    serializer = UserSerializer(data=user_fixture)
+    with pytest.raises(ValidationError):
+        assert serializer.is_valid(raise_exception=True)
 
 
 @pytest.mark.django_db

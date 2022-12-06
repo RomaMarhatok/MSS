@@ -2,6 +2,8 @@ from rest_framework.serializers import ModelSerializer
 from typing import OrderedDict
 from .role_serializer import RoleSerializer
 from ..models import User, Role, UserPersonalInfo, UserDocument
+from rest_framework.serializers import ValidationError
+from ..validators.password_validator import PasswordValidator
 
 
 class UserSerializer(ModelSerializer):
@@ -21,6 +23,15 @@ class UserSerializer(ModelSerializer):
             },
             "slug": {"required": False},
         }
+
+    def validate_password(self, value):
+        if not PasswordValidator.is_valid(value):
+            message = (
+                "Enter a valid password. This value may contain only English letters, "
+                "numbers, and optinal contain !/@/#/$/%/^/&/* characters."
+            )
+            raise ValidationError(message)
+        return value
 
     def create(self, validated_data: OrderedDict) -> User:
         role, validated_data = self.__get_role(validated_data)
