@@ -1,6 +1,6 @@
 <script setup>
 import formBaseInput from '@/components/inputs/base/formBaseInput.vue';
-import { reactive } from 'vue';
+import { reactive, defineProps } from 'vue';
 
 const passwordInput = reactive({
     labelText: "Second Name",
@@ -8,9 +8,12 @@ const passwordInput = reactive({
     inputType: "text",
     labelFor: "second_name_input",
 })
+const props = defineProps({
+    errors: Object,
+})
 </script>
 <template>
     <formBaseInput :labelText="passwordInput.labelText" :inputPlaceholder="passwordInput.inputPlaceholder"
         :inputType="passwordInput.inputType" :labelFor="passwordInput.labelFor"
-        @input="$emit('update:modelValue', $event.target.value)" />
+        @input="$emit('update:modelValue', $event.target.value)" :errors="props.errors" />
 </template>
