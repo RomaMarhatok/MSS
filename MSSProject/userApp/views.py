@@ -1,13 +1,15 @@
 from rest_framework.viewsets import ViewSet
 from rest_framework.views import APIView
-from .models import Doctor, Patient, User, UserPersonalInfo
+from .models import Doctor, Patient, User
 from .serializers.doctor_serializer import DoctorSerializer
 from .serializers.user_serializer import UserSerializer
 from .serializers.patient_serializer import PatientSerializer
+from .serializers.user_serializer import UserPersonalInfoSerializer
 from django.http import JsonResponse, HttpRequest
 from rest_framework.authtoken.models import Token
 from django.db.models import QuerySet
 from rest_framework.permissions import AllowAny
+from .services.serializer_service import SerializerService
 
 
 class DoctorViewSet(ViewSet):
@@ -42,23 +44,29 @@ class TokenRegistrationView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request: HttpRequest):
-        users: QuerySet = User.objects.filter(
-            login=request.data["login"], password=request.data["password"]
-        )
-        if users.exists():
-            return JsonResponse(data={"errors": ["user already exist"]}, status=400)
-        else:
-            serializer = UserSerializer(data=request.data)
-            if not serializer.is_valid():
-                return JsonResponse(data={"errors": serializer.errors}, status=400)
-            user = serializer.save()
-            Token.objects.create(user=user)
-            Patient.objects.create(user=user)
-            UserPersonalInfo.objects.create(
-                first_name=request.data["first_name"],
-                second_name=request.data["second_name"],
-                user=user,
+        user_login = request.data["login"]
+        if User.is_exist(user_login):
+            return JsonResponse(
+                data={"errors": {"general": ["user already exist"]}}, status=400
             )
+        else:
+            user_service = SerializerService(UserSerializer, request.data)
+
+            if user_service.errors is not None:
+                return JsonResponse(data={"errors": user_service.errors}, status=400)
+
+            Patient.objects.create(user=user_service.serialize_instance)
+
+            user_personal_info_service = SerializerService(
+                UserPersonalInfoSerializer,
+                {
+                    "user": {"login": user_login, "password": request.data["password"]},
+                    "first_name": request.data["first_name"],
+                    "second_name": request.data["second_name"],
+                },
+            )
+            if user_personal_info_service.errors is not None:
+                return JsonResponse(data={"errors": user_service.errors}, status=400)
             return JsonResponse(
                 data={"message": "user was successful registrated"}, status=200
             )
