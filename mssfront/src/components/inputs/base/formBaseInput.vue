@@ -12,17 +12,21 @@ const props = defineProps({
     <div class="container">
         <label class="container__label" :for="props.labelFor">{{ props.labelText }}</label>
         <ul v-if="props.errors" class="form__ul">
-            <li v-for="(error, index) in props.errors" :key="index">{{ error }}</li>
+            <li v-for="(error, index) in props.errors" :key="index">
+                {{ error }}
+            </li>
         </ul>
         <input :id="props.labelFor" class="container__input" :type="props.inputType"
-            :placeholder="props.inputPlaceholder">
+            :placeholder="props.inputPlaceholder" required>
     </div>
 </template>
 <style scoped>
 .container {
     display: flex;
     flex-direction: column;
-    gap: 5px
+    gap: 5px;
+    width: auto;
+    width: 100%;
 }
 
 .container__label {
