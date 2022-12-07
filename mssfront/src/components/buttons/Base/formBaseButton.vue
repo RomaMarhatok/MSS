@@ -2,7 +2,8 @@
 import { defineProps } from 'vue';
 const props = defineProps({
     buttonText: String,
-    buttonType: String
+    buttonType: String,
+    buttonEvent: String,
 })
 </script>
 <template>
