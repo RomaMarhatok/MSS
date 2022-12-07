@@ -31,6 +31,10 @@ class User(AbstractUser):
     class Meta:
         db_table = "user"
 
+    @staticmethod
+    def is_exist(login: str) -> bool:
+        return User.objects.filter(login=login).exists()
+
 
 def media_path_builder_for_user_info(instance, filename):
     now_date = datetime.now().strftime("%Y/%m/%d")
