@@ -1,6 +1,6 @@
 from rest_framework.viewsets import ViewSet
 from rest_framework.views import APIView
-from .models import Doctor, Patient, User
+from .models import Doctor, Patient, User, UserPersonalInfo
 from .serializers.doctor_serializer import DoctorSerializer
 from .serializers.user_serializer import UserSerializer
 from .serializers.patient_serializer import PatientSerializer
@@ -54,6 +54,11 @@ class TokenRegistrationView(APIView):
             user = serializer.save()
             Token.objects.create(user=user)
             Patient.objects.create(user=user)
+            UserPersonalInfo.objects.create(
+                first_name=request.data["first_name"],
+                second_name=request.data["second_name"],
+                user=user,
+            )
             return JsonResponse(
                 data={"message": "user was successful registrated"}, status=200
             )
