@@ -14,5 +14,6 @@ class SerializerService:
         serializer = self.class_serializer(data=self.data)
         if not serializer.is_valid():
             self.errors = serializer.errors
-        self.serialize_instance = serializer.save()
+        else:
+            self.serialize_instance = serializer.save()
         return self
