@@ -162,6 +162,14 @@ python-versions = ">=3.7"
 test = ["pytest (>=6)"]
 
 [[package]]
+name = "exrex"
+version = "0.10.5"
+description = "Irregular methods for regular expressions"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "factory-boy"
 version = "3.2.1"
 description = "A versatile test fixtures replacement based on thoughtbot's factory_bot for Ruby."
@@ -586,7 +594,7 @@ testing = ["coverage (>=6.2)", "coverage-enable-subprocess (>=1)", "flaky (>=3.7
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "b8d96bff77a678b4ada3346a7293450065d8e9f05a573664fe2387a57ab00dd0"
+content-hash = "d292d7f7cde9a276c49aa5344ac2b6d361de4616554c3da8fbd5970b854f7cb3"
 
 [metadata.files]
 asgiref = [
@@ -615,6 +623,7 @@ django-cors-headers = [
 ]
 djangorestframework = []
 exceptiongroup = []
+exrex = []
 factory-boy = [
     {file = "factory_boy-3.2.1-py2.py3-none-any.whl", hash = "sha256:eb02a7dd1b577ef606b75a253b9818e6f9eaf996d94449c9d5ebb124f90dc795"},
     {file = "factory_boy-3.2.1.tar.gz", hash = "sha256:a98d277b0c047c75eb6e4ab8508a7f81fb03d2cb21986f627913546ef7a2a55e"},

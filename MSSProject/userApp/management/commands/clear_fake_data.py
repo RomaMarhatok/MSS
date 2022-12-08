@@ -1,7 +1,7 @@
 from typing import Any, Optional
 
 from django.core.management.base import BaseCommand
-from faker import Faker
+from rest_framework.authtoken.models import Token
 
 from ...models import DoctorType, ImageForAnalyzes, Role, TreatmentHistory, User
 
@@ -19,3 +19,4 @@ class Command(BaseCommand):
             f"Treatments history models was deleted{TreatmentHistory.objects.all().delete()}"
         )
         print(f"Doctors types models was deleted:{DoctorType.objects.all().delete()}")
+        print(f"Tokens models was deleted:{Token.objects.all().delete()}")

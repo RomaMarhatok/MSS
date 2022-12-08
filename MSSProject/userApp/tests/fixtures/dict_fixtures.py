@@ -1,6 +1,7 @@
 import pytest
 from faker import Faker
 from userApp.utils.image_utils import load_image_from_url_to_file
+from ...utils.string_utls import generate_valid_password, generate_valid_login
 
 fake = Faker()
 
@@ -18,8 +19,8 @@ def patient_role_fixture() -> dict:
 @pytest.fixture
 def user_fixture(role_fixture) -> dict:
     return {
-        "login": fake.pystr(),
-        "password": fake.password(),
+        "login": generate_valid_login(),
+        "password": generate_valid_password(),
         "role": role_fixture,
     }
 
