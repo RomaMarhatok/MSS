@@ -50,6 +50,7 @@ class TokenRegistrationView(APIView):
                 data={"errors": {"general": ["user already exist"]}}, status=400
             )
         else:
+            print(request.data)
             user_service = SerializerService(UserSerializer, request.data)
 
             if user_service.errors is not None:
@@ -66,7 +67,9 @@ class TokenRegistrationView(APIView):
                 },
             )
             if user_personal_info_service.errors is not None:
-                return JsonResponse(data={"errors": user_service.errors}, status=400)
+                return JsonResponse(
+                    data={"errors": user_personal_info_service.errors}, status=400
+                )
             return JsonResponse(
                 data={"message": "user was successful registrated"}, status=200
             )
