@@ -14,8 +14,12 @@ const homeLink = reactive({
   link: "#/"
 })
 const loginLink = reactive({
-  text: "login",
+  text: "log in",
   link: "#/registration/",
+})
+const signUp = reactive({
+  text: "sign Up",
+  link: "#/"
 })
 </script>
 <template>
@@ -24,6 +28,8 @@ const loginLink = reactive({
     <nav-bar-link :text="contactsLink.text" :link="contactsLink.link" />
     <nav-bar-link :text="homeLink.text" :link="homeLink.link" />
     <nav-bar-link :text="loginLink.text" :link="loginLink.link" />
+    <nav-bar-link :text="signUp.text" :link="signUp.link" />
+
   </nav>
 </template>
 <style scoped>
