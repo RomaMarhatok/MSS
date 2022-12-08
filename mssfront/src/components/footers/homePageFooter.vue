@@ -3,7 +3,7 @@
         <div class="footer__div"></div>
     </footer>
 </template>
-<style>
+<style scoped>
 .footer {
     margin-top: 3%;
     background: rgba(19, 48, 94, 1);

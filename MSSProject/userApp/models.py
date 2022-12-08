@@ -31,6 +31,10 @@ class User(AbstractUser):
     class Meta:
         db_table = "user"
 
+    @staticmethod
+    def is_exist(login: str) -> bool:
+        return User.objects.filter(login=login).exists()
+
 
 def media_path_builder_for_user_info(instance, filename):
     now_date = datetime.now().strftime("%Y/%m/%d")
@@ -54,7 +58,7 @@ class UserPersonalInfo(models.Model):
     first_name = models.CharField("first name", max_length=100)
     second_name = models.CharField("second name", max_length=100)
     patronymic = models.CharField("patronymic", max_length=100, blank=True)
-    email = models.EmailField("email", max_length=100)
+    email = models.EmailField("email", max_length=100, blank=True)
 
     def __str__(self) -> str:
         return self.user.login

@@ -2,6 +2,10 @@ from rest_framework.serializers import ModelSerializer
 from typing import OrderedDict
 from .role_serializer import RoleSerializer
 from ..models import User, Role, UserPersonalInfo, UserDocument
+from rest_framework.serializers import ValidationError
+from ..validators.password_validator import PasswordValidator
+from ..validators.login_validator import LoginValidator
+from ..validators.text_validator import TextValidator
 
 
 class UserSerializer(ModelSerializer):
@@ -21,6 +25,25 @@ class UserSerializer(ModelSerializer):
             },
             "slug": {"required": False},
         }
+
+    def validate_password(self, value):
+        if not PasswordValidator.is_valid(value):
+            message = (
+                "Enter a valid password. This value may contain only English letters, "
+                "numbers, and optinal contain '!', '@', '#', '$', '%', '^', '&', '*' characters."
+                "min length of password 8 max length pasword 15"
+            )
+            raise ValidationError(message)
+        return value
+
+    def validate_login(self, value):
+        if not LoginValidator.is_valid(value):
+            message = (
+                "Enter a valid login. This value may contain only English letters, "
+                "numbers, and optinal contain '_', '-' characters."
+            )
+            raise ValidationError(message)
+        return value
 
     def create(self, validated_data: OrderedDict) -> User:
         role, validated_data = self.__get_role(validated_data)
@@ -50,6 +73,23 @@ class UserPersonalInfoSerializer(ModelSerializer):
             "patronymic",
             "email",
         )
+        extra_kwargs = {
+            "image": {"required": False},
+            "patronymic": {"required": False},
+            "email": {"required": False},
+        }
+
+    def validate_first_name(self, value):
+        if not TextValidator.is_valid(value):
+            message = "this name may contain only English letter"
+            raise ValidationError(message)
+        return value
+
+    def validate_second_name(self, value):
+        if not TextValidator.is_valid(value):
+            message = "this name may contain only English letter"
+            raise ValidationError(message)
+        return value
 
     def create(self, validated_data: OrderedDict) -> UserPersonalInfo:
         user = User.objects.get(login=validated_data["user"]["login"])

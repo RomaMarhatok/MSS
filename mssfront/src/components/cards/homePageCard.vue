@@ -16,7 +16,7 @@ const props = defineProps({
         </div>
     </div>
 </template>
-<style>
+<style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Fira+Sans&display=swap');
 
 .container__card {

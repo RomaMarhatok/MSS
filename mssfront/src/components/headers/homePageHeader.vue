@@ -1,14 +1,14 @@
 <script setup>
 import mssLogo from "./logo/mssLogo.vue";
-import frontPageNavBar from "../navbars/frontPageNavBar.vue";
+import homePageNavBar from "@/components/navbars/homePageNavBar.vue";
 </script>
 <template>
   <header class="header">
-    <mss-logo />
-    <front-page-nav-bar />
+    <mssLogo />
+    <homePageNavBar />
   </header>
 </template>
-<style>
+<style scoped>
 .header {
   display: flex;
   flex-direction: row;
