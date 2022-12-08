@@ -79,18 +79,23 @@ class TokenAuthenticationView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request: HttpRequest):
-        users: QuerySet = User.objects.filter(
-            login=request.data["login"], password=request.data["password"]
-        )
-        if users.exists():
-            user = users.first()
-            user_auth_token_key = Token.objects.filter(user=user).first().key
+        print(request.data)
+        if User.is_exist(request.data["login"]):
+            user_service = SerializerService(UserSerializer, request.data)
+            if user_service.errors is not None:
+                return JsonResponse(data={"errors": user_service.errors}, status=400)
+
+            user_auth_token_key, _ = Token.objects.get_or_create(
+                user=user_service.serialize_instance
+            )
             return JsonResponse(
                 data={
                     "message": "user successful authenticated",
-                    "token": user_auth_token_key,
-                    "user_role": user.role.name,
+                    "token": user_auth_token_key.key,
+                    "user_role": user_service.serialize_instance.role.name,
                 },
                 status=200,
             )
-        return JsonResponse(data={"errors": "user don't exist"}, status=400)
+        return JsonResponse(
+            data={"errors": {"general": ["user don't exist"]}}, status=400
+        )
