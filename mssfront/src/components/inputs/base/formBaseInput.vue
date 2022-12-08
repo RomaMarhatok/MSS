@@ -5,21 +5,28 @@ const props = defineProps({
     inputPlaceholder: String,
     inputType: String,
     labelFor: String,
-});
+    errors: Object,
+})
 </script>
 <template>
     <div class="container">
         <label class="container__label" :for="props.labelFor">{{ props.labelText }}</label>
+        <ul v-if="props.errors" class="form__ul">
+            <li v-for="(error, index) in props.errors" :key="index">
+                {{ error }}
+            </li>
+        </ul>
         <input :id="props.labelFor" class="container__input" :type="props.inputType"
-            :placeholder="props.inputPlaceholder" @input="$emit('update:text', $event.target.value)">
+            :placeholder="props.inputPlaceholder" required>
     </div>
-
 </template>
 <style scoped>
 .container {
     display: flex;
     flex-direction: column;
-    gap: 5px
+    gap: 5px;
+    width: auto;
+    width: 100%;
 }
 
 .container__label {
@@ -37,6 +44,19 @@ const props = defineProps({
     border-radius: 10px;
     padding: 10px;
     font-size: 1em;
+}
 
+.form__ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.form__ul>li {
+    border-radius: 10px;
+    padding: 5px;
+    color: rgb(114, 75, 75);
+    background-color: pink;
+    margin-bottom: 5px;
 }
 </style>
