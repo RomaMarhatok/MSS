@@ -19,7 +19,7 @@ const loginLink = reactive({
 })
 const signUp = reactive({
   text: "sign Up",
-  link: "#/"
+  link: "#/authentication/"
 })
 </script>
 <template>
@@ -29,7 +29,6 @@ const signUp = reactive({
     <nav-bar-link :text="homeLink.text" :link="homeLink.link" />
     <nav-bar-link :text="loginLink.text" :link="loginLink.link" />
     <nav-bar-link :text="signUp.text" :link="signUp.link" />
-
   </nav>
 </template>
 <style scoped>
