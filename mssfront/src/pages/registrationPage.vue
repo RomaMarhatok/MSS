@@ -6,29 +6,11 @@ import { ref } from 'vue';
 const changePasswordLink = ref("#/")
 </script>
 <template>
-    <main class="main">
-        <div class="wrapper">
+    <main class="flex flex-col justify-center items-center min-h-3/4 w-full">
+        <div class="flex flex-col w-4/5">
             <registrationPageHeader />
             <registrationForm />
             <registrationPageLink :link="changePasswordLink" />
         </div>
-
     </main>
 </template>
-<style scoped>
-.main {
-    display: flex;
-    flex-direction: column;
-    font-family: 'Fira Sans';
-    justify-content: center;
-    align-items: center;
-    min-height: 85vh;
-    width: 100%;
-}
-
-.wrapper {
-    display: flex;
-    flex-direction: column;
-    width: 80%;
-}
-</style>
