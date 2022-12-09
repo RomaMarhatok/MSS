@@ -9,6 +9,9 @@ module.exports = {
         "custom-dark-aqua":"#2C9C9C",
         "error-color":"#724b4b",
       },
+      minHeight: {
+        '3/4': '80vh',
+      }
     },
   },
   plugins: [],
