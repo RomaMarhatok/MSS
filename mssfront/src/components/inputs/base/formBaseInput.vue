@@ -1,5 +1,6 @@
 <script setup>
 import { defineProps } from 'vue';
+import InputText from "primevue/inputtext";
 const props = defineProps({
     labelText: String,
     inputPlaceholder: String,
@@ -9,54 +10,15 @@ const props = defineProps({
 })
 </script>
 <template>
-    <div class="container">
-        <label class="container__label" :for="props.labelFor">{{ props.labelText }}</label>
-        <ul v-if="props.errors" class="form__ul">
-            <li v-for="(error, index) in props.errors" :key="index">
+    <div class="field flex flex-col gap-1 w-full">
+        <label class="font-black text-lg" :for=props.labelFor>{{ props.labelText }}</label>
+        <InputText :placeholder=props.inputPlaceholder :id=props.labelFor :type=props.inputType
+            :aria-describedby=props.labelFor class="bg-white border-2 border-solid border-gray-300 rounded-xl text-base p-3 
+            focus:outline-none focus:shadow-outline focus:border-blue-300" required />
+        <div v-if="props.errors" class="flex flex-col mb-5">
+            <small class="p-error" v-for="error in props.errors" :key="error" :id=props.labelFor>
                 {{ error }}
-            </li>
-        </ul>
-        <input :id="props.labelFor" class="container__input" :type="props.inputType"
-            :placeholder="props.inputPlaceholder" required>
+            </small>
+        </div>
     </div>
 </template>
-<style scoped>
-.container {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    width: auto;
-    width: 100%;
-}
-
-.container__label {
-    font-weight: bolder;
-    font-size: 1.1em;
-}
-
-
-.container__input {
-    margin-top: 5px;
-    font-family: 'Fira Sans';
-    margin-bottom: 20px;
-    background: #FFFFFF;
-    border: 2px solid rgba(209, 209, 209, 1);
-    border-radius: 10px;
-    padding: 10px;
-    font-size: 1em;
-}
-
-.form__ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.form__ul>li {
-    border-radius: 10px;
-    padding: 5px;
-    color: rgb(114, 75, 75);
-    background-color: pink;
-    margin-bottom: 5px;
-}
-</style>
