@@ -14,16 +14,16 @@ const homeLink = reactive({
   link: "#/"
 })
 const loginLink = reactive({
-  text: "log in",
+  text: "Log in",
   link: "#/registration/",
 })
 const signUp = reactive({
-  text: "sign Up",
+  text: "Sign up",
   link: "#/authentication/"
 })
 </script>
 <template>
-  <nav class="header__navbar">
+  <nav class="w-11/12 flex flex-row justify-end gap-4">
     <nav-bar-link :text="aboutLink.text" :link="aboutLink.link" />
     <nav-bar-link :text="contactsLink.text" :link="contactsLink.link" />
     <nav-bar-link :text="homeLink.text" :link="homeLink.link" />
@@ -31,11 +31,3 @@ const signUp = reactive({
     <nav-bar-link :text="signUp.text" :link="signUp.link" />
   </nav>
 </template>
-<style scoped>
-.header__navbar {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-}
-</style>

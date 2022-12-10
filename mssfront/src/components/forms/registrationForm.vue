@@ -53,12 +53,13 @@ function submitForm() {
         errors.password = errorsFromResponce.password
         errors.first_name = errorsFromResponce.first_name
         errors.second_name = errorsFromResponce.second_name
+        console.log(errors)
     })
 }
 </script>
 <template>
     <baseForm @SubmitForm="submitForm" :errors="generalErrors" :message="message">
-        <div class="form__header">
+        <div class="flex flex-row gap-3">
             <formFirstNameInput v-model="formData.first_name" :errors="firstNameErrors" />
             <formSecondNameInput v-model="formData.second_name" :errors="secondNameErrors" />
         </div>
@@ -67,10 +68,3 @@ function submitForm() {
         <formSubmitButton :buttonText="'Sign up'" />
     </baseForm>
 </template>
-<style scoped>
-.form__header {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-}
-</style>

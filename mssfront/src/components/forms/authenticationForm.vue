@@ -47,10 +47,3 @@ function submitForm() {
         <formSubmitButton :buttonText="'Log in'" />
     </baseForm>
 </template>
-<style scoped>
-.form__header {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-}
-</style>
