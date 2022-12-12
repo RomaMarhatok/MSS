@@ -106,11 +106,12 @@ class UserDocumentSerializer(ModelSerializer):
 
     class Meta:
         model = UserDocument
-        fields = (
-            "user",
-            "content",
-        )
-        extra_kwargs = {"user": {"validators": [], "lookup_field": "slug"}}
+        fields = ("user", "content", "slug")
+        extra_kwargs = {
+            "user": {"validators": []},
+            "lookup_field": "slug",
+            "slug": {"required": False},
+        }
 
     def create(self, validated_data: OrderedDict) -> UserDocument:
         user = User.objects.get(login=validated_data["user"]["login"])

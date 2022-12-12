@@ -29,3 +29,5 @@ def test_desrialization(factory_user_docuemnt_fixture):
     assert isinstance(serializer.data, dict)
     assert "user" in serializer.data
     assert isinstance(serializer.data["user"], dict)
+    assert "slug" in serializer.data
+    assert isinstance(serializer.data["slug"], str)
