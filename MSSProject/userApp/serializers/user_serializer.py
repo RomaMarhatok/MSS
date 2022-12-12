@@ -25,6 +25,7 @@ class UserSerializer(ModelSerializer):
             },
             "slug": {"required": False},
         }
+        lookup_field = "slug"
 
     def validate_password(self, value):
         if not PasswordValidator.is_valid(value):
@@ -109,7 +110,7 @@ class UserDocumentSerializer(ModelSerializer):
             "user",
             "content",
         )
-        extra_kwargs = {"user": {"validators": []}}
+        extra_kwargs = {"user": {"validators": [], "lookup_field": "slug"}}
 
     def create(self, validated_data: OrderedDict) -> UserDocument:
         user = User.objects.get(login=validated_data["user"]["login"])
