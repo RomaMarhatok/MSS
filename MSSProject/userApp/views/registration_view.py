@@ -12,9 +12,9 @@ class RegistrationView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request: HttpRequest):
-        print(request.user)
-        user_login = request.data["login"]
-        if User.is_exist(user_login):
+        login = request.data["login"]
+        password = request.data["password"]
+        if User.is_exist(login, password):
             return JsonResponse(
                 data={"errors": {"general": ["user already exist"]}},
                 status=status.HTTP_400_BAD_REQUEST,
@@ -34,7 +34,7 @@ class RegistrationView(APIView):
             user_personal_info_service = SerializerService(
                 UserPersonalInfoSerializer,
                 {
-                    "user": {"login": user_login, "password": request.data["password"]},
+                    "user": {"login": login, "password": request.data["password"]},
                     "first_name": request.data["first_name"],
                     "second_name": request.data["second_name"],
                 },

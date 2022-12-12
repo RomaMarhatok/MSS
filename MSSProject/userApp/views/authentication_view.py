@@ -11,11 +11,10 @@ class AuthenticationView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request: HttpRequest):
-        users: QuerySet = User.objects.filter(
-            login=request.data["login"], password=request.data["password"]
-        )
-        if users.exists():
-            user = users.first()
+        login = request.data["login"]
+        password = request.data["password"]
+        if User.is_exist(login, password):
+            user = User.get_user_by_login(login)
             user_auth_token_key = Token.objects.filter(user=user).first().key
             return JsonResponse(
                 data={
