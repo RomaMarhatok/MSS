@@ -79,11 +79,16 @@ class UserPersonalInfo(models.Model):
 
 
 class UserDocument(models.Model):
+    slug = models.SlugField(max_length=100)
     content = models.TextField("document content")
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
         db_table = "user_document"
+
+    def save(self, *args, **kwargs):
+        self.slug = generate_slug_from_str(self.content[:20])
+        return super(UserDocument, self).save(*args, **kwargs)
 
 
 class DoctorType(models.Model):
