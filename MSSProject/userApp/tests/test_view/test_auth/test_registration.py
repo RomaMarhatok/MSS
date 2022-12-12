@@ -25,8 +25,6 @@ def test_registration(
     )
     assert response.status_code == 200
     assert "message" in json.loads(response.content.decode("utf-8"))
-    assert Token.objects.filter(user__login=user_fixture["login"]).exists()
-    assert Token.objects.count() == 1
     assert User.objects.count() == 1
     assert Patient.objects.count() == 1
     assert UserPersonalInfo.objects.count() == 1

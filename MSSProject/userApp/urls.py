@@ -1,16 +1,16 @@
-from rest_framework.routers import DefaultRouter
 from django.urls import path
-from userApp.views import TokenRegistrationView, TokenAuthenticationView
+from userApp.views.authentication_view import AuthenticationView
+from userApp.views.registration_view import RegistrationView
 
 urlpatterns = [
     path(
         "auth/registration/",
-        TokenRegistrationView.as_view(),
+        RegistrationView.as_view(),
         name="token-user-registration",
     ),
     path(
         "auth/authentication/",
-        TokenAuthenticationView.as_view(),
+        AuthenticationView.as_view(),
         name="token-user-authentication",
     ),
 ]
