@@ -82,6 +82,10 @@ class UserDocumentType(models.Model):
     slug = models.SlugField(max_length=100)
     name = models.CharField(max_length=255)
 
+    def save(self, *args, **kwargs):
+        self.slug = generate_slug_from_str(self.name)
+        return super(User, self).save(*args, **kwargs)
+
 
 class UserDocument(models.Model):
     content = models.TextField("document content")
