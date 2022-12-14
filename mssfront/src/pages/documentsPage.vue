@@ -1,11 +1,12 @@
 <script setup>
 import documentsPageHeader from '@/components/headers/documentsPageHeader.vue';
-import documentsListSection from '@/components/sections/documentPage/documentsListSection.vue';
+import documentPageNavBar from '@/components/navbars/documentPageNavBar.vue';
+import documentDisplaySection from '@/components/sections/documentPage/documentDisplaySection.vue';
 </script>
 <template>
-    <documentsPageHeader />
-    <main class="flex justify-center flex-row gap-3 p-5">
-        <documentsListSection />
-        <section></section>
-    </main>
+    <div>
+        <documentsPageHeader />
+        <documentPageNavBar />
+        <documentDisplaySection />
+    </div>
 </template>
