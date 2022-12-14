@@ -84,7 +84,7 @@ class UserDocumentType(models.Model):
 
     def save(self, *args, **kwargs):
         self.slug = generate_slug_from_str(self.name)
-        return super(User, self).save(*args, **kwargs)
+        return super(UserDocumentType, self).save(*args, **kwargs)
 
 
 class UserDocument(models.Model):
