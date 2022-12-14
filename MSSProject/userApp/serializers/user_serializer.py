@@ -1,7 +1,7 @@
 from rest_framework.serializers import ModelSerializer
 from typing import OrderedDict
 from .role_serializer import RoleSerializer
-from ..models import User, Role, UserPersonalInfo, UserDocument
+from ..models import User, Role, UserPersonalInfo, UserDocument, UserDocumentType
 from rest_framework.serializers import ValidationError
 from ..validators.password_validator import PasswordValidator
 from ..validators.login_validator import LoginValidator
@@ -99,6 +99,18 @@ class UserPersonalInfoSerializer(ModelSerializer):
             **validated_data, user=user
         )
         return instance
+
+
+class UserDocumentTypeSerializer(ModelSerializer):
+    class Meta:
+        fields = (
+            "name",
+            "slug",
+        )
+        model = UserDocumentType
+        extra_kwargs = {
+            "slug": {"required": False},
+        }
 
 
 class UserDocumentSerializer(ModelSerializer):
