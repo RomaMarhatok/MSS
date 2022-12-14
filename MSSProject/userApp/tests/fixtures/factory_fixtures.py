@@ -55,8 +55,12 @@ def factory_user_personal_info_fixture(factory_user_fixture) -> UserPersonalInfo
 
 
 @pytest.fixture
-def factory_user_docuemnt_fixture(factory_user_fixture) -> UserDocument:
-    return UserDocumentFactory.create(user=factory_user_fixture)
+def factory_user_docuemnt_fixture(
+    factory_user_fixture, factory_user_document_type_fixture
+) -> UserDocument:
+    return UserDocumentFactory.create(
+        user=factory_user_fixture, document_type=factory_user_document_type_fixture
+    )
 
 
 @pytest.fixture
