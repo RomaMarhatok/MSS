@@ -26,6 +26,13 @@ def user_fixture(role_fixture) -> dict:
 
 
 @pytest.fixture
+def user_document_type_fixture() -> dict:
+    return {
+        "name": fake.pystr(),
+    }
+
+
+@pytest.fixture
 def user_personal_info_fixture(user_fixture) -> dict:
     return {
         "user": user_fixture,
