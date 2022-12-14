@@ -1,8 +1,11 @@
+from __future__ import annotations
 from datetime import datetime
 from django.db import models
 from django.template.defaultfilters import slugify
 from .utils.slug_utils import generate_slug_from_str
 from django.contrib.auth.models import AbstractUser
+from rest_framework.authtoken.models import Token
+from django.db.models import Q
 
 
 class Role(models.Model):
@@ -32,8 +35,16 @@ class User(AbstractUser):
         db_table = "user"
 
     @staticmethod
-    def is_exist(login: str) -> bool:
-        return User.objects.filter(login=login).exists()
+    def is_exist(login: str, password: str) -> bool:
+        return User.objects.filter(Q(login=login) & Q(password=password)).exists()
+
+    @staticmethod
+    def get_user_by_token(token: str) -> User:
+        return Token.objects.filter(key=token).first().user
+
+    @staticmethod
+    def get_user_by_login(login: str) -> User:
+        return User.objects.filter(login=login).first()
 
 
 def media_path_builder_for_user_info(instance, filename):
@@ -67,9 +78,21 @@ class UserPersonalInfo(models.Model):
         db_table = "user_personal_info"
 
 
+class UserDocumentType(models.Model):
+    slug = models.SlugField(max_length=100)
+    name = models.CharField(max_length=255)
+
+    def save(self, *args, **kwargs):
+        self.slug = generate_slug_from_str(self.name)
+        return super(UserDocumentType, self).save(*args, **kwargs)
+
+
 class UserDocument(models.Model):
     content = models.TextField("document content")
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    document_type = models.ForeignKey(
+        UserDocumentType, on_delete=models.SET_NULL, null=True
+    )
 
     class Meta:
         db_table = "user_document"

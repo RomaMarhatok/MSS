@@ -28,6 +28,20 @@ def test_serialization_without_role(user_fixture):
 
 
 @pytest.mark.django_db
+def test_update_serialization(user_fixture):
+    user_fixture.pop("role")
+    Role.objects.create(name="patient")
+    serializer = UserSerializer(data=user_fixture)
+    assert serializer.is_valid(raise_exception=True)
+    instance = serializer.save()
+    user_fixture["login"] = "asdk82hiwh89"
+    serializer = UserSerializer(instance=instance, data=user_fixture)
+    assert serializer.is_valid(raise_exception=True)
+    instance2 = serializer.save()
+    assert instance2.login == user_fixture["login"]
+
+
+@pytest.mark.django_db
 def test_password_validator(user_fixture):
     user_fixture.pop("role")
     Role.objects.create(name="patient")

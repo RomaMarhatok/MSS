@@ -1,7 +1,7 @@
 from rest_framework.serializers import ModelSerializer
 from typing import OrderedDict
 from .role_serializer import RoleSerializer
-from ..models import User, Role, UserPersonalInfo, UserDocument
+from ..models import User, Role, UserPersonalInfo, UserDocument, UserDocumentType
 from rest_framework.serializers import ValidationError
 from ..validators.password_validator import PasswordValidator
 from ..validators.login_validator import LoginValidator
@@ -25,6 +25,7 @@ class UserSerializer(ModelSerializer):
             },
             "slug": {"required": False},
         }
+        lookup_field = "slug"
 
     def validate_password(self, value):
         if not PasswordValidator.is_valid(value):
@@ -100,19 +101,42 @@ class UserPersonalInfoSerializer(ModelSerializer):
         return instance
 
 
+class UserDocumentTypeSerializer(ModelSerializer):
+    class Meta:
+        fields = (
+            "name",
+            "slug",
+        )
+        model = UserDocumentType
+        extra_kwargs = {
+            "slug": {"required": False},
+        }
+
+
 class UserDocumentSerializer(ModelSerializer):
     user = UserSerializer(many=False, required=True)
+    document_type = UserDocumentTypeSerializer(many=False, required=True)
 
     class Meta:
         model = UserDocument
         fields = (
             "user",
             "content",
+            "document_type",
         )
-        extra_kwargs = {"user": {"validators": []}}
+        extra_kwargs = {
+            "user": {"validators": [], "lookup_field": "slug"},
+            "document_type": {"validators": []},
+        }
 
     def create(self, validated_data: OrderedDict) -> UserDocument:
         user = User.objects.get(login=validated_data["user"]["login"])
         validated_data.pop("user")
-        instance, _ = UserDocument.objects.get_or_create(**validated_data, user=user)
+        document_type = UserDocumentType.objects.get(
+            name=validated_data["document_type"]["name"]
+        )
+        validated_data.pop("document_type")
+        instance, _ = UserDocument.objects.get_or_create(
+            **validated_data, user=user, document_type=document_type
+        )
         return instance
