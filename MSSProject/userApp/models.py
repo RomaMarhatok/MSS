@@ -91,7 +91,8 @@ class UserDocumentType(models.Model):
 
 
 class UserDocument(models.Model):
-    slug = models.SlugField(max_length=100, unique=True)
+    slug = models.SlugField(max_length=255, unique=True)
+    name = models.CharField(max_length=255)
     content = models.TextField("document content")
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     document_type = models.ForeignKey(
@@ -102,7 +103,7 @@ class UserDocument(models.Model):
         db_table = "user_document"
 
     def save(self, *args, **kwargs):
-        self.slug = generate_slug_from_str(self.content[:20])
+        self.slug = generate_slug_from_str(self.name)
         return super(UserDocument, self).save(*args, **kwargs)
 
 
