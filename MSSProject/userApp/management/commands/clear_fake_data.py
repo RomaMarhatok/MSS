@@ -3,7 +3,14 @@ from typing import Any, Optional
 from django.core.management.base import BaseCommand
 from rest_framework.authtoken.models import Token
 
-from ...models import DoctorType, ImageForAnalyzes, Role, TreatmentHistory, User
+from ...models import (
+    DoctorType,
+    ImageForAnalyzes,
+    Role,
+    TreatmentHistory,
+    User,
+    UserDocumentType,
+)
 
 
 class Command(BaseCommand):
@@ -20,3 +27,6 @@ class Command(BaseCommand):
         )
         print(f"Doctors types models was deleted:{DoctorType.objects.all().delete()}")
         print(f"Tokens models was deleted:{Token.objects.all().delete()}")
+        print(
+            f"UserDocuments type models was deleted:{UserDocumentType.objects.all().delete()}"
+        )

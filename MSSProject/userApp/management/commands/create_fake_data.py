@@ -1,8 +1,7 @@
 from typing import Any, Optional
-
+import random
 from django.core.management.base import BaseCommand
 from faker import Faker
-from ...utils.image_utils import load_image_from_url_to_file
 from ...tests.factories.user_app_factories import (
     DoctorFactory,
     DoctorTypesFactory,
@@ -15,6 +14,7 @@ from ...tests.factories.user_app_factories import (
     UserPersonalInfoFactory,
     DoctorDoctorTypesFactory,
     TreatmentHistoryImageForAnalyzesFactory,
+    UserDocumentTypeFactory,
 )
 from ...utils.string_utls import generate_valid_password, generate_valid_login
 
@@ -27,7 +27,12 @@ class Command(BaseCommand):
     def handle(self, *args: Any, **options: Any) -> Optional[str]:
         patient_role = RoleFactory(name="patient")
         doctor_role = RoleFactory(name="doctor")
+        test = UserDocumentTypeFactory(name="test")
+        analyzes = UserDocumentTypeFactory(name="analyzes")
+        conclusions = UserDocumentTypeFactory(name="conclusions")
+        document_types = [test, analyzes, conclusions]
         for _ in range(1, 100):
+
             user = UserFactory(
                 login=generate_valid_login(),
                 password=generate_valid_password(),
@@ -41,7 +46,7 @@ class Command(BaseCommand):
                 patronymic=fake.last_name(),
                 email=fake.email(),
             )
-            UserDocumentFactory(content=fake.pystr(), user=user)
+            self.create_user_documents(user, document_types)
             doctor_type = DoctorTypesFactory(doctor_type=fake.pystr())
 
             doctor_user = UserFactory(
@@ -67,3 +72,14 @@ class Command(BaseCommand):
             TreatmentHistoryImageForAnalyzesFactory(
                 treatment_history=treatment, image_for_analyzes=img_for_analyzes
             )
+
+    def create_user_documents(self, user, document_types):
+        [
+            UserDocumentFactory(
+                name=fake.pystr(),
+                content=fake.text(),
+                user=user,
+                document_type=random.choice(document_types),
+            )
+            for _ in range(100)
+        ]
