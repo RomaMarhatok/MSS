@@ -6,7 +6,6 @@ from ..models import User
 
 class IsUserAuthenticated(BasePermission):
     def has_permission(self, request: HttpRequest, view) -> bool:
-        print(request.headers)
         if "Authorization" not in request.headers:
             return False
         try:
