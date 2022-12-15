@@ -24,7 +24,7 @@ def test_serialization(user_document_fixture):
     user_serializer.save()
 
     user_document_serializer = UserDocumentSerializer(data=user_document_fixture)
-    assert user_document_serializer.is_valid()
+    assert user_document_serializer.is_valid(raise_exception=True)
     instance = user_document_serializer.save()
     assert UserDocument.objects.all().count() == 1
     assert UserDocumentType.objects.count() == 1
@@ -36,7 +36,6 @@ def test_serialization(user_document_fixture):
 def test_desrialization(factory_user_docuemnt_fixture):
     serializer = UserDocumentSerializer(instance=factory_user_docuemnt_fixture)
     assert isinstance(serializer.data, dict)
-    assert "user" in serializer.data
-    assert isinstance(serializer.data["user"], dict)
     assert "document_type" in serializer.data
+    assert "slug" in serializer.data
     assert isinstance(serializer.data["document_type"], dict)
