@@ -78,10 +78,22 @@ class UserPersonalInfo(models.Model):
         db_table = "user_personal_info"
 
 
+class UserDocumentType(models.Model):
+    slug = models.SlugField(max_length=100)
+    name = models.CharField(max_length=255)
+
+    def save(self, *args, **kwargs):
+        self.slug = generate_slug_from_str(self.name)
+        return super(UserDocumentType, self).save(*args, **kwargs)
+
+
 class UserDocument(models.Model):
     slug = models.SlugField(max_length=100)
     content = models.TextField("document content")
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    document_type = models.ForeignKey(
+        UserDocumentType, on_delete=models.SET_NULL, null=True
+    )
 
     class Meta:
         db_table = "user_document"

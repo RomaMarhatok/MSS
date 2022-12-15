@@ -11,6 +11,7 @@ from ...models import (
     TreatmentHistory,
     User,
     UserDocument,
+    UserDocumentType,
     UserPersonalInfo,
     DoctorDoctorTypes,
     TreatmentHistoryImageForAnalyzes,
@@ -36,6 +37,13 @@ class UserFactory(DjangoModelFactory):
     role = SubFactory(RoleFactory)
 
 
+class UserDocumentTypeFactory(DjangoModelFactory):
+    class Meta:
+        model = UserDocumentType
+
+    name = fake.pystr()
+
+
 class UserPersonalInfoFactory(DjangoModelFactory):
     class Meta:
         model = UserPersonalInfo
@@ -54,6 +62,7 @@ class UserDocumentFactory(DjangoModelFactory):
 
     content = fake.text()
     user = SubFactory(UserFactory)
+    document_type = SubFactory(UserDocumentTypeFactory)
 
 
 class DoctorTypesFactory(DjangoModelFactory):
