@@ -61,6 +61,7 @@ class UserDocumentFactory(DjangoModelFactory):
         model = UserDocument
 
     content = fake.text()
+    name = fake.pystr()
     user = SubFactory(UserFactory)
     document_type = SubFactory(UserDocumentTypeFactory)
 

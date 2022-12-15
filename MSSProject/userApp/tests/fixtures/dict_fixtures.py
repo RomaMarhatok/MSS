@@ -57,6 +57,7 @@ def user_personal_info_with_image_fixture(user_personal_info_fixture) -> dict:
 @pytest.fixture
 def user_document_fixture(user_fixture, user_document_type_fixture) -> dict:
     return {
+        "name": fake.pystr(),
         "content": fake.text(),
         "user": user_fixture,
         "document_type": user_document_type_fixture,
