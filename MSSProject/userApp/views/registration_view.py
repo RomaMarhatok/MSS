@@ -20,7 +20,6 @@ class RegistrationView(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
         else:
-            print(request.data)
             user_service = SerializerService(UserSerializer, request.data)
 
             if user_service.errors is not None:

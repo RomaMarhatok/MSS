@@ -11,9 +11,4 @@ class IsUserAuthenticated(BasePermission):
         key = request.headers["Authorization"].split(" ")[1]
         if not Token.objects.filter(key=key).exists():
             return False
-        user_role = User.get_user_by(key).role
-        if (
-            view.action != "list" or view.action != "retrieve"
-        ) and user_role == "patient":
-            return False
         return True

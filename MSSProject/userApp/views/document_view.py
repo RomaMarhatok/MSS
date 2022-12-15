@@ -12,7 +12,8 @@ class DocumentView(GenericViewSet):
     permission_classes = [IsUserAuthenticated]
     lookup_field = "slug"
 
-    def list(self, request: HttpRequest):
+    def list(self, request: HttpRequest, slug=None):
+        print(slug)
         if "Authorization" in request.headers:
             key = request.headers["Authorization"].split(" ")[1]
             try:
@@ -32,14 +33,14 @@ class DocumentView(GenericViewSet):
             status=status.HTTP_400_BAD_REQUEST,
         )
 
-    def create(self, request):
-        serializer_service = SerializerService(UserDocumentSerializer, request.data)
-        if serializer_service.errors is not None:
-            return JsonResponse(
-                data={"errors": serializer_service.errors},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-        return JsonResponse(data={}, status=status.HTTP_200_OK)
+    # def create(self, request):
+    #     serializer_service = SerializerService(UserDocumentSerializer, request.data)
+    #     if serializer_service.errors is not None:
+    #         return JsonResponse(
+    #             data={"errors": serializer_service.errors},
+    #             status=status.HTTP_400_BAD_REQUEST,
+    #         )
+    #     return JsonResponse(data={}, status=status.HTTP_200_OK)
 
     def retrieve(self, request, slug=None):
         user_document = UserDocument.objects.filter(slug=slug).first()

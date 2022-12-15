@@ -2,7 +2,6 @@ import pytest
 import json
 from userApp.models import User, Patient, UserPersonalInfo
 from django.test.client import Client
-from rest_framework.authtoken.models import Token
 from django.urls import reverse
 
 
