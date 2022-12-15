@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from userApp.views.authentication_view import AuthenticationView
 from userApp.views.registration_view import RegistrationView
 from userApp.views.document_view import DocumentView
@@ -15,8 +15,20 @@ urlpatterns = [
         name="token-user-authentication",
     ),
     path(
-        "<str:slug>/documents",
-        DocumentView.as_view({"get": "list"}),
-        name="user-documents",
+        "user/<str:user_slug>/",
+        include(
+            [
+                path(
+                    "documents/",
+                    DocumentView.as_view({"get": "list"}),
+                    name="user-documents",
+                ),
+                path(
+                    "document/<str:doc_slug>",
+                    DocumentView.as_view({"get": "retrieve"}),
+                    name="user-document",
+                ),
+            ]
+        ),
     ),
 ]
