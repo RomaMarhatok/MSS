@@ -120,6 +120,8 @@ class UserDocumentSerializer(ModelSerializer):
     class Meta:
         model = UserDocument
         fields = (
+            "name",
+            "slug",
             "user",
             "content",
             "document_type",
@@ -127,6 +129,8 @@ class UserDocumentSerializer(ModelSerializer):
         extra_kwargs = {
             "user": {"validators": [], "lookup_field": "slug"},
             "document_type": {"validators": []},
+            "name": {"validators": []},
+            "slug": {"required": False},
         }
 
     def create(self, validated_data: OrderedDict) -> UserDocument:
@@ -140,3 +144,8 @@ class UserDocumentSerializer(ModelSerializer):
             **validated_data, user=user, document_type=document_type
         )
         return instance
+
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        rep.pop("user")
+        return rep
