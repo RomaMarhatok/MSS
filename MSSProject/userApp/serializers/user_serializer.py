@@ -30,8 +30,7 @@ class UserSerializer(ModelSerializer):
     def validate_password(self, value):
         if not PasswordValidator.is_valid(value):
             message = (
-                "Enter a valid password. This value may contain only English letters, "
-                "numbers, and optinal contain '!', '@', '#', '$', '%', '^', '&', '*' characters."
+                "Enter a valid password. This value may contain only English letters and numbers "
                 "min length of password 8 max length pasword 15"
             )
             raise ValidationError(message)
@@ -82,13 +81,13 @@ class UserPersonalInfoSerializer(ModelSerializer):
 
     def validate_first_name(self, value):
         if not TextValidator.is_valid(value):
-            message = "this name may contain only English letter"
+            message = "this field may contain only English letter"
             raise ValidationError(message)
         return value
 
     def validate_second_name(self, value):
         if not TextValidator.is_valid(value):
-            message = "this name may contain only English letter"
+            message = "this field may contain only English letter"
             raise ValidationError(message)
         return value
 
