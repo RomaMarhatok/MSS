@@ -25,12 +25,8 @@ class Command(BaseCommand):
     help: str = "create fake data from tests"
 
     def handle(self, *args: Any, **options: Any) -> Optional[str]:
-        patient_role = RoleFactory(name="patient")
-        doctor_role = RoleFactory(name="doctor")
-        test = UserDocumentTypeFactory(name="test")
-        analyzes = UserDocumentTypeFactory(name="analyzes")
-        conclusions = UserDocumentTypeFactory(name="conclusions")
-        document_types = [test, analyzes, conclusions]
+        patient_role, doctor_role = self.prepare_roles()
+        document_types = self.prepare_documents_types()
         for _ in range(1, 100):
 
             user = UserFactory(
@@ -51,8 +47,8 @@ class Command(BaseCommand):
 
             doctor_user = UserFactory(
                 username=fake.profile()["username"],
-                login=fake.pystr(),
-                password=fake.password(),
+                login=generate_valid_login(),
+                password=generate_valid_password(),
                 role=doctor_role,
             )
 
@@ -83,3 +79,17 @@ class Command(BaseCommand):
             )
             for _ in range(100)
         ]
+
+    def prepare_roles(self):
+        patient_role = RoleFactory(name="patient")
+        doctor_role = RoleFactory(name="doctor")
+        return (
+            patient_role,
+            doctor_role,
+        )
+
+    def prepare_documents_types(self):
+        test = UserDocumentTypeFactory(name="test")
+        analyzes = UserDocumentTypeFactory(name="analyzes")
+        conclusions = UserDocumentTypeFactory(name="conclusions")
+        return [test, analyzes, conclusions]
