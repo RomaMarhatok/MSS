@@ -51,6 +51,6 @@ class AuthenticationService:
             }
 
         return {
-            "data": {"errors": ["user don't exist"]},
+            "data": {"errors": {"general": ["user don't exist"]}},
             "status": status.HTTP_403_FORBIDDEN,
         }
