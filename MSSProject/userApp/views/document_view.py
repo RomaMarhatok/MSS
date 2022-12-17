@@ -13,7 +13,6 @@ class DocumentView(GenericViewSet):
 
     def list(self, request: HttpRequest, user_slug=None):
         user_docuements = UserDocument.objects.filter(user__slug=user_slug)
-        print(user_docuements.count())
         serializer = UserDocumentSerializer(instance=user_docuements, many=True)
         return JsonResponse(
             data={"user_documents": serializer.data},
