@@ -29,9 +29,13 @@ const passwordErrors = computed(() => {
 function submitForm() {
     for (let key in errors) errors[key] = []
 
-    authenticationService.value.authenticateUser(formData).then(() => {
+    authenticationService.value.authenticateUser(formData).then((response) => {
+        console.log(response)
+        const token = response.data.token
+        localStorage.setItem("auth_toke", token)
         router.push("/")
     }).catch(error => {
+        console.log(error)
         let errorsFromResponce = error.response.data.errors
         errors.general = errorsFromResponce.general
         errors.login = errorsFromResponce.login
