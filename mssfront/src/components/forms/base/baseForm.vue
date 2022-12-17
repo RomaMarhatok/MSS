@@ -1,19 +1,21 @@
 <script setup>
 
 import { defineProps } from 'vue';
-import Message from 'primevue/message';
+import errorMessage from '@/components/messages/errorMessage.vue';
+import successMessage from '@/components/messages/succesMessage.vue';
 const props = defineProps({
-    errors: Object,
+    errors: {
+        type: Array,
+        default: () => []
+    },
     message: String,
 })
 </script>
 <template>
     <div class="section">
-        <Message v-if="props.message" severity="success">{{ props.message }}</Message>
-        <div v-if="errors" class="flex flex-col">
-            <Message severity="error" v-for="(error, index) in props.errors" :key="index">
-                {{ error }}
-            </Message>
+        <successMessage v-if="props.message" :errorText="props.message" />
+        <div v-if="props.errors.length" class="flex flex-col">
+            <errorMessage severity="error" v-for="(error, index) in props.errors" :key="index" :errorText="error" />
         </div>
         <form @submit.prevent="$emit('SubmitForm')" class="flex flex-col" method="post">
             <slot>Fallback content</slot>
