@@ -17,29 +17,27 @@ class RegistrationService:
 
     def __validate_request_data(self):
         validating_keys = ["login", "password", "first_name", "second_name"]
-        request_keys = self.request.data.keys()
+        request_keys = list(self.request.data.keys())
         if is_containe(validating_keys, request_keys):
             return (
                 {
-                    "data": {
-                        "errors": [
-                            "login,password,first_name,second_name don't provided"
-                        ]
+                    "user": {
+                        "login": self.request.data["login"],
+                        "password": self.request.data["password"],
                     },
-                    "status": status.HTTP_400_BAD_REQUEST,
+                    "first_name": self.request.data["first_name"],
+                    "second_name": self.request.data["second_name"],
                 },
-                False,
+                True,
             )
         return (
             {
-                "user": {
-                    "login": self.request.data["login"],
-                    "password": self.request.data["password"],
+                "data": {
+                    "errors": ["login,password,first_name,second_name don't provided"]
                 },
-                "first_name": self.request.data["first_name"],
-                "second_name": self.request.data["second_name"],
+                "status": status.HTTP_400_BAD_REQUEST,
             },
-            True,
+            False,
         )
 
     def __processing_registration(self, data: dict):

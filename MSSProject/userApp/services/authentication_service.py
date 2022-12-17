@@ -19,7 +19,7 @@ class AuthenticationService:
 
     def __validate_request_data(self):
         validating_keys = ["login", "password"]
-        request_keys = self.request.data.keys()
+        request_keys = list(self.request.data.keys())
         if is_containe(validating_keys, request_keys):
             return (
                 {
