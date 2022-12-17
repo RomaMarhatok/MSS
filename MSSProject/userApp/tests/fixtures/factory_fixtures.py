@@ -11,6 +11,7 @@ from userApp.tests.factories.user_app_factories import (
     TreatmentsHistoryFactory,
     DoctorDoctorTypesFactory,
     TreatmentHistoryImageForAnalyzesFactory,
+    UserDocumentTypeFactory,
 )
 from ...models import (
     Role,
@@ -22,6 +23,7 @@ from ...models import (
     DoctorDoctorTypes,
     DoctorType,
     ImageForAnalyzes,
+    UserDocumentType,
     TreatmentHistory,
     TreatmentHistoryImageForAnalyzes,
 )
@@ -53,13 +55,22 @@ def factory_user_personal_info_fixture(factory_user_fixture) -> UserPersonalInfo
 
 
 @pytest.fixture
-def factory_user_docuemnt_fixture(factory_user_fixture) -> UserDocument:
-    return UserDocumentFactory.create(user=factory_user_fixture)
+def factory_user_docuemnt_fixture(
+    factory_user_fixture, factory_user_document_type_fixture
+) -> UserDocument:
+    return UserDocumentFactory.create(
+        user=factory_user_fixture, document_type=factory_user_document_type_fixture
+    )
 
 
 @pytest.fixture
 def factory_doctor_type_fixture() -> DoctorType:
     return DoctorTypesFactory.create()
+
+
+@pytest.fixture
+def factory_user_document_type_fixture() -> UserDocumentType:
+    return UserDocumentTypeFactory.create()
 
 
 @pytest.fixture

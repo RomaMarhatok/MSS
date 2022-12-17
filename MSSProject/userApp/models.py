@@ -9,7 +9,7 @@ from django.db.models import Q
 
 
 class Role(models.Model):
-    slug = models.SlugField(max_length=100)
+    slug = models.SlugField(max_length=100, unique=True)
     name = models.CharField("role name", max_length=100, unique=True)
 
     def save(self, *args, **kwargs):
@@ -21,7 +21,7 @@ class Role(models.Model):
 
 
 class User(AbstractUser):
-    slug = models.SlugField(max_length=100)
+    slug = models.SlugField(max_length=100, unique=True)
     login = models.CharField("user login", max_length=100, unique=True)
     password = models.CharField("user password", max_length=100)
     role = models.ForeignKey(Role, on_delete=models.SET_NULL, null=True)
@@ -78,16 +78,37 @@ class UserPersonalInfo(models.Model):
         db_table = "user_personal_info"
 
 
+class UserDocumentType(models.Model):
+    slug = models.SlugField(max_length=100, unique=True)
+    name = models.CharField(max_length=255)
+
+    def save(self, *args, **kwargs):
+        self.slug = generate_slug_from_str(self.name)
+        return super(UserDocumentType, self).save(*args, **kwargs)
+
+    class Meta:
+        db_table = "user_document_type"
+
+
 class UserDocument(models.Model):
+    slug = models.SlugField(max_length=255, unique=True)
+    name = models.CharField(max_length=255)
     content = models.TextField("document content")
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    document_type = models.ForeignKey(
+        UserDocumentType, on_delete=models.SET_NULL, null=True
+    )
 
     class Meta:
         db_table = "user_document"
 
+    def save(self, *args, **kwargs):
+        self.slug = generate_slug_from_str(self.name)
+        return super(UserDocument, self).save(*args, **kwargs)
+
 
 class DoctorType(models.Model):
-    slug = models.SlugField(max_length=100)
+    slug = models.SlugField(max_length=100, unique=True)
     doctor_type = models.CharField(
         "doctor profession name", max_length=100, unique=True
     )
@@ -148,7 +169,7 @@ class ImageForAnalyzes(models.Model):
 
 
 class TreatmentHistory(models.Model):
-    slug = models.SlugField()
+    slug = models.SlugField(max_length=100, unique=True)
     description = models.TextField()
     doctor = models.ForeignKey(Doctor, on_delete=models.SET_NULL, null=True)
     patient = models.ForeignKey(Patient, on_delete=models.SET_NULL, null=True)

@@ -40,6 +40,7 @@ const secondNameErrors = computed(() => {
     return errors.second_name ?? []
 })
 function submitForm() {
+    console.log(formData)
     message.value = ""
     for (let key in errors) errors[key] = []
 
@@ -47,13 +48,13 @@ function submitForm() {
         message.value = response.data.message
         router.push("/")
     }).catch(error => {
+        console.log(error)
         let errorsFromResponce = error.response.data.errors
         errors.general = errorsFromResponce.general
         errors.login = errorsFromResponce.login
         errors.password = errorsFromResponce.password
         errors.first_name = errorsFromResponce.first_name
         errors.second_name = errorsFromResponce.second_name
-        console.log(errors)
     })
 }
 </script>

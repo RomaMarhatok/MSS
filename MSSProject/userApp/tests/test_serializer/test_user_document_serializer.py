@@ -1,11 +1,19 @@
 import pytest
-from userApp.models import UserDocument, User
-from userApp.serializers.user_serializer import UserDocumentSerializer, UserSerializer
+from userApp.models import UserDocument, User, UserDocumentType
+from userApp.serializers.user_serializer import (
+    UserDocumentSerializer,
+    UserSerializer,
+    UserDocumentTypeSerializer,
+)
 from userApp.serializers.role_serializer import RoleSerializer
 
 
 @pytest.mark.django_db
 def test_serialization(user_document_fixture):
+
+    serializer = UserDocumentTypeSerializer(data=user_document_fixture["document_type"])
+    assert serializer.is_valid()
+    serializer.save()
 
     role_serializer = RoleSerializer(data=user_document_fixture["user"]["role"])
     assert role_serializer.is_valid()
@@ -16,9 +24,10 @@ def test_serialization(user_document_fixture):
     user_serializer.save()
 
     user_document_serializer = UserDocumentSerializer(data=user_document_fixture)
-    assert user_document_serializer.is_valid()
+    assert user_document_serializer.is_valid(raise_exception=True)
     instance = user_document_serializer.save()
     assert UserDocument.objects.all().count() == 1
+    assert UserDocumentType.objects.count() == 1
     assert User.objects.all().count() == 1
     assert isinstance(instance, UserDocument)
 
@@ -27,5 +36,6 @@ def test_serialization(user_document_fixture):
 def test_desrialization(factory_user_docuemnt_fixture):
     serializer = UserDocumentSerializer(instance=factory_user_docuemnt_fixture)
     assert isinstance(serializer.data, dict)
-    assert "user" in serializer.data
-    assert isinstance(serializer.data["user"], dict)
+    assert "document_type" in serializer.data
+    assert "slug" in serializer.data
+    assert isinstance(serializer.data["document_type"], dict)

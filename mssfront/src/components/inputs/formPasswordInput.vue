@@ -9,7 +9,10 @@ const passwordInput = reactive({
     labelFor: "password_input",
 })
 const props = defineProps({
-    errors: Object,
+    errors: {
+        type: Array,
+        default: () => []
+    }
 })
 </script>
 <template>

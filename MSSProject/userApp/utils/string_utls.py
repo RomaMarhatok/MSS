@@ -6,7 +6,7 @@ def generate_random_string_by_regex(re) -> str:
 
 
 def generate_valid_password() -> str:
-    regex = r"^[a-zA-Z0-9!@#$%^&*]{8,15}$"
+    regex = r"^[a-zA-Z0-9]{8,15}$"
     return generate_random_string_by_regex(regex)
 
 
