@@ -1,5 +1,5 @@
 <script setup>
-import documentPageLink from './links/documentPageLink.vue';
+import documentPageLink from '@/components/links/documentPageLink.vue';
 import { reactive } from 'vue'
 const documentLink = reactive({
     link: "/",
