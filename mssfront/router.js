@@ -7,11 +7,11 @@ import personalInfoPage from "./src/pages/userPages/personalInfoPage"
 const router = createRouter({
     history:createWebHashHistory(),
     routes:[
-        {path:"/",name:"Home",component:homePage},
-        {path:"/registration/",name:"Registration",component:registrationPage},
-        {path:"/authentication/",name:"Authentication",component:authenticationPage},
-        {path:"/user/documents/",name:"UserDocuments",component:documentsPage},
-        {path:"/user/home/",name:"UserHomePage",component:personalInfoPage}
+        {path:"/",name:"site-home-page",component:homePage},
+        {path:"/registration/",name:"registration-page",component:registrationPage},
+        {path:"/authentication/",name:"authentication-page",component:authenticationPage},
+        {path:"/user/documents/",name:"patuent-docuemnt-page",component:documentsPage},
+        {path:"/user/:slug/home/",name:"patient-profile-page",component:personalInfoPage}
     ]
 })
 export default router
