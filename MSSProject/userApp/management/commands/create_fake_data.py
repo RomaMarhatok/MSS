@@ -28,7 +28,7 @@ class Command(BaseCommand):
     def handle(self, *args: Any, **options: Any) -> Optional[str]:
         patient_role, doctor_role = self.prepare_roles()
         document_types = self.prepare_documents_types()
-        for _ in range(1, 2):
+        for _ in range(1, 50):
 
             user = UserFactory(
                 login=generate_valid_login(),
