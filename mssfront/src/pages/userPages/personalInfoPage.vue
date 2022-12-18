@@ -110,8 +110,10 @@ const imageSectionProps = reactive({
                 :personalInfo="imageSectionProps.personalInfo" />
         </section>
         <section class="flex__section">
-            <dataSection :headerText="recentDocuments.header" :data="recentDocuments.data" />
-            <dataSection :headerText="recentAppoitments.header" :data="recentAppoitments.data" />
+            <dataSection v-if="recentDocuments.data" :headerText="recentDocuments.header"
+                :data="recentDocuments.data" />
+            <dataSection v-if="recentAppoitments.data" :headerText="recentAppoitments.header"
+                :data="recentAppoitments.data" />
         </section>
     </main>
 </template>
