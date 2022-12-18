@@ -3,6 +3,7 @@ from datetime import datetime
 from django.db import models
 from django.template.defaultfilters import slugify
 from .utils.slug_utils import generate_slug_from_str
+from .utils.string_utls import generate_hash_from_string
 from django.contrib.auth.models import AbstractUser
 
 
@@ -62,6 +63,12 @@ class UserPersonalInfo(models.Model):
 
     class Meta:
         db_table = "user_personal_info"
+
+    def save(self, *args, **kwargs) -> None:
+        self.image.name = (
+            generate_hash_from_string(f"{self.first_name} {self.second_name}") + ".jpg"
+        )
+        return super(UserPersonalInfo, self).save(*args, **kwargs)
 
 
 class UserDocumentType(models.Model):
@@ -149,6 +156,10 @@ class ImageForAnalyzes(models.Model):
         blank=True,
     )
     description = models.TextField()
+
+    def save(self, *args, **kwargs):
+        self.image.name = generate_hash_from_string(self.description[:10]) + ".jpg"
+        return super(ImageForAnalyzes, self).save(*args, **kwargs)
 
     class Meta:
         db_table = "image_for_analyzes"
