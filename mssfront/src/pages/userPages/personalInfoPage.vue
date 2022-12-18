@@ -1,7 +1,24 @@
 <script setup>
 import dataSection from '@/components/sections/userPages/personalInfoPage/dataSection.vue';
 import imageSection from '@/components/sections/userPages/personalInfoPage/imageSection.vue';
-import { reactive } from 'vue';
+import { reactive, onBeforeMount } from 'vue';
+import { useRoute } from 'vue-router';
+import UserService from '../../../services/UserService';
+import getBaseApi from '@/baseApi';
+// const router = useRouter()
+const route = useRoute()
+console.log(route.params.slug)
+onBeforeMount(() => {
+    let userServive = new UserService()
+    userServive.getUserPersonalInfo(route.params.slug).then((response) => {
+        personalInfoSection.data[0].text = response.data.email
+        imageSectionProps.personalInfo.full_name = response.data.first_name + " " + response.data.second_name + " " + response.data.patronymic
+        imageSectionProps.imageSrc = getBaseApi.getUri() + response.data.image
+        console.log(response)
+    }).catch((error) => {
+        console.log(error)
+    })
+})
 const personalInfoSection = reactive({
     header: "personal info",
     data: [
