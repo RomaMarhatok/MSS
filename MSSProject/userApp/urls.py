@@ -2,6 +2,7 @@ from django.urls import path, include
 from userApp.views.authentication_view import AuthenticationView
 from userApp.views.registration_view import RegistrationView
 from userApp.views.document_view import DocumentView
+from userApp.views.profile_view import ProfileView
 
 urlpatterns = [
     path(
@@ -18,6 +19,11 @@ urlpatterns = [
         "user/<str:user_slug>/",
         include(
             [
+                path(
+                    "profile/",
+                    ProfileView.as_view({"post": "retrieve"}),
+                    name="user-profile",
+                ),
                 path(
                     "documents/",
                     DocumentView.as_view({"get": "list"}),
