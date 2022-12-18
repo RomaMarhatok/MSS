@@ -9,7 +9,6 @@ class UserService:
         user = User.objects.filter(slug=slug).first()
         user_personal_info = UserPersonalInfo.objects.filter(user=user).first()
         serializet_data = UserPersonalInfoSerializer(instance=user_personal_info).data
-        serializet_data.pop("user")
         return serializet_data
 
     def is_user_exist(self, login, password) -> bool:

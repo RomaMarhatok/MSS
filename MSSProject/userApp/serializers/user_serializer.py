@@ -6,6 +6,7 @@ from rest_framework.serializers import ValidationError
 from ..validators.password_validator import PasswordValidator
 from ..validators.login_validator import LoginValidator
 from ..validators.text_validator import TextValidator
+from django.http import HttpRequest
 
 
 class UserSerializer(ModelSerializer):
@@ -98,6 +99,14 @@ class UserPersonalInfoSerializer(ModelSerializer):
             **validated_data, user=user
         )
         return instance
+
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        rep.pop("user")
+        # print(HttpRequest.build_absolute_uri(rep["image"]))
+        print(rep["image"])
+        # rep["image"] = HttpRequest.build_absolute_uri(rep["image"])
+        return rep
 
 
 class UserDocumentTypeSerializer(ModelSerializer):
