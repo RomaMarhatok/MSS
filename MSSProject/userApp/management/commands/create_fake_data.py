@@ -17,6 +17,7 @@ from ...tests.factories.user_app_factories import (
     UserDocumentTypeFactory,
 )
 from ...utils.string_utls import generate_valid_password, generate_valid_login
+from ...utils.image_utils import load_image_from_url
 
 fake = Faker()
 
@@ -27,7 +28,7 @@ class Command(BaseCommand):
     def handle(self, *args: Any, **options: Any) -> Optional[str]:
         patient_role, doctor_role = self.prepare_roles()
         document_types = self.prepare_documents_types()
-        for _ in range(1, 100):
+        for _ in range(1, 2):
 
             user = UserFactory(
                 login=generate_valid_login(),
@@ -36,7 +37,7 @@ class Command(BaseCommand):
             )
             UserPersonalInfoFactory(
                 user=user,
-                image=fake.image_url(),
+                image=load_image_from_url(fake.image_url()),
                 first_name=fake.first_name(),
                 second_name=fake.last_name(),
                 patronymic=fake.last_name(),
@@ -57,7 +58,7 @@ class Command(BaseCommand):
             patient = PatinesFactory(user=user)
 
             img_for_analyzes = ImageForAnalyzesFactory(
-                image=fake.image_url(),
+                image=load_image_from_url(fake.image_url()),
                 description=fake.text(),
             )
             treatment = TreatmentsHistoryFactory(

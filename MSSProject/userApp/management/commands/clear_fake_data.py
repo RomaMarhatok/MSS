@@ -1,5 +1,5 @@
 from typing import Any, Optional
-
+from userApp.utils.image_utils import FolderController
 from django.core.management.base import BaseCommand
 from rest_framework.authtoken.models import Token
 
@@ -30,3 +30,5 @@ class Command(BaseCommand):
         print(
             f"UserDocuments type models was deleted:{UserDocumentType.objects.all().delete()}"
         )
+        folder_controller = FolderController()
+        folder_controller.remove_dir("media")

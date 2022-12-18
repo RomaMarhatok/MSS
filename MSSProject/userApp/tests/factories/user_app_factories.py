@@ -2,6 +2,7 @@ from factory import SubFactory
 from factory.django import DjangoModelFactory
 from faker import Faker
 from ...utils.string_utls import generate_valid_password, generate_valid_login
+from ...utils.image_utils import load_image_from_url
 from ...models import (
     Doctor,
     DoctorType,
@@ -49,7 +50,7 @@ class UserPersonalInfoFactory(DjangoModelFactory):
         model = UserPersonalInfo
 
     user = SubFactory(UserFactory)
-    image = fake.image_url()
+    image = load_image_from_url(fake.image_url())
     first_name = fake.first_name()
     second_name = fake.last_name()
     patronymic = fake.last_name()
@@ -99,7 +100,7 @@ class ImageForAnalyzesFactory(DjangoModelFactory):
     class Meta:
         model = ImageForAnalyzes
 
-    image = fake.image_url()
+    image = load_image_from_url(fake.image_url())
     description = fake.text()
 
 
