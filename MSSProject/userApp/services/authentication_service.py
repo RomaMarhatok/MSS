@@ -1,13 +1,14 @@
-from ..models import User
 from rest_framework.authtoken.models import Token
 from rest_framework import status
 from django.http import HttpRequest
 from ..utils.list_utils import is_containe
+from ..services.model_services.user_service import UserService
 
 
 class AuthenticationService:
     def __init__(self, request: HttpRequest) -> None:
         self.request = request
+        self.user_service = UserService()
 
     def authenticate_user(self):
         request_data, request_data_is_valid = self.__validate_request_data()
@@ -37,8 +38,8 @@ class AuthenticationService:
         )
 
     def __processing_authentication(self, login, password):
-        if User.is_exist(login, password):
-            user = User.get_user_by_login(login)
+        if self.user_service.is_user_exist(login, password):
+            user = self.user_service.get_user_by_login(login)
             token, _ = Token.objects.get_or_create(user=user)
             return {
                 "data": {

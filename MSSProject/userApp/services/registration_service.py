@@ -1,13 +1,15 @@
-from ..models import User, Patient
+from ..models import Patient
 from ..serializers.user_serializer import UserSerializer, UserPersonalInfoSerializer
 from rest_framework import status
 from django.http import HttpRequest
 from ..utils.list_utils import is_containe
+from ..services.model_services.user_service import UserService
 
 
 class RegistrationService:
     def __init__(self, request: HttpRequest) -> None:
         self.request = request
+        self.user_service = UserService()
 
     def register_user(self):
         validated_request_data, request_data_is_valid = self.__validate_request_data()
@@ -41,7 +43,9 @@ class RegistrationService:
         )
 
     def __processing_registration(self, data: dict):
-        if not User.is_exist(data["user"]["login"], data["user"]["password"]):
+        if not self.user_service.is_user_exist(
+            data["user"]["login"], data["user"]["password"]
+        ):
             serialization_result = self.__init__user(data)
             return serialization_result
         return {
