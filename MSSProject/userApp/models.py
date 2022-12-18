@@ -4,8 +4,6 @@ from django.db import models
 from django.template.defaultfilters import slugify
 from .utils.slug_utils import generate_slug_from_str
 from django.contrib.auth.models import AbstractUser
-from rest_framework.authtoken.models import Token
-from django.db.models import Q
 
 
 class Role(models.Model):
@@ -33,18 +31,6 @@ class User(AbstractUser):
 
     class Meta:
         db_table = "user"
-
-    @staticmethod
-    def is_exist(login: str, password: str) -> bool:
-        return User.objects.filter(Q(login=login) & Q(password=password)).exists()
-
-    @staticmethod
-    def get_user_by_token(token: str) -> User:
-        return Token.objects.filter(key=token).first().user
-
-    @staticmethod
-    def get_user_by_login(login: str) -> User:
-        return User.objects.filter(login=login).first()
 
 
 def media_path_builder_for_user_info(instance, filename):
