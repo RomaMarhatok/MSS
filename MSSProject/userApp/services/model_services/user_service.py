@@ -5,11 +5,15 @@ from rest_framework.authtoken.models import Token
 
 
 class UserService:
-    def get_user_personal_info(self, slug) -> dict:
+    def get_user_personal_info(self, slug) -> dict | None:
         user = User.objects.filter(slug=slug).first()
-        user_personal_info = UserPersonalInfo.objects.filter(user=user).first()
-        serializet_data = UserPersonalInfoSerializer(instance=user_personal_info).data
-        return serializet_data
+        if user is not None:
+            user_personal_info = UserPersonalInfo.objects.filter(user=user).first()
+            serialized_data = UserPersonalInfoSerializer(
+                instance=user_personal_info
+            ).data
+            return serialized_data
+        return None
 
     def is_user_exist(self, login, password) -> bool:
         return User.objects.filter(Q(login=login) & Q(password=password)).exists()
