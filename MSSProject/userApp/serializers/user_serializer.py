@@ -103,9 +103,6 @@ class UserPersonalInfoSerializer(ModelSerializer):
     def to_representation(self, instance):
         rep = super().to_representation(instance)
         rep.pop("user")
-        # print(HttpRequest.build_absolute_uri(rep["image"]))
-        print(rep["image"])
-        # rep["image"] = HttpRequest.build_absolute_uri(rep["image"])
         return rep
 
 
