@@ -15,6 +15,7 @@ from ...tests.factories.user_app_factories import (
     DoctorDoctorTypesFactory,
     TreatmentHistoryImageForAnalyzesFactory,
     UserDocumentTypeFactory,
+    UserLocationFactory,
 )
 from ...utils.string_utls import generate_valid_password, generate_valid_login
 from ...utils.image_utils import load_image_from_url
@@ -42,6 +43,12 @@ class Command(BaseCommand):
                 second_name=fake.last_name(),
                 patronymic=fake.last_name(),
                 email=fake.email(),
+            )
+            UserLocationFactory(
+                user=user,
+                country=fake.country(),
+                city=fake.city(),
+                address=fake.address(),
             )
             self.create_user_documents(user, document_types)
             doctor_type = DoctorTypesFactory(doctor_type=fake.pystr())
