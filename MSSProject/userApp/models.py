@@ -71,6 +71,13 @@ class UserPersonalInfo(models.Model):
         return super(UserPersonalInfo, self).save(*args, **kwargs)
 
 
+class UserLocation(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    country = models.CharField(max_length=255)
+    city = models.CharField(max_length=255)
+    address = models.CharField(max_length=255)
+
+
 class UserDocumentType(models.Model):
     slug = models.SlugField(max_length=100, unique=True)
     name = models.CharField(max_length=255)
