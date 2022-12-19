@@ -1,12 +1,18 @@
 from rest_framework.serializers import ModelSerializer
 from typing import OrderedDict
 from .role_serializer import RoleSerializer
-from ..models import User, Role, UserPersonalInfo, UserDocument, UserDocumentType
+from ..models import (
+    User,
+    Role,
+    UserPersonalInfo,
+    UserDocument,
+    UserDocumentType,
+    UserLocation,
+)
 from rest_framework.serializers import ValidationError
 from ..validators.password_validator import PasswordValidator
 from ..validators.login_validator import LoginValidator
 from ..validators.text_validator import TextValidator
-from django.http import HttpRequest
 
 
 class UserSerializer(ModelSerializer):
@@ -148,6 +154,31 @@ class UserDocumentSerializer(ModelSerializer):
         instance, _ = UserDocument.objects.get_or_create(
             **validated_data, user=user, document_type=document_type
         )
+        return instance
+
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        rep.pop("user")
+        return rep
+
+
+class UserLocationSerializer(ModelSerializer):
+    user = UserSerializer(required=True)
+
+    class Meta:
+        model = UserLocation
+        fields = (
+            "user",
+            "country",
+            "city",
+            "address",
+        )
+
+    def create(self, validated_data):
+        user_login = validated_data["user"]["login"]
+        user = User.objects.get(login=user_login)
+        validated_data.pop("user")
+        instance, _ = UserLocation.objects.get_or_create(**validated_data, user=user)
         return instance
 
     def to_representation(self, instance):
