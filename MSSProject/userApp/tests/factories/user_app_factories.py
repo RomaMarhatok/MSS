@@ -16,6 +16,7 @@ from ...models import (
     UserPersonalInfo,
     DoctorDoctorTypes,
     TreatmentHistoryImageForAnalyzes,
+    UserLocation,
 )
 
 fake = Faker()
@@ -65,6 +66,16 @@ class UserDocumentFactory(DjangoModelFactory):
     name = fake.pystr()
     user = SubFactory(UserFactory)
     document_type = SubFactory(UserDocumentTypeFactory)
+
+
+class UserLocationFactory(DjangoModelFactory):
+    class Meta:
+        model = UserLocation
+
+    user = SubFactory(User)
+    country = fake.country()
+    city = fake.city()
+    address = fake.address()
 
 
 class DoctorTypesFactory(DjangoModelFactory):
