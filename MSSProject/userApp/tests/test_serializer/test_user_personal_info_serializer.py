@@ -38,10 +38,6 @@ def test_serialize_without_fields(user_personal_info_with_image_fixture):
     user_serializer = UserSerializer(data=user_personal_info_with_image_fixture["user"])
     assert user_serializer.is_valid()
     user_serializer.save()
-
-    user_personal_info_with_image_fixture.pop("email")
-    user_personal_info_with_image_fixture.pop("image")
-    user_personal_info_with_image_fixture.pop("patronymic")
     serializer = UserPersonalInfoSerializer(
         data={
             "user": {
