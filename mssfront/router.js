@@ -10,7 +10,7 @@ const router = createRouter({
         {path:"/",name:"site-home-page",component:homePage},
         {path:"/registration/",name:"registration-page",component:registrationPage},
         {path:"/authentication/",name:"authentication-page",component:authenticationPage},
-        {path:"/user/documents/",name:"patuent-docuemnt-page",component:documentsPage},
+        {path:"/user/:slug/documents/",name:"patuent-docuemnt-page",component:documentsPage},
         {path:"/user/:slug/home/",name:"patient-profile-page",component:personalInfoPage}
     ]
 })
