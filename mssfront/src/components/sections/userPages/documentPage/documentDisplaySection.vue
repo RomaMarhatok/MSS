@@ -1,36 +1,28 @@
 <script setup>
 import documentListPageCard from '@/components/cards/documentListPageCard.vue';
-import { defineProps, ref } from 'vue';
-const searchString = ref("")
+import { ref, defineProps, computed } from 'vue';
 const props = defineProps({
-    documents: Object
+    documents: {
+        type: Array,
+        default: () => [],
+    }
 })
+const searchString = ref("")
+const getDocuments = computed(() => { return props.documents.filter(el => el.name.toLowerCase().includes(searchString.value)) })
 </script>
 <template>
-    <main class="mt-4 w-full">
-        <div class="flex flex-row justify-center">
+    <main class="flex justify-center flex-col mt-4 items-center">
+        <div class="flex flex-row justify-center mb-2">
             <div class="search-box">
                 <button class="btn-search">
                     <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
                 </button>
                 <input type="text" class="input-search" v-model="searchString" placeholder="Type to Search...">
             </div>
-            <div class="flex flex-row justify-evenly gap-8">
-                <button class="display-button">
-                    <font-awesome-icon icon="fa-solid fa-table-cells" class="text-4xl" />
-                </button>
-                <button class="display-button">
-                    <font-awesome-icon icon="fa-solid fa-table-cells-large" class="text-4xl" />
-                </button>
-                <button class="display-button">
-                    <font-awesome-icon icon="fa-solid fa-list" class="text-4xl" />
-                </button>
-            </div>
         </div>
-        <div
-            class="grid-cols-5 grid-flow-row-dense gap-3 justify-center w-4/5 max-[600px]:grid-cols-1 max-[900px]:grid-cols-2 max-[1300px]:grid-cols-3">
-            <div v-if="props.documents">
-                <documentListPageCard v-for="(document, index) in props.documents" :key="index" :document="document" />
+        <div class="container">
+            <div class="document-list" v-if="props.documents">
+                <documentListPageCard v-for="(document, index) in getDocuments" :key="index" :document="document" />
             </div>
         </div>
     </main>
@@ -94,6 +86,11 @@ const props = defineProps({
     pointer-events: painted;
 }
 
+.btn-search:hover {
+    color: white;
+    background-color: rgb(19, 48, 94);
+}
+
 .btn-search:focus~.input-search {
     width: 300px;
     border-radius: 0px;
@@ -108,5 +105,55 @@ const props = defineProps({
     background-color: transparent;
     border-bottom: 1px solid rgba(11, 11, 11, 0.5);
     transition: all 500ms cubic-bezier(0, 0.110, 0.35, 2);
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    padding-top: 10px;
+    background-color: rgb(215, 214, 214);
+    width: 100%;
+    border-radius: 10px;
+}
+
+.document-list {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-auto-flow: row dense;
+    gap: 10px;
+    justify-items: center;
+}
+
+@media screen and (max-width: 1300px) {
+    .document-list {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-auto-flow: row dense;
+        justify-items: center;
+        width: 80%;
+    }
+
+}
+
+@media screen and (max-width: 900px) {
+    .document-list {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-auto-flow: row dense;
+        justify-items: center;
+        width: 80%;
+    }
+
+}
+
+@media screen and (max-width: 600px) {
+    .document-list {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        grid-auto-flow: row dense;
+        justify-items: center;
+        width: 80%;
+    }
+
 }
 </style>
