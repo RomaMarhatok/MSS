@@ -1,6 +1,7 @@
 <script setup>
 import documentListPageCard from '@/components/cards/documentListPageCard.vue';
-import { defineProps } from 'vue';
+import { defineProps, ref } from 'vue';
+const searchString = ref("")
 const props = defineProps({
     documents: Object
 })
@@ -12,7 +13,7 @@ const props = defineProps({
                 <button class="btn-search">
                     <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
                 </button>
-                <input type="text" class="input-search" placeholder="Type to Search...">
+                <input type="text" class="input-search" v-model="searchString" placeholder="Type to Search...">
             </div>
             <div class="flex flex-row justify-evenly gap-8">
                 <button class="display-button">
