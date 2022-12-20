@@ -58,6 +58,16 @@ def user_personal_info_with_image_fixture(user_personal_info_fixture) -> dict:
 
 
 @pytest.fixture
+def user_location_fixture(user_fixture):
+    return {
+        "user": user_fixture,
+        "country": fake.country(),
+        "city": fake.city(),
+        "address": fake.address(),
+    }
+
+
+@pytest.fixture
 def user_document_fixture(user_fixture, user_document_type_fixture) -> dict:
     return {
         "name": fake.pystr(),
