@@ -1,4 +1,4 @@
-import getBaseApi from "@/baseApi";
+import getBaseApi from "@/apis/baseApi";
 class RequestService {
     get(url,config){
         return getBaseApi.get(url,config)
