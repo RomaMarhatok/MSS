@@ -4,118 +4,82 @@ import imageSection from '@/components/sections/userPages/personalInfoPage/image
 import { reactive, onBeforeMount } from 'vue';
 import { useRoute } from 'vue-router';
 import UserService from '../../../services/UserService';
-import getBaseApi from '@/baseApi';
-// const router = useRouter()
+import getBaseApi from '@/apis/baseApi';
 const route = useRoute()
-console.log(route.params.slug)
+const getFullGenderName = (gender) => {
+    switch (gender) {
+        case "F":
+            return "Female"
+        case "M":
+            return "Male"
+        default:
+            return "Other"
+    }
+}
 onBeforeMount(() => {
     let userServive = new UserService()
     userServive.getUserPersonalInfo(route.params.slug).then((response) => {
         personalInfoSection.data[0].text = response.data.email
+        personalInfoSection.data[1].text = response.data.age
+        personalInfoSection.data[2].text = getFullGenderName(response.data.gender)
+        personalInfoSection.data[3].text = response.data.health_status
+
         imageSectionProps.personalInfo.full_name = response.data.first_name + " " + response.data.second_name + " " + response.data.patronymic
         imageSectionProps.imageSrc = getBaseApi.getUri() + response.data.image
+        imageSectionProps.personalInfo.location = response.data.country + " " + response.data.city
+        imageSectionProps.personalInfo.address = response.data.address
         console.log(response)
     }).catch((error) => {
         console.log(error)
     })
 })
+
 const personalInfoSection = reactive({
     header: "personal info",
     data: [
         {
             label: "Email",
-            text: "maldonadoandrea@example.net"
+            text: ""
         },
         {
             label: "Age",
-            text: 26
+            text: -1
         },
         {
             label: "Gender",
-            text: "Male"
+            text: ""
         },
         {
             label: "Health status",
-            text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa sit ea molestias qui quae odit reprehenderit animi id, corporis tempora facilis debitis, cum placeat. Velit quo inventore maiores eius consectetur!"
+            text: ""
         }
     ]
 })
 const recentDocuments = reactive({
     header: "recent documents",
     data: [
-        {
-            label: "Age",
-            text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa sit ea molestias qui quae odit reprehenderit animi id, corporis tempora facilis debitis, cum placeat. Velit quo inventore maiores eius consectetur!"
-        },
-        {
-            label: "Age",
-            text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa sit ea molestias qui quae odit reprehenderit animi id, corporis tempora facilis debitis, cum placeat. Velit quo inventore maiores eius consectetur!"
-        },
-        {
-            label: "Age",
-            text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa sit ea molestias qui quae odit reprehenderit animi id, corporis tempora facilis debitis, cum placeat. Velit quo inventore maiores eius consectetur!"
-        },
-        {
-            label: "Age",
-            text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa sit ea molestias qui quae odit reprehenderit animi id, corporis tempora facilis debitis, cum placeat. Velit quo inventore maiores eius consectetur!"
-        },
-        {
-            label: "Age",
-            text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa sit ea molestias qui quae odit reprehenderit animi id, corporis tempora facilis debitis, cum placeat. Velit quo inventore maiores eius consectetur!"
-        },
-        {
-            label: "Age",
-            text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa sit ea molestias qui quae odit reprehenderit animi id, corporis tempora facilis debitis, cum placeat. Velit quo inventore maiores eius consectetur!"
-        },
-        {
-            label: "Age",
-            text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa sit ea molestias qui quae odit reprehenderit animi id, corporis tempora facilis debitis, cum placeat. Velit quo inventore maiores eius consectetur!"
-        },
+        //Example of data display
+        // {
+        //     label: "Age",
+        //     text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa sit ea molestias qui quae odit reprehenderit animi id, corporis tempora facilis debitis, cum placeat. Velit quo inventore maiores eius consectetur!"
+        // },
     ]
 })
 const recentAppoitments = reactive({
     header: "recent appoitments",
-    data: [
-        {
-            label: "Age",
-            text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa sit ea molestias qui quae odit reprehenderit animi id, corporis tempora facilis debitis, cum placeat. Velit quo inventore maiores eius consectetur!"
-        },
-        {
-            label: "Age",
-            text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa sit ea molestias qui quae odit reprehenderit animi id, corporis tempora facilis debitis, cum placeat. Velit quo inventore maiores eius consectetur!"
-        },
-        {
-            label: "Age",
-            text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa sit ea molestias qui quae odit reprehenderit animi id, corporis tempora facilis debitis, cum placeat. Velit quo inventore maiores eius consectetur!"
-        },
-        {
-            label: "Age",
-            text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa sit ea molestias qui quae odit reprehenderit animi id, corporis tempora facilis debitis, cum placeat. Velit quo inventore maiores eius consectetur!"
-        },
-        {
-            label: "Age",
-            text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa sit ea molestias qui quae odit reprehenderit animi id, corporis tempora facilis debitis, cum placeat. Velit quo inventore maiores eius consectetur!"
-        },
-        {
-            label: "Age",
-            text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa sit ea molestias qui quae odit reprehenderit animi id, corporis tempora facilis debitis, cum placeat. Velit quo inventore maiores eius consectetur!"
-        },
-        {
-            label: "Age",
-            text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa sit ea molestias qui quae odit reprehenderit animi id, corporis tempora facilis debitis, cum placeat. Velit quo inventore maiores eius consectetur!"
-        },
-    ]
+    data: []
 })
 const imageSectionProps = reactive({
     imageSrc: "https://picsum.photos/262/187",
     links: {
-        doctors: "#/",
+        doctors: `#/user/${route.params.slug}/documents/`,
         appoitments: "#/",
         documents: "#/",
     },
     personalInfo: {
-        full_name: "First Name Second name patronymic",
-        location: "location"
+        full_name: "",
+        location: "",
+        address: ""
     }
 })
 </script>
@@ -127,9 +91,9 @@ const imageSectionProps = reactive({
                 :personalInfo="imageSectionProps.personalInfo" />
         </section>
         <section class="flex__section">
-            <dataSection v-if="recentDocuments.data" :headerText="recentDocuments.header"
+            <dataSection v-if="recentDocuments.data.length" :headerText="recentDocuments.header"
                 :data="recentDocuments.data" />
-            <dataSection v-if="recentAppoitments.data" :headerText="recentAppoitments.header"
+            <dataSection v-if="recentAppoitments.data.length" :headerText="recentAppoitments.header"
                 :data="recentAppoitments.data" />
         </section>
     </main>
