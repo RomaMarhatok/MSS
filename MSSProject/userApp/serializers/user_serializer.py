@@ -165,6 +165,8 @@ class UserDocumentSerializer(ModelSerializer):
     def to_representation(self, instance):
         rep = super().to_representation(instance)
         rep.pop("user")
+        if "include_context" in self.context and self.context["include_context"]:
+            rep.pop("content")
         return rep
 
 
