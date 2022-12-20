@@ -57,6 +57,9 @@ class UserPersonalInfo(models.Model):
     second_name = models.CharField("second name", max_length=100)
     patronymic = models.CharField("patronymic", max_length=100, blank=True)
     email = models.EmailField("email", max_length=100, blank=True)
+    gender = models.CharField(max_length=150, blank=True, default="Other")
+    age = models.IntegerField(blank=True, default=-1)
+    health_status = models.TextField(blank=True, default="")
 
     def __str__(self) -> str:
         return self.user.login

@@ -79,11 +79,17 @@ class UserPersonalInfoSerializer(ModelSerializer):
             "second_name",
             "patronymic",
             "email",
+            "gender",
+            "age",
+            "health_status",
         )
         extra_kwargs = {
             "image": {"required": False},
             "patronymic": {"required": False},
             "email": {"required": False},
+            "gender": {"required": False},
+            "age": {"required": False},
+            "health_status": {"required": False},
         }
 
     def validate_first_name(self, value):

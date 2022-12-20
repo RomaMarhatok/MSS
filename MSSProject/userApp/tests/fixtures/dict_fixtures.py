@@ -41,6 +41,9 @@ def user_personal_info_fixture(user_fixture) -> dict:
         "second_name": fake.last_name(),
         "patronymic": fake.last_name(),
         "email": fake.email(),
+        "gender": fake.simple_profile()["sex"],
+        "age": fake.random_number(digits=2),
+        "health_status": fake.text(),
     }
 
 
