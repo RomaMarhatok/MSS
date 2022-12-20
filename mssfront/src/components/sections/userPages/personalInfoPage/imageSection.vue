@@ -12,6 +12,7 @@ const props = defineProps({
         <div class="content">
             <p>{{ props.personalInfo.full_name }}</p>
             <p>{{ props.personalInfo.location }}</p>
+            <p class="whitespace-pre text-center">{{ props.personalInfo.address }}</p>
             <section class="href__section">
                 <a :href="props.links.doctors">Doctors</a>
                 <a :href="props.links.appoitments">Appoitments</a>
