@@ -15,8 +15,10 @@ from ...tests.factories.user_app_factories import (
     DoctorDoctorTypesFactory,
     TreatmentHistoryImageForAnalyzesFactory,
     UserDocumentTypeFactory,
+    UserLocationFactory,
 )
 from ...utils.string_utls import generate_valid_password, generate_valid_login
+from ...utils.image_utils import load_image_from_url
 
 fake = Faker()
 
@@ -27,7 +29,7 @@ class Command(BaseCommand):
     def handle(self, *args: Any, **options: Any) -> Optional[str]:
         patient_role, doctor_role = self.prepare_roles()
         document_types = self.prepare_documents_types()
-        for _ in range(1, 100):
+        for _ in range(1, 50):
 
             user = UserFactory(
                 login=generate_valid_login(),
@@ -36,11 +38,20 @@ class Command(BaseCommand):
             )
             UserPersonalInfoFactory(
                 user=user,
-                image=fake.image_url(),
+                image=load_image_from_url(fake.image_url()),
                 first_name=fake.first_name(),
                 second_name=fake.last_name(),
                 patronymic=fake.last_name(),
                 email=fake.email(),
+                gender=fake.simple_profile()["sex"],
+                age=fake.random_number(digits=2),
+                health_status=fake.text(),
+            )
+            UserLocationFactory(
+                user=user,
+                country=fake.country(),
+                city=fake.city(),
+                address=fake.address(),
             )
             self.create_user_documents(user, document_types)
             doctor_type = DoctorTypesFactory(doctor_type=fake.pystr())
@@ -57,11 +68,11 @@ class Command(BaseCommand):
             patient = PatinesFactory(user=user)
 
             img_for_analyzes = ImageForAnalyzesFactory(
-                image=fake.image_url(),
-                description=fake.text(),
+                image=load_image_from_url(fake.image_url()),
+                description=fake.text(max_nb_chars=10000),
             )
             treatment = TreatmentsHistoryFactory(
-                description=fake.text(),
+                description=fake.text(max_nb_chars=10000),
                 doctor=doctor,
                 patient=patient,
             )
@@ -73,7 +84,7 @@ class Command(BaseCommand):
         [
             UserDocumentFactory(
                 name=fake.pystr(),
-                content=fake.text(),
+                content=fake.text(max_nb_chars=10000),
                 user=user,
                 document_type=random.choice(document_types),
             )

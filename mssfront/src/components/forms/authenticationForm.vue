@@ -32,8 +32,9 @@ function submitForm() {
     authenticationService.value.authenticateUser(formData).then((response) => {
         console.log(response)
         const token = response.data.token
-        localStorage.setItem("auth_toke", token)
-        router.push("/")
+        localStorage.setItem("auth_token", token)
+        const userSlug = response.data.user_slug
+        router.push("/user/" + userSlug + "/home/")
     }).catch(error => {
         console.log(error)
         let errorsFromResponce = error.response.data.errors

@@ -2,12 +2,28 @@
   <homePageHeader />
   <homePageDoctorImageSection />
   <homePageCardsSection />
-  <homePageFooter />
+  <footer class="footer">
+    <div class="footer__div"></div>
+  </footer>
 </template>
 
 <script setup>
 import homePageHeader from "@/components/headers/homePageHeader.vue";
 import homePageDoctorImageSection from "@/components/sections/homePage/homePageDoctorImageSection.vue";
 import homePageCardsSection from "@/components/sections/homePage/homePageCardsSection.vue";
-import homePageFooter from "@/components/footers/homePageFooter.vue";
 </script>
+<style scoped>
+.footer {
+  margin-top: 3%;
+  background: rgba(19, 48, 94, 1);
+  height: 100px;
+  width: 100%;
+}
+
+.footer__div {
+  background: white;
+  height: 15%;
+  width: auto;
+  border-radius: 0 0 100% 100%;
+}
+</style>

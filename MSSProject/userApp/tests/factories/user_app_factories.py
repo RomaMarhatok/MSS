@@ -2,6 +2,7 @@ from factory import SubFactory
 from factory.django import DjangoModelFactory
 from faker import Faker
 from ...utils.string_utls import generate_valid_password, generate_valid_login
+from ...utils.image_utils import load_image_from_url
 from ...models import (
     Doctor,
     DoctorType,
@@ -15,6 +16,7 @@ from ...models import (
     UserPersonalInfo,
     DoctorDoctorTypes,
     TreatmentHistoryImageForAnalyzes,
+    UserLocation,
 )
 
 fake = Faker()
@@ -49,21 +51,34 @@ class UserPersonalInfoFactory(DjangoModelFactory):
         model = UserPersonalInfo
 
     user = SubFactory(UserFactory)
-    image = fake.image_url()
+    image = load_image_from_url(fake.image_url())
     first_name = fake.first_name()
     second_name = fake.last_name()
     patronymic = fake.last_name()
     email = fake.email()
+    gender = fake.simple_profile()["sex"]
+    age = fake.random_number(digits=2)
+    health_status = fake.text(max_nb_chars=10000)
 
 
 class UserDocumentFactory(DjangoModelFactory):
     class Meta:
         model = UserDocument
 
-    content = fake.text()
+    content = fake.text(max_nb_chars=10000)
     name = fake.pystr()
     user = SubFactory(UserFactory)
     document_type = SubFactory(UserDocumentTypeFactory)
+
+
+class UserLocationFactory(DjangoModelFactory):
+    class Meta:
+        model = UserLocation
+
+    user = SubFactory(User)
+    country = fake.country()
+    city = fake.city()
+    address = fake.address()
 
 
 class DoctorTypesFactory(DjangoModelFactory):
@@ -99,15 +114,15 @@ class ImageForAnalyzesFactory(DjangoModelFactory):
     class Meta:
         model = ImageForAnalyzes
 
-    image = fake.image_url()
-    description = fake.text()
+    image = load_image_from_url(fake.image_url())
+    description = fake.text(max_nb_chars=10000)
 
 
 class TreatmentsHistoryFactory(DjangoModelFactory):
     class Meta:
         model = TreatmentHistory
 
-    description = fake.text()
+    description = fake.text(max_nb_chars=10000)
     doctor = SubFactory(DoctorFactory)
     patient = SubFactory(Patient)
 

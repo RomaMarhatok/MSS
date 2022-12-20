@@ -1,7 +1,14 @@
 from rest_framework.serializers import ModelSerializer
 from typing import OrderedDict
 from .role_serializer import RoleSerializer
-from ..models import User, Role, UserPersonalInfo, UserDocument, UserDocumentType
+from ..models import (
+    User,
+    Role,
+    UserPersonalInfo,
+    UserDocument,
+    UserDocumentType,
+    UserLocation,
+)
 from rest_framework.serializers import ValidationError
 from ..validators.password_validator import PasswordValidator
 from ..validators.login_validator import LoginValidator
@@ -72,11 +79,17 @@ class UserPersonalInfoSerializer(ModelSerializer):
             "second_name",
             "patronymic",
             "email",
+            "gender",
+            "age",
+            "health_status",
         )
         extra_kwargs = {
             "image": {"required": False},
             "patronymic": {"required": False},
             "email": {"required": False},
+            "gender": {"required": False},
+            "age": {"required": False},
+            "health_status": {"required": False},
         }
 
     def validate_first_name(self, value):
@@ -98,6 +111,11 @@ class UserPersonalInfoSerializer(ModelSerializer):
             **validated_data, user=user
         )
         return instance
+
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        rep.pop("user")
+        return rep
 
 
 class UserDocumentTypeSerializer(ModelSerializer):
@@ -142,6 +160,33 @@ class UserDocumentSerializer(ModelSerializer):
         instance, _ = UserDocument.objects.get_or_create(
             **validated_data, user=user, document_type=document_type
         )
+        return instance
+
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        rep.pop("user")
+        if "include_context" in self.context and self.context["include_context"]:
+            rep.pop("content")
+        return rep
+
+
+class UserLocationSerializer(ModelSerializer):
+    user = UserSerializer(required=True)
+
+    class Meta:
+        model = UserLocation
+        fields = (
+            "user",
+            "country",
+            "city",
+            "address",
+        )
+
+    def create(self, validated_data):
+        user_login = validated_data["user"]["login"]
+        user = User.objects.get(login=user_login)
+        validated_data.pop("user")
+        instance, _ = UserLocation.objects.get_or_create(**validated_data, user=user)
         return instance
 
     def to_representation(self, instance):

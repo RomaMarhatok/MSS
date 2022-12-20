@@ -1,5 +1,5 @@
 <script setup>
-import navBarLink from "./links/navBarLink.vue";
+import navBarLink from "@/components/links/navBarLink.vue";
 import { reactive } from "vue";
 const aboutLink = reactive({
   text: "about",

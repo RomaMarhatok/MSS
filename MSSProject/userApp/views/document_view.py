@@ -4,7 +4,7 @@ from ..serializers.user_serializer import UserDocumentSerializer
 from ..models import UserDocument
 from django.http import JsonResponse, HttpRequest
 from ..permissions.is_user_authenticated import IsUserAuthenticated
-from ..models import User
+from ..services.model_services.document_service import DocumentService
 
 
 class DocumentView(GenericViewSet):
@@ -12,18 +12,14 @@ class DocumentView(GenericViewSet):
     lookup_field = "slug"
 
     def list(self, request: HttpRequest, user_slug=None):
-        user_docuements = UserDocument.objects.filter(user__slug=user_slug)
-        serializer = UserDocumentSerializer(instance=user_docuements, many=True)
+        document_service = DocumentService()
+        data = document_service.get_all_documents(user_slug, True)
         return JsonResponse(
-            data={"user_documents": serializer.data},
+            data={"user_documents": data},
             status=status.HTTP_200_OK,
         )
 
     def retrieve(self, request, user_slug=None, doc_slug=None):
-        user_document = UserDocument.objects.filter(
-            slug=doc_slug, user__slug=user_slug
-        ).first()
-        serializer = UserDocumentSerializer(instance=user_document)
-        return JsonResponse(
-            data={"user_document": serializer.data}, status=status.HTTP_200_OK
-        )
+        document_service = DocumentService()
+        data = document_service.get_document_data_by_slug(doc_slug, user_slug)
+        return JsonResponse(data={"user_document": data}, status=status.HTTP_200_OK)

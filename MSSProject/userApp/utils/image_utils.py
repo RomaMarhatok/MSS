@@ -5,6 +5,7 @@ from django.core.files.images import ImageFile
 from PIL import Image
 from io import BytesIO
 from dataclasses import dataclass
+from django.core.files.uploadedfile import InMemoryUploadedFile
 
 
 @dataclass
@@ -58,3 +59,18 @@ def load_image_from_url_to_file(
     folder_controller.remove_dir(path_to_folder)
 
     yield True
+
+
+def load_image_from_url(image_url):
+    resp_content = Client.get(image_url)
+    pil_image = Image.open(BytesIO(resp_content)).convert("RGB")
+    img_io = BytesIO()
+    pil_image.save(img_io, format="JPEG")
+    return InMemoryUploadedFile(
+        img_io,
+        field_name=None,
+        name="token" + ".jpg",
+        content_type="image/jpeg",
+        size=img_io.tell,
+        charset=None,
+    )

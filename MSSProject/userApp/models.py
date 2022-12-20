@@ -3,9 +3,8 @@ from datetime import datetime
 from django.db import models
 from django.template.defaultfilters import slugify
 from .utils.slug_utils import generate_slug_from_str
+from .utils.string_utls import generate_hash_from_string
 from django.contrib.auth.models import AbstractUser
-from rest_framework.authtoken.models import Token
-from django.db.models import Q
 
 
 class Role(models.Model):
@@ -34,18 +33,6 @@ class User(AbstractUser):
     class Meta:
         db_table = "user"
 
-    @staticmethod
-    def is_exist(login: str, password: str) -> bool:
-        return User.objects.filter(Q(login=login) & Q(password=password)).exists()
-
-    @staticmethod
-    def get_user_by_token(token: str) -> User:
-        return Token.objects.filter(key=token).first().user
-
-    @staticmethod
-    def get_user_by_login(login: str) -> User:
-        return User.objects.filter(login=login).first()
-
 
 def media_path_builder_for_user_info(instance, filename):
     now_date = datetime.now().strftime("%Y/%m/%d")
@@ -70,12 +57,28 @@ class UserPersonalInfo(models.Model):
     second_name = models.CharField("second name", max_length=100)
     patronymic = models.CharField("patronymic", max_length=100, blank=True)
     email = models.EmailField("email", max_length=100, blank=True)
+    gender = models.CharField(max_length=150, blank=True, default="Other")
+    age = models.IntegerField(blank=True, default=-1)
+    health_status = models.TextField(blank=True, default="")
 
     def __str__(self) -> str:
         return self.user.login
 
     class Meta:
         db_table = "user_personal_info"
+
+    def save(self, *args, **kwargs) -> None:
+        self.image.name = (
+            generate_hash_from_string(f"{self.first_name} {self.second_name}") + ".jpg"
+        )
+        return super(UserPersonalInfo, self).save(*args, **kwargs)
+
+
+class UserLocation(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    country = models.CharField(max_length=255)
+    city = models.CharField(max_length=255)
+    address = models.CharField(max_length=255)
 
 
 class UserDocumentType(models.Model):
@@ -163,6 +166,10 @@ class ImageForAnalyzes(models.Model):
         blank=True,
     )
     description = models.TextField()
+
+    def save(self, *args, **kwargs):
+        self.image.name = generate_hash_from_string(self.description[:10]) + ".jpg"
+        return super(ImageForAnalyzes, self).save(*args, **kwargs)
 
     class Meta:
         db_table = "image_for_analyzes"
