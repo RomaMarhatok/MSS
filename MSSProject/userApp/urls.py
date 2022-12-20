@@ -30,7 +30,7 @@ urlpatterns = [
                     name="user-documents",
                 ),
                 path(
-                    "document/<str:doc_slug>",
+                    "document/<str:doc_slug>/",
                     DocumentView.as_view({"get": "retrieve"}),
                     name="user-document",
                 ),
