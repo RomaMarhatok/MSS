@@ -69,10 +69,10 @@ class Command(BaseCommand):
 
             img_for_analyzes = ImageForAnalyzesFactory(
                 image=load_image_from_url(fake.image_url()),
-                description=fake.text(),
+                description=fake.text(max_nb_chars=10000),
             )
             treatment = TreatmentsHistoryFactory(
-                description=fake.text(),
+                description=fake.text(max_nb_chars=10000),
                 doctor=doctor,
                 patient=patient,
             )
@@ -84,7 +84,7 @@ class Command(BaseCommand):
         [
             UserDocumentFactory(
                 name=fake.pystr(),
-                content=fake.text(),
+                content=fake.text(max_nb_chars=10000),
                 user=user,
                 document_type=random.choice(document_types),
             )

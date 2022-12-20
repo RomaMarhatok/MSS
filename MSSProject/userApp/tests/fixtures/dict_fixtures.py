@@ -61,7 +61,7 @@ def user_personal_info_with_image_fixture(user_personal_info_fixture) -> dict:
 def user_document_fixture(user_fixture, user_document_type_fixture) -> dict:
     return {
         "name": fake.pystr(),
-        "content": fake.text(),
+        "content": fake.text(max_nb_chars=10000),
         "user": user_fixture,
         "document_type": user_document_type_fixture,
     }
@@ -88,7 +88,7 @@ def patient_fixture(user_fixture) -> dict:
 def image_for_analyzes_fixture() -> dict:
     return {
         "image": fake.image_url(),
-        "description": fake.text(),
+        "description": fake.text(max_nb_chars=10000),
     }
 
 
@@ -105,7 +105,7 @@ def image_for_analyzes_with_image_fixture(image_for_analyzes_fixture) -> dict:
 @pytest.fixture
 def treatment_history_fixture(doctor_fixture, patient_fixture) -> dict:
     return {
-        "description": fake.text(),
+        "description": fake.text(max_nb_chars=10000),
         "doctor": doctor_fixture,
         "patient": patient_fixture,
     }

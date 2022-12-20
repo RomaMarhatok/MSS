@@ -58,14 +58,14 @@ class UserPersonalInfoFactory(DjangoModelFactory):
     email = fake.email()
     gender = fake.simple_profile()["sex"]
     age = fake.random_number(digits=2)
-    health_status = fake.text()
+    health_status = fake.text(max_nb_chars=10000)
 
 
 class UserDocumentFactory(DjangoModelFactory):
     class Meta:
         model = UserDocument
 
-    content = fake.text()
+    content = fake.text(max_nb_chars=10000)
     name = fake.pystr()
     user = SubFactory(UserFactory)
     document_type = SubFactory(UserDocumentTypeFactory)
@@ -115,14 +115,14 @@ class ImageForAnalyzesFactory(DjangoModelFactory):
         model = ImageForAnalyzes
 
     image = load_image_from_url(fake.image_url())
-    description = fake.text()
+    description = fake.text(max_nb_chars=10000)
 
 
 class TreatmentsHistoryFactory(DjangoModelFactory):
     class Meta:
         model = TreatmentHistory
 
-    description = fake.text()
+    description = fake.text(max_nb_chars=10000)
     doctor = SubFactory(DoctorFactory)
     patient = SubFactory(Patient)
 
