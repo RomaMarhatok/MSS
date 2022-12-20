@@ -23,7 +23,7 @@ const signUp = reactive({
 })
 </script>
 <template>
-  <nav class="w-11/12 flex flex-row justify-end gap-4">
+  <nav class="w-11/12 flex flex-row justify-end gap-4 max-[600px]:flex-col max-[600px]:items-center max-[600px]:w-full">
     <nav-bar-link :text="aboutLink.text" :link="aboutLink.link" />
     <nav-bar-link :text="contactsLink.text" :link="contactsLink.link" />
     <nav-bar-link :text="homeLink.text" :link="homeLink.link" />
