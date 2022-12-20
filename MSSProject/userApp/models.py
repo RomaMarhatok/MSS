@@ -80,6 +80,9 @@ class UserLocation(models.Model):
     city = models.CharField(max_length=255)
     address = models.CharField(max_length=255)
 
+    class Meta:
+        db_table = "user_location"
+
 
 class UserDocumentType(models.Model):
     slug = models.SlugField(max_length=100, unique=True)
