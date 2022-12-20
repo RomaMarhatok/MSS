@@ -1,7 +1,7 @@
 <script setup>
 import dataSection from '@/components/sections/userPages/personalInfoPage/dataSection.vue';
 import imageSection from '@/components/sections/userPages/personalInfoPage/imageSection.vue';
-import { reactive, onBeforeMount } from 'vue';
+import { reactive, onBeforeMount, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import UserService from '../../../services/UserService';
 import getBaseApi from '@/apis/baseApi';
@@ -17,8 +17,8 @@ const getFullGenderName = (gender) => {
     }
 }
 onBeforeMount(() => {
-    let userServive = new UserService()
-    userServive.getUserPersonalInfo(route.params.slug).then((response) => {
+    let userServive = ref(new UserService())
+    userServive.value.getUserPersonalInfo(route.params.slug).then((response) => {
         personalInfoSection.data[0].text = response.data.email
         personalInfoSection.data[1].text = response.data.age
         personalInfoSection.data[2].text = getFullGenderName(response.data.gender)
@@ -72,9 +72,9 @@ const recentAppoitments = reactive({
 const imageSectionProps = reactive({
     imageSrc: "https://picsum.photos/262/187",
     links: {
-        doctors: `#/user/${route.params.slug}/documents/`,
+        doctors: "#/",
         appoitments: "#/",
-        documents: "#/",
+        documents: `#/user/${route.params.slug}/documents/`,
     },
     personalInfo: {
         full_name: "",
