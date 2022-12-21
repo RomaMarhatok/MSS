@@ -6,5 +6,8 @@ class UserService extends RequestService {
     async getUserDocuments(slug){
         return await this.get(`/mss/user/${slug}/documents/`)
     }
+    async getUserDocument(userSlug,documentSlug){
+        return await this.get(`/mss/user/${userSlug}/document/${documentSlug}/`)
+    }
 }
 export default UserService
