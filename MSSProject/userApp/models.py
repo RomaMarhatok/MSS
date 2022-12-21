@@ -137,8 +137,12 @@ class Doctor(models.Model):
 
 
 class DoctorDoctorTypes(models.Model):
-    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
-    doctor_type = models.ForeignKey(DoctorType, on_delete=models.CASCADE)
+    doctor = models.ForeignKey(
+        Doctor, related_name="doctor_doctor_types", on_delete=models.CASCADE
+    )
+    doctor_type = models.ForeignKey(
+        DoctorType, related_name="doctor_doctor_types", on_delete=models.CASCADE
+    )
 
     class Meta:
         db_table = "doctor_doctor_type"
