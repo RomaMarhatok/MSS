@@ -12,6 +12,7 @@ from userApp.tests.factories.user_app_factories import (
     DoctorDoctorTypesFactory,
     TreatmentHistoryImageForAnalyzesFactory,
     UserDocumentTypeFactory,
+    UserLocationFactory,
 )
 from ...models import (
     Role,
@@ -26,6 +27,7 @@ from ...models import (
     UserDocumentType,
     TreatmentHistory,
     TreatmentHistoryImageForAnalyzes,
+    UserLocation,
 )
 
 
@@ -52,6 +54,11 @@ def factory_user_with_role_patient_fixture(factory_patient_role_fixture) -> User
 @pytest.fixture
 def factory_user_personal_info_fixture(factory_user_fixture) -> UserPersonalInfo:
     return UserPersonalInfoFactory.create(user=factory_user_fixture)
+
+
+@pytest.fixture
+def factory_user_location_fixture(factory_user_fixture) -> UserLocation:
+    return UserLocationFactory.create(user=factory_user_fixture)
 
 
 @pytest.fixture
