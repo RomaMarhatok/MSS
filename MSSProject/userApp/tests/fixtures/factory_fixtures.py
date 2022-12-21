@@ -13,6 +13,7 @@ from userApp.tests.factories.user_app_factories import (
     TreatmentHistoryImageForAnalyzesFactory,
     UserDocumentTypeFactory,
     UserLocationFactory,
+    UserDocumentDoctorFactory,
 )
 from ...models import (
     Role,
@@ -28,6 +29,7 @@ from ...models import (
     TreatmentHistory,
     TreatmentHistoryImageForAnalyzes,
     UserLocation,
+    UserDocumentDoctor,
 )
 
 
@@ -62,7 +64,7 @@ def factory_user_location_fixture(factory_user_fixture) -> UserLocation:
 
 
 @pytest.fixture
-def factory_user_docuemnt_fixture(
+def factory_user_document_fixture(
     factory_user_fixture, factory_user_document_type_fixture
 ) -> UserDocument:
     return UserDocumentFactory.create(
@@ -121,4 +123,13 @@ def factory_treatment_history_image_for_analyzes(
     return TreatmentHistoryImageForAnalyzesFactory.create(
         treatment_history=factory_treatment_history_fixture,
         image_for_analyzes=factory_image_for_analyzes_fixture,
+    )
+
+
+@pytest.fixture
+def factory_user_document_doctor_fixture(
+    factory_user_document_fixture, factory_doctor_fixture
+) -> UserDocumentDoctor:
+    return UserDocumentDoctorFactory.create(
+        user_document=factory_user_document_fixture, doctor=factory_doctor_fixture
     )

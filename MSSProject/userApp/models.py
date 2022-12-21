@@ -200,3 +200,13 @@ class TreatmentHistoryImageForAnalyzes(models.Model):
 
     class Meta:
         db_table = "treatment_history_image_for_analyzes"
+
+
+class UserDocumentDoctor(models.Model):
+    user_document = models.ForeignKey(
+        UserDocument, on_delete=models.SET_NULL, null=True
+    )
+    doctor = models.ForeignKey(Doctor, on_delete=models.SET_NULL, null=True)
+
+    class Meta:
+        db_table = "user_document_doctor"

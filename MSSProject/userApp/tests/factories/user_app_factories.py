@@ -17,6 +17,7 @@ from ...models import (
     DoctorDoctorTypes,
     TreatmentHistoryImageForAnalyzes,
     UserLocation,
+    UserDocumentDoctor,
 )
 
 fake = Faker()
@@ -133,3 +134,11 @@ class TreatmentHistoryImageForAnalyzesFactory(DjangoModelFactory):
 
     treatment_history = SubFactory(TreatmentHistory)
     image_for_analyzes = SubFactory(ImageForAnalyzes)
+
+
+class UserDocumentDoctorFactory(DjangoModelFactory):
+    class Meta:
+        model = UserDocumentDoctor
+
+    user_document = SubFactory(UserDocumentFactory)
+    doctor = SubFactory(DoctorFactory)

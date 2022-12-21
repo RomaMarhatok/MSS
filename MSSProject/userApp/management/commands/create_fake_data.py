@@ -16,6 +16,7 @@ from ...tests.factories.user_app_factories import (
     TreatmentHistoryImageForAnalyzesFactory,
     UserDocumentTypeFactory,
     UserLocationFactory,
+    UserDocumentDoctorFactory,
 )
 from ...utils.string_utls import generate_valid_password, generate_valid_login
 from ...utils.image_utils import load_image_from_url
@@ -53,17 +54,17 @@ class Command(BaseCommand):
                 city=fake.city(),
                 address=fake.address(),
             )
-            self.create_user_documents(user, document_types)
-            doctor_type = DoctorTypesFactory(doctor_type=fake.pystr())
-
             doctor_user = UserFactory(
                 username=fake.profile()["username"],
                 login=generate_valid_login(),
                 password=generate_valid_password(),
                 role=doctor_role,
             )
-
             doctor = DoctorFactory(user=doctor_user)
+
+            self.create_user_documents(user, document_types, doctor)
+            doctor_type = DoctorTypesFactory(doctor_type=fake.pystr())
+
             DoctorDoctorTypesFactory(doctor=doctor, doctor_type=doctor_type)
             patient = PatinesFactory(user=user)
 
@@ -80,16 +81,15 @@ class Command(BaseCommand):
                 treatment_history=treatment, image_for_analyzes=img_for_analyzes
             )
 
-    def create_user_documents(self, user, document_types):
-        [
-            UserDocumentFactory(
+    def create_user_documents(self, user, document_types, doctor):
+        for _ in range(100):
+            user_document = UserDocumentFactory(
                 name=fake.pystr(),
                 content=fake.text(max_nb_chars=10000),
                 user=user,
                 document_type=random.choice(document_types),
             )
-            for _ in range(100)
-        ]
+            UserDocumentDoctorFactory(user_document=user_document, doctor=doctor)
 
     def prepare_roles(self):
         patient_role = RoleFactory(name="patient")

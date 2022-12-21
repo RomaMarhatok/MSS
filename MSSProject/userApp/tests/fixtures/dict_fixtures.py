@@ -124,3 +124,8 @@ def treatment_history_fixture(doctor_fixture, patient_fixture) -> dict:
 @pytest.fixture
 def doctor_doctor_types_fixture(doctor_fixture, doctor_types_fixture) -> dict:
     return {"doctor": doctor_fixture, "doctor_type": doctor_types_fixture}
+
+
+@pytest.fixture
+def user_document_doctor_fixture(user_document_fixture, doctor_fixture):
+    return {"user_document": user_document_fixture, "doctor": doctor_fixture}
