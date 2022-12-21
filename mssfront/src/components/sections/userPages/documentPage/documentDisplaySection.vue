@@ -22,7 +22,7 @@ const getDocuments = computed(() => { return props.documents.filter(el => el.nam
         </div>
         <div class="container">
             <div class="document-list" v-if="props.documents">
-                <documentListPageCard v-for="(document, index) in getDocuments" :key="index" :document="document" />
+                <documentListPageCard v-for="document in getDocuments" :key="document.slug" :document="document" />
             </div>
         </div>
     </main>
