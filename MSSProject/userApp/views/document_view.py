@@ -20,4 +20,4 @@ class DocumentView(GenericViewSet):
     def retrieve(self, request, user_slug=None, doc_slug=None):
         document_service = DocumentService()
         data = document_service.get_document_data_by_slug(doc_slug, user_slug)
-        return JsonResponse(data={"user_document": data}, status=status.HTTP_200_OK)
+        return JsonResponse(data=data, status=status.HTTP_200_OK)
