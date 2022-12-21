@@ -18,7 +18,7 @@ const getFullGenderName = (gender) => {
 }
 onBeforeMount(() => {
     let userServive = ref(new UserService())
-    userServive.value.getUserPersonalInfo(route.params.slug).then((response) => {
+    userServive.value.getUserPersonalInfo(route.params.userSlug).then((response) => {
         personalInfoSection.data[0].text = response.data.email
         personalInfoSection.data[1].text = response.data.age
         personalInfoSection.data[2].text = getFullGenderName(response.data.gender)
@@ -74,7 +74,7 @@ const imageSectionProps = reactive({
     links: {
         doctors: "#/",
         appoitments: "#/",
-        documents: `#/user/${route.params.slug}/documents/`,
+        documents: `#/user/${route.params.userSlug}/documents/`,
     },
     personalInfo: {
         full_name: "",

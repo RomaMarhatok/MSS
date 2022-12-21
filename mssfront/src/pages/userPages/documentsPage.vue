@@ -9,7 +9,7 @@ const route = useRoute()
 const documents = ref([])
 onMounted(() => {
     const userService = ref(new UserService())
-    userService.value.getUserDocuments(route.params.slug).then(response => {
+    userService.value.getUserDocuments(route.params.userSlug).then(response => {
         documents.value = response.data.user_documents
     }).catch(error => {
         console.log(error)
