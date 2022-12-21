@@ -142,12 +142,16 @@ class UserDocumentSerializer(ModelSerializer):
             "user",
             "content",
             "document_type",
+            "created_at",
+            "updated_at",
         )
         extra_kwargs = {
             "user": {"validators": [], "lookup_field": "slug"},
             "document_type": {"validators": []},
             "name": {"validators": []},
             "slug": {"required": False},
+            "created_at": {"required": False},
+            "updated_at": {"required": False},
         }
 
     def create(self, validated_data: OrderedDict) -> UserDocument:

@@ -104,6 +104,8 @@ class UserDocument(models.Model):
     document_type = models.ForeignKey(
         UserDocumentType, on_delete=models.SET_NULL, null=True
     )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         db_table = "user_document"
@@ -169,6 +171,8 @@ class ImageForAnalyzes(models.Model):
         blank=True,
     )
     description = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
         self.image.name = generate_hash_from_string(self.description[:10]) + ".jpg"
@@ -183,6 +187,8 @@ class TreatmentHistory(models.Model):
     description = models.TextField()
     doctor = models.ForeignKey(Doctor, on_delete=models.SET_NULL, null=True)
     patient = models.ForeignKey(Patient, on_delete=models.SET_NULL, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
         self.slug = generate_slug_from_str(

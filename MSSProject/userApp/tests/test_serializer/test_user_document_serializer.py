@@ -33,8 +33,8 @@ def test_serialization(user_document_fixture):
 
 
 @pytest.mark.django_db
-def test_desrialization(factory_user_docuemnt_fixture):
-    serializer = UserDocumentSerializer(instance=factory_user_docuemnt_fixture)
+def test_desrialization(factory_user_document_fixture):
+    serializer = UserDocumentSerializer(instance=factory_user_document_fixture)
     assert isinstance(serializer.data, dict)
     assert "document_type" in serializer.data
     assert "slug" in serializer.data
