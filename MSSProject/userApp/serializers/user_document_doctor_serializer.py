@@ -25,11 +25,3 @@ class UserDocumentDoctorSerializer(ModelSerializer):
             doctor=doctor, user_document=user_document
         )
         return instance
-
-    def to_representation(self, instance):
-        rep = super().to_representation(instance)
-        return {
-            "user_document_slug": rep["user_document"]["slug"],
-            "doctor_slug": rep["doctor"]["user"]["slug"],
-            "document_typr": rep["user_document"]["document_type"],
-        }
