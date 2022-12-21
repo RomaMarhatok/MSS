@@ -30,7 +30,7 @@ class Command(BaseCommand):
     def handle(self, *args: Any, **options: Any) -> Optional[str]:
         patient_role, doctor_role = self.prepare_roles()
         document_types = self.prepare_documents_types()
-        for _ in range(1, 50):
+        for _ in range(1, 25):
 
             user = UserFactory(
                 login=generate_valid_login(),
@@ -60,6 +60,17 @@ class Command(BaseCommand):
                 password=generate_valid_password(),
                 role=doctor_role,
             )
+            UserPersonalInfoFactory(
+                user=doctor_user,
+                image=load_image_from_url(fake.image_url()),
+                first_name=fake.first_name(),
+                second_name=fake.last_name(),
+                patronymic=fake.last_name(),
+                email=fake.email(),
+                gender=fake.simple_profile()["sex"],
+                age=fake.random_number(digits=2),
+                health_status=fake.text(),
+            )
             doctor = DoctorFactory(user=doctor_user)
 
             self.create_user_documents(user, document_types, doctor)
@@ -82,7 +93,7 @@ class Command(BaseCommand):
             )
 
     def create_user_documents(self, user, document_types, doctor):
-        for _ in range(100):
+        for _ in range(50):
             user_document = UserDocumentFactory(
                 name=fake.pystr(),
                 content=fake.text(max_nb_chars=10000),
