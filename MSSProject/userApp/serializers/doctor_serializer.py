@@ -44,4 +44,8 @@ class DoctorSerializer(ModelSerializer):
             "gender": user_personal_info_data["gender"],
             "age": user_personal_info_data["age"],
         }
-        return {"personal_info": extracted_data, "doctor_types": doctor_types}
+        return {
+            "doctor_slug": user_from_instance.slug,
+            "personal_info": extracted_data,
+            "doctor_types": doctor_types,
+        }
