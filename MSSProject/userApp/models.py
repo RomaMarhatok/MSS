@@ -80,6 +80,9 @@ class UserLocation(models.Model):
     city = models.CharField(max_length=255)
     address = models.CharField(max_length=255)
 
+    class Meta:
+        db_table = "user_location"
+
 
 class UserDocumentType(models.Model):
     slug = models.SlugField(max_length=100, unique=True)
@@ -101,6 +104,8 @@ class UserDocument(models.Model):
     document_type = models.ForeignKey(
         UserDocumentType, on_delete=models.SET_NULL, null=True
     )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         db_table = "user_document"
@@ -132,8 +137,12 @@ class Doctor(models.Model):
 
 
 class DoctorDoctorTypes(models.Model):
-    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
-    doctor_type = models.ForeignKey(DoctorType, on_delete=models.CASCADE)
+    doctor = models.ForeignKey(
+        Doctor, related_name="doctor_doctor_types", on_delete=models.CASCADE
+    )
+    doctor_type = models.ForeignKey(
+        DoctorType, related_name="doctor_doctor_types", on_delete=models.CASCADE
+    )
 
     class Meta:
         db_table = "doctor_doctor_type"
@@ -166,6 +175,8 @@ class ImageForAnalyzes(models.Model):
         blank=True,
     )
     description = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
         self.image.name = generate_hash_from_string(self.description[:10]) + ".jpg"
@@ -180,6 +191,8 @@ class TreatmentHistory(models.Model):
     description = models.TextField()
     doctor = models.ForeignKey(Doctor, on_delete=models.SET_NULL, null=True)
     patient = models.ForeignKey(Patient, on_delete=models.SET_NULL, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
         self.slug = generate_slug_from_str(
@@ -197,3 +210,13 @@ class TreatmentHistoryImageForAnalyzes(models.Model):
 
     class Meta:
         db_table = "treatment_history_image_for_analyzes"
+
+
+class UserDocumentDoctor(models.Model):
+    user_document = models.ForeignKey(
+        UserDocument, on_delete=models.SET_NULL, null=True
+    )
+    doctor = models.ForeignKey(Doctor, on_delete=models.SET_NULL, null=True)
+
+    class Meta:
+        db_table = "user_document_doctor"

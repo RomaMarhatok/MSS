@@ -16,6 +16,7 @@ from ...tests.factories.user_app_factories import (
     TreatmentHistoryImageForAnalyzesFactory,
     UserDocumentTypeFactory,
     UserLocationFactory,
+    UserDocumentDoctorFactory,
 )
 from ...utils.string_utls import generate_valid_password, generate_valid_login
 from ...utils.image_utils import load_image_from_url
@@ -29,7 +30,7 @@ class Command(BaseCommand):
     def handle(self, *args: Any, **options: Any) -> Optional[str]:
         patient_role, doctor_role = self.prepare_roles()
         document_types = self.prepare_documents_types()
-        for _ in range(1, 50):
+        for _ in range(1, 25):
 
             user = UserFactory(
                 login=generate_valid_login(),
@@ -53,17 +54,28 @@ class Command(BaseCommand):
                 city=fake.city(),
                 address=fake.address(),
             )
-            self.create_user_documents(user, document_types)
-            doctor_type = DoctorTypesFactory(doctor_type=fake.pystr())
-
             doctor_user = UserFactory(
                 username=fake.profile()["username"],
                 login=generate_valid_login(),
                 password=generate_valid_password(),
                 role=doctor_role,
             )
-
+            UserPersonalInfoFactory(
+                user=doctor_user,
+                image=load_image_from_url(fake.image_url()),
+                first_name=fake.first_name(),
+                second_name=fake.last_name(),
+                patronymic=fake.last_name(),
+                email=fake.email(),
+                gender=fake.simple_profile()["sex"],
+                age=fake.random_number(digits=2),
+                health_status=fake.text(),
+            )
             doctor = DoctorFactory(user=doctor_user)
+
+            self.create_user_documents(user, document_types, doctor)
+            doctor_type = DoctorTypesFactory(doctor_type=fake.pystr())
+
             DoctorDoctorTypesFactory(doctor=doctor, doctor_type=doctor_type)
             patient = PatinesFactory(user=user)
 
@@ -80,16 +92,15 @@ class Command(BaseCommand):
                 treatment_history=treatment, image_for_analyzes=img_for_analyzes
             )
 
-    def create_user_documents(self, user, document_types):
-        [
-            UserDocumentFactory(
+    def create_user_documents(self, user, document_types, doctor):
+        for _ in range(50):
+            user_document = UserDocumentFactory(
                 name=fake.pystr(),
                 content=fake.text(max_nb_chars=10000),
                 user=user,
                 document_type=random.choice(document_types),
             )
-            for _ in range(100)
-        ]
+            UserDocumentDoctorFactory(user_document=user_document, doctor=doctor)
 
     def prepare_roles(self):
         patient_role = RoleFactory(name="patient")

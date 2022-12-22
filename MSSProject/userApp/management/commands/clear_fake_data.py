@@ -10,6 +10,7 @@ from ...models import (
     TreatmentHistory,
     User,
     UserDocumentType,
+    UserDocumentDoctor,
 )
 
 
@@ -29,6 +30,10 @@ class Command(BaseCommand):
         print(f"Tokens models was deleted:{Token.objects.all().delete()}")
         print(
             f"UserDocuments type models was deleted:{UserDocumentType.objects.all().delete()}"
+        )
+        print(
+            "UserDocumentsDoctor type models was"
+            + f"deleted:{UserDocumentDoctor.objects.all().delete()}"
         )
         folder_controller = FolderController()
         folder_controller.remove_dir("media")

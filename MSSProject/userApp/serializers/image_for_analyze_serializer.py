@@ -8,4 +8,10 @@ class ImageForAnlyzeSerializer(ModelSerializer):
         fields = (
             "image",
             "description",
+            "created_at",
+            "updated_at",
         )
+        extra_kwargs = {
+            "created_at": {"required": False},
+            "updated_at": {"required": False},
+        }
