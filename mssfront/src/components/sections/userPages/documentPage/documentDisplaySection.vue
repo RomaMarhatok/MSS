@@ -111,7 +111,7 @@ const getDocuments = computed(() => { return props.documents.filter(el => el.nam
     display: flex;
     justify-content: center;
     padding-top: 10px;
-    background-color: rgb(215, 214, 214);
+    background-color: rgb(38, 77, 141);
     width: 100%;
     border-radius: 10px;
 }
