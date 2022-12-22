@@ -15,4 +15,7 @@ class DoctorService(UserService):
         }
 
     def get_doctor_types(self, doctor: Doctor):
-        return [i.doctor_type.doctor_type for i in doctor.doctor_doctor_types.all()]
+        return [
+            doctor_type.doctor_type.doctor_type
+            for doctor_type in doctor.doctor_doctor_types.all()
+        ]
