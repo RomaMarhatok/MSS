@@ -1,5 +1,6 @@
 from .user_service import UserService
 from userApp.models import Doctor
+from userApp.serializers.doctor_serializer import DoctorSerializer
 
 
 class DoctorService(UserService):
@@ -15,7 +16,9 @@ class DoctorService(UserService):
         }
 
     def get_doctor_types(self, doctor: Doctor):
-        return [
-            doctor_type.doctor_type.doctor_type
-            for doctor_type in doctor.doctor_doctor_types.all()
-        ]
+        return DoctorSerializer(instance=doctor).data["doctor_types"]
+
+    def get_all_doctors(self):
+        all_doctors = Doctor.objects.all()
+        serializer = DoctorSerializer(instance=all_doctors, many=True)
+        return {"doctors": serializer.data}
