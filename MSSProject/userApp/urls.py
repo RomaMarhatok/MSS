@@ -3,6 +3,7 @@ from userApp.views.authentication_view import AuthenticationView
 from userApp.views.registration_view import RegistrationView
 from userApp.views.document_view import DocumentView
 from userApp.views.profile_view import ProfileView
+from userApp.views.doctor_view import DoctorView
 
 urlpatterns = [
     path(
@@ -15,6 +16,7 @@ urlpatterns = [
         AuthenticationView.as_view(),
         name="token-user-authentication",
     ),
+    path("doctors/", DoctorView.as_view({"get": "list"}), name="doctors-list"),
     path(
         "user/<str:user_slug>/",
         include(
