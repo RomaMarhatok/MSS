@@ -40,7 +40,7 @@ def test_multiply_serialization(factory_doctor_fixture):
 def test_deserialize(factory_doctor_fixture):
     serializer = DoctorSerializer(instance=factory_doctor_fixture)
     assert isinstance(serializer.data, dict)
+    assert "doctor_slug" in serializer.data
+    assert "personal_info" in serializer.data
+    assert "doctor_types" in serializer.data
     assert isinstance(serializer.data["doctor_types"], list)
-    assert "slug" in serializer.data["user"]
-    assert serializer.data["user"]["slug"] != "default"
-    assert serializer.data["user"]["slug"] != ""

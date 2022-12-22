@@ -43,6 +43,7 @@ class DoctorSerializer(ModelSerializer):
             "patronymic": user_personal_info_data["patronymic"],
             "gender": user_personal_info_data["gender"],
             "age": user_personal_info_data["age"],
+            "image": user_personal_info_data["image"],
         }
         return {
             "doctor_slug": user_from_instance.slug,
