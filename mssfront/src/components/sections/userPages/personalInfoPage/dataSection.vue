@@ -48,7 +48,7 @@ const props = defineProps({
     display: flex;
     flex-direction: row;
     border-bottom: 2px solid rgb(195, 191, 191);
-    gap: 2em;
+    gap: 2rem;
 }
 
 .label {
@@ -56,6 +56,7 @@ const props = defineProps({
     display: flex;
     justify-content: flex-start;
     font-weight: 900;
+    padding-right: 2rem;
 }
 
 .label-text {
