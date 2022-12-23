@@ -1,9 +1,7 @@
 from ...models import User, UserLocation, UserPersonalInfo
-from ...serializers.user_serializer import (
-    UserPersonalInfoSerializer,
-    UserSerializer,
-    UserLocationSerializer,
-)
+from ...serializers.user_serializer import UserSerializer
+from ...serializers.user_personal_info_serializer import UserPersonalInfoSerializer
+from ...serializers.user_location_serializer import UserLocationSerializer
 from django.db.models import Q
 from rest_framework.authtoken.models import Token
 

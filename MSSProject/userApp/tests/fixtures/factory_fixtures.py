@@ -3,33 +3,33 @@ from userApp.tests.factories.user_app_factories import (
     RoleFactory,
     UserFactory,
     UserPersonalInfoFactory,
-    UserDocumentFactory,
-    DoctorTypesFactory,
+    DocumentFactory,
+    DoctorSpecializationFactory,
     DoctorFactory,
     PatinesFactory,
     ImageForAnalyzesFactory,
     TreatmentsHistoryFactory,
-    DoctorDoctorTypesFactory,
+    DoctorDoctorSpecializationFactory,
     TreatmentHistoryImageForAnalyzesFactory,
-    UserDocumentTypeFactory,
+    DocumentTypeFactory,
     UserLocationFactory,
-    UserDocumentDoctorFactory,
+    DocumentCreatorFactory,
 )
 from ...models import (
     Role,
     User,
-    UserDocument,
+    Document,
     UserPersonalInfo,
     Patient,
     Doctor,
-    DoctorDoctorTypes,
-    DoctorType,
+    DoctorDoctorSpecialization,
+    DoctorSpecialization,
     ImageForAnalyzes,
-    UserDocumentType,
+    DocumentType,
     TreatmentHistory,
     TreatmentHistoryImageForAnalyzes,
     UserLocation,
-    UserDocumentDoctor,
+    DocumentCreator,
 )
 
 
@@ -64,22 +64,22 @@ def factory_user_location_fixture(factory_user_fixture) -> UserLocation:
 
 
 @pytest.fixture
-def factory_user_document_fixture(
-    factory_user_fixture, factory_user_document_type_fixture
-) -> UserDocument:
-    return UserDocumentFactory.create(
-        user=factory_user_fixture, document_type=factory_user_document_type_fixture
+def factory_document_fixture(
+    factory_user_fixture, factory_document_type_fixture
+) -> Document:
+    return DocumentFactory.create(
+        user=factory_user_fixture, document_type=factory_document_type_fixture
     )
 
 
 @pytest.fixture
-def factory_doctor_type_fixture() -> DoctorType:
-    return DoctorTypesFactory.create()
+def factory_doctor_specialization_fixture() -> DoctorSpecialization:
+    return DoctorSpecializationFactory.create()
 
 
 @pytest.fixture
-def factory_user_document_type_fixture() -> UserDocumentType:
-    return UserDocumentTypeFactory.create()
+def factory_document_type_fixture() -> DocumentType:
+    return DocumentTypeFactory.create()
 
 
 @pytest.fixture
@@ -88,11 +88,12 @@ def factory_doctor_fixture(factory_user_fixture) -> Doctor:
 
 
 @pytest.fixture
-def factory_doctor_doctor_types_fixture(
-    factory_doctor_type_fixture, factory_doctor_fixture
-) -> DoctorDoctorTypes:
-    return DoctorDoctorTypesFactory.create(
-        doctor=factory_doctor_fixture, doctor_type=factory_doctor_type_fixture
+def factory_doctor_doctor_specialization_fixture(
+    factory_doctor_specialization_fixture, factory_doctor_fixture
+) -> DoctorDoctorSpecialization:
+    return DoctorDoctorSpecializationFactory.create(
+        doctor=factory_doctor_fixture,
+        doctor_specialization=factory_doctor_specialization_fixture,
     )
 
 
@@ -127,9 +128,9 @@ def factory_treatment_history_image_for_analyzes(
 
 
 @pytest.fixture
-def factory_user_document_doctor_fixture(
-    factory_user_document_fixture, factory_doctor_fixture
-) -> UserDocumentDoctor:
-    return UserDocumentDoctorFactory.create(
-        user_document=factory_user_document_fixture, doctor=factory_doctor_fixture
+def factory_document_creator_fixture(
+    factory_document_fixture, factory_doctor_fixture
+) -> DocumentCreator:
+    return DocumentCreatorFactory.create(
+        document=factory_document_fixture, creator=factory_doctor_fixture
     )

@@ -4,19 +4,17 @@ from django.core.management.base import BaseCommand
 from rest_framework.authtoken.models import Token
 
 from ...models import (
-    DoctorType,
+    DoctorSpecialization,
     ImageForAnalyzes,
     Role,
     TreatmentHistory,
     User,
-    UserDocumentType,
-    UserDocumentDoctor,
+    DocumentType,
+    DocumentCreator,
 )
 
 
 class Command(BaseCommand):
-    help: str = "clear fake data from database tables"
-
     def handle(self, *args: Any, **options: Any) -> Optional[str]:
         print(f"Roles models was deleted:{Role.objects.all().delete()}")
         print(
@@ -26,14 +24,16 @@ class Command(BaseCommand):
         print(
             f"Treatments history models was deleted{TreatmentHistory.objects.all().delete()}"
         )
-        print(f"Doctors types models was deleted:{DoctorType.objects.all().delete()}")
+        print(
+            f"Doctors types models was deleted:{DoctorSpecialization.objects.all().delete()}"
+        )
         print(f"Tokens models was deleted:{Token.objects.all().delete()}")
         print(
-            f"UserDocuments type models was deleted:{UserDocumentType.objects.all().delete()}"
+            f"UserDocuments type models was deleted:{DocumentType.objects.all().delete()}"
         )
         print(
             "UserDocumentsDoctor type models was"
-            + f"deleted:{UserDocumentDoctor.objects.all().delete()}"
+            + f"deleted:{DocumentCreator.objects.all().delete()}"
         )
         folder_controller = FolderController()
         folder_controller.remove_dir("media")

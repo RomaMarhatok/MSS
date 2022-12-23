@@ -4,19 +4,19 @@ from django.core.management.base import BaseCommand
 from faker import Faker
 from ...tests.factories.user_app_factories import (
     DoctorFactory,
-    DoctorTypesFactory,
+    DoctorSpecializationFactory,
     ImageForAnalyzesFactory,
     PatinesFactory,
     RoleFactory,
     TreatmentsHistoryFactory,
-    UserDocumentFactory,
+    DocumentFactory,
     UserFactory,
     UserPersonalInfoFactory,
-    DoctorDoctorTypesFactory,
+    DoctorDoctorSpecialization,
     TreatmentHistoryImageForAnalyzesFactory,
-    UserDocumentTypeFactory,
+    DocumentTypeFactory,
     UserLocationFactory,
-    UserDocumentDoctorFactory,
+    DocumentCreatorFactory,
 )
 from ...utils.string_utls import generate_valid_password, generate_valid_login
 from ...utils.image_utils import load_image_from_url
@@ -25,8 +25,6 @@ fake = Faker()
 
 
 class Command(BaseCommand):
-    help: str = "create fake data from tests"
-
     def handle(self, *args: Any, **options: Any) -> Optional[str]:
         patient_role, doctor_role = self.prepare_roles()
         document_types = self.prepare_documents_types()
@@ -74,9 +72,9 @@ class Command(BaseCommand):
             doctor = DoctorFactory(user=doctor_user)
 
             self.create_user_documents(user, document_types, doctor)
-            doctor_type = DoctorTypesFactory(doctor_type=fake.pystr())
+            doctor_type = DoctorSpecializationFactory(name=fake.pystr())
 
-            DoctorDoctorTypesFactory(doctor=doctor, doctor_type=doctor_type)
+            DoctorDoctorSpecialization(doctor=doctor, doctor_type=doctor_type)
             patient = PatinesFactory(user=user)
 
             img_for_analyzes = ImageForAnalyzesFactory(
@@ -94,13 +92,13 @@ class Command(BaseCommand):
 
     def create_user_documents(self, user, document_types, doctor):
         for _ in range(50):
-            user_document = UserDocumentFactory(
+            document = DocumentFactory(
                 name=fake.pystr(),
                 content=fake.text(max_nb_chars=10000),
                 user=user,
                 document_type=random.choice(document_types),
             )
-            UserDocumentDoctorFactory(user_document=user_document, doctor=doctor)
+            DocumentCreatorFactory(document=document, creator=doctor)
 
     def prepare_roles(self):
         patient_role = RoleFactory(name="patient")
@@ -111,7 +109,7 @@ class Command(BaseCommand):
         )
 
     def prepare_documents_types(self):
-        test = UserDocumentTypeFactory(name="test")
-        analyzes = UserDocumentTypeFactory(name="analyzes")
-        conclusions = UserDocumentTypeFactory(name="conclusions")
+        test = DocumentTypeFactory(name="test")
+        analyzes = DocumentTypeFactory(name="analyzes")
+        conclusions = DocumentTypeFactory(name="conclusions")
         return [test, analyzes, conclusions]

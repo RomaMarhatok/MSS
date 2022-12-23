@@ -1,9 +1,7 @@
 import pytest
-from userApp.serializers.user_serializer import (
-    UserLocationSerializer,
-    UserSerializer,
-    RoleSerializer,
-)
+from userApp.serializers.user_serializer import UserSerializer
+from userApp.serializers.role_serializer import RoleSerializer
+from userApp.serializers.user_location_serializer import UserLocationSerializer
 from userApp.models import UserLocation
 
 

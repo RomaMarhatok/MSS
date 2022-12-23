@@ -1,9 +1,17 @@
 from rest_framework.serializers import ModelSerializer
 from typing import OrderedDict
-from ..models import DoctorType, Doctor, User, DoctorDoctorTypes, UserPersonalInfo
+from ..models import (
+    DoctorSpecialization,
+    Doctor,
+    User,
+    DoctorDoctorSpecialization,
+    UserPersonalInfo,
+)
 from .user_serializer import UserSerializer
-from .doctor_type_serializer import DoctorTypeSerializer
-from .user_serializer import UserPersonalInfoSerializer
+from .doctor_specialization_serializer import (
+    DoctorSpecializationSerializer,
+)
+from .user_personal_info_serializer import UserPersonalInfoSerializer
 
 
 class DoctorSerializer(ModelSerializer):
@@ -23,11 +31,15 @@ class DoctorSerializer(ModelSerializer):
         instance, _ = Doctor.objects.get_or_create(user=user)
         return instance
 
-    def to_representation(self, instance: Doctor) -> dict[User, list[DoctorType]]:
+    def to_representation(
+        self, instance: Doctor
+    ) -> dict[User, list[DoctorSpecialization]]:
         user_from_instance = instance.user
         doctor_types = [
-            DoctorTypeSerializer(instance=doctor_doctor_type.doctor_type).data
-            for doctor_doctor_type in DoctorDoctorTypes.objects.filter(
+            DoctorSpecializationSerializer(
+                instance=doctor_specialization.doctor_specialization
+            ).data
+            for doctor_specialization in DoctorDoctorSpecialization.objects.filter(
                 doctor__user__pk=user_from_instance.pk
             )
         ]
