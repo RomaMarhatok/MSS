@@ -5,19 +5,19 @@ from ...utils.string_utls import generate_valid_password, generate_valid_login
 from ...utils.image_utils import load_image_from_url
 from ...models import (
     Doctor,
-    DoctorType,
+    DoctorSpecialization,
     ImageForAnalyzes,
     Patient,
     Role,
     TreatmentHistory,
     User,
-    UserDocument,
-    UserDocumentType,
+    Document,
+    DocumentType,
     UserPersonalInfo,
-    DoctorDoctorTypes,
+    DoctorDoctorSpecialization,
     TreatmentHistoryImageForAnalyzes,
     UserLocation,
-    UserDocumentDoctor,
+    DocumentCreator,
 )
 
 fake = Faker()
@@ -40,9 +40,9 @@ class UserFactory(DjangoModelFactory):
     role = SubFactory(RoleFactory)
 
 
-class UserDocumentTypeFactory(DjangoModelFactory):
+class DocumentTypeFactory(DjangoModelFactory):
     class Meta:
-        model = UserDocumentType
+        model = DocumentType
 
     name = fake.pystr()
 
@@ -62,14 +62,14 @@ class UserPersonalInfoFactory(DjangoModelFactory):
     health_status = fake.text(max_nb_chars=10000)
 
 
-class UserDocumentFactory(DjangoModelFactory):
+class DocumentFactory(DjangoModelFactory):
     class Meta:
-        model = UserDocument
+        model = Document
 
     content = fake.text(max_nb_chars=10000)
     name = fake.pystr()
     user = SubFactory(UserFactory)
-    document_type = SubFactory(UserDocumentTypeFactory)
+    document_type = SubFactory(DocumentTypeFactory)
 
 
 class UserLocationFactory(DjangoModelFactory):
@@ -82,11 +82,11 @@ class UserLocationFactory(DjangoModelFactory):
     address = fake.address()
 
 
-class DoctorTypesFactory(DjangoModelFactory):
+class DoctorSpecializationFactory(DjangoModelFactory):
     class Meta:
-        model = DoctorType
+        model = DoctorSpecialization
 
-    doctor_type = fake.pystr()
+    name = fake.pystr()
 
 
 class DoctorFactory(DjangoModelFactory):
@@ -96,12 +96,12 @@ class DoctorFactory(DjangoModelFactory):
     user = SubFactory(UserFactory)
 
 
-class DoctorDoctorTypesFactory(DjangoModelFactory):
+class DoctorDoctorSpecializationFactory(DjangoModelFactory):
     class Meta:
-        model = DoctorDoctorTypes
+        model = DoctorDoctorSpecialization
 
     doctor = SubFactory(DoctorFactory)
-    doctor_type = SubFactory(DoctorType)
+    doctor_specialization = SubFactory(DoctorSpecializationFactory)
 
 
 class PatinesFactory(DjangoModelFactory):
@@ -136,9 +136,9 @@ class TreatmentHistoryImageForAnalyzesFactory(DjangoModelFactory):
     image_for_analyzes = SubFactory(ImageForAnalyzes)
 
 
-class UserDocumentDoctorFactory(DjangoModelFactory):
+class DocumentCreatorFactory(DjangoModelFactory):
     class Meta:
-        model = UserDocumentDoctor
+        model = DocumentCreator
 
-    user_document = SubFactory(UserDocumentFactory)
-    doctor = SubFactory(DoctorFactory)
+    document = SubFactory(DocumentFactory)
+    creator = SubFactory(DoctorFactory)

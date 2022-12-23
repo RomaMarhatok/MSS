@@ -3,7 +3,7 @@ from userApp.models import UserDocument, User, UserDocumentType
 from userApp.serializers.user_serializer import (
     UserDocumentSerializer,
     UserSerializer,
-    UserDocumentTypeSerializer,
+    DocumentTypeSerializer,
 )
 from userApp.serializers.role_serializer import RoleSerializer
 
@@ -11,7 +11,7 @@ from userApp.serializers.role_serializer import RoleSerializer
 @pytest.mark.django_db
 def test_serialization(user_document_fixture):
 
-    serializer = UserDocumentTypeSerializer(data=user_document_fixture["document_type"])
+    serializer = DocumentTypeSerializer(data=user_document_fixture["document_type"])
     assert serializer.is_valid()
     serializer.save()
 

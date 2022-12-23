@@ -1,5 +1,6 @@
 from ..models import Patient
-from ..serializers.user_serializer import UserSerializer, UserPersonalInfoSerializer
+from ..serializers.user_serializer import UserSerializer
+from ..serializers.user_personal_info_serializer import UserPersonalInfoSerializer
 from rest_framework import status
 from django.http import HttpRequest
 from ..utils.list_utils import is_containe

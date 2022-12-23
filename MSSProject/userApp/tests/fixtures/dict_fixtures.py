@@ -26,7 +26,7 @@ def user_fixture(role_fixture) -> dict:
 
 
 @pytest.fixture
-def user_document_type_fixture() -> dict:
+def document_type_fixture() -> dict:
     return {
         "name": fake.pystr(),
     }
@@ -68,18 +68,18 @@ def user_location_fixture(user_fixture):
 
 
 @pytest.fixture
-def user_document_fixture(user_fixture, user_document_type_fixture) -> dict:
+def document_fixture(user_fixture, document_type_fixture) -> dict:
     return {
         "name": fake.pystr(),
         "content": fake.text(max_nb_chars=10000),
         "user": user_fixture,
-        "document_type": user_document_type_fixture,
+        "document_type": document_type_fixture,
     }
 
 
 @pytest.fixture
-def doctor_type_fixture() -> dict:
-    return {"doctor_type": fake.pystr()}
+def doctor_specialization_fixture() -> dict:
+    return {"name": fake.pystr()}
 
 
 @pytest.fixture
@@ -122,10 +122,13 @@ def treatment_history_fixture(doctor_fixture, patient_fixture) -> dict:
 
 
 @pytest.fixture
-def doctor_doctor_types_fixture(doctor_fixture, doctor_types_fixture) -> dict:
-    return {"doctor": doctor_fixture, "doctor_type": doctor_types_fixture}
+def doctor_doctor_types_fixture(doctor_fixture, doctor_specialization_fixture) -> dict:
+    return {
+        "doctor": doctor_fixture,
+        "doctor_specialization": doctor_specialization_fixture,
+    }
 
 
 @pytest.fixture
-def user_document_doctor_fixture(user_document_fixture, doctor_fixture):
-    return {"user_document": user_document_fixture, "doctor": doctor_fixture}
+def user_document_doctor_fixture(document_fixture, doctor_fixture):
+    return {"document": document_fixture, "creator": doctor_fixture}

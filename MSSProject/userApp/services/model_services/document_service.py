@@ -1,5 +1,5 @@
 from ...models import Document, DocumentCreator
-from ...serializers.user_serializer import UserDocumentSerializer
+from ...serializers.document_serializer import DocumentSerializer
 from ...services.model_services.doctor_service import DoctorService
 
 
@@ -13,7 +13,7 @@ class DocumentService:
         )
         doctor_service = DoctorService()
         doctor_info = doctor_service.get_doctor_info(doctor.user.slug)
-        serializer = UserDocumentSerializer(instance=user_document)
+        serializer = DocumentSerializer(instance=user_document)
         return {
             "user_document": serializer.data,
             "doctor_creator": doctor_info,
@@ -21,7 +21,7 @@ class DocumentService:
 
     def get_all_documents(self, user_slug: str, include_context: bool = False):
         user_documents = Document.objects.filter(user__slug=user_slug)
-        serializer = UserDocumentSerializer(
+        serializer = DocumentSerializer(
             instance=user_documents,
             many=True,
             context={"include_context": include_context},

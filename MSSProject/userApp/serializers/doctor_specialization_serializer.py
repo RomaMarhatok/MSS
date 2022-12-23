@@ -6,11 +6,10 @@ class DoctorSpecializationSerializer(ModelSerializer):
     class Meta:
         model = DoctorSpecialization
         fields = (
-            "doctor_type",
+            "name",
             "slug",
         )
         extra_kwargs = {
-            "doctor_type": {"validators": []},
             "url": {"lookup_field": "slug"},
             "slug": {"required": False},
         }
