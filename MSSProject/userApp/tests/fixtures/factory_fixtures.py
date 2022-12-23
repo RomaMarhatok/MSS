@@ -128,9 +128,9 @@ def factory_treatment_history_image_for_analyzes(
 
 
 @pytest.fixture
-def factory_user_document_doctor_fixture(
-    factory_user_document_fixture, factory_doctor_fixture
+def factory_document_creator_fixture(
+    factory_document_fixture, factory_doctor_fixture
 ) -> DocumentCreator:
     return DocumentCreatorFactory.create(
-        document=factory_user_document_fixture, creator=factory_doctor_fixture
+        document=factory_document_fixture, creator=factory_doctor_fixture
     )
