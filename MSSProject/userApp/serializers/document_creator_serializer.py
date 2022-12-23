@@ -1,18 +1,18 @@
 from rest_framework.serializers import ModelSerializer
-from .user_serializer import UserDocumentSerializer
+from .document_serializer import DocumentSerializer
 from .doctor_serializer import DoctorSerializer
 from ..models import DocumentCreator, Doctor, Document
 
 
-class UserDocumentDoctorSerializer(ModelSerializer):
-    user_document = UserDocumentSerializer(many=False, required=False)
-    doctor = DoctorSerializer(many=False, required=False)
+class DocumentCreatorSerializer(ModelSerializer):
+    document = DocumentSerializer(many=False, required=False)
+    creator = DoctorSerializer(many=False, required=False)
 
     class Meta:
         model = DocumentCreator
         fields = (
-            "user_document",
-            "doctor",
+            "document",
+            "creator",
         )
 
     def create(self, validated_data):

@@ -4,7 +4,6 @@ from .role_serializer import RoleSerializer
 from ..models import (
     User,
     Role,
-    UserLocation,
 )
 from rest_framework.serializers import ValidationError
 from ..validators.password_validator import PasswordValidator

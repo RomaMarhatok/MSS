@@ -1,6 +1,6 @@
 from rest_framework.serializers import ModelSerializer
 from typing import OrderedDict
-from ..models import Document, User
+from ..models import Document, User, DocumentType
 from .user_serializer import UserSerializer
 from .document_type_serializer import DocumentTypeSerializer
 
@@ -32,7 +32,7 @@ class DocumentSerializer(ModelSerializer):
     def create(self, validated_data: OrderedDict) -> Document:
         user = User.objects.get(login=validated_data["user"]["login"])
         validated_data.pop("user")
-        document_type = Document.objects.get(
+        document_type = DocumentType.objects.get(
             name=validated_data["document_type"]["name"]
         )
         validated_data.pop("document_type")
