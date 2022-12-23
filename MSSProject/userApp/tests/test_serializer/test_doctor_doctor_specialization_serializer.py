@@ -7,11 +7,11 @@ from userApp.models import DoctorDoctorSpecialization
 
 
 @pytest.mark.django_db
-def test_serializer(factory_doctor_fixture, factory_doctor_type_fixture):
+def test_serializer(factory_doctor_fixture, factory_doctor_specialization_fixture):
     serializer = DoctorDoctorSpecializationSerializer(
         data={
             "doctor": factory_doctor_fixture.pk,
-            "doctor_specialization": factory_doctor_type_fixture.pk,
+            "doctor_specialization": factory_doctor_specialization_fixture.pk,
         }
     )
     assert serializer.is_valid()
@@ -21,8 +21,8 @@ def test_serializer(factory_doctor_fixture, factory_doctor_type_fixture):
 
 
 @pytest.mark.django_db
-def test_deserializer(factory_doctor_doctor_types_fixture):
+def test_deserializer(factory_doctor_doctor_specialization_fixture):
     serializer = DoctorDoctorSpecializationSerializer(
-        instance=factory_doctor_doctor_types_fixture
+        instance=factory_doctor_doctor_specialization_fixture
     )
     assert isinstance(serializer.data, dict)

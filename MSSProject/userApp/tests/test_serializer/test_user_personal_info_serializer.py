@@ -1,9 +1,7 @@
 import pytest
 from userApp.models import UserPersonalInfo
-from userApp.serializers.user_serializer import (
-    UserPersonalInfoSerializer,
-    UserSerializer,
-)
+from userApp.serializers.user_serializer import UserSerializer
+from userApp.serializers.user_personal_info_serializer import UserPersonalInfoSerializer
 from userApp.serializers.role_serializer import RoleSerializer
 from rest_framework.validators import ValidationError
 
