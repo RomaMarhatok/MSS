@@ -2,7 +2,6 @@ from .role import Role
 from .user import User
 from .user_personal_info import UserPersonalInfo
 from .user_location import UserLocation
-
 from .document_type import DocumentType
 from .document import Document
 from .doctor_specialization import DoctorSpecialization
