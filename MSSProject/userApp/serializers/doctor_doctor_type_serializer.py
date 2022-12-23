@@ -1,11 +1,11 @@
 from rest_framework.serializers import ModelSerializer
-from ..models import DoctorDoctorTypes
+from ..models import DoctorDoctorSpecialization
 
 
-class DoctorDoctorTypesSerializer(ModelSerializer):
+class DoctorDoctorSpecializationSerializer(ModelSerializer):
     class Meta:
-        model = DoctorDoctorTypes
+        model = DoctorDoctorSpecialization
         fields = (
             "doctor",
-            "doctor_type",
+            "doctor_specialization",
         )

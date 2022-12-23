@@ -5,8 +5,8 @@ from ..models import (
     User,
     Role,
     UserPersonalInfo,
-    UserDocument,
-    UserDocumentType,
+    Document,
+    DocumentType,
     UserLocation,
 )
 from rest_framework.serializers import ValidationError
@@ -124,7 +124,7 @@ class UserDocumentTypeSerializer(ModelSerializer):
             "name",
             "slug",
         )
-        model = UserDocumentType
+        model = Document
         extra_kwargs = {
             "slug": {"required": False},
         }
@@ -135,7 +135,7 @@ class UserDocumentSerializer(ModelSerializer):
     document_type = UserDocumentTypeSerializer(many=False, required=True)
 
     class Meta:
-        model = UserDocument
+        model = Document
         fields = (
             "name",
             "slug",
@@ -154,14 +154,14 @@ class UserDocumentSerializer(ModelSerializer):
             "updated_at": {"required": False},
         }
 
-    def create(self, validated_data: OrderedDict) -> UserDocument:
+    def create(self, validated_data: OrderedDict) -> Document:
         user = User.objects.get(login=validated_data["user"]["login"])
         validated_data.pop("user")
-        document_type = UserDocumentType.objects.get(
+        document_type = Document.objects.get(
             name=validated_data["document_type"]["name"]
         )
         validated_data.pop("document_type")
-        instance, _ = UserDocument.objects.get_or_create(
+        instance, _ = Document.objects.get_or_create(
             **validated_data, user=user, document_type=document_type
         )
         return instance
