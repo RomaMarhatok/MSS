@@ -8,7 +8,7 @@ const props = defineProps({
 </script>
 <template>
     <section class="personal-image">
-        <img class="img" :src="props.imageSrc">
+        <img class="img" :src="props.imageSrc" />
         <div class="content">
             <p>{{ props.personalInfo.full_name }}</p>
             <p>{{ props.personalInfo.location }}</p>

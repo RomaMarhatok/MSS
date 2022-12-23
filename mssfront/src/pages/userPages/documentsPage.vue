@@ -1,12 +1,13 @@
 <script setup>
-import documentsPageHeader from '@/components/headers/documentsPageHeader.vue';
-import documentPageNavBar from '@/components/navbars/documentPageNavBar.vue';
+import documentsPageHeader from '@/components/headers/pageHeader.vue';
+import documentPageNavBar from '@/components/navbars/pageNavBar.vue';
 import documentDisplaySection from '@/components/sections/userPages/documentPage/documentDisplaySection.vue';
 import UserService from '@/../services/UserService';
 import { useRoute } from 'vue-router';
 import { ref, onMounted } from 'vue';
 const route = useRoute()
 const documents = ref([])
+const activeLinks = ref([true, false, false])
 onMounted(() => {
     const userService = ref(new UserService())
     userService.value.getUserDocuments(route.params.userSlug).then(response => {
@@ -19,7 +20,7 @@ onMounted(() => {
 <template>
     <div>
         <documentsPageHeader />
-        <documentPageNavBar />
+        <documentPageNavBar :activeLinks="activeLinks" />
         <documentDisplaySection :documents="documents" />
     </div>
 </template>

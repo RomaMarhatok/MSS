@@ -1,21 +1,27 @@
 <script setup>
 import documentPageLink from '@/components/links/documentPageLink.vue';
-import { reactive } from 'vue'
+import { reactive, defineProps } from 'vue'
+const props = defineProps({
+    activeLinks: {
+        type: Array,
+        default: () => [false, false, false]
+    }
+})
 const documentLink = reactive({
     link: "#/",
     text: "Documents",
-    active: true,
+    active: props.activeLinks[0],
 })
 const appoitmentsLink = reactive({
     link: "#/",
     text: "Appoitments",
-    active: false,
+    active: props.activeLinks[1],
 
 })
 const doctorLink = reactive({
-    link: "#/",
+    link: "#/doctors/",
     text: "Doctors",
-    active: false,
+    active: props.activeLinks[2],
 
 })
 </script>

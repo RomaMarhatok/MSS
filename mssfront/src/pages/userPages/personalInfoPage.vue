@@ -58,11 +58,6 @@ const personalInfoSection = reactive({
 const recentDocuments = reactive({
     header: "recent documents",
     data: [
-        //Example of data display
-        // {
-        //     label: "Age",
-        //     text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa sit ea molestias qui quae odit reprehenderit animi id, corporis tempora facilis debitis, cum placeat. Velit quo inventore maiores eius consectetur!"
-        // },
     ]
 })
 const recentAppoitments = reactive({
@@ -72,7 +67,7 @@ const recentAppoitments = reactive({
 const imageSectionProps = reactive({
     imageSrc: "https://picsum.photos/262/187",
     links: {
-        doctors: "#/",
+        doctors: "#/doctors/",
         appoitments: "#/",
         documents: `#/user/${route.params.userSlug}/documents/`,
     },
