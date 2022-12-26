@@ -1,19 +1,13 @@
 from .user_service import UserService
 from userApp.models import Doctor
-from userApp.serializers.doctor_serializer import DoctorSerializer
+from ...serializers.doctor_serializer import DoctorSerializer
 
 
 class DoctorService(UserService):
-    def get_doctor_info(self, slug):
-        user_personal_info = self.get_user_personal_info(slug)
+    def get_doctor_by_slug(self, slug):
         doctor = Doctor.objects.filter(user__slug=slug).first()
-        doctor_types = self.get_doctor_types(doctor)
-        return {
-            "first_name": user_personal_info["first_name"],
-            "second_name": user_personal_info["second_name"],
-            "patronymic": user_personal_info["patronymic"],
-            "doctor_types": doctor_types,
-        }
+        data = DoctorSerializer(instance=doctor).data
+        return data
 
     def get_doctor_types(self, doctor: Doctor):
         return DoctorSerializer(instance=doctor).data["doctor_types"]
