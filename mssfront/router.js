@@ -6,6 +6,7 @@ import documentsPage from './src/pages/userPages/documentsPage'
 import personalInfoPage from "./src/pages/userPages/personalInfoPage"  
 import singleDocumentPage from "./src/pages/userPages/singleDocumentPage"
 import doctorsListPage from "./src/pages/userPages/doctorsListPage" 
+import doctorSinglePage from "./src/pages/userPages/doctorSinglePage"
 const router = createRouter({
     history:createWebHashHistory(),
     routes:[
@@ -13,6 +14,7 @@ const router = createRouter({
         {path:"/registration/",name:"registration-page",component:registrationPage},
         {path:"/authentication/",name:"authentication-page",component:authenticationPage},
         {path:"/doctors/",name:"doctors-list-page",component:doctorsListPage},
+        {path:"/doctor/:doctorSlug",name:"doctor-sing-display-section",component:doctorSinglePage},
         {path:"/user/:userSlug/",children:[
             {
                 path:"documents/",
