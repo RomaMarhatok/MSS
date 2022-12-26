@@ -35,30 +35,36 @@ class DoctorSerializer(ModelSerializer):
         self, instance: Doctor
     ) -> dict[User, list[DoctorSpecialization]]:
         user_from_instance = instance.user
+        doctor_types = self.get_doctor_specializations(user_from_instance)
+        user_personal_info = self.get_user_personal_info(user_from_instance)
+        return {
+            "doctor_slug": user_from_instance.slug,
+            "personal_info": user_personal_info,
+            "doctor_types": doctor_types,
+        }
+
+    def get_doctor_specializations(self, user: User):
         doctor_types = [
             DoctorSpecializationSerializer(
                 instance=doctor_specialization.doctor_specialization
             ).data
             for doctor_specialization in DoctorDoctorSpecialization.objects.filter(
-                doctor__user__pk=user_from_instance.pk
+                doctor__user__pk=user.pk
             )
         ]
-        user_personal_info = UserPersonalInfo.objects.filter(
-            user=user_from_instance
-        ).first()
+        return doctor_types
+
+    def get_user_personal_info(self, user: User):
+        user_personal_info = UserPersonalInfo.objects.filter(user=user).first()
         user_personal_info_data = UserPersonalInfoSerializer(
             instance=user_personal_info
         ).data
-        extracted_data = {
-            "first_name": user_personal_info_data["first_name"],
-            "second_name": user_personal_info_data["second_name"],
-            "patronymic": user_personal_info_data["patronymic"],
-            "gender": user_personal_info_data["gender"],
-            "age": user_personal_info_data["age"],
-            "image": user_personal_info_data["image"],
-        }
-        return {
-            "doctor_slug": user_from_instance.slug,
-            "personal_info": extracted_data,
-            "doctor_types": doctor_types,
-        }
+        not_neccessary_data = (
+            "gender",
+            "email",
+            "health_status",
+        )
+        for key in not_neccessary_data:
+            user_personal_info_data.pop(key)
+
+        return user_personal_info_data
