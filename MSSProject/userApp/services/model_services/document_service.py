@@ -12,7 +12,7 @@ class DocumentService:
             DocumentCreator.objects.filter(user_document=user_document).first().creator
         )
         doctor_service = DoctorService()
-        doctor_info = doctor_service.get_doctor_info(doctor.user.slug)
+        doctor_info = doctor_service.get_doctor_by_slug(doctor.user.slug)
         serializer = DocumentSerializer(instance=user_document)
         return {
             "user_document": serializer.data,
