@@ -66,5 +66,12 @@ class DoctorSerializer(ModelSerializer):
         )
         for key in not_neccessary_data:
             user_personal_info_data.pop(key)
-
+        full_name = (
+            user_personal_info.first_name
+            + " "
+            + user_personal_info.second_name
+            + " "
+            + user_personal_info.patronymic
+        )
+        user_personal_info_data.update({"full_name": full_name})
         return user_personal_info_data
