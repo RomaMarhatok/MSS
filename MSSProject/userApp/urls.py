@@ -18,6 +18,11 @@ urlpatterns = [
     ),
     path("doctors/", DoctorView.as_view({"get": "list"}), name="doctors-list"),
     path(
+        "doctor/<str:doctor_slug>/",
+        DoctorView.as_view({"get": "retrieve"}),
+        name="doctor-retrieve",
+    ),
+    path(
         "user/<str:user_slug>/",
         include(
             [
