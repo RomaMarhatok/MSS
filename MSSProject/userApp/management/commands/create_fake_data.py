@@ -72,9 +72,11 @@ class Command(BaseCommand):
             doctor = DoctorFactory(user=doctor_user)
 
             self.create_user_documents(user, document_types, doctor)
-            doctor_type = DoctorSpecializationFactory(name=fake.pystr())
+            doctor_specialization = DoctorSpecializationFactory(name=fake.pystr())
 
-            DoctorDoctorSpecialization(doctor=doctor, doctor_type=doctor_type)
+            DoctorDoctorSpecialization(
+                doctor=doctor, doctor_specialization=doctor_specialization
+            )
             patient = PatinesFactory(user=user)
 
             img_for_analyzes = ImageForAnalyzesFactory(
