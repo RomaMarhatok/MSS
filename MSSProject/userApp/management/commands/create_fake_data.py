@@ -12,7 +12,7 @@ from ...tests.factories.user_app_factories import (
     DocumentFactory,
     UserFactory,
     UserPersonalInfoFactory,
-    DoctorDoctorSpecialization,
+    DoctorDoctorSpecializationFactory,
     TreatmentHistoryImageForAnalyzesFactory,
     DocumentTypeFactory,
     UserLocationFactory,
@@ -20,6 +20,7 @@ from ...tests.factories.user_app_factories import (
 )
 from ...utils.string_utls import generate_valid_password, generate_valid_login
 from ...utils.image_utils import load_image_from_url
+from enum import Enum
 
 fake = Faker()
 
@@ -28,8 +29,8 @@ class Command(BaseCommand):
     def handle(self, *args: Any, **options: Any) -> Optional[str]:
         patient_role, doctor_role = self.prepare_roles()
         document_types = self.prepare_documents_types()
-        for _ in range(1, 25):
-
+        for i in range(1, 25):
+            print(f"{i*4}%")
             user = UserFactory(
                 login=generate_valid_login(),
                 password=generate_valid_password(),
@@ -70,13 +71,9 @@ class Command(BaseCommand):
                 health_status=fake.text(),
             )
             doctor = DoctorFactory(user=doctor_user)
-
+            self.prepare_doctor_specializations(doctor)
             self.create_user_documents(user, document_types, doctor)
-            doctor_specialization = DoctorSpecializationFactory(name=fake.pystr())
 
-            DoctorDoctorSpecialization(
-                doctor=doctor, doctor_specialization=doctor_specialization
-            )
             patient = PatinesFactory(user=user)
 
             img_for_analyzes = ImageForAnalyzesFactory(
@@ -115,3 +112,10 @@ class Command(BaseCommand):
         analyzes = DocumentTypeFactory(name="analyzes")
         conclusions = DocumentTypeFactory(name="conclusions")
         return [test, analyzes, conclusions]
+
+    def prepare_doctor_specializations(self, doctor):
+        for _ in range(random.randint(1, 5)):
+            doctor_specialization = DoctorSpecializationFactory(name=fake.pystr())
+            DoctorDoctorSpecializationFactory(
+                doctor=doctor, doctor_specialization=doctor_specialization
+            )
