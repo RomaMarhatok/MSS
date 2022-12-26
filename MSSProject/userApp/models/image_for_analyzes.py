@@ -31,8 +31,7 @@ class ImageForAnalyzes(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
-        if self.image:
-            self.image.name = generate_hash_from_string(self.description[:10]) + ".jpg"
+        self.image.name = generate_hash_from_string(self.description[:10]) + ".jpg"
         super(ImageForAnalyzes, self).save(*args, **kwargs)
         if self.image:
             image_service.resize_image(self.image.path)

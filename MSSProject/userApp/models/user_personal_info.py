@@ -42,11 +42,9 @@ class UserPersonalInfo(models.Model):
         db_table = "user_personal_info"
 
     def save(self, *args, **kwargs) -> None:
-        if self.image:
-            self.image.name = (
-                generate_hash_from_string(f"{self.first_name} {self.second_name}")
-                + ".jpg"
-            )
+        self.image.name = (
+            generate_hash_from_string(f"{self.first_name} {self.second_name}") + ".jpg"
+        )
         super(UserPersonalInfo, self).save(*args, **kwargs)
         if self.image:
             photo_service.resize_image(self.image.path)
