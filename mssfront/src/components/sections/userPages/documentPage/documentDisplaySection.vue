@@ -8,7 +8,7 @@ const props = defineProps({
     }
 })
 const searchString = ref("")
-const getDocuments = computed(() => { return props.documents.filter(el => el.name.toLowerCase().includes(searchString.value)) })
+const getDocuments = computed(() => { return props.documents.filter(el => el.name.toLowerCase().includes(searchString.value.toLowerCase())) })
 </script>
 <template>
     <main class="flex justify-center flex-col mt-4 items-center">
