@@ -12,7 +12,7 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 class Client:
     @staticmethod
     def get(url):
-        with requests.get(url) as resp:
+        with requests.get(url, stream=True) as resp:
             return resp.content
 
 
