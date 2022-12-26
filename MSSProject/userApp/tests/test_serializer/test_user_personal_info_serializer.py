@@ -20,9 +20,10 @@ def test_serialize(user_personal_info_with_image_fixture):
 
     serializer = UserPersonalInfoSerializer(data=user_personal_info_with_image_fixture)
     assert serializer.is_valid(raise_exception=True)
-    instance = serializer.save()
+    instance: UserPersonalInfo = serializer.save()
     assert UserPersonalInfo.objects.all().count() == 1
     assert isinstance(instance, UserPersonalInfo)
+    assert instance.image is not None
 
 
 @pytest.mark.django_db
@@ -50,6 +51,7 @@ def test_serialize_without_fields(user_personal_info_with_image_fixture):
     instance = serializer.save()
     assert UserPersonalInfo.objects.all().count() == 1
     assert isinstance(instance, UserPersonalInfo)
+    assert instance.image is not None
 
 
 @pytest.mark.django_db

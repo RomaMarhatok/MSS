@@ -10,6 +10,7 @@ def test_serialization(image_for_analyzes_with_image_fixture):
     instance = serializer.save()
     assert ImageForAnalyzes.objects.all().count() == 1
     assert isinstance(instance, ImageForAnalyzes)
+    assert instance.image is not None
 
 
 @pytest.mark.django_db

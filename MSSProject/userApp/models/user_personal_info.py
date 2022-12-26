@@ -1,10 +1,14 @@
+from __future__ import annotations
 from datetime import datetime
 from django.db import models
+from userApp.services.image_service import ImageService
 from ..utils.string_utls import generate_hash_from_string
 from .user import User
 
+photo_service = ImageService()
 
-def media_path_builder_for_user_info(instance, filename):
+
+def media_path_builder_for_user_info(instance: UserPersonalInfo, filename):
     now_date = datetime.now().strftime("%Y/%m/%d")
     if hasattr(instance, "user"):
         return "/".join(
@@ -41,4 +45,6 @@ class UserPersonalInfo(models.Model):
         self.image.name = (
             generate_hash_from_string(f"{self.first_name} {self.second_name}") + ".jpg"
         )
-        return super(UserPersonalInfo, self).save(*args, **kwargs)
+        super(UserPersonalInfo, self).save(*args, **kwargs)
+        if self.image:
+            photo_service.resize_image(self.image.path)
