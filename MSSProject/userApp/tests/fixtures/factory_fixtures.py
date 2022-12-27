@@ -14,6 +14,7 @@ from userApp.tests.factories.user_app_factories import (
     DocumentTypeFactory,
     UserLocationFactory,
     DocumentCreatorFactory,
+    DoctorSummaryFactory,
 )
 from ...models import (
     Role,
@@ -30,6 +31,7 @@ from ...models import (
     TreatmentHistoryImageForAnalyzes,
     UserLocation,
     DocumentCreator,
+    DoctorSummary,
 )
 
 
@@ -134,3 +136,8 @@ def factory_document_creator_fixture(
     return DocumentCreatorFactory.create(
         document=factory_document_fixture, creator=factory_doctor_fixture
     )
+
+
+@pytest.fixture
+def factory_document_summary_fixture(factory_doctor_fixture) -> DoctorSummary:
+    return DoctorSummaryFactory.create(doctor=factory_doctor_fixture)

@@ -132,3 +132,12 @@ def doctor_doctor_types_fixture(doctor_fixture, doctor_specialization_fixture) -
 @pytest.fixture
 def user_document_doctor_fixture(document_fixture, doctor_fixture):
     return {"document": document_fixture, "creator": doctor_fixture}
+
+
+@pytest.fixture
+def doctor_summary_fixture(doctor_fixture):
+    return {
+        "doctor": doctor_fixture,
+        "short_summary": fake.text(max_nb_chars=1000),
+        "summary": fake.text(max_nb_chars=100000),
+    }
