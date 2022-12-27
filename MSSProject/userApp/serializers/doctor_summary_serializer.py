@@ -22,3 +22,8 @@ class DoctorSummarySerializer(ModelSerializer):
             **validated_data, doctor=doctor
         )
         return instance
+
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        rep.pop("doctor")
+        return rep

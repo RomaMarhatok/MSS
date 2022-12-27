@@ -1,9 +1,16 @@
-from userApp.models import Doctor, User, DoctorDoctorSpecialization, UserPersonalInfo
+from userApp.models import (
+    Doctor,
+    User,
+    DoctorDoctorSpecialization,
+    UserPersonalInfo,
+    DoctorSummary,
+)
 from ...serializers.doctor_serializer import DoctorSerializer
 from ...serializers.doctor_specialization_serializer import (
     DoctorSpecializationSerializer,
 )
 from ...serializers.user_personal_info_serializer import UserPersonalInfoSerializer
+from ...serializers.doctor_summary_serializer import DoctorSummarySerializer
 
 
 class DoctorService:
@@ -15,10 +22,12 @@ class DoctorService:
         doctor_data = DoctorSerializer(instance=doctor).data
         user_personal_info = self.get_user_personal_info(doctor.user)
         doctor_specializations = self.get_doctor_specializations(doctor)
+        doctor_summary = self.get_doctor_summary(doctor)
         return {
             "doctor_slug": doctor_data["user"]["slug"],
             "personal_info": user_personal_info,
             "doctor_types": doctor_specializations,
+            "doctor_summary": doctor_summary,
         }
 
     def get_doctor_specializations(self, doctor: Doctor):
@@ -53,6 +62,10 @@ class DoctorService:
         )
         user_personal_info_data.update({"full_name": full_name})
         return user_personal_info_data
+
+    def get_doctor_summary(self, doctor: Doctor):
+        doctor_summary = DoctorSummary.objects.filter(doctor=doctor).first()
+        return DoctorSummarySerializer(instance=doctor_summary).data
 
     def get_all_doctors(self):
         all_doctors = Doctor.objects.all()
