@@ -18,6 +18,7 @@ from ...models import (
     TreatmentHistoryImageForAnalyzes,
     UserLocation,
     DocumentCreator,
+    DoctorSummary,
 )
 
 fake = Faker()
@@ -104,7 +105,7 @@ class DoctorDoctorSpecializationFactory(DjangoModelFactory):
     doctor_specialization = SubFactory(DoctorSpecializationFactory)
 
 
-class PatinesFactory(DjangoModelFactory):
+class PatientFactory(DjangoModelFactory):
     class Meta:
         model = Patient
 
@@ -119,21 +120,21 @@ class ImageForAnalyzesFactory(DjangoModelFactory):
     description = fake.text(max_nb_chars=10000)
 
 
-class TreatmentsHistoryFactory(DjangoModelFactory):
+class TreatmentHistoryFactory(DjangoModelFactory):
     class Meta:
         model = TreatmentHistory
 
     description = fake.text(max_nb_chars=10000)
     doctor = SubFactory(DoctorFactory)
-    patient = SubFactory(Patient)
+    patient = SubFactory(PatientFactory)
 
 
 class TreatmentHistoryImageForAnalyzesFactory(DjangoModelFactory):
     class Meta:
         model = TreatmentHistoryImageForAnalyzes
 
-    treatment_history = SubFactory(TreatmentHistory)
-    image_for_analyzes = SubFactory(ImageForAnalyzes)
+    treatment_history = SubFactory(TreatmentHistoryFactory)
+    image_for_analyzes = SubFactory(ImageForAnalyzesFactory)
 
 
 class DocumentCreatorFactory(DjangoModelFactory):
@@ -142,3 +143,12 @@ class DocumentCreatorFactory(DjangoModelFactory):
 
     document = SubFactory(DocumentFactory)
     creator = SubFactory(DoctorFactory)
+
+
+class DoctorSummaryFactory(DjangoModelFactory):
+    class Meta:
+        model = DoctorSummary
+
+    doctor = SubFactory(DoctorFactory)
+    short_summary = fake.text(max_nb_chars=1000)
+    summary = fake.text(max_nb_chars=100000)

@@ -6,9 +6,9 @@ from userApp.tests.factories.user_app_factories import (
     DocumentFactory,
     DoctorSpecializationFactory,
     DoctorFactory,
-    PatinesFactory,
+    PatientFactory,
     ImageForAnalyzesFactory,
-    TreatmentsHistoryFactory,
+    TreatmentHistoryFactory,
     DoctorDoctorSpecializationFactory,
     TreatmentHistoryImageForAnalyzesFactory,
     DocumentTypeFactory,
@@ -99,7 +99,7 @@ def factory_doctor_doctor_specialization_fixture(
 
 @pytest.fixture
 def factory_patient_fixture(factory_user_fixture) -> Patient:
-    return PatinesFactory.create(user=factory_user_fixture)
+    return PatientFactory.create(user=factory_user_fixture)
 
 
 @pytest.fixture
@@ -111,7 +111,7 @@ def factory_image_for_analyzes_fixture() -> ImageForAnalyzes:
 def factory_treatment_history_fixture(
     factory_doctor_fixture, factory_patient_fixture
 ) -> TreatmentHistory:
-    return TreatmentsHistoryFactory.create(
+    return TreatmentHistoryFactory.create(
         doctor=factory_doctor_fixture,
         patient=factory_patient_fixture,
     )
