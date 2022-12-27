@@ -6,9 +6,9 @@ from ...tests.factories.user_app_factories import (
     DoctorFactory,
     DoctorSpecializationFactory,
     ImageForAnalyzesFactory,
-    PatinesFactory,
+    PatientFactory,
     RoleFactory,
-    TreatmentsHistoryFactory,
+    TreatmentHistoryFactory,
     DocumentFactory,
     UserFactory,
     UserPersonalInfoFactory,
@@ -17,10 +17,10 @@ from ...tests.factories.user_app_factories import (
     DocumentTypeFactory,
     UserLocationFactory,
     DocumentCreatorFactory,
+    DoctorSummaryFactory,
 )
 from ...utils.string_utls import generate_valid_password, generate_valid_login
 from ...utils.image_utils import load_image_from_url
-from enum import Enum
 
 fake = Faker()
 
@@ -71,16 +71,21 @@ class Command(BaseCommand):
                 health_status=fake.text(),
             )
             doctor = DoctorFactory(user=doctor_user)
+            DoctorSummaryFactory(
+                doctor=doctor,
+                short_summary=fake.text(max_nb_chars=1000),
+                summary=fake.text(max_nb_chars=100000),
+            )
             self.prepare_doctor_specializations(doctor)
             self.create_user_documents(user, document_types, doctor)
 
-            patient = PatinesFactory(user=user)
+            patient = PatientFactory(user=user)
 
             img_for_analyzes = ImageForAnalyzesFactory(
                 image=load_image_from_url(fake.image_url()),
                 description=fake.text(max_nb_chars=10000),
             )
-            treatment = TreatmentsHistoryFactory(
+            treatment = TreatmentHistoryFactory(
                 description=fake.text(max_nb_chars=10000),
                 doctor=doctor,
                 patient=patient,
