@@ -12,7 +12,13 @@ class DocumentService:
         document_creator = DocumentCreator.objects.filter(
             document=user_document
         ).first()
-        return DocumentCreatorSerializer(instance=document_creator).data
+        doctor_service = DoctorService()
+        creator_data = doctor_service.get_serializet_doctor(document_creator.creator)
+        document = DocumentCreatorSerializer(instance=document_creator).data["document"]
+        return {
+            "document": document,
+            "creator": creator_data,
+        }
 
     def get_all_documents(self, user_slug: str, include_context: bool = False):
         user_documents = Document.objects.filter(user__slug=user_slug)
