@@ -20,8 +20,8 @@ onMounted(() => {
     userService.value.getUserDocument(userSlug, documentSlug).then(response => {
         console.log(response)
 
-        const userDocument = response.data.user_document
-        const doctorCreator = response.data.doctor_creator
+        const userDocument = response.data.document
+        const doctorCreator = response.data.creator
         document.document_name = userDocument.name
         document.document_type = userDocument.document_type.name
         document.doctor_name = getFullName(doctorCreator)
