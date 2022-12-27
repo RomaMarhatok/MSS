@@ -6,7 +6,7 @@ import documentsPage from './src/pages/userPages/documentsPage'
 import personalInfoPage from "./src/pages/userPages/personalInfoPage"  
 import singleDocumentPage from "./src/pages/userPages/singleDocumentPage"
 import doctorsListPage from "./src/pages/userPages/doctorsListPage" 
-import doctorSinglePage from "./src/pages/userPages/doctorSinglePage"
+import doctorSinglePage from "./src/pages/userPages/singleDoctorPage"
 const router = createRouter({
     history:createWebHashHistory(),
     routes:[

@@ -7,7 +7,6 @@ const props = defineProps({
 })
 
 const getImageSrc = computed(() => {
-    console.log(props.image)
     return getBaseApi.getUri() + props.image
 })
 </script>
