@@ -1,15 +1,16 @@
 <script setup>
 import documentPageLink from '@/components/links/documentPageLink.vue';
 import { reactive, defineProps } from 'vue'
+import { useStore } from 'vuex'
+const store = useStore()
 const props = defineProps({
     activeLinks: {
         type: Array,
         default: () => [false, false, false]
     },
-    userSlug: String,
 })
 const documentLink = reactive({
-    link: `#/user/${props.userSlug}/documents/`,
+    link: `#/user/${store.state.user.slug}/documents/`,
     text: "Documents",
     active: props.activeLinks[0],
 })
