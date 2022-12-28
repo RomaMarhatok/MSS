@@ -20,11 +20,11 @@ onMounted(() => {
     userService.value.getUserDocument(userSlug, documentSlug).then(response => {
         console.log(response)
 
-        const userDocument = response.data.user_document
-        const doctorCreator = response.data.doctor_creator
+        const userDocument = response.data.document
+        const doctorCreator = response.data.creator
         document.document_name = userDocument.name
         document.document_type = userDocument.document_type.name
-        document.doctor_name = getFullName(doctorCreator)
+        document.doctor_name = doctorCreator.personal_info.full_name
         document.content = userDocument.content
         document.created_at = "created at " + getFullDate(userDocument.created_at)
         document.updated_at = "updated at " + getFullDate(userDocument.updated_at)
@@ -39,9 +39,7 @@ function getFullDate(dateString) {
     const yyyy = date.getFullYear()
     return dd + "/" + mm + "/" + yyyy
 }
-function getFullName(doctorData) {
-    return "creator " + doctorData.first_name + " " + doctorData.second_name + " " + (doctorData.patronymic ?? "")
-}
+
 </script>
 <template>
     <div class="main">

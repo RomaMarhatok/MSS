@@ -1,23 +1,25 @@
 <script setup>
 import doctorPageCard from '@/components/cards/doctorPageCard.vue';
-import { onMounted, ref } from 'vue';
-import DoctorService from '@/../services/DoctorService';
-const doctors = ref([])
-onMounted(() => {
-    const doctorService = ref(new DoctorService());
-    doctorService.value.getAllDoctors().then(response => {
-        doctors.value = response.data.doctors
-    }).catch(error => console.log(error))
+import { ref, defineProps, computed } from 'vue';
+const props = defineProps({
+    doctors: {
+        type: Array,
+        default: () => []
+    }
+})
+const searchString = ref("")
+const getDoctors = computed(() => {
+    return props.doctors.filter(el => el.personal_info.full_name.toLowerCase().includes(searchString.value.toLowerCase()))
 })
 </script>
 <template>
     <main class="main">
         <div class="search-bar-container">
-            <input class="search-bar" placeholder="search">
+            <input class="search-bar" placeholder="search" v-model="searchString">
         </div>
         <section class="doctor-list-section" v-if="doctors">
-            <doctorPageCard v-for="doctor in doctors" :key="doctor.doctor_slug" :personalInfo="doctor.personal_info"
-                :doctorTypes="doctor.doctor_types" />
+            <doctorPageCard v-for="doctor in getDoctors" :key="doctor.doctor_slug" :personalInfo="doctor.personal_info"
+                :doctorTypes="doctor.doctor_types" :summary="doctor.doctor_summary.short_summary" />
         </section>
     </main>
 </template>
@@ -50,7 +52,7 @@ onMounted(() => {
     grid-auto-flow: row dense;
     gap: 10px;
     justify-items: center;
-    width: 80%;
+    width: 90%;
 }
 
 @media screen and (max-width: 1000px) {

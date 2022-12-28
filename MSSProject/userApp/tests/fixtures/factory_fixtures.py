@@ -6,14 +6,15 @@ from userApp.tests.factories.user_app_factories import (
     DocumentFactory,
     DoctorSpecializationFactory,
     DoctorFactory,
-    PatinesFactory,
+    PatientFactory,
     ImageForAnalyzesFactory,
-    TreatmentsHistoryFactory,
+    TreatmentHistoryFactory,
     DoctorDoctorSpecializationFactory,
     TreatmentHistoryImageForAnalyzesFactory,
     DocumentTypeFactory,
     UserLocationFactory,
     DocumentCreatorFactory,
+    DoctorSummaryFactory,
 )
 from ...models import (
     Role,
@@ -30,6 +31,7 @@ from ...models import (
     TreatmentHistoryImageForAnalyzes,
     UserLocation,
     DocumentCreator,
+    DoctorSummary,
 )
 
 
@@ -99,7 +101,7 @@ def factory_doctor_doctor_specialization_fixture(
 
 @pytest.fixture
 def factory_patient_fixture(factory_user_fixture) -> Patient:
-    return PatinesFactory.create(user=factory_user_fixture)
+    return PatientFactory.create(user=factory_user_fixture)
 
 
 @pytest.fixture
@@ -111,7 +113,7 @@ def factory_image_for_analyzes_fixture() -> ImageForAnalyzes:
 def factory_treatment_history_fixture(
     factory_doctor_fixture, factory_patient_fixture
 ) -> TreatmentHistory:
-    return TreatmentsHistoryFactory.create(
+    return TreatmentHistoryFactory.create(
         doctor=factory_doctor_fixture,
         patient=factory_patient_fixture,
     )
@@ -134,3 +136,8 @@ def factory_document_creator_fixture(
     return DocumentCreatorFactory.create(
         document=factory_document_fixture, creator=factory_doctor_fixture
     )
+
+
+@pytest.fixture
+def factory_document_summary_fixture(factory_doctor_fixture) -> DoctorSummary:
+    return DoctorSummaryFactory.create(doctor=factory_doctor_fixture)

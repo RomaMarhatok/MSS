@@ -8,6 +8,7 @@ import { ref, onMounted } from 'vue';
 const route = useRoute()
 const documents = ref([])
 const activeLinks = ref([true, false, false])
+
 onMounted(() => {
     const userService = ref(new UserService())
     userService.value.getUserDocuments(route.params.userSlug).then(response => {
@@ -20,7 +21,7 @@ onMounted(() => {
 <template>
     <div>
         <documentsPageHeader />
-        <documentPageNavBar :activeLinks="activeLinks" />
+        <documentPageNavBar :activeLinks="activeLinks" :userSlug="route.params.userSlug" />
         <documentDisplaySection :documents="documents" />
     </div>
 </template>

@@ -1,23 +1,38 @@
 <script setup>
-import { defineProps, computed } from "vue"
+import { defineProps, computed, getCurrentInstance } from "vue"
+import { useRouter } from "vue-router";
 import getBaseApi from "@/apis/baseApi";
+const instance = getCurrentInstance()
+const router = useRouter()
 const props = defineProps({
     personalInfo: Object,
-    doctorTypes: Array,
+    doctorTypes: {
+        type: Array,
+        default: () => []
+    },
+    summary: String,
 })
 const getImageSrc = computed(() => {
     return getBaseApi.getUri() + props.personalInfo.image
 })
+function redirectOnSingleDoctorPage() {
+    const slug = instance.vnode.key
+    router.push(`/doctor/${slug}/`)
+}
 </script>
 <template>
-    <div class="card">
+    <div class="card" @click="redirectOnSingleDoctorPage">
         <div class="img-container">
             <img class="card-img" :src="getImageSrc">
+            <div class="container">
+                <p class="small-text" v-for="doctorType in props.doctorTypes" :key="doctorType.slug">
+                    {{ doctorType.name }}
+                </p>
+            </div>
         </div>
         <div class="card-text">
-            <p class="text">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Et asperiores assumenda ipsum
-                suscipit animi, laborum, iure modi culpa fugiat sit minus voluptates quas fuga perferendis rem tempore
-                doloribus sint cum!</p>
+            <p class="text">{{ props.summary }}</p>
+
         </div>
     </div>
 </template>
@@ -30,8 +45,7 @@ const getImageSrc = computed(() => {
 
 .img-container {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
     width: 100%;
     padding: 0.5rem;
 }
@@ -43,12 +57,16 @@ const getImageSrc = computed(() => {
 }
 
 .card-text {
-    padding: 1rem;
+    padding: 0.5rem;
     width: 100%;
 }
 
+.small-text {
+    font-size: 0.8rem;
+}
+
 .text {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
 }
 
 .card:hover {
@@ -56,6 +74,13 @@ const getImageSrc = computed(() => {
     color: white;
     background-color: rgba(19, 48, 94, 1);
     border-radius: 20px;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 10px;
 }
 
 @media screen and (max-width: 450px) {

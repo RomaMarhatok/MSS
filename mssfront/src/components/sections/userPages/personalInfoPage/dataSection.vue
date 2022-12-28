@@ -21,7 +21,7 @@ const props = defineProps({
         </div>
     </section>
 </template>
-<style>
+<style scoped>
 .table-display-section {
     background-color: #ffffff;
     border-radius: 5px;
