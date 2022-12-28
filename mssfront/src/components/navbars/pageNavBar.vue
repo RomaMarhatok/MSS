@@ -5,10 +5,11 @@ const props = defineProps({
     activeLinks: {
         type: Array,
         default: () => [false, false, false]
-    }
+    },
+    userSlug: String,
 })
 const documentLink = reactive({
-    link: "#/",
+    link: `#/user/${props.userSlug}/documents/`,
     text: "Documents",
     active: props.activeLinks[0],
 })
