@@ -19,7 +19,7 @@ const getDoctors = computed(() => {
         </div>
         <section class="doctor-list-section" v-if="doctors">
             <doctorPageCard v-for="doctor in getDoctors" :key="doctor.doctor_slug" :personalInfo="doctor.personal_info"
-                :doctorTypes="doctor.doctor_types" />
+                :doctorTypes="doctor.doctor_types" :summary="doctor.doctor_summary.short_summary" />
         </section>
     </main>
 </template>
