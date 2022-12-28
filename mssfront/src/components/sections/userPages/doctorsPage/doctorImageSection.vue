@@ -23,8 +23,9 @@ const getImageSrc = computed(() => {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 20%;
+    width: 100%;
     padding: 1rem;
+    border-radius: 1rem;
     box-shadow: 1px 0px 8px 0px rgba(34, 60, 80, 0.2);
 }
 

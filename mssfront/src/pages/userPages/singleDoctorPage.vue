@@ -25,7 +25,9 @@ onMounted(() => {
     <div>
         <doctorsPageHeader />
         <main class="main-data-section">
-            <doctorImageSection :fullName="fullName" :image="image" />
+            <div>
+                <doctorImageSection :fullName="fullName" :image="image" />
+            </div>
             <doctorDataSection :sectionTitle="'Resume'" :sectionText="summary" />
         </main>
 
