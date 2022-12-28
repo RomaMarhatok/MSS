@@ -9,7 +9,8 @@ const props = defineProps({
     doctorTypes: {
         type: Array,
         default: () => []
-    }
+    },
+    summary: String,
 })
 const getImageSrc = computed(() => {
     return getBaseApi.getUri() + props.personalInfo.image
@@ -30,11 +31,8 @@ function redirectOnSingleDoctorPage() {
             </div>
         </div>
         <div class="card-text">
-            <p class="text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum, ipsa distinctio harum sit
-                repellendus incidunt dolorem laudantium corporis assumenda totam quos reiciendis enim odio neque
-                possimus, atque fugit, ratione nulla.</p>
+            <p class="text">{{ props.summary }}</p>
 
-            <!-- <p class="text">{{ props.personalInfo.short_resume }}</p> -->
         </div>
     </div>
 </template>
