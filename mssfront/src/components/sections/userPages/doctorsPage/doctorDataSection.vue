@@ -8,7 +8,7 @@ const props = defineProps({
 <template>
     <section class="resume-section">
         <header class="header__section">
-            Resume
+            {{ props.sectionTitle }}
         </header>
         <div class="table-wrapper">
             <p class="label-text">
