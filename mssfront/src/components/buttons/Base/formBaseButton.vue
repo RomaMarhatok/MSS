@@ -8,9 +8,9 @@ const props = defineProps({
 </script>
 <template>
     <button class="form__button border-1 border-black border-solid cursor-pointer text-base p-1 rounded-xl"
-        :type="props.buttonType">{{
-        props.buttonText
-        }}</button>
+        :type="props.buttonType">
+        {{ props.buttonText }}
+    </button>
 </template>
 <style scoped>
 .form__button {
