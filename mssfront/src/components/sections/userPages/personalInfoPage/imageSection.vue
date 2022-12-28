@@ -21,7 +21,7 @@ const props = defineProps({
         </div>
     </section>
 </template>
-<style>
+<style scoped>
 .personal-image {
     display: flex;
     flex-direction: column;
