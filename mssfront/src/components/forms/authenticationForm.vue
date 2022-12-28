@@ -1,54 +1,37 @@
 <script setup>
-import { reactive, ref, computed } from "vue"
+import { reactive, computed, onMounted } from "vue"
 import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 import baseForm from "@/components/forms/base/baseForm.vue"
-import AuthenticationService from "../../../services/AuthenticationService";
 import formEmailInput from '@/components/inputs/formEmailInput.vue';
 import formPasswordInput from '@/components/inputs/formPasswordInput.vue';
 import formSubmitButton from '@/components/buttons/formSubmitButton.vue';
-const authenticationService = ref(new AuthenticationService())
+const store = useStore()
 const router = useRouter()
-const errors = reactive({
-    general: [],
-    login: [],
-    password: [],
-})
+const errors = computed(() => store.state.responseErrors.errors)
 const formData = reactive({
     login: "",
     password: "",
 })
-const generalErrors = computed(() => {
-    return errors.general ?? []
-})
-const loginErrors = computed(() => {
-    return errors.login ?? []
-})
-const passwordErrors = computed(() => {
-    return errors.password ?? []
+onMounted(() => {
+    store.dispatch("responseErrors/clearErrors")
 })
 function submitForm() {
-    for (let key in errors) errors[key] = []
-
-    authenticationService.value.authenticateUser(formData).then((response) => {
-        console.log(response)
-        const token = response.data.token
-        localStorage.setItem("auth_token", token)
-        const userSlug = response.data.user_slug
-        router.push("/user/" + userSlug + "/home/")
-    }).catch(error => {
-        console.log(error)
-        let errorsFromResponce = error.response.data.errors
-        errors.general = errorsFromResponce.general
-        errors.login = errorsFromResponce.login
-        errors.password = errorsFromResponce.password
-        console.log(generalErrors)
+    console.log(formData)
+    store.dispatch("authentication/authenticateUser", formData).then((responseStatus) => {
+        if (responseStatus == 200) {
+            store.dispatch("responseErrors/clearErrors")
+        }
+        if (Object.keys(errors.value).length === 0) {
+            router.push("/user/" + store.state.user.slug + "/home/")
+        }
     })
 }
 </script>
 <template>
-    <baseForm @SubmitForm="submitForm" :errors="generalErrors">
-        <formEmailInput v-model="formData.login" :errors="loginErrors" />
-        <formPasswordInput v-model="formData.password" :errors="passwordErrors" />
+    <baseForm @SubmitForm="submitForm">
+        <formEmailInput v-model="formData.login" />
+        <formPasswordInput v-model="formData.password" />
         <formSubmitButton :buttonText="'Log in'" />
     </baseForm>
 </template>
