@@ -23,7 +23,7 @@ const getImageSrc = computed(() => {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 40%;
+    width: 20%;
     padding: 1rem;
     box-shadow: 1px 0px 8px 0px rgba(34, 60, 80, 0.2);
 }
@@ -39,7 +39,7 @@ const getImageSrc = computed(() => {
     border-top-right-radius: 5px;
 }
 
-@media screen and (max-width: 750px) {
+@media screen and (max-width: 1100px) {
     .personal-image {
         width: 70%;
     }
