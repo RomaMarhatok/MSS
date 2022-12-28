@@ -1,11 +1,14 @@
 <script setup>
-import dataSection from '@/components/sections/userPages/personalInfoPage/dataSection.vue';
-import imageSection from '@/components/sections/userPages/personalInfoPage/imageSection.vue';
 import { reactive, onBeforeMount, ref } from 'vue';
 import { useRoute } from 'vue-router';
+import { useStore } from 'vuex'
+import dataSection from '@/components/sections/userPages/personalInfoPage/dataSection.vue';
+import imageSection from '@/components/sections/userPages/personalInfoPage/imageSection.vue';
 import UserService from '../../../services/UserService';
 import getBaseApi from '@/apis/baseApi';
 const route = useRoute()
+const store = useStore()
+console.log(store)
 const getFullGenderName = (gender) => {
     switch (gender) {
         case "F":
@@ -24,7 +27,7 @@ onBeforeMount(() => {
         personalInfoSection.data[2].text = getFullGenderName(response.data.gender)
         personalInfoSection.data[3].text = response.data.health_status
 
-        imageSectionProps.personalInfo.full_name = response.data.first_name + " " + response.data.second_name + " " + response.data.patronymic
+        imageSectionProps.personalInfo.full_name = response.data.full_name
         imageSectionProps.imageSrc = getBaseApi.getUri() + response.data.image
         imageSectionProps.personalInfo.location = response.data.country + " " + response.data.city
         imageSectionProps.personalInfo.address = response.data.address
@@ -57,8 +60,7 @@ const personalInfoSection = reactive({
 })
 const recentDocuments = reactive({
     header: "recent documents",
-    data: [
-    ]
+    data: []
 })
 const recentAppoitments = reactive({
     header: "recent appoitments",
