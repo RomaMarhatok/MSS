@@ -1,11 +1,11 @@
 import RequestService from "./base/RequestService"
 class DoctorService extends RequestService {
-    async getAllDoctors(){
-        return await this.get(`/mss/doctors/`)
-    }
-
-    async getDoctorBySlug(slug){
-        return await this.get(`/mss/doctor/${slug}/`)
+    async getAllDoctors(cb,errorCb){
+        return await this.get(`/mss/doctors/`).then(response=>{
+            cb(response.data.doctors)
+        }).catch(error=>{
+            errorCb(error)
+        })
     }
 }
 export default DoctorService
