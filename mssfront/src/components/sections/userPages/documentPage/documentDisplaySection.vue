@@ -1,14 +1,11 @@
 <script setup>
 import documentListPageCard from '@/components/cards/documentListPageCard.vue';
-import { ref, defineProps, computed } from 'vue';
-const props = defineProps({
-    documents: {
-        type: Array,
-        default: () => [],
-    }
-})
+import { ref, computed } from 'vue';
+import { useStore } from 'vuex';
+const store = useStore()
 const searchString = ref("")
-const getDocuments = computed(() => { return props.documents.filter(el => el.name.toLowerCase().includes(searchString.value.toLowerCase())) })
+const documents = computed(() => store.state.user.documents)
+const getDocuments = computed(() => { return documents.value.filter(el => el.name.toLowerCase().includes(searchString.value.toLowerCase())) })
 </script>
 <template>
     <main class="flex justify-center flex-col mt-4 items-center">
@@ -21,7 +18,7 @@ const getDocuments = computed(() => { return props.documents.filter(el => el.nam
             </div>
         </div>
         <div class="container">
-            <div class="document-list" v-if="props.documents">
+            <div class="document-list" v-if="documents">
                 <documentListPageCard v-for="document in getDocuments" :key="document.slug" :document="document" />
             </div>
         </div>
