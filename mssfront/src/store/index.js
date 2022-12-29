@@ -4,12 +4,14 @@ import authentication from './modules/authentication'
 import registration from './modules/registration'
 import responseErrors from './modules/responseErrors'
 import user from './modules/user'
+import doctors from './modules/doctors'
 const store = createStore({
     modules:{
         registration,
         authentication,
         responseErrors,
         user,
+        doctors,
     },
     plugins:[
         createPersistedState()
