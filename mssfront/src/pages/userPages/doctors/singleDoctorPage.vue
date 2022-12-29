@@ -2,33 +2,22 @@
 import doctorsPageHeader from '@/components/headers/pageHeader.vue';
 import doctorImageSection from '@/components/sections/userPages/doctorsPage/doctorImageSection.vue';
 import doctorDataSection from '@/components/sections/userPages/doctorsPage/doctorDataSection.vue';
-import DoctorService from '@/../services/DoctorService';
-import { onMounted, ref } from 'vue';
+import { computed } from 'vue';
 import { useRoute } from 'vue-router';
+import { useStore } from 'vuex';
 const route = useRoute()
-const doctorService = ref(new DoctorService())
-const fullName = ref("")
-const image = ref("")
-const summary = ref("")
-onMounted(() => {
-    const doctorSlug = route.params.doctorSlug
-    doctorService.value.getDoctorBySlug(doctorSlug).then((response) => {
-        console.log(response)
-        fullName.value = response.data.personal_info.full_name
-        image.value = response.data.personal_info.image
-        summary.value = response.data.doctor_summary.summary
-    }).catch((error) => console.log(error))
-
-})
+const store = useStore()
+const doctorSlug = route.params.doctorSlug
+const doctor = computed(() => store.getters["doctors/getDoctorBySlug"](doctorSlug))
 </script>
 <template>
     <div>
         <doctorsPageHeader />
         <main class="main-data-section">
             <div>
-                <doctorImageSection :fullName="fullName" :image="image" />
+                <doctorImageSection :fullName="doctor.personal_info.full_name" :image="doctor.personal_info.image" />
             </div>
-            <doctorDataSection :sectionTitle="'Resume'" :sectionText="summary" />
+            <doctorDataSection :sectionTitle="'Resume'" :sectionText="doctor.doctor_summary.summary" />
         </main>
 
     </div>
