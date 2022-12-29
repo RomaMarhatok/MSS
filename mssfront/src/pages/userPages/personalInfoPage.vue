@@ -1,63 +1,19 @@
 <script setup>
-import { reactive, onBeforeMount, ref } from 'vue';
+import { reactive, onBeforeMount, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { useStore } from 'vuex'
-import dataSection from '@/components/sections/userPages/personalInfoPage/dataSection.vue';
 import imageSection from '@/components/sections/userPages/personalInfoPage/imageSection.vue';
-import UserService from '../../../services/UserService';
-import getBaseApi from '@/apis/baseApi';
-const route = useRoute()
+import dataSection from '@/components/sections/userPages/personalInfoPage/base/dataSection.vue';
+import healthInfoSection from '@/components/sections/userPages/personalInfoPage/healthInfoSection.vue';
 const store = useStore()
+const route = useRoute()
 console.log(store)
-const getFullGenderName = (gender) => {
-    switch (gender) {
-        case "F":
-            return "Female"
-        case "M":
-            return "Male"
-        default:
-            return "Other"
-    }
-}
+const slug = computed(() => store.state.user.slug ? store.state.user.slug : route.params.userSlug)
 onBeforeMount(() => {
-    let userServive = ref(new UserService())
-    userServive.value.getUserPersonalInfo(route.params.userSlug).then((response) => {
-        personalInfoSection.data[0].text = response.data.email
-        personalInfoSection.data[1].text = response.data.age
-        personalInfoSection.data[2].text = getFullGenderName(response.data.gender)
-        personalInfoSection.data[3].text = response.data.health_status
-
-        imageSectionProps.personalInfo.full_name = response.data.full_name
-        imageSectionProps.imageSrc = getBaseApi.getUri() + response.data.image
-        imageSectionProps.personalInfo.location = response.data.country + " " + response.data.city
-        imageSectionProps.personalInfo.address = response.data.address
-        console.log(response)
-    }).catch((error) => {
-        console.log(error)
-    })
+    console.log("on mounted")
+    store.dispatch("user/fetchUserPersonalInfo", slug.value)
 })
 
-const personalInfoSection = reactive({
-    header: "personal info",
-    data: [
-        {
-            label: "Email",
-            text: ""
-        },
-        {
-            label: "Age",
-            text: -1
-        },
-        {
-            label: "Gender",
-            text: ""
-        },
-        {
-            label: "Health status",
-            text: ""
-        }
-    ]
-})
 const recentDocuments = reactive({
     header: "recent documents",
     data: []
@@ -71,7 +27,7 @@ const imageSectionProps = reactive({
     links: {
         doctors: "#/doctors/",
         appoitments: "#/",
-        documents: `#/user/${route.params.userSlug}/documents/`,
+        documents: `#/user/${slug.value}/documents/`,
     },
     personalInfo: {
         full_name: "",
@@ -83,7 +39,7 @@ const imageSectionProps = reactive({
 <template>
     <main>
         <section class="flex__section">
-            <dataSection :headerText="personalInfoSection.header" :data="personalInfoSection.data" />
+            <healthInfoSection />
             <imageSection :imageSrc="imageSectionProps.imageSrc" :links="imageSectionProps.links"
                 :personalInfo="imageSectionProps.personalInfo" />
         </section>

@@ -1,18 +1,19 @@
 <script setup>
-import { defineProps } from 'vue'
+import { defineProps, computed } from 'vue'
+import { useStore } from 'vuex';
+const store = useStore()
+const personalInfo = computed(() => store.getters["user/getPersonalInfo"])
 const props = defineProps({
-    imageSrc: String,
     links: Object,
-    personalInfo: Object
 })
 </script>
 <template>
     <section class="personal-image">
-        <img class="img" :src="props.imageSrc" />
+        <img class="img" :src="personalInfo.image" />
         <div class="content">
-            <p>{{ props.personalInfo.full_name }}</p>
-            <p>{{ props.personalInfo.location }}</p>
-            <p class="whitespace-pre text-center">{{ props.personalInfo.address }}</p>
+            <p>{{ personalInfo.full_name }}</p>
+            <p>{{ personalInfo.location }}</p>
+            <p class="whitespace-pre text-center">{{ personalInfo.address }}</p>
             <section class="href__section">
                 <a :href="props.links.doctors">Doctors</a>
                 <a :href="props.links.appoitments">Appoitments</a>
