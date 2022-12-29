@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, computed, onMounted } from "vue"
+import { reactive, computed, onBeforeMount } from "vue"
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import baseForm from "@/components/forms/base/baseForm.vue"
@@ -13,7 +13,7 @@ const formData = reactive({
     login: "",
     password: "",
 })
-onMounted(() => {
+onBeforeMount(() => {
     store.dispatch("responseErrors/clearErrors")
 })
 function submitForm() {

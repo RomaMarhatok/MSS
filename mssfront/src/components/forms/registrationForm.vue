@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, onMounted } from "vue"
+import { reactive, onBeforeMount } from "vue"
 import { useStore } from 'vuex'
 import { useRouter } from "vue-router";
 import baseForm from "@/components/forms/base/baseForm.vue"
@@ -16,7 +16,7 @@ const formData = reactive({
     first_name: "",
     second_name: "",
 })
-onMounted(() => {
+onBeforeMount(() => {
     store.dispatch("responseErrors/clearErrors")
     store.dispatch("registration/clearAll")
 
