@@ -1,16 +1,10 @@
 <script setup>
 import doctorPageCard from '@/components/cards/doctorPageCard.vue';
-import { ref, defineProps, computed } from 'vue';
-const props = defineProps({
-    doctors: {
-        type: Array,
-        default: () => []
-    }
-})
+import { ref, computed } from 'vue';
+import { useStore } from 'vuex';
+const store = useStore()
 const searchString = ref("")
-const getDoctors = computed(() => {
-    return props.doctors.filter(el => el.personal_info.full_name.toLowerCase().includes(searchString.value.toLowerCase()))
-})
+const doctors = computed(() => store.getters["doctors/getDoctorsByString"](searchString.value))
 </script>
 <template>
     <main class="main">
@@ -18,7 +12,7 @@ const getDoctors = computed(() => {
             <input class="search-bar" placeholder="search" v-model="searchString">
         </div>
         <section class="doctor-list-section" v-if="doctors">
-            <doctorPageCard v-for="doctor in getDoctors" :key="doctor.doctor_slug" :personalInfo="doctor.personal_info"
+            <doctorPageCard v-for="doctor in doctors" :key="doctor.doctor_slug" :personalInfo="doctor.personal_info"
                 :doctorTypes="doctor.doctor_types" :summary="doctor.doctor_summary.short_summary" />
         </section>
     </main>

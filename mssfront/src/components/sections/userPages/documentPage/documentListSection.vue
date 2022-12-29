@@ -4,8 +4,7 @@ import { ref, computed } from 'vue';
 import { useStore } from 'vuex';
 const store = useStore()
 const searchString = ref("")
-const documents = computed(() => store.state.user.documents)
-const getDocuments = computed(() => { return documents.value.filter(el => el.name.toLowerCase().includes(searchString.value.toLowerCase())) })
+const documents = computed(() => store.getters["user/getDocumentByString"](searchString.value))
 </script>
 <template>
     <main class="flex justify-center flex-col mt-4 items-center">
@@ -19,7 +18,7 @@ const getDocuments = computed(() => { return documents.value.filter(el => el.nam
         </div>
         <div class="container">
             <div class="document-list" v-if="documents">
-                <documentListPageCard v-for="document in getDocuments" :key="document.slug" :document="document" />
+                <documentListPageCard v-for="document in documents" :key="document.slug" :document="document" />
             </div>
         </div>
     </main>
