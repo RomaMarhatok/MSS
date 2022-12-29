@@ -1,4 +1,5 @@
 import {createStore} from 'vuex'
+import createPersistedState from 'vuex-persistedstate'
 import authentication from './modules/authentication'
 import registration from './modules/registration'
 import responseErrors from './modules/responseErrors'
@@ -10,5 +11,8 @@ const store = createStore({
         responseErrors,
         user,
     },
+    plugins:[
+        createPersistedState()
+    ]
 })
 export default store
