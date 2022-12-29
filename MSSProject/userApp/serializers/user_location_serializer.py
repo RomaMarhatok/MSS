@@ -29,4 +29,6 @@ class UserLocationSerializer(ModelSerializer):
     def to_representation(self, instance):
         rep = super().to_representation(instance)
         rep.pop("user")
+        location = rep.get("country", None) + " " + rep.get("city", None)
+        rep.update({"location": location})
         return rep
