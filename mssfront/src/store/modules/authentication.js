@@ -13,6 +13,7 @@ const actions = {
         await authenticationService.authenticateUser(
             dataFromForm,
             (slug, role, status)=>{
+                console.log("cb",slug,role,state)
                 commit("user/setSlug", slug, {root:true})
                 commit("user/setRole", role, {root:true})
                 commit("setStatus", status)
@@ -28,7 +29,10 @@ const actions = {
 }
 
 const mutations = {
-    setStatus:(state,status)=>(state.status = status)
+    setStatus:(state,status)=>{
+        console.log("mutation authentication",status)
+        state.status = status
+    }
 }
 
 export default {

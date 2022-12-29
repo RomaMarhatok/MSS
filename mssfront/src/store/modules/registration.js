@@ -29,7 +29,10 @@ const actions = {
 }
 
 const mutations = {
-    setMessage:(state,message)=>(state.message=message),
+    setMessage:(state,message)=>{
+        console.log("mutation registration",message)
+        state.message=message
+    },
 }
 
 export default {

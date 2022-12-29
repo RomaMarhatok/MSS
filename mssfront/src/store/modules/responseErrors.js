@@ -18,8 +18,8 @@ const actions = {
 
 const mutations = {
     setErrors:(state, errors)=>{
+        console.log("mutation response errors",state.errors)
         state.errors = errors
-        console.log("mutation",state.errors)
     },
 }
 
