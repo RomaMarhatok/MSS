@@ -35,6 +35,12 @@ const getters = {
             location:state.personalInfo.location,
             address:state.personalInfo.address,
         }
+    },
+    getDocumentBySlug:(state)=>(slug)=>{
+        return state.documents.filter(document=>document.slug===slug)[0]
+    },
+    getDocumentByString:(state)=>(searchString)=>{
+        return state.documents.filter(document=>document.name.toLowerCase().includes(searchString.toLowerCase()))
     }
 }
 
@@ -48,7 +54,7 @@ const actions = {
             )
         console.log("action personal info",state.personalInfo)
     },
-    async fetchUserDocuments({commit},slug){
+    async fetchUserDocuments({commit,state},slug){
         const userService = new UserService()
         await userService.getUserDocuments(
                 slug,
@@ -73,7 +79,7 @@ const mutations = {
         console.log("mutation user personal info",personalInfo)
         state.personalInfo = personalInfo
     },
-    setDocuments:(state,documents)=>{
+    setDocuments:( state, documents )=>{
         console.log("mutation user documents",documents)
         state.documents = documents
     }
