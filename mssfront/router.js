@@ -2,11 +2,11 @@ import {createRouter,createWebHashHistory} from "vue-router";
 import homePage from "./src/pages/homePage"
 import registrationPage from "./src/pages/registrationPage"
 import authenticationPage from "./src/pages/authenticationPage"
-import documentsPage from './src/pages/userPages/documentsListPage'
+import documentsPage from './src/pages/userPages/documents/documentsListPage'
 import personalInfoPage from "./src/pages/userPages/personalInfoPage"  
-import singleDocumentPage from "./src/pages/userPages/singleDocumentPage"
-import doctorsListPage from "./src/pages/userPages/doctorsListPage" 
-import doctorSinglePage from "./src/pages/userPages/singleDoctorPage"
+import singleDocumentPage from "./src/pages/userPages/documents/singleDocumentPage"
+import doctorsListPage from "./src/pages/userPages/doctors/doctorsListPage" 
+import doctorSinglePage from "./src/pages/userPages/doctors/singleDoctorPage"
 const router = createRouter({
     history:createWebHashHistory(),
     routes:[
