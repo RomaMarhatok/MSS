@@ -17,7 +17,7 @@ class DocumentService:
         document = DocumentCreatorSerializer(instance=document_creator).data["document"]
         return {
             "document": document,
-            "creator": creator_data,
+            "creator": {"slug": creator_data["doctor_slug"]},
         }
 
     def get_all_documents(self, user_slug: str, include_context: bool = False):
