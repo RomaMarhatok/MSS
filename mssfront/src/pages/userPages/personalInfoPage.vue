@@ -22,26 +22,12 @@ const recentAppoitments = reactive({
     header: "recent appoitments",
     data: []
 })
-const imageSectionProps = reactive({
-    imageSrc: "https://picsum.photos/262/187",
-    links: {
-        doctors: "#/doctors/",
-        appoitments: "#/",
-        documents: `#/user/${slug.value}/documents/`,
-    },
-    personalInfo: {
-        full_name: "",
-        location: "",
-        address: ""
-    }
-})
 </script>
 <template>
     <main>
         <section class="flex__section">
             <healthInfoSection />
-            <imageSection :imageSrc="imageSectionProps.imageSrc" :links="imageSectionProps.links"
-                :personalInfo="imageSectionProps.personalInfo" />
+            <imageSection />
         </section>
         <section class="flex__section">
             <dataSection v-if="recentDocuments.data.length" :headerText="recentDocuments.header"
