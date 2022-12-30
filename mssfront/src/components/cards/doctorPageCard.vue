@@ -39,20 +39,20 @@ function redirectOnSingleDoctorPage() {
 <style scoped>
 .card {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     border: 1px solid black;
 }
 
 .img-container {
     display: flex;
-    flex-direction: column;
-    width: 100%;
+    flex-direction: row;
+    width: auto;
     padding: 0.5rem;
 }
 
 .card-img {
     border-radius: 10px;
-    width: 100%;
+    width: 50%;
     height: auto;
 }
 
