@@ -32,7 +32,6 @@ function redirectOnSingleDoctorPage() {
         </div>
         <div class="card-text">
             <p class="text">{{ props.summary }}</p>
-
         </div>
     </div>
 </template>
