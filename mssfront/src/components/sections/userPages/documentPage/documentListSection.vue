@@ -1,5 +1,5 @@
 <script setup>
-import documentListPageCard from '@/components/cards/documentListPageCard.vue';
+import documentPageCard from '@/components/cards/documentPageCard.vue';
 import { ref, computed } from 'vue';
 import { useStore } from 'vuex';
 const store = useStore()
@@ -18,7 +18,7 @@ const documents = computed(() => store.getters["user/getDocumentByString"](searc
         </div>
         <div class="container">
             <div class="document-list" v-if="documents">
-                <documentListPageCard v-for="document in documents" :key="document.slug" :document="document" />
+                <documentPageCard v-for="document in documents" :key="document.slug" :document="document" />
             </div>
         </div>
     </main>
