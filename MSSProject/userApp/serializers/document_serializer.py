@@ -3,6 +3,8 @@ from typing import OrderedDict
 from ..models import Document, User, DocumentType
 from .user_serializer import UserSerializer
 from .document_type_serializer import DocumentTypeSerializer
+from ..utils.date_utils import parse_date_iso_format
+from ..models import DocumentCreator
 
 
 class DocumentSerializer(ModelSerializer):
@@ -43,7 +45,15 @@ class DocumentSerializer(ModelSerializer):
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)
+        docuemnt_creator = DocumentCreator.objects.filter(
+            document__slug=rep["slug"]
+        ).first()
+        if docuemnt_creator:
+            creator_slug = docuemnt_creator.creator.user.slug
+            rep.update({"creator_slug": creator_slug})
         rep.pop("user")
-        if "include_context" in self.context and self.context["include_context"]:
+        if "include_context" in self.context and not self.context["include_context"]:
             rep.pop("content")
+        rep["created_at"] = parse_date_iso_format(rep["created_at"])
+        rep["updated_at"] = parse_date_iso_format(rep["updated_at"])
         return rep
