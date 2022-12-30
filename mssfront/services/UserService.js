@@ -14,8 +14,5 @@ class UserService extends RequestService {
             errorCb(error)
         })
     }
-    async getUserDocument(userSlug,documentSlug){
-        return await this.get(`/mss/user/${userSlug}/document/${documentSlug}/`)
-    }
 }
 export default UserService
