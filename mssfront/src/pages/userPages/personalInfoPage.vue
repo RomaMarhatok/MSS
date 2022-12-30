@@ -1,13 +1,12 @@
 <script setup>
-import { reactive, onBeforeMount, computed } from 'vue';
-import { useRoute } from 'vue-router';
 import { useStore } from 'vuex'
+import { useRoute } from 'vue-router';
+import { reactive, onBeforeMount, computed } from 'vue';
 import imageSection from '@/components/sections/userPages/personalInfoPage/imageSection.vue';
 import dataSection from '@/components/sections/userPages/personalInfoPage/base/dataSection.vue';
 import healthInfoSection from '@/components/sections/userPages/personalInfoPage/healthInfoSection.vue';
 const store = useStore()
 const route = useRoute()
-console.log(store)
 const slug = computed(() => store.state.user.slug ? store.state.user.slug : route.params.userSlug)
 onBeforeMount(() => {
     console.log("on mounted")
@@ -16,18 +15,25 @@ onBeforeMount(() => {
 
 const recentDocuments = reactive({
     header: "recent documents",
-    data: []
+    data: [],
 })
 const recentAppoitments = reactive({
     header: "recent appoitments",
-    data: []
+    data: [],
+})
+const imageSectionProps = reactive({
+    links: {
+        doctors: "#/doctors/",
+        appoitments: "#/",
+        documents: `#/user/${slug.value}/documents/`,
+    },
 })
 </script>
 <template>
     <main>
         <section class="flex__section">
             <healthInfoSection />
-            <imageSection />
+            <imageSection :links="imageSectionProps.links" />
         </section>
         <section class="flex__section">
             <dataSection v-if="recentDocuments.data.length" :headerText="recentDocuments.header"
