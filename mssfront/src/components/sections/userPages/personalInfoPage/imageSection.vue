@@ -9,7 +9,9 @@ const props = defineProps({
 </script>
 <template>
     <section class="personal-image">
-        <img class="img" :src="personalInfo.image" />
+        <div v-if="personalInfo.image">
+            <img class="img" :src="personalInfo.image" />
+        </div>
         <div class="content">
             <p>{{ personalInfo.full_name }}</p>
             <p>{{ personalInfo.location }}</p>
