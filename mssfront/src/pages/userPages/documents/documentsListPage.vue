@@ -1,7 +1,7 @@
 <script setup>
 import documentsPageHeader from '@/components/headers/pageHeader.vue';
 import documentPageNavBar from '@/components/navbars/pageNavBar.vue';
-import documentDisplaySection from '@/components/sections/userPages/documentPage/documentDisplaySection.vue';
+import documentListSection from '@/components/sections/userPages/documentPage/documentListSection.vue';
 import { useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 import { ref, onMounted, computed } from 'vue';
@@ -18,6 +18,6 @@ onMounted(() => {
     <div>
         <documentsPageHeader />
         <documentPageNavBar :activeLinks="activeLinks" />
-        <documentDisplaySection />
+        <documentListSection />
     </div>
 </template>
