@@ -28,9 +28,9 @@ const getters = {
             }
         ]
     },
-    getPersonalInfo:(state)=>{
+    getPersonalInfo:(state,getters)=>{
         return {
-            image:getBaseApi.getUri() + state.personalInfo.image,
+            image:getters.getImage,
             full_name:state.personalInfo.full_name,
             location:state.personalInfo.location,
             address:state.personalInfo.address,
@@ -41,6 +41,9 @@ const getters = {
     },
     getDocumentByString:(state)=>(searchString)=>{
         return state.documents.filter(document=>document.name.toLowerCase().includes(searchString.toLowerCase()))
+    },
+    getImage:(state)=>{
+        return state.personalInfo.image ? getBaseApi.getUri()+state.personalInfo.image:undefined
     }
 }
 
