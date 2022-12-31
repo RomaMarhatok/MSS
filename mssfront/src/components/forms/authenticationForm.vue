@@ -19,10 +19,8 @@ onBeforeMount(() => {
 function submitForm() {
     console.log(formData)
     store.dispatch("authentication/authenticateUser", formData).then((responseStatus) => {
-        if (responseStatus == 200) {
+        if ((Object.keys(errors.value).length === 0) && responseStatus == 200) {
             store.dispatch("responseErrors/clearErrors")
-        }
-        if (Object.keys(errors.value).length === 0) {
             router.push("/user/" + store.state.user.slug + "/home/")
         }
     })
