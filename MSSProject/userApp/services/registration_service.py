@@ -44,7 +44,7 @@ class RegistrationService:
         )
 
     def __processing_registration(self, data: dict):
-        if not self.user_service.is_user_exist(
+        if not self.user_service.user_repository.is_user_exist(
             data["user"]["login"], data["user"]["password"]
         ):
             serialization_result = self.__init__user(data)
