@@ -11,7 +11,7 @@ class DocumentView(GenericViewSet):
 
     def list(self, request: HttpRequest, user_slug=None):
         document_service = DocumentService()
-        data = document_service.get_all_documents(user_slug, include_context=True)
+        data = document_service.get_all_documents_with_content(user_slug)
         return JsonResponse(
             data={"user_documents": data},
             status=status.HTTP_200_OK,
@@ -19,5 +19,5 @@ class DocumentView(GenericViewSet):
 
     def retrieve(self, request, user_slug=None, doc_slug=None):
         document_service = DocumentService()
-        data = document_service.get_document_data_by_slug(doc_slug, user_slug)
+        data = document_service.get_document_info(doc_slug, user_slug)
         return JsonResponse(data=data, status=status.HTTP_200_OK)

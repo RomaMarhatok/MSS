@@ -11,7 +11,7 @@ class ProfileView(GenericViewSet):
 
     def retrieve(self, request: HttpRequest, user_slug=None):
         user_service = UserService()
-        serialized_data = user_service.get_user_personal_info(user_slug)
+        serialized_data = user_service.get_user_info(user_slug)
         if serialized_data is not None:
             return JsonResponse(data=serialized_data, status=status.HTTP_200_OK)
         return JsonResponse(

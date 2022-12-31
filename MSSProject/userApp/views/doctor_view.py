@@ -11,7 +11,7 @@ class DoctorView(GenericViewSet):
 
     def list(self, request: HttpRequest):
         doctor_service = DoctorService()
-        data = doctor_service.get_all_doctors()
+        data = doctor_service.get_doctors()
         return JsonResponse(
             data=data,
             status=status.HTTP_200_OK,
@@ -19,5 +19,5 @@ class DoctorView(GenericViewSet):
 
     def retrieve(self, request: HttpRequest, doctor_slug: str = None):
         doctor_service = DoctorService()
-        data = doctor_service.get_doctor_by_slug(doctor_slug)
+        data = doctor_service.get_doctor(doctor_slug)
         return JsonResponse(data=data, status=status.HTTP_200_OK)
