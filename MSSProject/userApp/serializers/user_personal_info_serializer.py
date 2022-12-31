@@ -54,7 +54,27 @@ class UserPersonalInfoSerializer(ModelSerializer):
         )
         return instance
 
-    def to_representation(self, instance):
+    def to_representation(self, instance: UserPersonalInfo):
         rep = super().to_representation(instance)
         rep.pop("user")
+        if "not_necessery_fields" in self.context:
+            for field in (
+                self.context["not_necessery_fields"]
+                and self.context["not_necessery_fields"] is not None
+            ):
+                if field in rep:
+                    rep.pop(field)
+        full_name = self.__get_full_name(rep)
+        rep.update({"full_name": full_name})
+        if not instance.image.storage.exists(instance.image.name):
+            rep.pop("image")
         return rep
+
+    def __get_full_name(self, personal_info: dict):
+        return (
+            personal_info.get("first_name", "")
+            + " "
+            + personal_info.get("second_name", "")
+            + " "
+            + personal_info.get("patronymic", "")
+        )
