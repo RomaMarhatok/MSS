@@ -11,7 +11,7 @@ class AuthenticationService extends RequestService{
             const status = response.status
             cb(slug,role,status)
         }).catch(error => {
-            errorCb(error.response.data.errors)
+            errorCb(error.response.data.errors??{})
         })
     }
 }   
