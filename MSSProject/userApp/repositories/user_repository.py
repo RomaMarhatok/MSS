@@ -26,22 +26,30 @@ class UserRepository:
         return Token.objects.filter(key=token_key).first().user
 
     def get_user_by_login(self, login: str) -> User | None:
-        return User.objects.filter(login=login).first()
+        return (
+            User.objects.filter(login=login)
+            .select_related("role", "userpersonalinfo", "userlocation")
+            .first()
+        )
 
     def get_user_by_slug(self, slug) -> User | None:
-        user = User.objects.filter(slug=slug).first()
+        user = (
+            User.objects.filter(slug=slug)
+            .select_related("role", "userpersonalinfo", "userlocation")
+            .first()
+        )
         return user
 
     def get_user_personal_info(
         self, user: User, not_necessary_fields=None, serialized=False
     ) -> UserPersonalInfo | dict:
-        instance = UserPersonalInfo.objects.filter(user=user).first()
+        instance = user.userpersonalinfo
         serialized_data = UserPersonalInfoSerializer(
             instance=instance, context={"not_necessary_fields": not_necessary_fields}
         ).data
         return serialized_data if serialized else instance
 
     def get_user_location(self, user: User, serialized=False) -> UserLocation | dict:
-        instance = UserLocation.objects.filter(user=user).first()
+        instance = user.userlocation
         serialized_data = UserLocationSerializer(instance=instance).data
         return serialized_data if serialized else instance
