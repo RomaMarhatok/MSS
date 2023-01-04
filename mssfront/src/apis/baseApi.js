@@ -7,7 +7,6 @@ const getBaseApi = axios.create({
 getBaseApi.interceptors.request.use(function(config){
     console.log("authorization interceptors")
     const token = localStorage.getItem("auth_token")
-    console.log(`auth token ${token}`)
     config.headers.Authorization = `Token ${token}`
     return config
 })

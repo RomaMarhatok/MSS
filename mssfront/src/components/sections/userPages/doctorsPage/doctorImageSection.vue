@@ -1,6 +1,7 @@
 <script setup>
 import { defineProps, computed } from 'vue';
 import getBaseApi from '@/apis/baseApi';
+import baseLink from '@/components/links/Base/baseLink.vue';
 const props = defineProps({
     fullName: String,
     image: String
@@ -16,6 +17,7 @@ const getImageSrc = computed(() => {
         <div class="content">
             <p>{{ fullName }}</p>
         </div>
+        <baseLink class="w-full" :href="'#/doctors/'" :text="'back'" />
     </section>
 </template>
 <style scoped>

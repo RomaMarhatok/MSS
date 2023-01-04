@@ -1,21 +1,18 @@
 <script setup>
 import formBaseInput from '@/components/inputs/base/formBaseInput.vue';
-import { reactive, defineProps } from 'vue';
+import { reactive, computed } from 'vue';
+import { useStore } from 'vuex';
+const store = useStore()
 const emailInput = reactive({
     labelText: "Username",
     inputPlaceholder: "EANkEtoR",
     inputType: "text",
     labelFor: "text_input"
 })
-const props = defineProps({
-    errors: {
-        type: Array,
-        default: () => []
-    }
-})
+const errors = computed(() => store.getters["responseErrors/loginErrors"])
 </script>
 <template>
     <formBaseInput :labelText="emailInput.labelText" :inputPlaceholder="emailInput.inputPlaceholder"
         :inputType="emailInput.inputType" :labelFor="emailInput.labelFor"
-        @input="$emit('update:modelValue', $event.target.value)" :errors="props.errors" />
+        @input="$emit('update:modelValue', $event.target.value)" :errors="errors" />
 </template>

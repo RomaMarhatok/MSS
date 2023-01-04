@@ -1,44 +1,20 @@
 <script setup>
-import { reactive, onMounted, ref } from 'vue';
-import UserService from '@/../services/UserService';
-import baseLink from '@/components/links/Base/baseLink.vue';
+import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
-const document = reactive({
-    document_name: "",
-    document_type: "",
-    doctor_name: "",
-    content: "",
-    created_at: "",
-    updated_at: "",
-})
+import { onBeforeMount, ref, computed } from 'vue';
+import baseLink from '@/components/links/Base/baseLink.vue';
+const store = useStore()
 const route = useRoute()
 const redirectHref = ref(`#/user/${route.params.userSlug}/documents/`)
-onMounted(() => {
-    const userService = ref(new UserService())
-    const userSlug = route.params.userSlug
-    const documentSlug = route.params.documentSlug
-    userService.value.getUserDocument(userSlug, documentSlug).then(response => {
-        console.log(response)
-
-        const userDocument = response.data.document
-        const doctorCreator = response.data.creator
-        document.document_name = userDocument.name
-        document.document_type = userDocument.document_type.name
-        document.doctor_name = doctorCreator.personal_info.full_name
-        document.content = userDocument.content
-        document.created_at = "created at " + getFullDate(userDocument.created_at)
-        document.updated_at = "updated at " + getFullDate(userDocument.updated_at)
-    }).then(error => {
-        console.log(error)
-    })
+const documentSlug = route.params.documentSlug
+const document = computed(() => store.getters["user/getDocumentBySlug"](documentSlug))
+const doctor = computed(() => store.getters["doctors/getDoctorBySlug"](document.value.creator_slug))
+onBeforeMount(() => {
+    if (store.state.doctors.doctors.length == 0) {
+        store.dispatch("doctors/fetchAllDoctors")
+    }
 })
-function getFullDate(dateString) {
-    const date = new Date(dateString)
-    const dd = date.getDate()
-    const mm = date.getMonth()
-    const yyyy = date.getFullYear()
-    return dd + "/" + mm + "/" + yyyy
-}
+
 
 </script>
 <template>
@@ -47,10 +23,10 @@ function getFullDate(dateString) {
             <div class="document-header">
                 <div class="content-container">
                     <div class="header-container">
-                        <p>{{ document.document_type }}</p>
-                        <p>{{ document.document_name }}</p>
+                        <p>{{ document.document_type.name }}</p>
+                        <p>{{ document.name }}</p>
                     </div>
-                    <p>{{ document.doctor_name }}</p>
+                    <p>{{ doctor.personal_info.full_name }}</p>
                     <p>{{ document.updated_at }}</p>
                     <p>{{ document.created_at }}</p>
                 </div>

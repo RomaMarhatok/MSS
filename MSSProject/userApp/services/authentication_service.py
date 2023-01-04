@@ -38,8 +38,8 @@ class AuthenticationService:
         )
 
     def __processing_authentication(self, login, password):
-        if self.user_service.is_user_exist(login, password):
-            user = self.user_service.get_user_by_login(login)
+        if self.user_service.user_repository.is_user_exist(login, password):
+            user = self.user_service.user_repository.get_user_by(login=login)
             token, _ = Token.objects.get_or_create(user=user)
             return {
                 "data": {
