@@ -23,7 +23,7 @@ urlpatterns = [
             [
                 path("", DoctorView.as_view({"get": "list"}), name="doctors-list"),
                 path(
-                    "types/",
+                    "specializations/",
                     DoctorSpecializationView.as_view(
                         {"get": "list"},
                     ),
