@@ -45,12 +45,6 @@ class DocumentSerializer(ModelSerializer):
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)
-        docuemnt_creator = DocumentCreator.objects.filter(
-            document__slug=rep["slug"]
-        ).first()
-        if docuemnt_creator:
-            creator_slug = docuemnt_creator.creator.user.slug
-            rep.update({"creator_slug": creator_slug})
         rep.pop("user")
         if "include_context" in self.context and not self.context["include_context"]:
             rep.pop("content")
