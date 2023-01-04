@@ -1,19 +1,7 @@
 from dataclasses import dataclass
-from userApp.models import (
-    Doctor,
-    User,
-    DoctorDoctorSpecialization,
-    UserPersonalInfo,
-    DoctorSummary,
-)
-from ...serializers.doctor_serializer import DoctorSerializer
-from ...serializers.doctor_specialization_serializer import (
-    DoctorSpecializationSerializer,
-)
-from ...serializers.user_personal_info_serializer import UserPersonalInfoSerializer
-from ...serializers.doctor_summary_serializer import DoctorSummarySerializer
-from ...repositories.doctor_repository import DoctorRepository
+from userApp.models import Doctor
 from ...repositories.user_repository import UserRepository
+from ...repositories.doctor_repository import DoctorRepository
 
 
 @dataclass

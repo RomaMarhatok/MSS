@@ -1,9 +1,5 @@
 from dataclasses import dataclass
-from ...models import Document, DocumentCreator
-from ...serializers.document_serializer import DocumentSerializer
 from ...repositories.document_repository import DocumentRepository
-from ...services.model_services.doctor_service import DoctorService
-from ...serializers.document_creator_serializer import DocumentCreatorSerializer
 
 
 @dataclass

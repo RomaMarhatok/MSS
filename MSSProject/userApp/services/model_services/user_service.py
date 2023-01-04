@@ -1,8 +1,5 @@
 from dataclasses import dataclass
-from ...models import UserLocation, UserPersonalInfo
 from ...repositories.user_repository import UserRepository
-from ...serializers.user_location_serializer import UserLocationSerializer
-from ...serializers.user_personal_info_serializer import UserPersonalInfoSerializer
 
 
 @dataclass
