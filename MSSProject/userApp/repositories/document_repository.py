@@ -4,7 +4,6 @@ from dataclasses import dataclass
 from ..models import Document, DocumentCreator
 from ..serializers.doctor_serializer import DoctorSerializer
 from ..serializers.document_serializer import DocumentSerializer
-from ..models import DocumentType, Doctor, User
 
 
 @dataclass
