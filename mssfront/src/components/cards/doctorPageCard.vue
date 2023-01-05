@@ -25,6 +25,7 @@ function redirectOnSingleDoctorPage() {
         <div class="img-container">
             <img class="card-img" :src="getImageSrc">
             <div class="container">
+                <p>{{ props.personalInfo.full_name }}</p>
                 <p class="small-text" v-for="doctorType in props.doctorTypes" :key="doctorType.slug">
                     {{ doctorType.name }}
                 </p>
