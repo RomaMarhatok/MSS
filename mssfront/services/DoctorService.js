@@ -7,5 +7,13 @@ class DoctorService extends RequestService {
             errorCb(error)
         })
     }
+    async getAllDoctorTypes(cb,errorCb){
+        return await this.get(`/mss/doctors/specializations/`).then(response=>{
+            console.log("doctor types",response)
+            cb(response.data.doctor_types)
+        }).catch((error)=>{
+            errorCb(error)
+        })
+    }
 }
 export default DoctorService
