@@ -4,13 +4,44 @@ import { ref, computed } from 'vue';
 import { useStore } from 'vuex';
 const store = useStore()
 const searchString = ref("")
-const doctors = computed(() => store.getters["doctors/getDoctorsByString"](searchString.value))
+const selectedDoctorType = ref(null)
+const doctors = computed(() => filter())
+const filter = () => {
+    let doctorsBySearchString = store.getters["doctors/getDoctorsByString"](searchString.value)
+    console.log("doctorsBySearchString", doctorsBySearchString)
+    if (selectedDoctorType.value) {
+        let doctorsBydoctorType = store.getters["doctors/getDoctorByDoctorTypes"](selectedDoctorType.value)
+        console.log("doctorsBydoctorType", doctorsBydoctorType)
+        let result = doctorsBySearchString.filter(d => doctorsBydoctorType.some(doctor => doctor.doctor_slug == d.doctor_slug))
+        console.log("intercaption", result)
+        return result
+    }
+    return doctorsBySearchString
+}
+const doctorTypes = computed(() => store.state.doctors.doctorTypes)
 </script>
 <template>
     <main class="main">
-        <div class="search-bar-container">
-            <input class="search-bar" placeholder="search" v-model="searchString">
-        </div>
+        <section class="w-4/5 flex flex-row gap-7">
+            <div class="search-bar-container">
+                <input class="search-bar" placeholder="search by fio" v-model="searchString">
+            </div>
+            <div class="flex justify-center">
+                <div class="w-96 h-full">
+                    <select class="form-select appearance-none block w-full px-3 py-1.5 text-base font-normal 
+                    text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded
+                    transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 
+                    focus:outline-none h-full" v-model="selectedDoctorType">
+                        <option disabled value="" selected>Please select doctor type</option>
+                        <option v-for="doctorType in doctorTypes" :key="doctorType.slug" :value="doctorType">{{
+                            doctorType.name
+                        }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
         <section class="doctor-list-section" v-if="doctors">
             <doctorPageCard v-for="doctor in doctors" :key="doctor.doctor_slug" :personalInfo="doctor.personal_info"
                 :doctorTypes="doctor.doctor_types" :summary="doctor.doctor_summary.short_summary" />
@@ -29,7 +60,7 @@ const doctors = computed(() => store.getters["doctors/getDoctorsByString"](searc
 .search-bar-container {
     display: flex;
     justify-content: center;
-    width: 60%;
+    width: 80%;
 }
 
 .search-bar {
@@ -38,6 +69,12 @@ const doctors = computed(() => store.getters["doctors/getDoctorsByString"](searc
     border: 2px solid rgb(185, 185, 188);
     width: 100%;
     font-size: 1rem;
+}
+
+.search-bar:focus {
+    background-color: white;
+    border: 2px solid rgb(37, 99, 235);
+    outline-width: 0;
 }
 
 .doctor-list-section {
