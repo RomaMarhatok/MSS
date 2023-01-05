@@ -57,11 +57,11 @@ class UserPersonalInfoSerializer(ModelSerializer):
     def to_representation(self, instance: UserPersonalInfo):
         rep = super().to_representation(instance)
         rep.pop("user")
-        if "not_necessery_fields" in self.context:
-            for field in (
-                self.context["not_necessery_fields"]
-                and self.context["not_necessery_fields"] is not None
-            ):
+        if (
+            "not_necessary_fields" in self.context
+            and self.context["not_necessary_fields"] is not None
+        ):
+            for field in self.context["not_necessary_fields"]:
                 if field in rep:
                     rep.pop(field)
         full_name = self.__get_full_name(rep)

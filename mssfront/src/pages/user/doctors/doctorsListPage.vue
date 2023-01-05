@@ -8,6 +8,7 @@ const store = useStore()
 const activeLinks = ref([false, false, true])
 onBeforeMount(() => {
     store.dispatch("doctors/fetchAllDoctors")
+    store.dispatch("doctors/fetchAllDoctorTypes")
 })
 </script>
 <template>

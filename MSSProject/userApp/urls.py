@@ -4,6 +4,7 @@ from userApp.views.registration_view import RegistrationView
 from userApp.views.document_view import DocumentView
 from userApp.views.profile_view import ProfileView
 from userApp.views.doctor_view import DoctorView
+from userApp.views.doctor_specialization_view import DoctorSpecializationView
 
 urlpatterns = [
     path(
@@ -16,7 +17,21 @@ urlpatterns = [
         AuthenticationView.as_view(),
         name="token-user-authentication",
     ),
-    path("doctors/", DoctorView.as_view({"get": "list"}), name="doctors-list"),
+    path(
+        "doctors/",
+        include(
+            [
+                path("", DoctorView.as_view({"get": "list"}), name="doctors-list"),
+                path(
+                    "specializations/",
+                    DoctorSpecializationView.as_view(
+                        {"get": "list"},
+                    ),
+                    name="doctor-types-list",
+                ),
+            ]
+        ),
+    ),
     path(
         "doctor/<str:doctor_slug>/",
         DoctorView.as_view({"get": "retrieve"}),
