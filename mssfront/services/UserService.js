@@ -14,5 +14,12 @@ class UserService extends RequestService {
             errorCb(error)
         })
     }
+    async getAllDocumentTypes(cb,errorCb){
+        return await this.get(`/mss/documents/types/`).then(response=>{
+            cb(response.data.document_types)
+        }).catch(error=>{
+            errorCb(error)
+        })
+    }
 }
 export default UserService
