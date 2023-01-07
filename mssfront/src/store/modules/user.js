@@ -5,6 +5,7 @@ const state = {
     role:"",
     personalInfo:{},
     documents:[],
+    documentTypes:[],
 }
 
 const getters = {
@@ -42,9 +43,12 @@ const getters = {
     getDocumentByString:(state)=>(searchString)=>{
         return state.documents.filter(document=>document.name.toLowerCase().includes(searchString.toLowerCase()))
     },
+    getDocumentsByDocumentType:(state)=>(documentType)=>{
+        return state.documents.filter(d=>d.document_type.name === documentType.name)
+    },
     getImage:(state)=>{
         return state.personalInfo.image ? getBaseApi.getUri()+state.personalInfo.image:undefined
-    }
+    },
 }
 
 const actions = {
@@ -65,7 +69,14 @@ const actions = {
                 error=>console.log(error)
             )
         console.log("action documents",state.documents)
-
+    },
+    async fetchDocumentTypes({commit,state}){
+        const userService = new UserService()
+        await userService.getAllDocumentTypes(
+                documentTypes=>commit("setDocumentTypes",documentTypes),
+                error=>console.log(error)
+            )
+        console.log("action document types",state.documentTypes)
     }
 }
 
@@ -85,6 +96,10 @@ const mutations = {
     setDocuments:( state, documents )=>{
         console.log("mutation user documents",documents)
         state.documents = documents
+    },
+    setDocumentTypes:(state,documentTypes)=>{
+        console.log("mutation document types",documentTypes)
+        state.documentTypes = documentTypes
     }
 }
 
