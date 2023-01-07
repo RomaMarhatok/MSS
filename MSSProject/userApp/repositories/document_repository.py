@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from ..models import Document, DocumentCreator
 from ..serializers.doctor_serializer import DoctorSerializer
 from ..serializers.document_serializer import DocumentSerializer
+from ..serializers.document_creator_serializer import DocumentCreatorSerializer
 
 
 @dataclass
@@ -13,13 +14,23 @@ class DocumentRepository:
     def get_all_user_documents(
         self, user_slug, serialized=False, include_context=False
     ) -> QuerySet[Document] | list[dict]:
-        documents = Document.objects.filter(user__slug=user_slug).select_related(
-            "document_type", "user", "user__role"
+        documents_creators = DocumentCreator.objects.filter(
+            document__user__slug=user_slug
+        ).select_related(
+            "creator",
+            "document",
+            "document__document_type",
+            "document__user",
+            "document__user__role",
+            "creator__user",
+            "creator__user__role",
         )
-        serialized_documents = DocumentSerializer(
-            instance=documents, many=True, context={"include_context": include_context}
+        serialized_documents_creators = DocumentCreatorSerializer(
+            instance=documents_creators,
+            many=True,
+            context={"include_context": include_context},
         ).data
-        return serialized_documents if serialized else documents
+        return serialized_documents_creators if serialized else documents_creators
 
     def get_document_by(self, serialized=False, **kwargs) -> Document | dict:
         function_map = {

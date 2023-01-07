@@ -24,3 +24,18 @@ class DocumentCreatorSerializer(ModelSerializer):
             doctor=doctor, user_document=user_document
         )
         return instance
+
+    def to_representation(self, instance: DocumentCreator):
+        document_serializer_context = {}
+        if "include_context" in self.context:
+            document_serializer_context.update(
+                {"include_context": self.context["include_context"]}
+            )
+        serialized_document = DocumentSerializer(
+            instance=instance.document,
+            context=document_serializer_context,
+        ).data
+        print(instance.creator.user.slug)
+        serialized_document.update({"creator": {"slug": instance.creator.user.slug}})
+        rep = serialized_document
+        return rep
