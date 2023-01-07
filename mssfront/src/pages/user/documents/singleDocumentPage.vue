@@ -8,7 +8,7 @@ const route = useRoute()
 const redirectHref = ref(`#/user/${route.params.userSlug}/documents/`)
 const documentSlug = route.params.documentSlug
 const document = computed(() => store.getters["user/getDocumentBySlug"](documentSlug))
-const doctor = computed(() => store.getters["doctors/getDoctorBySlug"](document.value.creator_slug))
+const creator = computed(() => store.getters["doctors/getDoctorBySlug"](document.value.creator.slug))
 onBeforeMount(() => {
     if (store.state.doctors.doctors.length == 0) {
         store.dispatch("doctors/fetchAllDoctors")
@@ -26,7 +26,7 @@ onBeforeMount(() => {
                         <p>{{ document.document_type.name }}</p>
                         <p>{{ document.name }}</p>
                     </div>
-                    <p>{{ doctor.personal_info.full_name }}</p>
+                    <p>{{ creator.personal_info.full_name }}</p>
                     <p>{{ document.updated_at }}</p>
                     <p>{{ document.created_at }}</p>
                 </div>
