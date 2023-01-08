@@ -19,6 +19,16 @@ def test_serialization(treatment_history_fixture):
     assert serializer.is_valid()
     serializer.save()
 
+    serializer = RoleSerializer(
+        data=treatment_history_fixture["patient"]["user"]["role"]
+    )
+    assert serializer.is_valid()
+    serializer.save()
+
+    serializer = UserSerializer(data=treatment_history_fixture["patient"]["user"])
+    assert serializer.is_valid()
+    serializer.save()
+
     serializer = DoctorSerializer(data=treatment_history_fixture["doctor"])
     assert serializer.is_valid()
     serializer.save()
