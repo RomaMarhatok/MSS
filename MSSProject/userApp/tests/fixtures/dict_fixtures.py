@@ -83,15 +83,25 @@ def doctor_specialization_fixture() -> dict:
 
 
 @pytest.fixture
-def doctor_fixture(user_fixture) -> dict:
+def doctor_fixture() -> dict:
     return {
-        "user": user_fixture,
+        "user": {
+            "login": generate_valid_login(),
+            "password": generate_valid_password(),
+            "role": {"name": fake.pystr()},
+        }
     }
 
 
 @pytest.fixture
-def patient_fixture(user_fixture) -> dict:
-    return {"user": user_fixture}
+def patient_fixture() -> dict:
+    return {
+        "user": {
+            "login": generate_valid_login(),
+            "password": generate_valid_password(),
+            "role": {"name": fake.pystr()},
+        }
+    }
 
 
 @pytest.fixture
@@ -140,4 +150,13 @@ def doctor_summary_fixture(doctor_fixture):
         "doctor": doctor_fixture,
         "short_summary": fake.text(max_nb_chars=1000),
         "summary": fake.text(max_nb_chars=100000),
+    }
+
+
+@pytest.fixture
+def appoitment_fixture(doctor_fixture, patient_fixture):
+    return {
+        "doctor": doctor_fixture,
+        "patient": patient_fixture,
+        "date": fake.date_time(),
     }
