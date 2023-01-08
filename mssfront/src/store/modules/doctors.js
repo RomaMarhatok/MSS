@@ -6,10 +6,9 @@ const state = {
 
 const getters = {
     getDoctorBySlug:(state)=>(slug)=>{
-        return state.doctors.filter(doctor=>doctor.doctor_slug === slug)[0]
+        return state.doctors.find(doctor=>doctor.doctor_slug === slug)
     },
     getDoctorsByString:(state)=>(searchString)=>{
-        console.log("getters searchString",searchString)
         return state.doctors.filter(doctor => doctor.personal_info.full_name.toLowerCase().includes(searchString.toLowerCase()))
     },
     getDoctorByDoctorTypes:(state)=>(doctorType)=>{

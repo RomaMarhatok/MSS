@@ -4,18 +4,47 @@ import { ref, computed } from 'vue';
 import { useStore } from 'vuex';
 const store = useStore()
 const searchString = ref("")
-const documents = computed(() => store.getters["user/getDocumentByString"](searchString.value))
+const selectedDocumentType = ref(null)
+const documentTypes = computed(() => store.state.user.documentTypes)
+const documents = computed(() => filter())
+const filter = () => {
+    let documentsBySearchString = store.getters["user/getDocumentByString"](searchString.value)
+    if (selectedDocumentType.value) {
+        let documentsBydocumentType = store.getters["user/getDocumentsByDocumentType"](selectedDocumentType.value)
+        let result = documentsBySearchString.filter(d => documentsBydocumentType.some(document => document.document_type.name == d.document_type.name))
+        return result
+    }
+    return documentsBySearchString
+}
 </script>
 <template>
     <main class="flex justify-center flex-col mt-4 items-center">
-        <div class="flex flex-row justify-center mb-2">
-            <div class="search-box">
-                <button class="btn-search">
-                    <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
-                </button>
-                <input type="text" class="input-search" v-model="searchString" placeholder="Type to Search...">
+        <section class="flex flex-row gap-7 mb-4">
+            <div class="flex flex-row justify-center mb-2">
+                <div class="search-box">
+                    <button class="btn-search">
+                        <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
+                    </button>
+                    <input type="text" class="input-search" v-model="searchString" placeholder="Type to Search...">
+                </div>
             </div>
-        </div>
+            <div class="flex justify-center">
+                <div class="w-96 h-full">
+                    <select class="form-select appearance-none block w-full px-3 py-1.5 text-base font-normal 
+                    text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded
+                    transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 
+                    focus:outline-none h-full" v-model="selectedDocumentType">
+                        <option disabled value="" selected>Please select document type</option>
+                        <option value=""></option>
+                        <option v-for="documentType in documentTypes" :key="documentType.slug" :value="documentType">{{
+                            documentType.name
+                        }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
         <div class="container">
             <div class="document-list" v-if="documents">
                 <documentPageCard v-for="document in documents" :key="document.slug" :document="document" />
@@ -118,6 +147,7 @@ const documents = computed(() => store.getters["user/getDocumentByString"](searc
     grid-auto-flow: row dense;
     gap: 10px;
     justify-items: center;
+    padding-bottom: 1rem;
 }
 
 @media screen and (max-width: 1300px) {

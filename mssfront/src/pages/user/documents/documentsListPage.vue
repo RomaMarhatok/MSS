@@ -12,6 +12,8 @@ const activeLinks = ref([true, false, false])
 
 onMounted(() => {
     store.dispatch("user/fetchUserDocuments", slug.value)
+    store.dispatch("user/fetchDocumentTypes")
+
 })
 </script>
 <template>

@@ -5,6 +5,7 @@ from userApp.views.document_view import DocumentView
 from userApp.views.profile_view import ProfileView
 from userApp.views.doctor_view import DoctorView
 from userApp.views.doctor_specialization_view import DoctorSpecializationView
+from userApp.views.document_type_view import DocumentTypeView
 
 urlpatterns = [
     path(
@@ -58,5 +59,10 @@ urlpatterns = [
                 ),
             ]
         ),
+    ),
+    path(
+        "documents/types/",
+        DocumentTypeView.as_view({"get": "list"}),
+        name="list-document-types",
     ),
 ]

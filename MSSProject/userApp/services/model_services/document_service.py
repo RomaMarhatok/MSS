@@ -13,9 +13,9 @@ class DocumentService:
         creator = self.document_repository.get_document_creator(
             document.get("slug", None)
         )
+        document.update({"creator": {"slug": creator.user.slug}})
         return {
             "document": document,
-            "creator": {"slug": creator.user.slug},
         }
 
     def get_all_documents_with_content(self, user_slug: str):
