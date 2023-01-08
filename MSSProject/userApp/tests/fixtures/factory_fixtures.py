@@ -15,6 +15,7 @@ from userApp.tests.factories.user_app_factories import (
     UserLocationFactory,
     DocumentCreatorFactory,
     DoctorSummaryFactory,
+    AppointmentsFactory,
 )
 from ...models import (
     Role,
@@ -32,6 +33,7 @@ from ...models import (
     UserLocation,
     DocumentCreator,
     DoctorSummary,
+    Appointments,
 )
 
 
@@ -141,3 +143,12 @@ def factory_document_creator_fixture(
 @pytest.fixture
 def factory_document_summary_fixture(factory_doctor_fixture) -> DoctorSummary:
     return DoctorSummaryFactory.create(doctor=factory_doctor_fixture)
+
+
+@pytest.fixture
+def factory_appointments_fixture(
+    factory_doctor_fixture, factory_patient_fixture
+) -> Appointments:
+    return AppointmentsFactory.create(
+        doctor=factory_doctor_fixture, patient=factory_patient_fixture
+    )
