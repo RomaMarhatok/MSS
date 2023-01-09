@@ -14,6 +14,9 @@ class UserRepository:
     def is_user_exist(self, login, password) -> bool:
         return User.objects.filter(Q(login=login) & Q(password=password)).exists()
 
+    def is_user_exist_by_slug(self, slug) -> bool:
+        return User.objects.filter(slug=slug).exists()
+
     def get_user_by(self, **kwargs) -> User | None:
         function_map = {
             ("token",): self.get_user_by_token,
