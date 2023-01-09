@@ -23,7 +23,9 @@ class UserRepository:
         return self.function_mapper.mapping(function_map, kwargs=kwargs)
 
     def get_user_by_token(self, token_key: str) -> User | None:
-        return Token.objects.filter(key=token_key).first().user
+        if Token.objects.filter(key=token_key).exists():
+            return Token.objects.filter(key=token_key).first().user
+        return None
 
     def get_user_by_login(self, login: str) -> User | None:
         return (
