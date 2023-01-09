@@ -17,10 +17,6 @@ class AppointmentsSerializer(ModelSerializer):
             "patient",
             "date",
         )
-        kwargs = {
-            "doctor": {"validators": []},
-            "patient": {"validators": []},
-        }
 
     def create(self, validated_data: OrderedDict) -> Appointments:
         doctor = Doctor.objects.get(
@@ -39,4 +35,8 @@ class AppointmentsSerializer(ModelSerializer):
     def to_representation(self, instance):
         rep = super().to_representation(instance)
         rep["date"] = parse_date_iso_format(rep["date"])
+        rep["doctor"]["user"].pop("login")
+        rep["doctor"]["user"].pop("password")
+        rep["patient"]["user"].pop("login")
+        rep["patient"]["user"].pop("password")
         return rep
