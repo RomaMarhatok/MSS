@@ -6,6 +6,7 @@ from userApp.views.profile_view import ProfileView
 from userApp.views.doctor_view import DoctorView
 from userApp.views.doctor_specialization_view import DoctorSpecializationView
 from userApp.views.document_type_view import DocumentTypeView
+from userApp.views.appointments_view import AppointmentsView
 
 urlpatterns = [
     path(
@@ -64,5 +65,32 @@ urlpatterns = [
         "documents/types/",
         DocumentTypeView.as_view({"get": "list"}),
         name="list-document-types",
+    ),
+    path(
+        "appointments/",
+        include(
+            [
+                path(
+                    "destroy/",
+                    AppointmentsView.as_view({"post": "destroy"}),
+                    name="appointments-destroy",
+                ),
+                path(
+                    "create/",
+                    AppointmentsView.as_view({"post": "create"}),
+                    name="appointments-create",
+                ),
+                path(
+                    "<str:patient_slug>/",
+                    AppointmentsView.as_view({"get": "list"}),
+                    name="appoitments-list",
+                ),
+                path(
+                    "<str:patient_slug>/<str:doctor_slug>/",
+                    AppointmentsView.as_view({"get": "retrieve"}),
+                    name="appoitments-retrieve",
+                ),
+            ]
+        ),
     ),
 ]
