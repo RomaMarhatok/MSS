@@ -6,6 +6,7 @@ const state = {
     personalInfo:{},
     documents:[],
     documentTypes:[],
+    appoitnments:[],
 }
 
 const getters = {
@@ -77,6 +78,23 @@ const actions = {
                 error=>console.log(error)
             )
         console.log("action document types",state.documentTypes)
+    },
+    async fetchAppointments({commit,state},slug){
+        const userService = new UserService()
+        await userService.getAllAppointments(
+            slug,
+            appointments=>commit("setAppointments",appointments),
+            error=>console.log(error)
+        )
+        console.log("action appointments",state.appointments)
+    },
+    async fetchCreateAppointemtns(){
+        const userService = new UserService()
+        await userService.destroyAppointments(
+            appointments=>console.log(appointments),
+            error=>console.log(error)
+        )
+        console.log("action destroy appointments",state.appoitnments)
     }
 }
 
@@ -100,6 +118,10 @@ const mutations = {
     setDocumentTypes:(state,documentTypes)=>{
         console.log("mutation document types",documentTypes)
         state.documentTypes = documentTypes
+    },
+    setAppointments:(state,appointments)=>{
+        console.log("mutation appointments",appointments)
+        state.appointments = appointments
     }
 }
 
