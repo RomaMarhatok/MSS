@@ -18,6 +18,7 @@ from ...tests.factories.user_app_factories import (
     UserLocationFactory,
     DocumentCreatorFactory,
     DoctorSummaryFactory,
+    AppointmentsFactory,
 )
 from ...utils.string_utls import generate_valid_password, generate_valid_login
 from ...utils.image_utils import load_image_from_url
@@ -80,7 +81,7 @@ class Command(BaseCommand):
             self.create_user_documents(user, document_types, doctor)
 
             patient = PatientFactory(user=user)
-
+            self.prepare_appointments(patient, doctor)
             img_for_analyzes = ImageForAnalyzesFactory(
                 image=load_image_from_url(fake.image_url()),
                 description=fake.text(max_nb_chars=10000),
@@ -124,3 +125,7 @@ class Command(BaseCommand):
             DoctorDoctorSpecializationFactory(
                 doctor=doctor, doctor_specialization=doctor_specialization
             )
+
+    def prepare_appointments(self, patient, doctor):
+        for _ in range(random.randint(1, 5)):
+            AppointmentsFactory(patient=patient, doctor=doctor, date=fake.date_time())
