@@ -23,7 +23,7 @@ class UserService extends RequestService {
     }
     async getAllAppointments(userSlug,cb,errorCb){
         return await this.get(`/mss/appointments/${userSlug}/`).then(response=>{
-            cb(response.data.document_types)
+            cb(response.data.user_appointments)
         }).catch(error=>{
             errorCb(error)
         })
