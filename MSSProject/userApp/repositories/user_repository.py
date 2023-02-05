@@ -48,7 +48,10 @@ class UserRepository:
     def get_user_personal_info(
         self, user: User, not_necessary_fields=None, serialized=False
     ) -> UserPersonalInfo | dict:
-        instance = user.userpersonalinfo
+        try:
+            instance = user.userpersonalinfo
+        except UserPersonalInfo.DoesNotExist:
+            return {}
         serialized_data = UserPersonalInfoSerializer(
             instance=instance, context={"not_necessary_fields": not_necessary_fields}
         ).data
