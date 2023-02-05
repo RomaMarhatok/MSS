@@ -50,6 +50,25 @@ const getters = {
     getImage:(state)=>{
         return state.personalInfo.image ? getBaseApi.getUri()+state.personalInfo.image:undefined
     },
+    getAllAppointmentsForCalendar:(state)=>{
+        console.log("getters",state.appointments)
+        let ap = state.appointments.map((appointment,index)=>{
+            // date example "23/8/2006 10:28"
+            let [days,months,years] = appointment.date.split(" ")[0].split("/")
+            let [hours,minutes] = appointment.date.split(" ")[1].split(":")
+            let date = new Date(years,months,days,hours,minutes)
+            return {
+                key:index,
+                customData:{
+                    title:`appointments to ${appointment.doctor.user.full_name}`,
+                    class:'bg-pink-500 text-white',
+                },
+                dates:date
+            }
+        })
+        console.log(ap)
+        return ap
+    }
 }
 
 const actions = {
