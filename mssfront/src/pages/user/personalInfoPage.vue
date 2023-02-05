@@ -24,7 +24,7 @@ const recentAppoitments = reactive({
 const imageSectionProps = reactive({
     links: {
         doctors: "#/doctors/",
-        appoitments: "#/",
+        appoitments: `#/user/${slug.value}/appointments/`,
         documents: `#/user/${slug.value}/documents/`,
     },
 })
