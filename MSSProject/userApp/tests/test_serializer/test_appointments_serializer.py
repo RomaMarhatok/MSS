@@ -43,5 +43,4 @@ def test_serialize(appoitment_fixture):
 @pytest.mark.django_db
 def test_deserialize(factory_appointments_fixture):
     serializer = AppointmentsSerializer(instance=factory_appointments_fixture)
-    print(serializer.data)
     assert isinstance(serializer.data, dict)
