@@ -18,26 +18,32 @@ const getters = {
 
 const actions = {
     async fetchAllDoctors({commit, state}){
-        const doctorService = new DoctorService()
-        await doctorService.getAllDoctors(
-            doctors=>{
-                console.log("cb",doctors)
-                commit("setDoctors",doctors)
-            },
-            error=>console.log(error)
-            )
-        console.log("action doctors",state.doctors)
+        if(state.doctors.length == 0){
+            const doctorService = new DoctorService()
+            await doctorService.getAllDoctors(
+                doctors=>{
+                    console.log("cb",doctors)
+                    commit("setDoctors",doctors)
+                },
+                error=>console.log(error)
+                )
+            console.log("action doctors",state.doctors)
+        }
+        console.log("action without request",state.doctorTypes)
     },
     async fetchAllDoctorTypes({commit,state}){
-        const doctorService = new DoctorService()
-        await doctorService.getAllDoctorTypes(
-            doctorTypes=>{
-                console.log("cb",doctorTypes)
-                commit("setDoctorType",doctorTypes)
-            },
-            error=>console.log(error)
-        )
-        console.log("action doctor types",state.doctorTypes)
+        if(state.doctorTypes.length == 0){
+            const doctorService = new DoctorService()
+            await doctorService.getAllDoctorTypes(
+                doctorTypes=>{
+                    console.log("cb",doctorTypes)
+                    commit("setDoctorType",doctorTypes)
+                },
+                error=>console.log(error)
+            )
+            console.log("action doctor types",state.doctorTypes)
+        }
+        console.log("action without request",state.doctorTypes)
     }
 }
 

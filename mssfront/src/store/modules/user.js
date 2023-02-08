@@ -73,39 +73,52 @@ const getters = {
 
 const actions = {
     async fetchUserPersonalInfo({commit,state},slug){
-        const userService = new UserService()
-        await userService.getUserPersonalInfo(
-                slug,
-                personalInfo=>commit("setPersonalInfo",personalInfo),
-                error=>console.log(error)
-            )
-        console.log("action personal info",state.personalInfo)
+        if(Object.keys(state.personalInfo).length == 0){
+            const userService = new UserService()
+            await userService.getUserPersonalInfo(
+                    slug,
+                    personalInfo=>commit("setPersonalInfo",personalInfo),
+                    error=>console.log(error)
+                )
+            console.log("action personal info",state.personalInfo)
+        }
+        console.log("action without request",state.doctorTypes)
     },
     async fetchUserDocuments({commit,state},slug){
-        const userService = new UserService()
-        await userService.getUserDocuments(
-                slug,
-                documents=>commit("setDocuments",documents),
-                error=>console.log(error)
-            )
-        console.log("action documents",state.documents)
+        if(state.documents.length == 0){
+            const userService = new UserService()
+            await userService.getUserDocuments(
+                    slug,
+                    documents=>commit("setDocuments",documents),
+                    error=>console.log(error)
+                )
+            console.log("action documents",state.documents)
+        }
+        console.log("action without request",state.doctorTypes)
     },
     async fetchDocumentTypes({commit,state}){
-        const userService = new UserService()
-        await userService.getAllDocumentTypes(
-                documentTypes=>commit("setDocumentTypes",documentTypes),
-                error=>console.log(error)
-            )
-        console.log("action document types",state.documentTypes)
+        if(state.documentTypes.length == 0){
+            const userService = new UserService()
+            await userService.getAllDocumentTypes(
+                    documentTypes=>commit("setDocumentTypes",documentTypes),
+                    error=>console.log(error)
+                )
+            console.log("action document types",state.documentTypes)
+        }
+        console.log("action without request",state.doctorTypes)
     },
     async fetchAppointments({commit,state},slug){
-        const userService = new UserService()
-        await userService.getAllAppointments(
-            slug,
-            appointments=>commit("setAppointments",appointments),
-            error=>console.log(error)
-        )
-        console.log("action appointments",state.appointments)
+        if(state.appointments.length == 0){
+            const userService = new UserService()
+            await userService.getAllAppointments(
+                slug,
+                appointments=>commit("setAppointments",appointments),
+                error=>console.log(error)
+            )
+            console.log("action appointments",state.appointments)
+        }
+        console.log("action without request",state.appointments)
+       
     },
     async fetchCreateAppointemtns(){
         const userService = new UserService()
