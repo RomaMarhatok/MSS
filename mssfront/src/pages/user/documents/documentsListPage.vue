@@ -1,7 +1,7 @@
 <script setup>
-import documentsPageHeader from '@/components/headers/pageHeader.vue';
-import documentPageNavBar from '@/components/navbars/pageNavBar.vue';
-import documentListSection from '@/components/sections/userPages/documentPage/documentListSection.vue';
+import PageHeader from '@/components/layout/Headers/PageHeader.vue';
+import PageNavBar from '@/components/layout/Navbars/PageNavBar.vue';
+import DocumentList from '@/components/ui/Sections/UserPages/DocumentPage/ListSection.vue'
 import { useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 import { ref, onMounted, computed } from 'vue';
@@ -18,8 +18,8 @@ onMounted(() => {
 </script>
 <template>
     <div>
-        <documentsPageHeader />
-        <documentPageNavBar :activeLinks="activeLinks" />
-        <documentListSection />
+        <PageHeader />
+        <PageNavBar :activeLinks="activeLinks" />
+        <DocumentList />
     </div>
 </template>

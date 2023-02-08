@@ -2,9 +2,9 @@
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router';
 import { reactive, onBeforeMount, computed } from 'vue';
-import imageSection from '@/components/sections/userPages/personalInfoPage/imageSection.vue';
-import dataSection from '@/components/sections/userPages/personalInfoPage/base/dataSection.vue';
-import healthInfoSection from '@/components/sections/userPages/personalInfoPage/healthInfoSection.vue';
+import imageSection from '@/components/ui/Sections/UserPages/PersonalInfoPage/ImageSection.vue'
+import dataSection from '@/components/ui/Sections/UserPages/PersonalInfoPage/Base/DataSection.vue';
+import healthInfoSection from '@/components/ui/Sections/UserPages/PersonalInfoPage/HealthInfoSection.vue';
 const store = useStore()
 const route = useRoute()
 const slug = computed(() => store.state.user.slug ? store.state.user.slug : route.params.userSlug)

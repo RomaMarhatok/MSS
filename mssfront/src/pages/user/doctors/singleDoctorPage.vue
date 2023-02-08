@@ -1,7 +1,7 @@
 <script setup>
-import doctorsPageHeader from '@/components/headers/pageHeader.vue';
-import doctorImageSection from '@/components/sections/userPages/doctorsPage/doctorImageSection.vue';
-import doctorDataSection from '@/components/sections/userPages/doctorsPage/doctorDataSection.vue';
+import doctorsPageHeader from '@/components/layout//Headers/PageHeader.vue';
+import doctorImageSection from '@/components/ui/Sections/UserPages/DoctorsPage/ImageSection.vue'
+import doctorDataSection from '@/components/ui/Sections/UserPages/DoctorsPage/DataSection.vue';
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { useStore } from 'vuex';
