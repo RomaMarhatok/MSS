@@ -19,6 +19,7 @@ from ...models import (
     UserLocation,
     DocumentCreator,
     DoctorSummary,
+    Appointments,
 )
 
 fake = Faker()
@@ -152,3 +153,12 @@ class DoctorSummaryFactory(DjangoModelFactory):
     doctor = SubFactory(DoctorFactory)
     short_summary = fake.text(max_nb_chars=1000)
     summary = fake.text(max_nb_chars=100000)
+
+
+class AppointmentsFactory(DjangoModelFactory):
+    class Meta:
+        model = Appointments
+
+    doctor = SubFactory(DoctorFactory)
+    patient = SubFactory(PatientFactory)
+    date = fake.date_time()

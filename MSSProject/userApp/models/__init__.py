@@ -13,3 +13,4 @@ from .treatment_history import TreatmentHistory
 from .document_creator import DocumentCreator
 from .treatment_history_image_for_analyzes import TreatmentHistoryImageForAnalyzes
 from .doctor_summary import DoctorSummary
+from .appointment import Appointments

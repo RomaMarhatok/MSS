@@ -11,10 +11,5 @@ class ProfileView(GenericViewSet):
 
     def retrieve(self, request: HttpRequest, user_slug=None):
         user_service = UserService()
-        serialized_data = user_service.get_user_info(user_slug)
-        if serialized_data is not None:
-            return JsonResponse(data=serialized_data, status=status.HTTP_200_OK)
-        return JsonResponse(
-            data={"errors": {"general": ["user don't exist"]}},
-            status=status.HTTP_403_FORBIDDEN,
-        )
+        response_data = user_service.get_user_info(user_slug)
+        return JsonResponse(data=response_data["data"], status=response_data["status"])

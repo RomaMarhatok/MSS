@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from rest_framework import status
 from ...repositories.user_repository import UserRepository
 
 
@@ -15,5 +16,11 @@ class UserService:
             user_location = self.user_repository.get_user_location(
                 user, serialized=True
             )
-            return {**user_personal_info, **user_location}
-        return None
+            return {
+                "data": {**user_personal_info, **user_location},
+                "status": status.HTTP_200_OK,
+            }
+        return {
+            "data": {"errors": {"general": ["user don't exist"]}},
+            "status": status.HTTP_403_FORBIDDEN,
+        }

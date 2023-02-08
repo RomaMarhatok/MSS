@@ -14,7 +14,10 @@ class UserRepository:
     def is_user_exist(self, login, password) -> bool:
         return User.objects.filter(Q(login=login) & Q(password=password)).exists()
 
-    def get_user_by(self, **kwargs) -> User:
+    def is_user_exist_by_slug(self, slug) -> bool:
+        return User.objects.filter(slug=slug).exists()
+
+    def get_user_by(self, **kwargs) -> User | None:
         function_map = {
             ("token",): self.get_user_by_token,
             ("login",): self.get_user_by_login,
@@ -23,7 +26,9 @@ class UserRepository:
         return self.function_mapper.mapping(function_map, kwargs=kwargs)
 
     def get_user_by_token(self, token_key: str) -> User | None:
-        return Token.objects.filter(key=token_key).first().user
+        if Token.objects.filter(key=token_key).exists():
+            return Token.objects.filter(key=token_key).first().user
+        return None
 
     def get_user_by_login(self, login: str) -> User | None:
         return (
@@ -43,7 +48,10 @@ class UserRepository:
     def get_user_personal_info(
         self, user: User, not_necessary_fields=None, serialized=False
     ) -> UserPersonalInfo | dict:
-        instance = user.userpersonalinfo
+        try:
+            instance = user.userpersonalinfo
+        except UserPersonalInfo.DoesNotExist:
+            return {}
         serialized_data = UserPersonalInfoSerializer(
             instance=instance, context={"not_necessary_fields": not_necessary_fields}
         ).data

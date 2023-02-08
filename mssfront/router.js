@@ -7,6 +7,7 @@ import personalInfoPage from "./src/pages/user/personalInfoPage"
 import singleDocumentPage from "./src/pages/user/documents/singleDocumentPage"
 import doctorsListPage from "./src/pages/user/doctors/doctorsListPage" 
 import doctorSinglePage from "./src/pages/user/doctors/singleDoctorPage"
+import appointmentsPage from "./src/pages/user/appointments/appointmentsPage"
 const router = createRouter({
     history:createWebHashHistory(),
     routes:[
@@ -31,6 +32,11 @@ const router = createRouter({
                 name:"patient-profile-page",
                 component:personalInfoPage
             },
+            {
+                path:"appointments/",
+                name:"patient-appointments",
+                component:appointmentsPage
+            }
         ]},
         
 
