@@ -147,8 +147,12 @@ def factory_document_summary_fixture(factory_doctor_fixture) -> DoctorSummary:
 
 @pytest.fixture
 def factory_appointments_fixture(
-    factory_doctor_fixture, factory_patient_fixture
+    factory_doctor_fixture,
+    factory_patient_fixture,
+    factory_doctor_specialization_fixture,
 ) -> Appointments:
     return AppointmentsFactory.create(
-        doctor=factory_doctor_fixture, patient=factory_patient_fixture
+        doctor=factory_doctor_fixture,
+        patient=factory_patient_fixture,
+        doctor_specialization=factory_doctor_specialization_fixture,
     )
