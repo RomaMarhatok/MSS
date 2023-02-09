@@ -15,8 +15,12 @@ const props = defineProps({
         </header>
         <div v-if="props.data">
             <div class="table-wrapper" v-for="(el, index) in props.data" :key="index">
-                <p class="label">{{ el.label }}</p>
-                <p class="label-text">{{ el.text }}</p>
+                <div class="label">
+                    <p>{{ el.label }}</p>
+                </div>
+                <div class="label-text">
+                    <p>{{ el.text }}</p>
+                </div>
             </div>
         </div>
     </section>
@@ -32,11 +36,6 @@ const props = defineProps({
     box-sizing: border-box;
 }
 
-@media screen and (max-width: 900px) {
-    .table-display-section {
-        width: 100%;
-    }
-}
 
 .section-header {
     font-size: 2em;
@@ -48,15 +47,14 @@ const props = defineProps({
     display: flex;
     flex-direction: row;
     border-bottom: 2px solid rgb(195, 191, 191);
-    gap: 2rem;
 }
 
 .label {
-    width: 10%;
     display: flex;
     justify-content: flex-start;
     font-weight: 900;
     padding-right: 2rem;
+    min-width: 20%;
 }
 
 .label-text {
@@ -72,5 +70,31 @@ const props = defineProps({
 .table-wrapper:hover .label {
     color: skyblue;
 
+}
+
+@media screen and (max-width: 1350px) {
+    .table-display-section {
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .table-wrapper {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .label {
+        padding: 0;
+        width: 100%;
+        text-align: center;
+    }
+
+}
+
+@media screen and (max-width: 900px) {
+    .table-display-section {
+        width: 100%;
+        gap: 0.5rem;
+    }
 }
 </style>
