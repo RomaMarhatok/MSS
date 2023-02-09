@@ -1,9 +1,7 @@
 from dataclasses import dataclass
 from rest_framework import status
-from ...models import Patient
 from ...repositories.appointments_repository import AppointmentsRepository
 from ...repositories.user_repository import UserRepository
-from django.http import HttpRequest
 
 
 @dataclass
@@ -37,6 +35,7 @@ class AppointmentsService:
     def create(self, request_data: dict):
         doctor_slug = request_data["doctor_slug"]
         patient_slug = request_data["patient_slug"]
+        doctor_specialization = request_data["doctor_specialization"]
         date = request_data["appointment_date"]
         doctor = self.user_repository.get_user_by(slug=doctor_slug)
         patient = self.user_repository.get_user_by(slug=patient_slug)
@@ -44,6 +43,7 @@ class AppointmentsService:
             # password need only for validators it don't use in create method of serializer
             "doctor": {"user": {"login": doctor.login, "password": doctor.password}},
             "patient": {"user": {"login": patient.login, "password": patient.password}},
+            "doctor_specialization": {"name": doctor_specialization},
             "date": date,
         }
         errors, is_created = self.appointments_repository.create_appointment(data)
