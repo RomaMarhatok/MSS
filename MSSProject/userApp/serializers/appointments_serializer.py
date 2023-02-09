@@ -1,21 +1,33 @@
-from rest_framework.serializers import ModelSerializer
+# buildin
+from typing import OrderedDict
+
+# serializers
 from .doctor_serializer import DoctorSerializer
 from .patient_serializer import PatientSerializer
-from ..models import Appointments, Doctor, Patient, User
-from typing import OrderedDict
+from .doctor_specialization_serializer import DoctorSpecializationSerializer
+from rest_framework.serializers import ModelSerializer
+
+# utils
 from ..utils.date_utils import parse_date_iso_format
+
+# models
+from ..models import Appointments, Doctor, Patient, User, DoctorSpecialization
+
+# repositories
 from ..repositories.user_repository import UserRepository
 
 
 class AppointmentsSerializer(ModelSerializer):
     doctor = DoctorSerializer(required=True)
     patient = PatientSerializer(required=True)
+    doctor_specialization = DoctorSpecializationSerializer(required=True)
 
     class Meta:
         model = Appointments
         fields = (
             "doctor",
             "patient",
+            "doctor_specialization",
             "date",
         )
 
@@ -26,10 +38,17 @@ class AppointmentsSerializer(ModelSerializer):
         patient = Patient.objects.get(
             user__login=validated_data["patient"]["user"]["login"]
         )
+        doctor_specialization = DoctorSpecialization.objects.get(
+            name=validated_data["doctor_specialization"]["name"]
+        )
         validated_data.pop("doctor")
         validated_data.pop("patient")
+        validated_data.pop("doctor_specialization")
         instance, _ = Appointments.objects.get_or_create(
-            **validated_data, doctor=doctor, patient=patient
+            **validated_data,
+            doctor=doctor,
+            patient=patient,
+            doctor_specialization=doctor_specialization
         )
         return instance
 
