@@ -67,6 +67,24 @@ const getters = {
             }
         })
         return calendarAppointments
+    },
+    getRecentAppointments:(state)=>{
+        let recentAppointments = state.appointments.map(appointment=>{
+            // date example "23/8/2006 10:28"
+            let [days,months,years] = appointment.date.split(" ")[0].split("/")
+            let [hours,minutes] = appointment.date.split(" ")[1].split(":")
+            let date = new Date(years,months,days,hours,minutes)
+            let currentDate = new Date()
+            let dateDifference = Math.abs(date - currentDate)
+            let diffDays = Math.ceil(dateDifference / (1000 * 60 * 60 * 24)); 
+            if(diffDays <= 10000000) {
+                return {
+                    label:`date: ${appointment.date.split(" ")[0]} time: ${appointment.date.split(" ")[1]}`,
+                    text:`appointments to ${appointment.doctor_specialization.name}`,
+                }
+            }
+        })
+        return recentAppointments
     }
 }
 
