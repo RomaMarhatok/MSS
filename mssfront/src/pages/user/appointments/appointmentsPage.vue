@@ -2,7 +2,7 @@
 import { onBeforeMount, computed } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
-import appointemntsListSection from '@/components/ui/Sections/UserPages/AppointmentsPage/ListSection.vue';
+import CalendarSection from '@/components/ui/Sections/UserPages/PersonalInfoPage/CalendarSection.vue';
 const store = useStore()
 const route = useRoute()
 const slug = computed(() => store.state.user.slug ? store.state.user.slug : route.params.userSlug)
@@ -13,5 +13,5 @@ onBeforeMount(() => {
 })
 </script>
 <template>
-    <appointemntsListSection></appointemntsListSection>
+    <CalendarSection></CalendarSection>
 </template>
