@@ -52,7 +52,7 @@ const getters = {
     },
     getAllAppointmentsForCalendar:(state)=>{
         console.log("getters",state.appointments)
-        let ap = state.appointments.map((appointment,index)=>{
+        let calendarAppointments = state.appointments.map((appointment,index)=>{
             // date example "23/8/2006 10:28"
             let [days,months,years] = appointment.date.split(" ")[0].split("/")
             let [hours,minutes] = appointment.date.split(" ")[1].split(":")
@@ -60,14 +60,13 @@ const getters = {
             return {
                 key:index,
                 customData:{
-                    title:`appointments to ${appointment.doctor.user.full_name}`,
+                    title:`appointments to ${appointment.doctor_specialization.name}`,
                     class:'bg-pink-500 text-white',
                 },
                 dates:date
             }
         })
-        console.log(ap)
-        return ap
+        return calendarAppointments
     }
 }
 
@@ -82,7 +81,7 @@ const actions = {
                 )
             console.log("action personal info",state.personalInfo)
         }
-        console.log("action without request",state.doctorTypes)
+        console.log("action without request",state.personalInfo)
     },
     async fetchUserDocuments({commit,state},slug){
         if(state.documents.length == 0){
@@ -94,7 +93,7 @@ const actions = {
                 )
             console.log("action documents",state.documents)
         }
-        console.log("action without request",state.doctorTypes)
+        console.log("action without request",state.documents)
     },
     async fetchDocumentTypes({commit,state}){
         if(state.documentTypes.length == 0){
@@ -105,7 +104,7 @@ const actions = {
                 )
             console.log("action document types",state.documentTypes)
         }
-        console.log("action without request",state.doctorTypes)
+        console.log("action without request",state.documentTypes)
     },
     async fetchAppointments({commit,state},slug){
         if(state.appointments.length == 0){
@@ -117,7 +116,7 @@ const actions = {
             )
             console.log("action appointments",state.appointments)
         }
-        console.log("action without request",state.appointments)
+        console.log("action without request appointments",state.appointments)
        
     },
     async fetchCreateAppointemtns(){
