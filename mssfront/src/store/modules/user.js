@@ -69,6 +69,7 @@ const getters = {
         return calendarAppointments
     },
     getRecentAppointments:(state)=>{
+        console.log("getters",state.appointments)
         let recentAppointments = state.appointments.map(appointment=>{
             // date example "23/8/2006 10:28"
             let [days,months,years] = appointment.date.split(" ")[0].split("/")
