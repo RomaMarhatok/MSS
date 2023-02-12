@@ -39,7 +39,7 @@ class AppointmentsSerializer(ModelSerializer):
             user__login=validated_data["patient"]["user"]["login"]
         )
         doctor_specialization = DoctorSpecialization.objects.get(
-            name=validated_data["doctor_specialization"]["name"]
+            slug=validated_data["doctor_specialization"]["slug"]
         )
         validated_data.pop("doctor")
         validated_data.pop("patient")

@@ -43,7 +43,7 @@ class AppointmentsService:
             # password need only for validators it don't use in create method of serializer
             "doctor": {"user": {"login": doctor.login, "password": doctor.password}},
             "patient": {"user": {"login": patient.login, "password": patient.password}},
-            "doctor_specialization": {"name": doctor_specialization},
+            "doctor_specialization": {"slug": doctor_specialization},
             "date": date,
         }
         errors, is_created = self.appointments_repository.create_appointment(data)
