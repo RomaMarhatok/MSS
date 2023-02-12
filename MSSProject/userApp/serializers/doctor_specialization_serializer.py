@@ -12,5 +12,5 @@ class DoctorSpecializationSerializer(ModelSerializer):
         extra_kwargs = {
             "url": {"lookup_field": "slug"},
             "slug": {"required": False, "validators": []},
-            "name": {"required": False},
+            "name": {"required": False, "validators": []},
         }

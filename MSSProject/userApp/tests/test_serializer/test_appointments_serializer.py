@@ -16,8 +16,8 @@ def test_serialize(appoitment_fixture):
         data=appoitment_fixture["doctor_specialization"]
     )
     assert serializer.is_valid()
-    serializer.save()
-
+    doctor_specialization = serializer.save()
+    appoitment_fixture["doctor_specialization"]["slug"] = doctor_specialization.slug
     serializer = RoleSerializer(data=appoitment_fixture["doctor"]["user"]["role"])
     assert serializer.is_valid()
     serializer.save()
