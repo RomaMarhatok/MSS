@@ -13,7 +13,10 @@ const getters = {
     },
     getDoctorByDoctorTypes:(state)=>(doctorType)=>{
         return state.doctors.filter(doctor=>doctor.doctor_types.some(dt=>dt.slug==doctorType.slug))
-    }
+    },
+    getDoctorByDoctorTypeSlug:(state)=>(doctorTypeSlug)=>{
+        return state.doctors.filter(doctor=>doctor.doctor_types.some(dt=>dt.slug==doctorTypeSlug))
+    },
 }
 
 const actions = {
