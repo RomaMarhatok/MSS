@@ -2,7 +2,7 @@
 import { onBeforeMount, computed } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
-import CalendarSection from '@/components/ui/Sections/UserPages/PersonalInfoPage/CalendarSection.vue';
+import AppointmentForm from '@/components/ui/Forms/AppointmentForm.vue';
 const store = useStore()
 const route = useRoute()
 const slug = computed(() => store.state.user.slug ? store.state.user.slug : route.params.userSlug)
@@ -10,8 +10,11 @@ const slug = computed(() => store.state.user.slug ? store.state.user.slug : rout
 console.log(store)
 onBeforeMount(() => {
     store.dispatch("user/fetchAppointments", slug.value)
+    store.dispatch("doctors/fetchAllDoctors")
+    store.dispatch("doctors/fetchAllDoctorTypes")
+
 })
 </script>
 <template>
-    <CalendarSection></CalendarSection>
+    <AppointmentForm></AppointmentForm>
 </template>
