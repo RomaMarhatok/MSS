@@ -46,6 +46,11 @@ class AppointmentsService:
             "doctor_specialization": {"slug": doctor_specialization},
             "date": date,
         }
+        if self.appointments_repository.is_exist(patient_slug, doctor_slug, date):
+            return {
+                "data": {"errors": {"general": ["appointments alredy exist"]}},
+                "status": status.HTTP_409_CONFLICT,
+            }
         appointment, is_created = self.appointments_repository.create_appointment(data)
         if is_created:
             return {

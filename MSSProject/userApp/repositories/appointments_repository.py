@@ -31,6 +31,18 @@ class AppointmentsRepository:
         )
         return AppointmentsSerializer(instance=instance).data
 
+    def is_exist(self, user_slug: str, doctor_slug: str, appointment_date: str) -> bool:
+        is_exist = Appointments.objects.filter(
+            Q(patient__user__slug=user_slug)
+            & Q(doctor__user__slug=doctor_slug)
+            & Q(date=appointment_date)
+        ).exists()
+        if not is_exist:
+            is_exist = Appointments.objects.filter(
+                Q(patient__user__slug=user_slug) & Q(doctor__user__slug=doctor_slug)
+            ).exists()
+        return is_exist
+
     def create_appointment(self, data: dict) -> tuple[dict, bool]:
         serializer = AppointmentsSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
