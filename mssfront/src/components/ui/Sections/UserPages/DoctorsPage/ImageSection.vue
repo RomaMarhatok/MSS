@@ -1,8 +1,10 @@
 <script setup>
 import { defineProps, computed, ref } from 'vue';
+import { useStore } from 'vuex'
 import getBaseApi from '@/apis/baseApi';
 import baseLink from '@/components/common/Links/Base/BaseLink.vue';
 import AppointmentForm from '@/components/ui/Forms/AppointmentForm.vue';
+const store = useStore()
 const props = defineProps({
     fullName: String,
     image: String
@@ -11,6 +13,10 @@ const show = ref(false)
 const getImageSrc = computed(() => {
     return getBaseApi.getUri() + props.image
 })
+function showAppintmentForm() {
+    show.value = !show.value
+    store.dispatch('responseErrors/clearErrors')
+}
 </script>
 <template>
     <section class="personal-image">
@@ -19,7 +25,8 @@ const getImageSrc = computed(() => {
             <p>{{ fullName }}</p>
         </div>
         <div class="flex flex-col gap-4">
-            <button class="btn w-full border-1 border-black p-1" @click="show = !show">create appointment</button>
+
+            <button class="btn w-full border-1 border-black p-1" @click="showAppintmentForm">create appointment</button>
             <baseLink class="w-full" :href="'#/doctors/'" :text="'back'" />
         </div>
     </section>
@@ -28,7 +35,6 @@ const getImageSrc = computed(() => {
             <AppointmentForm></AppointmentForm>
         </div>
     </transition>
-
 </template>
 <style scoped>
 .personal-image {
