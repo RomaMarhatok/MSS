@@ -138,13 +138,22 @@ const actions = {
         console.log("action without request appointments",state.appointments)
        
     },
-    async fetchCreateAppointemtns(){
+    async fetchDestroyAppointemtns(data){
         const userService = new UserService()
         await userService.destroyAppointments(
             appointments=>console.log(appointments),
-            error=>console.log(error)
+            error=>console.log(error),
+            data
         )
         console.log("action destroy appointments",state.appoitnments)
+    },
+    async fetchCreateAppointemtns({commit},data){
+        const userService = new UserService()
+        await userService.createAppointments( 
+            appointment=>commit("addAppointment",appointment),
+            error=>console.log(error),
+            data
+        )
     }
 }
 
@@ -172,6 +181,10 @@ const mutations = {
     setAppointments:(state,appointments)=>{
         console.log("mutation appointments",appointments)
         state.appointments = appointments
+    },
+    addAppointment:(state,appointment)=>{
+        console.log("add appointments")
+        state.appointments.push(appointment)
     }
 }
 
