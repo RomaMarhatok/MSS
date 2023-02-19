@@ -8,7 +8,6 @@ import FormSubmitButton from '../Buttons/FormSubmitButton.vue';
 import DoctorTypeSelector from '@/components/common/Selectors/DoctorTypeSelector.vue';
 import DoctorSelector from '@/components/common/Selectors/DoctorSelector.vue';
 const store = useStore()
-// const date = ref(new Date())
 const userSlug = computed(() => store.state.user.slug)
 const formData = reactive({
     selectedDoctorTypeSlug: "",
@@ -23,7 +22,7 @@ const doctors = computed(() => {
     return formData.selectedDoctorTypeSlug.length == 0 ? store.state.doctors.doctors : store.getters["doctors/getDoctorByDoctorTypeSlug"](formData.selectedDoctorTypeSlug)
 })
 function submit() {
-    console.log(formData)
+    store.dispatch("user/fetchCreateAppointemtns", formData)
 }
 </script>
 
