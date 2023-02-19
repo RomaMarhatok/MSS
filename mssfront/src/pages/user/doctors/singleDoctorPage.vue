@@ -1,10 +1,11 @@
 <script setup>
-import doctorsPageHeader from '@/components/layout//Headers/PageHeader.vue';
-import doctorImageSection from '@/components/ui/Sections/UserPages/DoctorsPage/ImageSection.vue'
-import doctorDataSection from '@/components/ui/Sections/UserPages/DoctorsPage/DataSection.vue';
 import { computed } from 'vue';
-import { useRoute } from 'vue-router';
 import { useStore } from 'vuex';
+import { useRoute } from 'vue-router';
+import PageHeader from '@/components/layout//Headers/PageHeader.vue';
+import DataSection from '@/components/ui/Sections/UserPages/DoctorsPage/DataSection.vue';
+import ImageSection from '@/components/ui/Sections/UserPages/DoctorsPage/ImageSection.vue'
+
 const route = useRoute()
 const store = useStore()
 const doctorSlug = route.params.doctorSlug
@@ -12,12 +13,12 @@ const doctor = computed(() => store.getters["doctors/getDoctorBySlug"](doctorSlu
 </script>
 <template>
     <div>
-        <doctorsPageHeader />
+        <PageHeader />
         <main class="main-data-section">
-            <div>
-                <doctorImageSection :fullName="doctor.personal_info.full_name" :image="doctor.personal_info.image" />
+            <div class="w-72">
+                <ImageSection :fullName="doctor.personal_info.full_name" :image="doctor.personal_info.image" />
             </div>
-            <doctorDataSection :sectionTitle="'Resume'" :sectionText="doctor.doctor_summary.summary" />
+            <DataSection :sectionTitle="'Resume'" :sectionText="doctor.doctor_summary.summary" />
         </main>
 
     </div>
