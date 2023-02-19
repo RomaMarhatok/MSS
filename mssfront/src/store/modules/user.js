@@ -6,7 +6,7 @@ const state = {
     personalInfo:{},
     documents:[],
     documentTypes:[],
-    appoitnments:[],
+    appointments:[],
 }
 
 const getters = {
@@ -56,7 +56,7 @@ const getters = {
             // date example "23/8/2006 10:28"
             let [days,months,years] = appointment.date.split(" ")[0].split("/")
             let [hours,minutes] = appointment.date.split(" ")[1].split(":")
-            let date = new Date(years,months,days,hours,minutes)
+            let date = new Date(years,months-1,days,hours,minutes)
             return {
                 key:index,
                 customData:{
@@ -100,7 +100,9 @@ const actions = {
                 )
             console.log("action personal info",state.personalInfo)
         }
-        console.log("action without request",state.personalInfo)
+        else{
+            console.log("action without request",state.personalInfo)
+        }
     },
     async fetchUserDocuments({commit,state},slug){
         if(state.documents.length == 0){
@@ -112,7 +114,9 @@ const actions = {
                 )
             console.log("action documents",state.documents)
         }
-        console.log("action without request",state.documents)
+        else{
+            console.log("action without request",state.documents)
+        }
     },
     async fetchDocumentTypes({commit,state}){
         if(state.documentTypes.length == 0){
@@ -123,7 +127,9 @@ const actions = {
                 )
             console.log("action document types",state.documentTypes)
         }
-        console.log("action without request",state.documentTypes)
+        else{
+            console.log("action without request",state.documentTypes)
+        }
     },
     async fetchAppointments({commit,state},slug){
         if(state.appointments.length == 0){
@@ -134,8 +140,10 @@ const actions = {
                 error=>console.log(error)
             )
             console.log("action appointments",state.appointments)
+        }else{
+            console.log("action without request appointments",state.appointments)
+
         }
-        console.log("action without request appointments",state.appointments)
        
     },
     async fetchDestroyAppointemtns(data){
@@ -145,15 +153,27 @@ const actions = {
             error=>console.log(error),
             data
         )
-        console.log("action destroy appointments",state.appoitnments)
+        console.log("action destroy appointments",state.appointments)
     },
-    async fetchCreateAppointemtns({commit},data){
+    async fetchCreateAppointemtns({commit,rootState },data){
         const userService = new UserService()
         await userService.createAppointments( 
-            appointment=>commit("addAppointment",appointment),
-            error=>console.log(error),
+            (status,appointment)=>{
+                commit("authentication/setStatus", status, { root:true })
+                if(appointment !==null || appointment!=="undefined"){
+                    commit("addAppointment",appointment)
+                }
+            },
+            (status,error)=>{
+                commit("authentication/setStatus", status, { root:true })
+                commit("responseErrors/setErrors", error, { root:true })
+            },
             data
         )
+        return new Promise((resolve,reject)=>{
+            resolve(rootState.authentication.status)
+            reject(null)
+        })
     }
 }
 
