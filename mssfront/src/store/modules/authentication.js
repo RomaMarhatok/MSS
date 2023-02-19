@@ -25,7 +25,10 @@ const actions = {
             resolve(state.status)
             reject(null)
         })
-   }
+    },
+    async clearStatus({commit}){
+        commit("setStatus",0)
+    }
 }
 
 const mutations = {
