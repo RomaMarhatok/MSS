@@ -35,8 +35,8 @@ class UserService extends RequestService {
             errorCb(error)
         })
     }
-    async destroyAppointments(cb,errorCb){
-        return await this.post(`mss/appointments/desctroy/`).then(response=>{
+    async destroyAppointments(cb,errorCb,data){
+        return await this.post(`mss/appointments/desctroy/`,data).then(response=>{
             cb(response.data)
         }).catch(error=>{
             errorCb(error)
