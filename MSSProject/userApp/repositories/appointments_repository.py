@@ -31,12 +31,13 @@ class AppointmentsRepository:
         )
         return AppointmentsSerializer(instance=instance).data
 
-    def create_appointment(self, data: dict) -> tuple[dict | None, bool]:
+    def create_appointment(self, data: dict) -> tuple[dict, bool]:
         serializer = AppointmentsSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
-            serializer.save()
+            appointment = serializer.save()
+            serialized_appointment = AppointmentsSerializer(instance=appointment).data
             return (
-                None,
+                serialized_appointment,
                 True,
             )
         return (

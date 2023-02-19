@@ -23,7 +23,7 @@ class AppointmentsService:
     def get(self, patient_slug: str, doctor_slug: str) -> dict:
         if patient_slug is None or doctor_slug is None:
             return {
-                "data": "errors"["data don't provided"],
+                "data": {"errors": ["data don't provided"]},
                 "status": status.HTTP_400_BAD_REQUEST,
             }
 
@@ -46,16 +46,16 @@ class AppointmentsService:
             "doctor_specialization": {"slug": doctor_specialization},
             "date": date,
         }
-        errors, is_created = self.appointments_repository.create_appointment(data)
+        appointment, is_created = self.appointments_repository.create_appointment(data)
         if is_created:
             return {
                 "data": {
-                    "message": "appointment successful created",
+                    "message": appointment,
                 },
                 "status": status.HTTP_200_OK,
             }
         return {
-            "data": {"errors": errors},
+            "data": {"errors": appointment},
             "status": status.HTTP_400_BAD_REQUEST,
         }
 
