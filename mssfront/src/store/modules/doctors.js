@@ -32,7 +32,9 @@ const actions = {
                 )
             console.log("action doctors",state.doctors)
         }
-        console.log("action without request",state.doctorTypes)
+        else{
+            console.log("action without request",state.doctorTypes)
+        }
     },
     async fetchAllDoctorTypes({commit,state}){
         if(state.doctorTypes.length == 0){
@@ -46,7 +48,9 @@ const actions = {
             )
             console.log("action doctor types",state.doctorTypes)
         }
-        console.log("action without request",state.doctorTypes)
+        else{
+            console.log("action without request",state.doctorTypes)
+        }
     }
 }
 
