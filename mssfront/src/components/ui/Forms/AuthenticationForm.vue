@@ -1,11 +1,11 @@
 <script setup>
-import { reactive, computed, onBeforeMount } from "vue"
-import { useRouter } from "vue-router";
 import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 import baseForm from "./Base/BaseForm.vue"
+import { reactive, computed, onBeforeMount } from "vue"
 import formEmailInput from '@/components/ui/Inputs/FormEmailInput.vue';
-import formPasswordInput from '@/components/ui/Inputs/FormPasswordInput.vue';
 import formSubmitButton from '@/components/ui/Buttons/FormSubmitButton.vue';
+import formPasswordInput from '@/components/ui/Inputs/FormPasswordInput.vue';
 const store = useStore()
 const router = useRouter()
 const errors = computed(() => store.state.responseErrors.errors)
