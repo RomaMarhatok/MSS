@@ -1,3 +1,9 @@
+<script setup>
+import homePageHeader from "@/components/layout/Headers/HomePageHeader.vue";
+import homePageDoctorImageSection from "@/components/ui/Sections/HomePage/DoctorImageSection.vue";
+import homePageCardsSection from "@/components/ui/Sections/HomePage/CardsSection.vue";
+</script>
+
 <template>
   <homePageHeader />
   <homePageDoctorImageSection />
@@ -7,11 +13,7 @@
   </footer>
 </template>
 
-<script setup>
-import homePageHeader from "@/components/layout/Headers/HomePageHeader.vue";
-import homePageDoctorImageSection from "@/components/ui/Sections/HomePage/DoctorImageSection.vue";
-import homePageCardsSection from "@/components/ui/Sections/HomePage/CardsSection.vue";
-</script>
+
 <style scoped>
 .footer {
   margin-top: 3%;
