@@ -7,12 +7,10 @@ const store = useStore()
 const route = useRoute()
 const redirectHref = ref(`#/user/${route.params.userSlug}/documents/`)
 const documentSlug = route.params.documentSlug
-const document = computed(() => store.getters["user/getDocumentBySlug"](documentSlug))
+const document = computed(() => store.getters["documents/getDocumentBySlug"](documentSlug))
 const creator = computed(() => store.getters["doctors/getDoctorBySlug"](document.value.creator.slug))
 onBeforeMount(() => {
-    if (store.state.doctors.doctors.length == 0) {
-        store.dispatch("doctors/fetchAllDoctors")
-    }
+    store.dispatch("doctors/fetchAllDoctors")
 })
 
 

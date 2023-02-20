@@ -15,7 +15,7 @@ const getImageSrc = computed(() => {
 })
 function showAppintmentForm() {
     show.value = !show.value
-    store.dispatch('responseErrors/clearErrors')
+    store.dispatch('response/resetErrors')
 }
 </script>
 <template>

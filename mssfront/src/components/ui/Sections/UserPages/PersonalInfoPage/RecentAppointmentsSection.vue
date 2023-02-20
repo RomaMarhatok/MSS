@@ -7,7 +7,7 @@ const recentAppoitments = reactive({
     header: "recent appoitments",
     data: [],
 })
-recentAppoitments.data = computed(() => store.getters["user/getRecentAppointments"])
+recentAppoitments.data = computed(() => store.getters["appointments/getRecentAppointments"])
 </script>
 <template>
     <DataSection v-if="recentAppoitments.data.length" :headerText="recentAppoitments.header"

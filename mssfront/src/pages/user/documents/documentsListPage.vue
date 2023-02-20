@@ -11,9 +11,8 @@ const slug = computed(() => route.params.userSlug ? route.params.userSlug : stor
 const activeLinks = ref([true, false, false])
 
 onMounted(() => {
-    store.dispatch("user/fetchUserDocuments", slug.value)
-    store.dispatch("user/fetchDocumentTypes")
-
+    store.dispatch("documents/fetchDocuments", slug.value)
+    store.dispatch("documents/fetchDocumentsTypes")
 })
 </script>
 <template>

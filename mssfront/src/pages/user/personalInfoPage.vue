@@ -12,9 +12,8 @@ const slug = computed(() => store.state.user.slug ? store.state.user.slug : rout
 onBeforeMount(() => {
     console.log("on mounted")
     store.dispatch("user/fetchUserPersonalInfo", slug.value)
-    store.dispatch("user/fetchAppointments", slug.value)
+    store.dispatch("appointments/fetchAppointments", slug.value)
 })
-
 const imageSectionProps = reactive({
     links: {
         doctors: "#/doctors/",
