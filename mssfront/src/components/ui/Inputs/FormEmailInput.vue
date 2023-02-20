@@ -9,7 +9,7 @@ const emailInput = reactive({
     inputType: "text",
     labelFor: "text_input"
 })
-const errors = computed(() => store.getters["responseErrors/loginErrors"])
+const errors = computed(() => store.getters["response/loginErrors"])
 </script>
 <template>
     <formBaseInput :labelText="emailInput.labelText" :inputPlaceholder="emailInput.inputPlaceholder"

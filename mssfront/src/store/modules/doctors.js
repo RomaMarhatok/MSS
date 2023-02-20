@@ -40,10 +40,7 @@ const actions = {
         if(state.doctorTypes.length == 0){
             const doctorService = new DoctorService()
             await doctorService.getAllDoctorTypes(
-                doctorTypes=>{
-                    console.log("cb",doctorTypes)
-                    commit("setDoctorType",doctorTypes)
-                },
+                doctorTypes=>commit("setDoctorType",doctorTypes),
                 error=>console.log(error)
             )
             console.log("action doctor types",state.doctorTypes)

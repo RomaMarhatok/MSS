@@ -17,20 +17,20 @@ const formData = reactive({
     second_name: "",
 })
 onBeforeMount(() => {
-    store.dispatch("responseErrors/clearErrors")
-    store.dispatch("registration/clearAll")
-
+    store.dispatch("response/resetErrors")
+    store.dispatch("registration/resetMessage")
 })
 
 function submitForm() {
-    store.dispatch("responseErrors/clearErrors")
+    store.dispatch("response/resetErrors")
     store.dispatch("registration/registrateUser", formData).then((message) => {
+        console.log("submit", message)
         if (message) {
             router.push("/")
-            store.dispatch("responseErrors/clearErrors")
+            store.dispatch("response/resetErrors")
+            store.dispatch("registration/resetMessage")
         }
     })
-
 }
 </script>
 <template>

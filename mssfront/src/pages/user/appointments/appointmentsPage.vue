@@ -9,7 +9,7 @@ const slug = computed(() => store.state.user.slug ? store.state.user.slug : rout
 
 console.log(store)
 onBeforeMount(() => {
-    store.dispatch("user/fetchAppointments", slug.value)
+    store.dispatch("appointments/fetchAppointments", slug.value)
     store.dispatch("doctors/fetchAllDoctors")
     store.dispatch("doctors/fetchAllDoctorTypes")
 

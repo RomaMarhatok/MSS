@@ -17,7 +17,6 @@ const formData = reactive({
     appointment_date: new Date(),
     patient_slug: userSlug.value
 })
-const errors = computed(() => store.getters["responseErrors/generalErrors"])
 const doctorTypes = computed(() => {
     return store.state.doctors.doctorTypes
 })
@@ -25,11 +24,9 @@ const doctors = computed(() => {
     return formData.doctor_specialization.length == 0 ? store.state.doctors.doctors : store.getters["doctors/getDoctorByDoctorTypeSlug"](formData.doctor_specialization)
 })
 function submit() {
-    store.dispatch("user/fetchCreateAppointemtns", formData).then(responseStatus => {
-        console.log(responseStatus)
-        console.log((Object.keys(errors.value).length))
-        if ((Object.keys(errors.value).length === 0) && responseStatus == 200) {
-            store.dispatch("responseErrors/clearErrors")
+    store.dispatch("appointments/fetchCreateAppointemtns", formData).then(responseStatus => {
+        if (responseStatus == 200) {
+            store.dispatch("response/resetErrors")
             router.push("/user/" + store.state.user.slug + "/home/")
         }
     })

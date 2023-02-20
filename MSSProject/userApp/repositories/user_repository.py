@@ -12,7 +12,10 @@ class UserRepository:
     function_mapper: Mapper = Mapper()
 
     def is_user_exist(self, login, password) -> bool:
-        return User.objects.filter(Q(login=login) & Q(password=password)).exists()
+        return (
+            User.objects.filter(Q(login=login) & Q(password=password)).exists()
+            or User.objects.filter(Q(login=login) & Q(username=login)).exists()
+        )
 
     def is_user_exist_by_slug(self, slug) -> bool:
         return User.objects.filter(slug=slug).exists()

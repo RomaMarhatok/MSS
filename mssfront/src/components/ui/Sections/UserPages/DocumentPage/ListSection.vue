@@ -5,12 +5,12 @@ import { useStore } from 'vuex';
 const store = useStore()
 const searchString = ref("")
 const selectedDocumentType = ref(null)
-const documentTypes = computed(() => store.state.user.documentTypes)
+const documentTypes = computed(() => store.state.documents.documentsTypes)
 const documents = computed(() => filter())
 const filter = () => {
-    let documentsBySearchString = store.getters["user/getDocumentByString"](searchString.value)
+    let documentsBySearchString = store.getters["documents/getDocumentByString"](searchString.value)
     if (selectedDocumentType.value) {
-        let documentsBydocumentType = store.getters["user/getDocumentsByDocumentType"](selectedDocumentType.value)
+        let documentsBydocumentType = store.getters["documents/getDocumentsByDocumentType"](selectedDocumentType.value)
         let result = documentsBySearchString.filter(d => documentsBydocumentType.some(document => document.document_type.name == d.document_type.name))
         return result
     }
@@ -31,9 +31,9 @@ const filter = () => {
             <div class="flex justify-center">
                 <div class="w-96 h-full">
                     <select class="form-select appearance-none block w-full px-3 py-1.5 text-base font-normal 
-                    text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded
-                    transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 
-                    focus:outline-none h-full" v-model="selectedDocumentType">
+                                            text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded
+                                            transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 
+                                            focus:outline-none h-full" v-model="selectedDocumentType">
                         <option disabled value="" selected>Please select document type</option>
                         <option value=""></option>
                         <option v-for="documentType in documentTypes" :key="documentType.slug" :value="documentType">{{

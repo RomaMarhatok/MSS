@@ -5,6 +5,7 @@ const state = {
 }
 
 const getters = {
+    getMessage:(state)=>state.message
 }
 
 const actions = {
@@ -16,14 +17,15 @@ const actions = {
             message=>{
                 commit("setMessage",message)
             },
-            error=>commit("responseErrors/setErrors", error,{ root:true })
+            error=>commit("response/setErrors", error,{ root:true })
         )
+
         return new Promise((resolve,reject)=>{
             resolve(state.message)
             reject("")
         })      
     },
-    async clearAll({commit}){
+    async resetMessage({commit}){
         commit("setMessage","")
     }
 }

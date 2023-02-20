@@ -1,8 +1,10 @@
 const state = {
+    status:200,
     errors:{},
 }
 
 const getters = {
+    responseStatus:(state)=>state.status,
     generalErrors:(state)=>state.errors.general ?? [],
     loginErrors:(state)=>state.errors.login ?? [],
     passwordErrors:(state)=>state.errors.password ?? [],
@@ -11,12 +13,18 @@ const getters = {
 }
 
 const actions = {
-    async clearErrors({commit}){
+    async resetStatus({commit}){
+        commit("setStatus",200)
+    },
+    async resetErrors({commit}){
         commit("setErrors",{})
     }
 }
 
 const mutations = {
+    setStatus:(state,status)=>{
+        state.status =status
+    },
     setErrors:(state, errors)=>{
         state.errors = errors
         console.log("mutation response errors",state.errors)
