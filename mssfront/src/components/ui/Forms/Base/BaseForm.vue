@@ -4,7 +4,7 @@ import { useStore } from 'vuex';
 import errorMessage from '@/components/common/Messages/ErrorMessage.vue';
 import successMessage from '@/components/common/Messages/SuccesMessage.vue';
 const store = useStore()
-const errors = computed(() => store.getters["responseErrors/generalErrors"])
+const errors = computed(() => store.getters["response/generalErrors"])
 const message = computed(() => store.state.registration.message)
 </script>
 <template>

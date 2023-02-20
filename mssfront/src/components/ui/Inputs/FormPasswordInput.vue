@@ -9,7 +9,7 @@ const passwordInput = reactive({
     inputType: "password",
     labelFor: "password_input",
 })
-const errors = computed(() => store.getters["responseErrors/passwordErrors"])
+const errors = computed(() => store.getters["response/passwordErrors"])
 </script>
 <template>
     <formBaseInput :labelText="passwordInput.labelText" :inputPlaceholder="passwordInput.inputPlaceholder"

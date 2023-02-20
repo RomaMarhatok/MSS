@@ -9,7 +9,7 @@ const passwordInput = reactive({
     inputType: "text",
     labelFor: "second_name_input",
 })
-const errors = computed(() => store.getters["responseErrors/secondNameErrors"])
+const errors = computed(() => store.getters["response/secondNameErrors"])
 
 </script>
 <template>
