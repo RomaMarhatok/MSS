@@ -35,7 +35,6 @@ class DocumentCreatorSerializer(ModelSerializer):
             instance=instance.document,
             context=document_serializer_context,
         ).data
-        print(instance.creator.user.slug)
         serialized_document.update({"creator": {"slug": instance.creator.user.slug}})
         rep = serialized_document
         return rep
