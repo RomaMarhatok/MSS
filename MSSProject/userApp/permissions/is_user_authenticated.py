@@ -1,6 +1,6 @@
-from rest_framework.permissions import BasePermission
 from django.http import HttpRequest
 from rest_framework.authtoken.models import Token
+from rest_framework.permissions import BasePermission
 
 
 class IsUserAuthenticated(BasePermission):
