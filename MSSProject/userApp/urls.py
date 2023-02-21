@@ -8,6 +8,9 @@ from userApp.views.patient.doctor_specialization_view import DoctorSpecializatio
 from userApp.views.patient.document_type_view import DocumentTypeView
 from userApp.views.patient.appointments_view import AppointmentsView
 
+# doctor view
+from userApp.views.doctor.doctor_appointments_view import DoctorAppointments
+
 urlpatterns = [
     path(
         "auth/registration/",
@@ -88,6 +91,23 @@ urlpatterns = [
                 path(
                     "<str:patient_slug>/<str:doctor_slug>/",
                     AppointmentsView.as_view({"get": "retrieve"}),
+                    name="appoitments-retrieve",
+                ),
+            ]
+        ),
+    ),
+    path(
+        "doctor/appointments/<str:doctor_slug>/",
+        include(
+            [
+                path(
+                    "",
+                    DoctorAppointments.as_view({"get": "list"}),
+                    name="appoitments-list",
+                ),
+                path(
+                    "<str:patient_slug>/",
+                    DoctorAppointments.as_view({"get": "retrieve"}),
                     name="appoitments-retrieve",
                 ),
             ]
