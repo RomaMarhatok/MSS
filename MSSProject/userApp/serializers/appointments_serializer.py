@@ -53,15 +53,27 @@ class AppointmentsSerializer(ModelSerializer):
         return instance
 
     def to_representation(self, instance: Appointments):
+        if "is_doctor" in self.context and self.context["is_doctor"]:
+            return self.doctor_representation(instance)
+        return self.patient_representation(instance)
+
+    def patient_representation(self, instance: Appointments):
         rep = super().to_representation(instance)
         rep["date"] = parse_date_iso_format(rep["date"])
         rep["doctor"]["user"].pop("login")
         rep["doctor"]["user"].pop("password")
-        rep["patient"]["user"].pop("login")
-        rep["patient"]["user"].pop("password")
+        rep.pop("patient")
         rep["doctor"]["user"]["full_name"] = self.__get_doctor_full_name(
             instance.doctor.user
         )
+        return rep
+
+    def doctor_representation(self, instance: Appointments):
+        rep = super().to_representation(instance)
+        rep["date"] = parse_date_iso_format(rep["date"])
+        rep["patient"]["user"].pop("login")
+        rep["patient"]["user"].pop("password")
+        rep.pop("doctor")
         return rep
 
     def __get_doctor_full_name(self, user: User) -> str:
