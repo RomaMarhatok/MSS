@@ -18,7 +18,10 @@ class AppointmentsService:
         appointments = self.appointments_repository.get_list_of_appoitments(
             patient_slug
         )
-        return {"user_appointments": appointments}
+        return {
+            "data": {"user_appointments": appointments},
+            "status": status.HTTP_200_OK,
+        }
 
     def get(self, patient_slug: str, doctor_slug: str) -> dict:
         if patient_slug is None or doctor_slug is None:
@@ -30,7 +33,7 @@ class AppointmentsService:
         appointment = self.appointments_repository.get_appoitment(
             patient_slug, doctor_slug
         )
-        return appointment
+        return {"data": appointment, "status": status.HTTP_200_OK}
 
     def create(self, request_data: dict):
         doctor_slug = request_data["doctor_slug"]

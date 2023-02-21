@@ -13,6 +13,6 @@ class DoctorSpecializationView(GenericViewSet):
         doctor_service = DoctorTypeService()
         data = doctor_service.get_doctor_types()
         return JsonResponse(
-            data=data,
-            status=status.HTTP_200_OK,
+            data=data["data"],
+            status=data["status"],
         )

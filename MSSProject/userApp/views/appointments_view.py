@@ -1,4 +1,3 @@
-from rest_framework import status
 from rest_framework.viewsets import GenericViewSet
 from django.http import JsonResponse, HttpRequest
 from ..permissions.is_user_authenticated import IsUserAuthenticated
@@ -13,14 +12,17 @@ class AppointmentsView(GenericViewSet):
         appointments_service = AppointmentsService()
         data = appointments_service.get_all(patient_slug)
         return JsonResponse(
-            data=data,
-            status=status.HTTP_200_OK,
+            data=data["data"],
+            status=data["status"],
         )
 
     def retrieve(self, request: HttpRequest, patient_slug=None, doctor_slug=None):
         appointments_service = AppointmentsService()
         data = appointments_service.get(patient_slug, doctor_slug)
-        return JsonResponse(data=data, status=status.HTTP_200_OK)
+        return JsonResponse(
+            data=data["data"],
+            status=data["status"],
+        )
 
     def create(self, request: HttpRequest, *args, **kwargs):
         appointments_service = AppointmentsService()

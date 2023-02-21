@@ -20,4 +20,4 @@ class DoctorView(GenericViewSet):
     def retrieve(self, request: HttpRequest, doctor_slug: str = None):
         doctor_service = DoctorService()
         data = doctor_service.get_doctor(doctor_slug)
-        return JsonResponse(data=data, status=status.HTTP_200_OK)
+        return JsonResponse(data=data["data"], status=data["status"])
