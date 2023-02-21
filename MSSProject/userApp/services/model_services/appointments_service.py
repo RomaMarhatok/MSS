@@ -9,17 +9,31 @@ class AppointmentsService:
     appointments_repository: AppointmentsRepository = AppointmentsRepository()
     user_repository: UserRepository = UserRepository()
 
-    def get_all(self, patient_slug: str) -> dict:
-        if self.user_repository.is_user_exist_by_slug(patient_slug) is None:
+    def get_patient_appointments(self, patient_slug: str) -> dict:
+        if not self.user_repository.is_user_exist_by_slug(patient_slug):
             return {
-                "data": {"errors": {"general": ["user don't exist"]}},
+                "data": {"errors": {"general": ["patient don't exist"]}},
                 "status": status.HTTP_404_NOT_FOUND,
             }
-        appointments = self.appointments_repository.get_list_of_appoitments(
+        appointments = self.appointments_repository.get_list_of_appoitments_for_patient(
             patient_slug
         )
         return {
             "data": {"user_appointments": appointments},
+            "status": status.HTTP_200_OK,
+        }
+
+    def get_doctor_appointments(self, doctor_slug: str) -> dict:
+        if not self.user_repository.is_user_exist_by_slug(doctor_slug):
+            return {
+                "data": {"errors": {"general": ["doctor don't exist"]}},
+                "status": status.HTTP_404_NOT_FOUND,
+            }
+        appointments = self.appointments_repository.get_list_of_appointemnts_for_doctor(
+            doctor_slug
+        )
+        return {
+            "data": {"doctor_appointments": appointments},
             "status": status.HTTP_200_OK,
         }
 

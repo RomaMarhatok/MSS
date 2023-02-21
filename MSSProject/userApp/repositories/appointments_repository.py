@@ -4,8 +4,8 @@ from ..serializers.appointments_serializer import AppointmentsSerializer
 
 
 class AppointmentsRepository:
-    def get_list_of_appoitments(self, user_slug: str) -> list:
-        isntances = Appointments.objects.filter(
+    def get_list_of_appoitments_for_patient(self, user_slug: str) -> list:
+        instances = Appointments.objects.filter(
             patient__user__slug=user_slug
         ).select_related(
             "patient",
@@ -14,7 +14,20 @@ class AppointmentsRepository:
             "doctor__user",
         )
 
-        return AppointmentsSerializer(instance=isntances, many=True).data
+        return AppointmentsSerializer(instance=instances, many=True).data
+
+    def get_list_of_appointemnts_for_doctor(self, doctor_slug: str) -> list:
+        instances = Appointments.objects.filter(
+            doctor__user__slug=doctor_slug
+        ).select_related(
+            "patient",
+            "doctor",
+            "patient__user",
+            "doctor__user",
+        )
+        return AppointmentsSerializer(
+            instance=instances, many=True, context={"is_doctor": True}
+        ).data
 
     def get_appoitment(self, user_slug: str, doctor_slug: str) -> dict:
         instance = (
