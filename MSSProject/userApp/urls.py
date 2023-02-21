@@ -1,12 +1,12 @@
 from django.urls import path, include
-from userApp.views.authentication_view import AuthenticationView
-from userApp.views.registration_view import RegistrationView
-from userApp.views.document_view import DocumentView
-from userApp.views.profile_view import ProfileView
-from userApp.views.doctor_view import DoctorView
-from userApp.views.doctor_specialization_view import DoctorSpecializationView
-from userApp.views.document_type_view import DocumentTypeView
-from userApp.views.appointments_view import AppointmentsView
+from userApp.views.patient.authentication_view import AuthenticationView
+from userApp.views.patient.registration_view import RegistrationView
+from userApp.views.patient.document_view import DocumentView
+from userApp.views.patient.profile_view import ProfileView
+from userApp.views.patient.doctor_view import DoctorView
+from userApp.views.patient.doctor_specialization_view import DoctorSpecializationView
+from userApp.views.patient.document_type_view import DocumentTypeView
+from userApp.views.patient.appointments_view import AppointmentsView
 
 urlpatterns = [
     path(

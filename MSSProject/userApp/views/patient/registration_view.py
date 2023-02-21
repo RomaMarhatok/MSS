@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from django.http import JsonResponse, HttpRequest
 from rest_framework.permissions import AllowAny
-from ..services.registration_service import RegistrationService
+from ...services.registration_service import RegistrationService
 
 
 class RegistrationView(APIView):
