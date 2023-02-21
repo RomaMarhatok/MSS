@@ -10,7 +10,7 @@ class AppointmentsView(GenericViewSet):
 
     def list(self, request: HttpRequest, patient_slug: str):
         appointments_service = AppointmentsService()
-        data = appointments_service.get_all(patient_slug)
+        data = appointments_service.get_patient_appointments(patient_slug)
         return JsonResponse(
             data=data["data"],
             status=data["status"],
