@@ -30,8 +30,15 @@ class DoctorService:
         doctors = [self.__get_doctor_info(doctor) for doctor in all_doctors]
         return {"data": {"doctors": doctors}, "status": status.HTTP_200_OK}
 
-    def get_doctor(self, slug: str):
+    def is_exist(self, slug: str) -> bool:
         if self.user_repository.is_user_exist_by_slug(slug):
+            user = self.user_repository.get_user_by_slug(slug)
+            if user.role == "doctor":
+                return True
+        return False
+
+    def get_doctor(self, slug: str):
+        if self.is_exist(slug):
             doctor = self.doctor_repository.get_doctor_by(slug=slug)
             return {
                 "data": self.__get_doctor_info(doctor),
