@@ -1,7 +1,7 @@
 <script setup>
-import registrationPageHeader from "@/components/headers/registrationPageHeader.vue"
-import authenticationForm from "@/components/forms/authenticationForm.vue";
-import registrationPageLink from '@/components/links/registrationPageLink.vue';
+import registrationPageHeader from "@/components/layout/Headers/RegistrationPageHeader.vue"
+import authenticationForm from "@/components/ui/Forms/AuthenticationForm.vue";
+import registrationPageLink from '@/components/common/Links/ChangePasswordLink.vue';
 import { ref } from 'vue';
 const changePasswordLink = ref("#/")
 </script>

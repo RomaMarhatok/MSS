@@ -39,3 +39,11 @@ class TreatmentHistorySerializer(ModelSerializer):
             description=validated_data["description"], doctor=doctor, patient=patient
         )
         return instance
+
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        rep["doctor"]["user"].pop("login")
+        rep["doctor"]["user"].pop("password")
+        rep["patient"]["user"].pop("login")
+        rep["patient"]["user"].pop("password")
+        return rep

@@ -4,9 +4,6 @@ const state = {
     slug:"",
     role:"",
     personalInfo:{},
-    documents:[],
-    documentTypes:[],
-    appoitnments:[],
 }
 
 const getters = {
@@ -38,83 +35,26 @@ const getters = {
             address:state.personalInfo.address,
         }
     },
-    getDocumentBySlug:(state)=>(slug)=>{
-        return state.documents.filter(document=>document.slug===slug)[0]
-    },
-    getDocumentByString:(state)=>(searchString)=>{
-        return state.documents.filter(document=>document.name.toLowerCase().includes(searchString.toLowerCase()))
-    },
-    getDocumentsByDocumentType:(state)=>(documentType)=>{
-        return state.documents.filter(d=>d.document_type.name === documentType.name)
-    },
     getImage:(state)=>{
         return state.personalInfo.image ? getBaseApi.getUri()+state.personalInfo.image:undefined
     },
-    getAllAppointmentsForCalendar:(state)=>{
-        console.log("getters",state.appointments)
-        let ap = state.appointments.map((appointment,index)=>{
-            // date example "23/8/2006 10:28"
-            let [days,months,years] = appointment.date.split(" ")[0].split("/")
-            let [hours,minutes] = appointment.date.split(" ")[1].split(":")
-            let date = new Date(years,months,days,hours,minutes)
-            return {
-                key:index,
-                customData:{
-                    title:`appointments to ${appointment.doctor.user.full_name}`,
-                    class:'bg-pink-500 text-white',
-                },
-                dates:date
-            }
-        })
-        console.log(ap)
-        return ap
-    }
 }
 
 const actions = {
     async fetchUserPersonalInfo({commit,state},slug){
-        const userService = new UserService()
-        await userService.getUserPersonalInfo(
-                slug,
-                personalInfo=>commit("setPersonalInfo",personalInfo),
-                error=>console.log(error)
-            )
-        console.log("action personal info",state.personalInfo)
+        if(Object.keys(state.personalInfo).length == 0){
+            const userService = new UserService()
+            await userService.getUserPersonalInfo(
+                    slug,
+                    personalInfo=>commit("setPersonalInfo",personalInfo),
+                    error=>console.log(error)
+                )
+            console.log("action personal info",state.personalInfo)
+        }
+        else{
+            console.log("action without request",state.personalInfo)
+        }
     },
-    async fetchUserDocuments({commit,state},slug){
-        const userService = new UserService()
-        await userService.getUserDocuments(
-                slug,
-                documents=>commit("setDocuments",documents),
-                error=>console.log(error)
-            )
-        console.log("action documents",state.documents)
-    },
-    async fetchDocumentTypes({commit,state}){
-        const userService = new UserService()
-        await userService.getAllDocumentTypes(
-                documentTypes=>commit("setDocumentTypes",documentTypes),
-                error=>console.log(error)
-            )
-        console.log("action document types",state.documentTypes)
-    },
-    async fetchAppointments({commit,state},slug){
-        const userService = new UserService()
-        await userService.getAllAppointments(
-            slug,
-            appointments=>commit("setAppointments",appointments),
-            error=>console.log(error)
-        )
-        console.log("action appointments",state.appointments)
-    },
-    async fetchCreateAppointemtns(){
-        const userService = new UserService()
-        await userService.destroyAppointments(
-            appointments=>console.log(appointments),
-            error=>console.log(error)
-        )
-        console.log("action destroy appointments",state.appoitnments)
-    }
 }
 
 const mutations = {
@@ -130,18 +70,6 @@ const mutations = {
         console.log("mutation user personal info",personalInfo)
         state.personalInfo = personalInfo
     },
-    setDocuments:( state, documents )=>{
-        console.log("mutation user documents",documents)
-        state.documents = documents
-    },
-    setDocumentTypes:(state,documentTypes)=>{
-        console.log("mutation document types",documentTypes)
-        state.documentTypes = documentTypes
-    },
-    setAppointments:(state,appointments)=>{
-        console.log("mutation appointments",appointments)
-        state.appointments = appointments
-    }
 }
 
 export default {

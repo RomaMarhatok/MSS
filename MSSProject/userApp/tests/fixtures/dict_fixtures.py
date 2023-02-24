@@ -154,9 +154,10 @@ def doctor_summary_fixture(doctor_fixture):
 
 
 @pytest.fixture
-def appoitment_fixture(doctor_fixture, patient_fixture):
+def appoitment_fixture(doctor_fixture, patient_fixture, doctor_specialization_fixture):
     return {
         "doctor": doctor_fixture,
         "patient": patient_fixture,
         "date": fake.date_time(),
+        "doctor_specialization": doctor_specialization_fixture,
     }

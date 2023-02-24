@@ -2,24 +2,17 @@
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router';
 import { reactive, onBeforeMount, computed } from 'vue';
-import imageSection from '@/components/sections/userPages/personalInfoPage/imageSection.vue';
-import dataSection from '@/components/sections/userPages/personalInfoPage/base/dataSection.vue';
-import healthInfoSection from '@/components/sections/userPages/personalInfoPage/healthInfoSection.vue';
+import imageSection from '@/components/ui/Sections/UserPages/PersonalInfoPage/ImageSection.vue'
+import healthInfoSection from '@/components/ui/Sections/UserPages/PersonalInfoPage/HealthInfoSection.vue';
+import CalendarSection from '@/components/ui/Sections/UserPages/PersonalInfoPage/CalendarSection.vue';
+import RecentAppointmentsSection from '@/components/ui/Sections/UserPages/PersonalInfoPage/RecentAppointmentsSection.vue';
 const store = useStore()
 const route = useRoute()
 const slug = computed(() => store.state.user.slug ? store.state.user.slug : route.params.userSlug)
 onBeforeMount(() => {
     console.log("on mounted")
     store.dispatch("user/fetchUserPersonalInfo", slug.value)
-})
-
-const recentDocuments = reactive({
-    header: "recent documents",
-    data: [],
-})
-const recentAppoitments = reactive({
-    header: "recent appoitments",
-    data: [],
+    store.dispatch("appointments/fetchAppointments", slug.value)
 })
 const imageSectionProps = reactive({
     links: {
@@ -31,22 +24,31 @@ const imageSectionProps = reactive({
 </script>
 <template>
     <main>
-        <section class="flex__section">
+        <section class="flex__section flex_row">
             <healthInfoSection />
             <imageSection :links="imageSectionProps.links" />
         </section>
-        <section class="flex__section">
-            <dataSection v-if="recentDocuments.data.length" :headerText="recentDocuments.header"
-                :data="recentDocuments.data" />
-            <dataSection v-if="recentAppoitments.data.length" :headerText="recentAppoitments.header"
-                :data="recentAppoitments.data" />
+        <section class="flex__section flex_column">
+            <section class="flex__section flex_row">
+                <RecentAppointmentsSection></RecentAppointmentsSection>
+            </section>
+            <CalendarSection></CalendarSection>
         </section>
+
     </main>
 </template>
 <style scoped>
+.flex_row {
+    flex-direction: row;
+
+}
+
+.flex_column {
+    flex-direction: column;
+}
+
 .flex__section {
     display: flex;
-    flex-direction: row;
     justify-content: center;
     gap: 30px;
     margin-top: 10px;

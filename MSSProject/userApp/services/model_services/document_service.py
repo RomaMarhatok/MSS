@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from rest_framework import status
 from ...repositories.document_repository import DocumentRepository
 
 
@@ -14,9 +15,7 @@ class DocumentService:
             document.get("slug", None)
         )
         document.update({"creator": {"slug": creator.user.slug}})
-        return {
-            "document": document,
-        }
+        return {"data": {"document": document}, "status": status.HTTP_200_OK}
 
     def get_all_documents_with_content(self, user_slug: str):
         return self.document_repository.get_all_user_documents(

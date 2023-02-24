@@ -2,6 +2,7 @@ from typing import Any, Optional
 import random
 from django.core.management.base import BaseCommand
 from faker import Faker
+from typing import List
 from ...tests.factories.user_app_factories import (
     DoctorFactory,
     DoctorSpecializationFactory,
@@ -77,11 +78,11 @@ class Command(BaseCommand):
                 short_summary=fake.text(max_nb_chars=1000),
                 summary=fake.text(max_nb_chars=100000),
             )
-            self.prepare_doctor_specializations(doctor)
+            doctor, specializations = self.prepare_doctor_specializations(doctor)
             self.create_user_documents(user, document_types, doctor)
 
             patient = PatientFactory(user=user)
-            self.prepare_appointments(patient, doctor)
+            self.prepare_appointments(patient, doctor, specializations)
             img_for_analyzes = ImageForAnalyzesFactory(
                 image=load_image_from_url(fake.image_url()),
                 description=fake.text(max_nb_chars=10000),
@@ -120,12 +121,20 @@ class Command(BaseCommand):
         return [test, analyzes, conclusions]
 
     def prepare_doctor_specializations(self, doctor):
+        specializations = []
         for _ in range(random.randint(1, 5)):
             doctor_specialization = DoctorSpecializationFactory(name=fake.pystr())
-            DoctorDoctorSpecializationFactory(
+            doctor_doctor_specialization = DoctorDoctorSpecializationFactory(
                 doctor=doctor, doctor_specialization=doctor_specialization
             )
+            specializations.append(doctor_doctor_specialization.doctor_specialization)
+        return doctor, specializations
 
-    def prepare_appointments(self, patient, doctor):
+    def prepare_appointments(self, patient, doctor, doctor_specializations):
         for _ in range(random.randint(1, 5)):
-            AppointmentsFactory(patient=patient, doctor=doctor, date=fake.date_time())
+            AppointmentsFactory(
+                patient=patient,
+                doctor=doctor,
+                date=fake.date_time(),
+                doctor_specialization=random.choice(doctor_specializations),
+            )

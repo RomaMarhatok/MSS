@@ -1,14 +1,10 @@
 import AuthenticationService from "@/../services/AuthenticationService"
 
-const state = {
-    status:0,
-}
-
-const getters = {
-}
+const state = {}
+const getters = {}
 
 const actions = {
-    async authenticateUser({ commit,state }, dataFromForm){   
+    async authenticate({ commit,state,rootState }, dataFromForm){   
         const authenticationService = new AuthenticationService()
         await authenticationService.authenticateUser(
             dataFromForm,
@@ -16,16 +12,15 @@ const actions = {
                 console.log("cb",slug,role,state)
                 commit("user/setSlug", slug, {root:true})
                 commit("user/setRole", role, {root:true})
-                commit("setStatus", status)
+                commit("response/setStatus", status,{root:true})
             },
-            error=>commit("responseErrors/setErrors", error, { root:true })
+            error=>commit("response/setErrors", error, { root:true })
         )
-        console.log("action",state.status)
         return new Promise((resolve,reject)=>{
-            resolve(state.status)
+            resolve(rootState.response.status)
             reject(null)
         })
-   }
+    },
 }
 
 const mutations = {

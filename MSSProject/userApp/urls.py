@@ -1,12 +1,16 @@
 from django.urls import path, include
-from userApp.views.authentication_view import AuthenticationView
-from userApp.views.registration_view import RegistrationView
-from userApp.views.document_view import DocumentView
-from userApp.views.profile_view import ProfileView
-from userApp.views.doctor_view import DoctorView
-from userApp.views.doctor_specialization_view import DoctorSpecializationView
-from userApp.views.document_type_view import DocumentTypeView
-from userApp.views.appointments_view import AppointmentsView
+from userApp.views.patient.authentication_view import AuthenticationView
+from userApp.views.patient.registration_view import RegistrationView
+from userApp.views.patient.document_view import DocumentView
+from userApp.views.patient.profile_view import ProfileView
+from userApp.views.patient.doctor_view import DoctorView
+from userApp.views.patient.doctor_specialization_view import DoctorSpecializationView
+from userApp.views.patient.document_type_view import DocumentTypeView
+from userApp.views.patient.appointments_view import AppointmentsView
+from userApp.views.doctor.patient_treatments_view import PatientTreatmentView
+
+# doctor view
+from userApp.views.doctor.doctor_appointments_view import DoctorAppointments
 
 urlpatterns = [
     path(
@@ -89,6 +93,40 @@ urlpatterns = [
                     "<str:patient_slug>/<str:doctor_slug>/",
                     AppointmentsView.as_view({"get": "retrieve"}),
                     name="appoitments-retrieve",
+                ),
+            ]
+        ),
+    ),
+    path(
+        "doctor/appointments/<str:doctor_slug>/",
+        include(
+            [
+                path(
+                    "",
+                    DoctorAppointments.as_view({"get": "list"}),
+                    name="appoitments-list",
+                ),
+                path(
+                    "<str:patient_slug>/",
+                    DoctorAppointments.as_view({"get": "retrieve"}),
+                    name="appoitments-retrieve",
+                ),
+            ]
+        ),
+    ),
+    path(
+        "patient/treatment/",
+        include(
+            [
+                path(
+                    "<str:patient_slug>/",
+                    PatientTreatmentView.as_view({"get": "list"}),
+                    name="treatment-history-list",
+                ),
+                path(
+                    "<str:patient_slug>/<str:treatment_slug>/",
+                    PatientTreatmentView.as_view({"get": "retrieve"}),
+                    name="treatment-history-retrieve",
                 ),
             ]
         ),

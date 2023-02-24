@@ -1,9 +1,7 @@
 from dataclasses import dataclass
 from rest_framework import status
-from ...models import Patient
 from ...repositories.appointments_repository import AppointmentsRepository
 from ...repositories.user_repository import UserRepository
-from django.http import HttpRequest
 
 
 @dataclass
@@ -11,32 +9,50 @@ class AppointmentsService:
     appointments_repository: AppointmentsRepository = AppointmentsRepository()
     user_repository: UserRepository = UserRepository()
 
-    def get_all(self, patient_slug: str) -> dict:
-        if self.user_repository.is_user_exist_by_slug(patient_slug) is None:
+    def get_patient_appointments(self, patient_slug: str) -> dict:
+        if not self.user_repository.is_user_exist_by_slug(patient_slug):
             return {
-                "data": {"errors": {"general": ["user don't exist"]}},
+                "data": {"errors": {"general": ["patient don't exist"]}},
                 "status": status.HTTP_404_NOT_FOUND,
             }
-        appointments = self.appointments_repository.get_list_of_appoitments(
+        appointments = self.appointments_repository.get_list_of_appoitments_for_patient(
             patient_slug
         )
-        return {"user_appointments": appointments}
+        return {
+            "data": {"user_appointments": appointments},
+            "status": status.HTTP_200_OK,
+        }
+
+    def get_doctor_appointments(self, doctor_slug: str) -> dict:
+        if not self.user_repository.is_user_exist_by_slug(doctor_slug):
+            return {
+                "data": {"errors": {"general": ["doctor don't exist"]}},
+                "status": status.HTTP_404_NOT_FOUND,
+            }
+        appointments = self.appointments_repository.get_list_of_appointemnts_for_doctor(
+            doctor_slug
+        )
+        return {
+            "data": {"doctor_appointments": appointments},
+            "status": status.HTTP_200_OK,
+        }
 
     def get(self, patient_slug: str, doctor_slug: str) -> dict:
         if patient_slug is None or doctor_slug is None:
             return {
-                "data": "errors"["data don't provided"],
+                "data": {"errors": ["data don't provided"]},
                 "status": status.HTTP_400_BAD_REQUEST,
             }
 
         appointment = self.appointments_repository.get_appoitment(
             patient_slug, doctor_slug
         )
-        return appointment
+        return {"data": appointment, "status": status.HTTP_200_OK}
 
     def create(self, request_data: dict):
         doctor_slug = request_data["doctor_slug"]
         patient_slug = request_data["patient_slug"]
+        doctor_specialization = request_data["doctor_specialization"]
         date = request_data["appointment_date"]
         doctor = self.user_repository.get_user_by(slug=doctor_slug)
         patient = self.user_repository.get_user_by(slug=patient_slug)
@@ -44,18 +60,24 @@ class AppointmentsService:
             # password need only for validators it don't use in create method of serializer
             "doctor": {"user": {"login": doctor.login, "password": doctor.password}},
             "patient": {"user": {"login": patient.login, "password": patient.password}},
+            "doctor_specialization": {"slug": doctor_specialization},
             "date": date,
         }
-        errors, is_created = self.appointments_repository.create_appointment(data)
+        if self.appointments_repository.is_exist(patient_slug, doctor_slug, date):
+            return {
+                "data": {"errors": {"general": ["appointments alredy exist"]}},
+                "status": status.HTTP_409_CONFLICT,
+            }
+        appointment, is_created = self.appointments_repository.create_appointment(data)
         if is_created:
             return {
                 "data": {
-                    "message": "appointment successful created",
+                    "message": appointment,
                 },
                 "status": status.HTTP_200_OK,
             }
         return {
-            "data": {"errors": errors},
+            "data": {"errors": appointment},
             "status": status.HTTP_400_BAD_REQUEST,
         }
 

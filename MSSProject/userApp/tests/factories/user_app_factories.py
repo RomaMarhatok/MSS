@@ -161,4 +161,5 @@ class AppointmentsFactory(DjangoModelFactory):
 
     doctor = SubFactory(DoctorFactory)
     patient = SubFactory(PatientFactory)
+    doctor_specialization = SubFactory(DoctorSpecializationFactory)
     date = fake.date_time()
