@@ -7,6 +7,7 @@ from userApp.views.patient.doctor_view import DoctorView
 from userApp.views.patient.doctor_specialization_view import DoctorSpecializationView
 from userApp.views.patient.document_type_view import DocumentTypeView
 from userApp.views.patient.appointments_view import AppointmentsView
+from userApp.views.doctor.patient_treatments_view import PatientTreatmentView
 
 # doctor view
 from userApp.views.doctor.doctor_appointments_view import DoctorAppointments
@@ -109,6 +110,23 @@ urlpatterns = [
                     "<str:patient_slug>/",
                     DoctorAppointments.as_view({"get": "retrieve"}),
                     name="appoitments-retrieve",
+                ),
+            ]
+        ),
+    ),
+    path(
+        "patient/treatment/",
+        include(
+            [
+                path(
+                    "<str:patient_slug>/",
+                    PatientTreatmentView.as_view({"get": "list"}),
+                    name="treatment-history-list",
+                ),
+                path(
+                    "<str:patient_slug>/<str:treatment_slug>/",
+                    PatientTreatmentView.as_view({"get": "retrieve"}),
+                    name="treatment-history-retrieve",
                 ),
             ]
         ),
