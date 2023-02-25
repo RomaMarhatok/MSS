@@ -15,7 +15,7 @@ class TreatmentHistoryService:
                 )
             )
             return {
-                "data": {"treatment histories": treatments_histories},
+                "data": {"treatment_histories": treatments_histories},
                 "status": status.HTTP_200_OK,
             }
         return {"data": ["patient don't exist"], "status": status.HTTP_404_NOT_FOUND}
@@ -28,10 +28,10 @@ class TreatmentHistoryService:
                 )
                 return {"data": treatment, "status": status.HTTP_200_OK}
             return {
-                "data": {"errors"["treatment history don't exist"]},
+                "data": {"errors": ["treatment history don't exist"]},
                 "status": status.HTTP_404_NOT_FOUND,
             }
         return {
-            "data": {"errors"["patient don't exist"]},
+            "data": {"errors": ["patient don't exist"]},
             "status": status.HTTP_404_NOT_FOUND,
         }

@@ -72,7 +72,7 @@ class AppointmentsService:
         if is_created:
             return {
                 "data": {
-                    "message": appointment,
+                    "appointment": appointment,
                 },
                 "status": status.HTTP_200_OK,
             }
