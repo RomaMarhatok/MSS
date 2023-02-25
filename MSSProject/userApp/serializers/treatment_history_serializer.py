@@ -1,8 +1,9 @@
 from rest_framework.serializers import ModelSerializer
 from typing import OrderedDict
-from ..models import TreatmentHistory, Doctor, Patient
+from ..models import TreatmentHistory, Doctor, Patient, User
 from .doctor_serializer import DoctorSerializer
 from .patient_serializer import PatientSerializer
+from ..repositories.user_repository import UserRepository
 
 
 class TreatmentHistorySerializer(ModelSerializer):
@@ -42,8 +43,14 @@ class TreatmentHistorySerializer(ModelSerializer):
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)
-        rep["doctor"]["user"].pop("login")
-        rep["doctor"]["user"].pop("password")
+        rep.pop("doctor")
         rep["patient"]["user"].pop("login")
         rep["patient"]["user"].pop("password")
         return rep
+
+    def __get_user_full_name(self, user: User) -> str:
+        user_repository = UserRepository()
+        user = user_repository.get_user_by_slug(user.slug)
+        return user_repository.get_user_personal_info(user, serialized=True).get(
+            "full_name", ""
+        )

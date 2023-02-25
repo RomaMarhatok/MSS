@@ -63,7 +63,7 @@ class AppointmentsSerializer(ModelSerializer):
         rep["doctor"]["user"].pop("login")
         rep["doctor"]["user"].pop("password")
         rep.pop("patient")
-        rep["doctor"]["user"]["full_name"] = self.__get_doctor_full_name(
+        rep["doctor"]["user"]["full_name"] = self.__get_user_full_name(
             instance.doctor.user
         )
         return rep
@@ -71,12 +71,16 @@ class AppointmentsSerializer(ModelSerializer):
     def doctor_representation(self, instance: Appointments):
         rep = super().to_representation(instance)
         rep["date"] = parse_date_iso_format(rep["date"])
-        rep["patient"]["user"].pop("login")
-        rep["patient"]["user"].pop("password")
+        slug = rep["patient"]["user"]["slug"]
+        rep["patient"]["user"] = {
+            "full_name": self.__get_user_full_name(instance.patient.user),
+            "slug": slug,
+        }
         rep.pop("doctor")
+        rep.pop("doctor_specialization")
         return rep
 
-    def __get_doctor_full_name(self, user: User) -> str:
+    def __get_user_full_name(self, user: User) -> str:
         user_repository = UserRepository()
         user = user_repository.get_user_by_slug(user.slug)
         return user_repository.get_user_personal_info(user, serialized=True).get(
