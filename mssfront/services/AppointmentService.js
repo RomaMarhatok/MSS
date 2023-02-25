@@ -11,7 +11,7 @@ class AppointmentService extends RequestService{
     }
     async createAppointments(cb,errorCb,data){
         return await this.post(`/mss/appointments/create/`,data).then(response=>{
-            cb(response.status,response.data.appointments)
+            cb(response.status,response.data.appointment)
         }).catch(error=>{
             errorCb(error.response.status,error.response.data.errors??{})
         })
