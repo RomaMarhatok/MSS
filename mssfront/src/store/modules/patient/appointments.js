@@ -9,7 +9,6 @@ const getters = {
             console.log("getters getAllAppointmentsForCalendar",state.appointments)
             console.log(state.appointemnts)
             let calendarAppointments = state.appointments.map((appointment,index)=>{
-                if(typeof appointment !="undefined"){
                     console.log(appointment)
                     let [days,months,years] = appointment.date.split(" ")[0].split("/")
                     let [hours,minutes] = appointment.date.split(" ")[1].split(":")
@@ -22,7 +21,6 @@ const getters = {
                         },
                         dates:date
                     }
-                }
                 // date example "23/8/2006 10:28"
                 
             })
@@ -31,8 +29,10 @@ const getters = {
         },
         getRecentAppointments:(state)=>{
             console.log("getters getRecentAppointments",state.appointments)
-            let recentAppointments = state.appointemnts.map(appointment=>{
+            let recentAppointments = state.appointments.map(appointment=>{
                 // date example "23/8/2006 10:28"
+                console.log(appointment)
+
                 let [days,months,years] = appointment.date.split(" ")[0].split("/")
                 let [hours,minutes] = appointment.date.split(" ")[1].split(":")
                 let date = new Date(years,months-1,days,hours,minutes)
@@ -72,9 +72,7 @@ const actions = {
         await appointmentService.createAppointments( 
             (status,appointment)=>{
                 commit("response/setStatus", status, { root:true })
-                if(appointment !==null || appointment!=="undefined"){
-                    commit("addAppointment",appointment)
-                }
+                commit("addAppointment",appointment)
             },
             (status,error)=>{
                 commit("response/setStatus", status, { root:true })
