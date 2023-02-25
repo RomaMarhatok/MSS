@@ -13,8 +13,8 @@ class DoctorView(GenericViewSet):
         doctor_service = DoctorService()
         data = doctor_service.get_doctors()
         return JsonResponse(
-            data=data,
-            status=status.HTTP_200_OK,
+            data=data["data"],
+            status=data["status"],
         )
 
     def retrieve(self, request: HttpRequest, doctor_slug: str = None):
