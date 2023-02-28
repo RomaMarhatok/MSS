@@ -17,8 +17,8 @@ onBeforeMount(() => {
 const imageSectionProps = reactive({
     links: {
         doctors: "#/doctors/",
-        appoitments: `#/user/${slug.value}/appointments/`,
-        documents: `#/user/${slug.value}/documents/`,
+        appoitments: `#/home/appointments/`,
+        documents: `#/home/documents/`,
     },
 })
 </script>
