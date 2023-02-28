@@ -15,5 +15,12 @@ class DoctorService extends RequestService {
             errorCb(error)
         })
     }
+    async getAppointmentsForDoctor(cb,errorCb,doctor_slug){
+        return await this.get(`/mss/doctor/appointments/${doctor_slug}/`).then(response=>{
+                console.log(response)
+                cb(response.data.doctor_appointments)
+            }
+        ).error(error=>errorCb(error))
+    }
 }
 export default DoctorService
