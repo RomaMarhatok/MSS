@@ -53,7 +53,7 @@ const getters = {
 
 const actions = {
     async fetchAppointments({commit,state},slug){
-        await appointmentService.getAppointments(
+        await appointmentService.getAppointmentsForUser(
             slug,
             appointments=>commit("setAppointments",appointments),
             error=>console.log(error)
