@@ -1,8 +1,7 @@
 <script setup>
 import { defineProps, computed, getCurrentInstance } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
+import { useRouter } from 'vue-router';
 const router = useRouter()
-const route = useRoute()
 const props = defineProps({
     document: Object
 })
@@ -23,8 +22,7 @@ const getIcon = computed(() => {
 })
 function redirectOnSingleDocumentPage() {
     const documentSlug = component.vnode.key
-    const userSlug = route.params.userSlug
-    router.push(`/user/${userSlug}/document/${documentSlug}/`)
+    router.push(`/home/document/${documentSlug}/`)
 }
 </script>
 <template>

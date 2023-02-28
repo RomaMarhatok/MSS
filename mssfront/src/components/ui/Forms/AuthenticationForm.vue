@@ -21,7 +21,7 @@ function submitForm() {
     store.dispatch("authentication/authenticate", formData).then(status => {
         console.log("status authentication", status)
         if (status == 200) {
-            router.push("/user/" + store.state.user.slug + "/home/")
+            router.push("/home/")
         }
     })
 }

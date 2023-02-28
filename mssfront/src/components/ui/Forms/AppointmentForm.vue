@@ -27,7 +27,7 @@ function submit() {
     store.dispatch("appointments/fetchCreateAppointemtns", formData).then(responseStatus => {
         if (responseStatus == 200) {
             store.dispatch("response/resetErrors")
-            router.push("/user/" + store.state.user.slug + "/home/")
+            router.push("/home/")
         }
     })
 
