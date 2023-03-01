@@ -14,11 +14,11 @@ const homeLink = reactive({
   link: "#/"
 })
 const loginLink = reactive({
-  text: "Log in",
+  text: "SignUp",
   link: "#/registration/",
 })
 const signUp = reactive({
-  text: "Sign up",
+  text: "Login",
   link: "#/authentication/"
 })
 </script>
