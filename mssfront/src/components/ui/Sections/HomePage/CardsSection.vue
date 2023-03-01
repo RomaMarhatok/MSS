@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from "vue";
-import homePageCard from "@/components/layout/Cards/DomePageCard.vue"
+import homePageCard from "@/components/layout/Cards/HomePageCard.vue"
 const title = ref("SOME TEXT")
 const text = ref("Lorem Ipsum is simply dummy text of the printing and typesetting industry.")
 </script>
