@@ -1,12 +1,13 @@
 <script setup>
-import { defineProps, computed, getCurrentInstance } from 'vue';
+import "primevue/resources/themes/saga-blue/theme.css"
+import "primevue/resources/primevue.min.css"
+import { defineProps, computed } from 'vue';
 import { useRouter } from 'vue-router';
+import Card from 'primevue/card'
 const router = useRouter()
 const props = defineProps({
     document: Object
 })
-const component = getCurrentInstance()
-
 const getIcon = computed(() => {
     let className = ""
     if (props.document.document_type.name == "test") {
@@ -20,21 +21,21 @@ const getIcon = computed(() => {
     }
     return className
 })
-function redirectOnSingleDocumentPage() {
-    const documentSlug = component.vnode.key
-    router.push(`/home/document/${documentSlug}/`)
-}
+console.log(props)
+const redirect = (slug) => router.push(`/home/document/${slug}/`)
 </script>
 <template>
-    <button class="p-3 cursor-pointer bg-none border-none bg-white rounded-2xl hover:bg-sky-300 hover:text-white"
-        @click="redirectOnSingleDocumentPage">
-        <div class="text-6xl">
-            <font-awesome-icon :icon="getIcon" />
-        </div>
-        <div>
-            <p>
-                {{ props.document.name }}
-            </p>
-        </div>
-    </button>
+    <Card @click="redirect(props.document.slug)" class="w-full  hover:cursor-pointer">
+        <template #title>
+            <div class="flex flex-row gap-2 text-center align-bottom">
+                <div>
+                    <font-awesome-icon :icon="getIcon" />
+                </div>
+                {{ props.document.document_type.name }}
+            </div>
+        </template>
+        <template #content>
+            <p>{{ props.document.name }}</p>
+        </template>
+    </Card>
 </template>
