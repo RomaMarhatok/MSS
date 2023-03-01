@@ -1,7 +1,8 @@
 <script setup>
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router';
-import { reactive, onBeforeMount, computed } from 'vue';
+import { onBeforeMount, computed } from 'vue';
+import TabMenu from '@/components/ui/Menu/TabMenu.vue';
 import imageSection from '@/components/ui/Sections/UserPages/PersonalInfoPage/ImageSection.vue'
 import healthInfoSection from '@/components/ui/Sections/UserPages/PersonalInfoPage/HealthInfoSection.vue';
 import CalendarSection from '@/components/ui/Sections/UserPages/PersonalInfoPage/CalendarSection.vue';
@@ -14,19 +15,13 @@ onBeforeMount(() => {
     store.dispatch("user/fetchUserPersonalInfo", slug.value)
     store.dispatch("appointments/fetchAppointments", slug.value)
 })
-const imageSectionProps = reactive({
-    links: {
-        doctors: "#/doctors/",
-        appoitments: `#/home/appointments/`,
-        documents: `#/home/documents/`,
-    },
-})
 </script>
 <template>
+    <TabMenu />
     <main>
         <section class="flex__section flex_row">
             <healthInfoSection />
-            <imageSection :links="imageSectionProps.links" />
+            <imageSection />
         </section>
         <section class="flex__section flex_column">
             <section class="flex__section flex_row">
