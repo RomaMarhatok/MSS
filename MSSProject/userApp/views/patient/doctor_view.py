@@ -1,4 +1,3 @@
-from rest_framework import status
 from rest_framework.viewsets import GenericViewSet
 from django.http import JsonResponse, HttpRequest
 from ...permissions.is_user_authenticated import IsUserAuthenticated
