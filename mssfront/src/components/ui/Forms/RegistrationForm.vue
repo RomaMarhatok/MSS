@@ -23,9 +23,9 @@ onBeforeMount(() => {
 
 function submitForm() {
     store.dispatch("response/resetErrors")
-    store.dispatch("registration/registrateUser", formData).then((message) => {
-        console.log("submit", message)
-        if (message) {
+    store.dispatch("registration/registrateUser", formData).then((status) => {
+        console.log("submit", status)
+        if (status == 200) {
             router.push("/")
             store.dispatch("response/resetErrors")
             store.dispatch("registration/resetMessage")
