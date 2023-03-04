@@ -11,3 +11,11 @@ const items = ref([
 <template>
     <TabMenu :model="items"></TabMenu>
 </template>
+<style>
+@media screen and (max-width:515px) {
+    .p-tabmenu-nav {
+        display: flex;
+        flex-direction: column;
+    }
+}
+</style>
