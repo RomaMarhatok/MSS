@@ -70,7 +70,9 @@ class AppointmentsRepository:
             False,
         )
 
-    def delete_appointment(self, doctor: Doctor = None, patient: Patient = None) -> int:
+    def delete_appointment(
+        self, doctor: Doctor = None, patient: Patient = None
+    ) -> int | None:
         instance = Appointments.objects.filter(doctor=doctor, patient=patient)
         if instance.exists():
             count_of_deleted_instantes, _ = instance.first().delete()
