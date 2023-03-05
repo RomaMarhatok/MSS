@@ -97,6 +97,7 @@ urlpatterns = [
             ]
         ),
     ),
+    # doctor urls
     path(
         "doctor/appointments/<str:doctor_slug>/",
         include(
@@ -119,7 +120,7 @@ urlpatterns = [
         include(
             [
                 path(
-                    "<str:patient_slug>/",
+                    "treatments/<str:patient_slug>/<str:doctor_specialization_slug>/",
                     PatientTreatmentView.as_view({"get": "list"}),
                     name="treatment-history-list",
                 ),
