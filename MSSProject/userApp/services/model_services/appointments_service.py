@@ -37,7 +37,7 @@ class AppointmentsService:
             "status": status.HTTP_200_OK,
         }
 
-    def get(self, patient_slug: str, doctor_slug: str) -> dict:
+    def get_patient_appointment(self, patient_slug: str, doctor_slug: str) -> dict:
         if patient_slug is None or doctor_slug is None:
             return {
                 "data": {"errors": ["data don't provided"]},

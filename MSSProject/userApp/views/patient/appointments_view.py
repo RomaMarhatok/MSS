@@ -18,7 +18,7 @@ class AppointmentsView(GenericViewSet):
 
     def retrieve(self, request: HttpRequest, patient_slug=None, doctor_slug=None):
         appointments_service = AppointmentsService()
-        data = appointments_service.get(patient_slug, doctor_slug)
+        data = appointments_service.get_patient_appointment(patient_slug, doctor_slug)
         return JsonResponse(
             data=data["data"],
             status=data["status"],
