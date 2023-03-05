@@ -75,6 +75,8 @@ class UserPersonalInfoSerializer(ModelSerializer):
                 request: WSGIRequest = self.context["request"]
                 photo_url = instance.image.url
                 rep["image"] = request.build_absolute_uri(photo_url)
+            else:
+                rep["image"] = "https://placehold.co/400"
         return rep
 
     def __get_full_name(self, personal_info: dict):
