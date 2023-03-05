@@ -44,13 +44,6 @@ class TreatmentHistorySerializer(ModelSerializer):
     def to_representation(self, instance):
         rep = super().to_representation(instance)
         rep.pop("doctor")
-        rep["patient"]["user"].pop("login")
-        rep["patient"]["user"].pop("password")
+        rep["patient_slug"] = rep["patient"]["user"]["slug"]
+        rep.pop("patient")
         return rep
-
-    def __get_user_full_name(self, user: User) -> str:
-        user_repository = UserRepository()
-        user = user_repository.get_user_by_slug(user.slug)
-        return user_repository.get_user_personal_info(user, serialized=True).get(
-            "full_name", ""
-        )
