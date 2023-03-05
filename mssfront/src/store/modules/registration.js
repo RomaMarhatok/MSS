@@ -1,6 +1,7 @@
 import RegistrationService from "@/../services/RegistrationService"
 
 const state = {
+    status:0,
     message:"",
 }
 
@@ -14,15 +15,16 @@ const actions = {
         const registrationService = new RegistrationService()
         await registrationService.registerUser(
             dataFromForm,
-            message=>{
+            (status,message)=>{
+                commit("setStatus",status)
                 commit("setMessage",message)
             },
             error=>commit("response/setErrors", error,{ root:true })
         )
 
         return new Promise((resolve,reject)=>{
-            resolve(state.message)
-            reject("")
+            resolve(state.status)
+            reject(null)
         })      
     },
     async resetMessage({commit}){
@@ -32,9 +34,13 @@ const actions = {
 
 const mutations = {
     setMessage:(state,message)=>{
-        console.log("mutation registration",message)
+        console.log("mutation registration message",message)
         state.message=message
     },
+    setStatus:(state,status)=>{
+        console.log("mutation registration status",status)
+        state.status = status
+    }
 }
 
 export default {
