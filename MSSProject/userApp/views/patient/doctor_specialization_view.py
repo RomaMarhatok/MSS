@@ -11,7 +11,7 @@ class DoctorSpecializationView(GenericViewSet):
 
     def list(self, request: HttpRequest):
         doctor_service = DoctorTypeService()
-        data = doctor_service.get_doctor_types()
+        data = doctor_service.get_doctor_specializations()
         return JsonResponse(
             data=data["data"],
             status=data["status"],
