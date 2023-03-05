@@ -25,4 +25,6 @@ class ImageForAnlyzeSerializer(ModelSerializer):
         ):
             request: WSGIRequest = self.context["request"]
             rep["image"] = request.build_absolute_uri(instance.image.url)
+        else:
+            rep["image"] = "https://placehold.co/400"
         return rep
