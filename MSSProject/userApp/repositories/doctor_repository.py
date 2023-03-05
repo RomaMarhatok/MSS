@@ -39,6 +39,13 @@ class DoctorRepository:
     def get_doctor_by_slug(self, slug) -> QuerySet[Doctor]:
         return Doctor.objects.filter(user__slug=slug)
 
+    def get_doctors_by_specialization(
+        self, doctor_specialization_slug: str
+    ) -> QuerySet[tuple[str]]:
+        return DoctorDoctorSpecialization.objects.filter(
+            doctor_specialization__slug=doctor_specialization_slug
+        ).values_list("doctor__user__slug")
+
     def get_doctor_summary(self, doctor, serialized=False) -> DoctorSummary | dict:
         summary_serialized = DoctorSummarySerializer(instance=doctor.doctorsummary).data
         return summary_serialized if serialized else doctor.doctorsummary
