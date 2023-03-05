@@ -1,5 +1,4 @@
 import UserService from "@/../services/UserService"
-import getBaseApi from "@/apis/baseApi"
 const state = {
     slug:"",
     role:"",
@@ -27,17 +26,15 @@ const getters = {
             }
         ]
     },
-    getPersonalInfo:(state,getters)=>{
+    getPersonalInfo:(state)=>{
         return {
-            image:getters.getImage,
+            image:state.personalInfo.image,
             full_name:state.personalInfo.full_name,
             location:state.personalInfo.location,
             address:state.personalInfo.address,
         }
     },
-    getImage:(state)=>{
-        return state.personalInfo.image ? getBaseApi.getUri()+state.personalInfo.image:undefined
-    },
+
 }
 
 const actions = {
