@@ -77,7 +77,6 @@ class AppointmentsSerializer(ModelSerializer):
             "slug": slug,
         }
         rep.pop("doctor")
-        rep.pop("doctor_specialization")
         return rep
 
     def __get_user_full_name(self, user: User) -> str:
