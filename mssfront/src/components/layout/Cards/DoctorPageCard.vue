@@ -15,13 +15,13 @@ const props = defineProps({
 const getImageSrc = computed(() => {
     return getBaseApi.getUri() + props.personalInfo.image
 })
-function redirectOnSingleDoctorPage() {
+function redirect() {
     const slug = instance.vnode.key
     router.push(`/doctor/${slug}/`)
 }
 </script>
 <template>
-    <div class="card" @click="redirectOnSingleDoctorPage">
+    <div class="card" @click="redirect">
         <div class="img-container">
             <img class="card-img" :src="getImageSrc">
             <div class="container">
