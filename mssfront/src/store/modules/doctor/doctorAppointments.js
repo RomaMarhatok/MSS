@@ -18,15 +18,15 @@ const getters = {
             let [hours,minutes] = appointment.date.split(" ")[1].split(":")
             let date = new Date(years,months-1,days,hours,minutes)
             console.log(date)
-            let currentDate = new Date()
-            let dateDifference = Math.abs(date - currentDate)
-            let diffDays = Math.ceil(dateDifference / (1000 * 60 * 60 * 24)); 
-            if(diffDays <= 10000000) {
-                return {
-                    label:`date: ${appointment.date.split(" ")[0]} time: ${appointment.date.split(" ")[1]}`,
-                    text:`appointments to ${appointment.doctor_specialization.name}`,
-                }
+            // let currentDate = new Date()
+            // let dateDifference = Math.abs(date - currentDate)
+            // let diffDays = Math.ceil(dateDifference / (1000 * 60 * 60 * 24)); 
+            // if(diffDays <= 10000000) {
+            return {
+                label:`date: ${appointment.date.split(" ")[0]} time: ${appointment.date.split(" ")[1]}`,
+                text:`appointments to ${appointment.doctor_specialization.name}`,
             }
+            // }
         })
         return recentAppointments
     }
