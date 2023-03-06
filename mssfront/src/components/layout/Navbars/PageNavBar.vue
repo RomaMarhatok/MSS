@@ -1,19 +1,14 @@
 <script setup>
-import { useStore } from 'vuex'
-import { useRoute } from 'vue-router';
-import { reactive, defineProps, computed } from 'vue'
+import { reactive, defineProps } from 'vue'
 import documentPageLink from '@/components/common/Links/DocumentPageLink.vue';
-const route = useRoute()
-const store = useStore()
 const props = defineProps({
     activeLinks: {
         type: Array,
         default: () => [false, false, false]
     },
 })
-const slug = computed(() => store.state.user.slug ? store.state.user.slug : route.params.userSlug)
 const documentLink = reactive({
-    link: `#/user/${slug.value}/documents/`,
+    link: `#/home/documents/`,
     text: "Documents",
     active: props.activeLinks[0],
 })

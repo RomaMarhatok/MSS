@@ -1,4 +1,3 @@
-from rest_framework import status
 from rest_framework.viewsets import GenericViewSet
 from django.http import JsonResponse, HttpRequest
 from ...permissions.is_user_authenticated import IsUserAuthenticated
@@ -13,8 +12,8 @@ class DoctorView(GenericViewSet):
         doctor_service = DoctorService()
         data = doctor_service.get_doctors()
         return JsonResponse(
-            data=data,
-            status=status.HTTP_200_OK,
+            data=data["data"],
+            status=data["status"],
         )
 
     def retrieve(self, request: HttpRequest, doctor_slug: str = None):

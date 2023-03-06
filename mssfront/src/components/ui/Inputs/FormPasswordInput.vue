@@ -5,7 +5,7 @@ import { useStore } from 'vuex';
 const store = useStore()
 const passwordInput = reactive({
     labelText: "Password",
-    inputPlaceholder: "password",
+    inputPlaceholder: "Password",
     inputType: "password",
     labelFor: "password_input",
 })

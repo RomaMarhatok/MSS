@@ -33,7 +33,7 @@ class DoctorService:
     def is_exist(self, slug: str) -> bool:
         if self.user_repository.is_user_exist_by_slug(slug):
             user = self.user_repository.get_user_by_slug(slug)
-            if user.role == "doctor":
+            if user.role.name == "doctor":
                 return True
         return False
 

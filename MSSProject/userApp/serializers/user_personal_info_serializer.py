@@ -7,6 +7,7 @@ from ..models import (
 from rest_framework.serializers import ValidationError
 from ..validators.text_validator import TextValidator
 from .user_serializer import UserSerializer
+from django.core.handlers.wsgi import WSGIRequest
 
 
 class UserPersonalInfoSerializer(ModelSerializer):
@@ -64,10 +65,18 @@ class UserPersonalInfoSerializer(ModelSerializer):
             for field in self.context["not_necessary_fields"]:
                 if field in rep:
                     rep.pop(field)
+
         full_name = self.__get_full_name(rep)
         rep.update({"full_name": full_name})
         if not instance.image.storage.exists(instance.image.name):
             rep.pop("image")
+        else:
+            if "request" in self.context:
+                request: WSGIRequest = self.context["request"]
+                photo_url = instance.image.url
+                rep["image"] = request.build_absolute_uri(photo_url)
+            else:
+                rep["image"] = "https://placehold.co/400"
         return rep
 
     def __get_full_name(self, personal_info: dict):

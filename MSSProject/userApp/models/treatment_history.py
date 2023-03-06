@@ -4,6 +4,8 @@ from ..utils.slug_utils import generate_slug_from_str
 from .doctor import Doctor
 from .patient import Patient
 
+# TODO add short description
+
 
 class TreatmentHistory(models.Model):
     slug = models.SlugField(max_length=100, unique=True)

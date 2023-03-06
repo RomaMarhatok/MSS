@@ -3,19 +3,19 @@ import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
 import { onBeforeMount, ref, computed } from 'vue';
 import baseLink from '@/components/common/Links/Base/BaseLink.vue';
+import TabMenu from '@/components/ui/Menu/TabMenu.vue'
 const store = useStore()
 const route = useRoute()
-const redirectHref = ref(`#/user/${route.params.userSlug}/documents/`)
+const redirectHref = ref(`#/home/documents/`)
 const documentSlug = route.params.documentSlug
 const document = computed(() => store.getters["documents/getDocumentBySlug"](documentSlug))
 const creator = computed(() => store.getters["doctors/getDoctorBySlug"](document.value.creator.slug))
 onBeforeMount(() => {
     store.dispatch("doctors/fetchAllDoctors")
 })
-
-
 </script>
 <template>
+    <TabMenu />
     <div class="main">
         <div class="main-container">
             <div class="document-header">

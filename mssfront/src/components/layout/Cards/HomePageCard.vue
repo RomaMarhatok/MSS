@@ -9,8 +9,7 @@ const props = defineProps({
 <template>
     <Card class="w-60 shadow-2xl border rounded-2xl">
         <template #header>
-            <img src="https://mdbootstrap.com/img/new/standard/city/044.jpg" class="max-w-full h-auto rounded-t-2xl"
-                alt="">
+            <img src="https://mdbootstrap.com/img/new/standard/city/044.jpg" class="max-w-full h-auto rounded-t-2xl" alt="">
         </template>
         <template #title>
             <p class="bg-custom-dark-blue text-custom-dark-aqua bg-c text-base font-bold text-center pt-3">

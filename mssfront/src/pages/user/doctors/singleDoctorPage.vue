@@ -2,7 +2,7 @@
 import { computed } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
-import PageHeader from '@/components/layout//Headers/PageHeader.vue';
+import TabMenu from '@/components/ui/Menu/TabMenu.vue';
 import DataSection from '@/components/ui/Sections/UserPages/DoctorsPage/DataSection.vue';
 import ImageSection from '@/components/ui/Sections/UserPages/DoctorsPage/ImageSection.vue'
 
@@ -13,7 +13,7 @@ const doctor = computed(() => store.getters["doctors/getDoctorBySlug"](doctorSlu
 </script>
 <template>
     <div>
-        <PageHeader />
+        <TabMenu />
         <main class="main-data-section">
             <div class="w-72">
                 <ImageSection :fullName="doctor.personal_info.full_name" :image="doctor.personal_info.image" />

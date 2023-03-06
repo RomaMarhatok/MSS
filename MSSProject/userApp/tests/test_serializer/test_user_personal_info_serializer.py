@@ -4,6 +4,7 @@ from userApp.serializers.user_serializer import UserSerializer
 from userApp.serializers.user_personal_info_serializer import UserPersonalInfoSerializer
 from userApp.serializers.role_serializer import RoleSerializer
 from rest_framework.validators import ValidationError
+from django.test.client import RequestFactory
 
 
 @pytest.mark.django_db
@@ -76,4 +77,13 @@ def test_validation_error(user_personal_info_with_image_fixture):
 @pytest.mark.django_db
 def test_deserialize(factory_user_personal_info_fixture):
     serializer = UserPersonalInfoSerializer(instance=factory_user_personal_info_fixture)
+    assert isinstance(serializer.data, dict)
+
+
+@pytest.mark.django_db
+def test_serialization_with_absolute_image_url(factory_user_personal_info_fixture):
+    request = RequestFactory().request()
+    serializer = UserPersonalInfoSerializer(
+        instance=factory_user_personal_info_fixture, context={"request": request}
+    )
     assert isinstance(serializer.data, dict)

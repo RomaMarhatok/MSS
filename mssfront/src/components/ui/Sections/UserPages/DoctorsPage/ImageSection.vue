@@ -1,7 +1,7 @@
 <script setup>
-import { defineProps, computed, ref } from 'vue';
 import { useStore } from 'vuex'
-import getBaseApi from '@/apis/baseApi';
+import { defineProps, ref } from 'vue';
+import Image from 'primevue/image'
 import baseLink from '@/components/common/Links/Base/BaseLink.vue';
 import AppointmentForm from '@/components/ui/Forms/AppointmentForm.vue';
 const store = useStore()
@@ -10,9 +10,6 @@ const props = defineProps({
     image: String
 })
 const show = ref(false)
-const getImageSrc = computed(() => {
-    return getBaseApi.getUri() + props.image
-})
 function showAppintmentForm() {
     show.value = !show.value
     store.dispatch('response/resetErrors')
@@ -20,7 +17,7 @@ function showAppintmentForm() {
 </script>
 <template>
     <section class="personal-image">
-        <img class="img" :src="getImageSrc">
+        <Image class="img" :src="props.image" />
         <div class="content">
             <p>{{ fullName }}</p>
         </div>

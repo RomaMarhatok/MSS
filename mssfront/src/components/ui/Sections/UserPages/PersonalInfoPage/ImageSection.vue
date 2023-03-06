@@ -1,26 +1,19 @@
 <script setup>
-import { defineProps, computed } from 'vue'
+import { computed } from 'vue'
 import { useStore } from 'vuex';
+import Image from 'primevue/image'
 const store = useStore()
 const personalInfo = computed(() => store.getters["user/getPersonalInfo"])
-const props = defineProps({
-    links: Object,
-})
 </script>
 <template>
     <section class="personal-image">
-        <div v-if="personalInfo.image">
-            <img class="img" :src="personalInfo.image" />
+        <div class="img">
+            <Image :src="'https://placehold.co/300x200/'" />
         </div>
         <div class="content">
             <p>{{ personalInfo.full_name }}</p>
             <p>{{ personalInfo.location }}</p>
             <p class="whitespace-pre text-center">{{ personalInfo.address }}</p>
-            <section class="href__section">
-                <a :href="props.links.doctors">Doctors</a>
-                <a :href="props.links.appoitments">Appoitments</a>
-                <a :href="props.links.documents">Documents</a>
-            </section>
         </div>
     </section>
 </template>
@@ -47,6 +40,7 @@ const props = defineProps({
     margin-top: 2px;
 }
 
+
 .img {
     width: 100%;
     height: auto;
@@ -54,37 +48,30 @@ const props = defineProps({
     border-top-right-radius: 5px;
 }
 
-.href__section {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    gap: 10px;
-    color: black;
-}
-
-.href__section>a {
-    text-transform: uppercase;
-    text-decoration: none;
-    letter-spacing: 0.15em;
-    color: inherit;
-}
-
-.href__section>a:hover {
-    transition: 100ms;
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-
-}
-
-@media screen and (max-width: 600px) {
-    .href__section {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        gap: 10px;
-        color: black;
+@media screen and (max-width: 900px) {
+    .personal-image {
+        flex-direction: row;
     }
 
+    .content {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+@media screen and (max-width: 630px) {
+    .personal-image {
+        flex-direction: column;
+    }
+
+    .content {
+        width: 100%;
+        text-align: center;
+    }
+
+    .img {
+        display: flex;
+        justify-content: center;
+    }
 }
 </style>

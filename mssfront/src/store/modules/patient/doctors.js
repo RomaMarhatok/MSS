@@ -15,7 +15,14 @@ const getters = {
         return state.doctors.filter(doctor=>doctor.doctor_types.some(dt=>dt.slug==doctorType.slug))
     },
     getDoctorByDoctorTypeSlug:(state)=>(doctorTypeSlug)=>{
-        return state.doctors.filter(doctor=>doctor.doctor_types.some(dt=>dt.slug==doctorTypeSlug))
+        const filteredDoctors = state.doctors.filter(doctor=>doctor.doctor_types.some(dt=>dt.slug==doctorTypeSlug))
+        return filteredDoctors
+        // return filteredDoctors.map(doctor=>{
+        //     return {
+        //         slug:doctor.doctor_slug,
+        //         full_name:doctor.personal_info.full_name
+        //     }
+        // })
     },
 }
 

@@ -3,9 +3,13 @@ from ..models.role import Role
 from ..models.user import User
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import BasePermission
+from rest_framework.exceptions import NotAcceptable
+from rest_framework import status
 
 
 class IsDoctor(BasePermission):
+    message = "Access denied for not doctor user"
+
     def has_permission(self, request: HttpRequest, view) -> bool:
         if "Authorization" not in request.headers:
             return False
@@ -18,4 +22,4 @@ class IsDoctor(BasePermission):
         token: User = Token.objects.filter(key=key).first().user
         if token.role.name == "doctor":
             return True
-        return False
+        raise NotAcceptable(detail=self.message)
