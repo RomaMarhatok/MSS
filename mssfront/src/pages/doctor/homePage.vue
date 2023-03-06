@@ -1,7 +1,6 @@
 <script setup>
 import PageHeader from '@/components/layout/Headers/PageHeader.vue';
-import AppointmentsListSection from '@/components/ui/Sections/DoctorPage/AppointmentsListSection.vue';
-import TreatmentHistoryListSection from '@/components/ui/Sections/DoctorPage/TreatmentHistoryListSection.vue';
+import AppointmentsListSection from '@/components/ui/Sections/DoctorPage/Appointments/AppointmentsListSection.vue';
 import { onBeforeMount } from 'vue';
 import { useStore } from 'vuex';
 const store = useStore()
@@ -14,7 +13,6 @@ onBeforeMount(() => {
         <PageHeader></PageHeader>
         <div class="flex flex-row m-2 gap-5">
             <AppointmentsListSection></AppointmentsListSection>
-            <TreatmentHistoryListSection></TreatmentHistoryListSection>
         </div>
     </div>
 </template>
