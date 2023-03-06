@@ -1,9 +1,8 @@
 from rest_framework.serializers import ModelSerializer
 from typing import OrderedDict
-from ..models import TreatmentHistory, Doctor, Patient, User
+from ..models import TreatmentHistory, Doctor, Patient
 from .doctor_serializer import DoctorSerializer
 from .patient_serializer import PatientSerializer
-from ..repositories.user_repository import UserRepository
 
 
 class TreatmentHistorySerializer(ModelSerializer):
@@ -13,7 +12,11 @@ class TreatmentHistorySerializer(ModelSerializer):
     class Meta:
         model = TreatmentHistory
         fields = (
+            "title",
+            "short_description",
+            "conclusion",
             "description",
+            "date",
             "doctor",
             "patient",
             "slug",
@@ -36,8 +39,10 @@ class TreatmentHistorySerializer(ModelSerializer):
         patient = Patient.objects.get(
             user__login=validated_data["patient"]["user"]["login"]
         )
+        validated_data.pop("doctor")
+        validated_data.pop("patient")
         instance, _ = TreatmentHistory.objects.get_or_create(
-            description=validated_data["description"], doctor=doctor, patient=patient
+            **validated_data, doctor=doctor, patient=patient
         )
         return instance
 

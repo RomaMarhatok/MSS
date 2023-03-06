@@ -125,7 +125,11 @@ def image_for_analyzes_with_image_fixture(image_for_analyzes_fixture) -> dict:
 @pytest.fixture
 def treatment_history_fixture(doctor_fixture, patient_fixture) -> dict:
     return {
+        "title": fake.text(max_nb_chars=100),
+        "short_description": fake.text(max_nb_chars=1000),
         "description": fake.text(max_nb_chars=10000),
+        "conclusion": fake.text(max_nb_chars=10000),
+        "date": fake.date_time(),
         "doctor": doctor_fixture,
         "patient": patient_fixture,
     }

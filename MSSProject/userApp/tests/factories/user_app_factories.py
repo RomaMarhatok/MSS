@@ -125,7 +125,11 @@ class TreatmentHistoryFactory(DjangoModelFactory):
     class Meta:
         model = TreatmentHistory
 
+    title = fake.text(max_nb_chars=100)
+    short_description = fake.text(max_nb_chars=1000)
     description = fake.text(max_nb_chars=10000)
+    conclusion = fake.text(max_nb_chars=10000)
+    date = fake.date_time()
     doctor = SubFactory(DoctorFactory)
     patient = SubFactory(PatientFactory)
 
