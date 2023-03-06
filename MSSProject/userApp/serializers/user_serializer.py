@@ -8,7 +8,6 @@ from ..models import (
 from rest_framework.serializers import ValidationError
 from ..validators.password_validator import PasswordValidator
 from ..validators.login_validator import LoginValidator
-from ..validators.text_validator import TextValidator
 
 
 class UserSerializer(ModelSerializer):

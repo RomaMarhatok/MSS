@@ -1,5 +1,4 @@
 from rest_framework.serializers import ModelSerializer
-from typing import OrderedDict
 from ..models import (
     User,
     UserLocation,

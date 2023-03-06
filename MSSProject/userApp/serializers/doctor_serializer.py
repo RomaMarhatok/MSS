@@ -1,17 +1,10 @@
 from rest_framework.serializers import ModelSerializer
 from typing import OrderedDict
 from ..models import (
-    DoctorSpecialization,
     Doctor,
     User,
-    DoctorDoctorSpecialization,
-    UserPersonalInfo,
 )
 from .user_serializer import UserSerializer
-from .doctor_specialization_serializer import (
-    DoctorSpecializationSerializer,
-)
-from .user_personal_info_serializer import UserPersonalInfoSerializer
 
 
 class DoctorSerializer(ModelSerializer):

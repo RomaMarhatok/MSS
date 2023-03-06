@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from ..models.treatment_history import TreatmentHistory
+from ..models import TreatmentHistory
 from userApp.serializers.treatment_history_serializer import TreatmentHistorySerializer
 from userApp.repositories.doctor_repository import DoctorRepository
 from django.db.models import Q
