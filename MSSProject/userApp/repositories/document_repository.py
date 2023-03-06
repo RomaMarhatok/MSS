@@ -11,7 +11,7 @@ from ..serializers.document_creator_serializer import DocumentCreatorSerializer
 class DocumentRepository:
     function_mapper: Mapper = Mapper()
 
-    def get_all_user_documents(
+    def get_patient_documents(
         self, user_slug, serialized=False, include_context=False
     ) -> QuerySet[Document] | list[dict]:
         documents_creators = DocumentCreator.objects.filter(
