@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from rest_framework import status
+from django.core.handlers.wsgi import WSGIRequest
 from ...repositories.user_repository import UserRepository
 
 
@@ -7,11 +8,11 @@ from ...repositories.user_repository import UserRepository
 class UserService:
     user_repository: UserRepository = UserRepository()
 
-    def get_user_info(self, slug) -> dict | None:
+    def get_user_info(self, slug, request: WSGIRequest) -> dict | None:
         user = self.user_repository.get_user_by(slug=slug)
         if user is not None:
             user_personal_info = self.user_repository.get_user_personal_info(
-                user, serialized=True
+                user, serialized=True, request=request
             )
             user_location = self.user_repository.get_user_location(
                 user, serialized=True

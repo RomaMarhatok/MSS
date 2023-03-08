@@ -15,7 +15,7 @@ def media_path_builder_for_user_info(instance: UserPersonalInfo, filename):
             [
                 "media_files",
                 "user_info",
-                instance.user.login,
+                instance.user.slug,
                 now_date,
                 filename,
             ]

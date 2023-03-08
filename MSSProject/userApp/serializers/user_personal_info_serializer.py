@@ -71,7 +71,7 @@ class UserPersonalInfoSerializer(ModelSerializer):
         if not instance.image.storage.exists(instance.image.name):
             rep.pop("image")
         else:
-            if "request" in self.context:
+            if "request" in self.context and self.context["request"] is not None:
                 request: WSGIRequest = self.context["request"]
                 photo_url = instance.image.url
                 rep["image"] = request.build_absolute_uri(photo_url)

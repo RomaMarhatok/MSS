@@ -7,6 +7,7 @@ from ..serializers.doctor_specialization_serializer import (
 )
 from ..serializers.doctor_summary_serializer import DoctorSummarySerializer
 from django.db.models import QuerySet, Prefetch
+from django.core.handlers.wsgi import WSGIRequest
 
 
 @dataclass
@@ -79,6 +80,7 @@ class DoctorRepository:
         self,
         user_repository: UserRepository,
         doctor: Doctor,
+        request: WSGIRequest = None,
     ):
         return user_repository.get_user_personal_info(
             doctor.user,
@@ -88,6 +90,7 @@ class DoctorRepository:
                 "health_status",
             ],
             serialized=True,
+            request=request,
         )
 
     def get_doctor_specializations(self, doctor: Doctor, serialized=False):

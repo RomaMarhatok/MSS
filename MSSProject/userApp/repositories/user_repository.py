@@ -1,4 +1,5 @@
 from django.db.models import Q
+from django.core.handlers.wsgi import WSGIRequest
 from dataclasses import dataclass
 from .mapper.mapper import Mapper
 from rest_framework.authtoken.models import Token
@@ -49,14 +50,20 @@ class UserRepository:
         return user
 
     def get_user_personal_info(
-        self, user: User, not_necessary_fields=None, serialized=False
+        self,
+        user: User,
+        not_necessary_fields=None,
+        serialized=False,
+        request: WSGIRequest = None,
     ) -> UserPersonalInfo | dict:
         try:
             instance = user.userpersonalinfo
         except UserPersonalInfo.DoesNotExist:
             return {}
+        print("request", request)
         serialized_data = UserPersonalInfoSerializer(
-            instance=instance, context={"not_necessary_fields": not_necessary_fields}
+            instance=instance,
+            context={"not_necessary_fields": not_necessary_fields, "request": request},
         ).data
         return serialized_data if serialized else instance
 
