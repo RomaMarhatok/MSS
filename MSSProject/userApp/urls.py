@@ -11,8 +11,10 @@ from userApp.views.doctor.patient_treatments_view import PatientTreatmentView
 
 # doctor view
 from userApp.views.doctor.doctor_appointments_view import DoctorAppointments
+from userApp.views.log_out_view import LogOutView
 
 urlpatterns = [
+    path("logout/<str:user_slug>/", LogOutView.as_view(), name="logout"),
     path(
         "auth/registration/",
         RegistrationView.as_view(),
