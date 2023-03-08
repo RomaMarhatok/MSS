@@ -19,7 +19,7 @@ class TreatmentHistoryRepository:
         treatment_histories = TreatmentHistory.objects.filter(
             Q(patient__user__slug=patient_slug)
             & Q(doctor__user__slug__in=doctors_slugs)
-        )
+        ).order_by("-date")
         serializer = TreatmentHistorySerializer(instance=treatment_histories, many=True)
         return serializer.data
 

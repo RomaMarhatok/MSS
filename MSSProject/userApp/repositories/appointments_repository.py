@@ -13,7 +13,7 @@ class AppointmentsRepository:
                 "patient__user",
                 "doctor__user",
             )
-            .order_by("date")
+            .order_by("-date")
         )
 
         appointments = AppointmentsSerializer(instance=instances, many=True).data
