@@ -14,7 +14,7 @@ const router = useRouter()
 const appointments = computed(() => store.getters["doctorAppointments/getAppointments"])
 const layout = ref('list')
 const onclick = (appointment) => {
-    store.commit("treatments/setSelectedAppointment", appointment)
+    store.commit("appointment/setSelectedAppointment", appointment)
     router.push("/appointment/")
 }
 </script>
