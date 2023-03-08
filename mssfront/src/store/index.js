@@ -9,6 +9,7 @@ import documents from './modules/patient/documents'
 import appointments from './modules/patient/appointments'
 import doctorAppointments from './modules/doctor/doctorAppointments'
 import treatments from './modules/doctor/treatments'
+import appointment from './modules/doctor/appointment'
 const store = createStore({
     modules:{
         registration,
@@ -19,6 +20,7 @@ const store = createStore({
         documents,
         appointments,
         doctorAppointments,
+        appointment,
         treatments,
     },
      plugins: [createPersistedState({
