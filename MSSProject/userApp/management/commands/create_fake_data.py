@@ -83,18 +83,7 @@ class Command(BaseCommand):
 
             patient = PatientFactory(user=user)
             self.prepare_appointments(patient, doctor, specializations)
-            img_for_analyzes = ImageForAnalyzesFactory(
-                image=load_image_from_url(fake.image_url()),
-                description=fake.text(max_nb_chars=10000),
-            )
-            treatment = TreatmentHistoryFactory(
-                description=fake.text(max_nb_chars=10000),
-                doctor=doctor,
-                patient=patient,
-            )
-            TreatmentHistoryImageForAnalyzesFactory(
-                treatment_history=treatment, image_for_analyzes=img_for_analyzes
-            )
+            self.create_treatment_histories(doctor, patient)
 
     def create_user_documents(self, user, document_types, doctor):
         for _ in range(50):
@@ -131,10 +120,29 @@ class Command(BaseCommand):
         return doctor, specializations
 
     def prepare_appointments(self, patient, doctor, doctor_specializations):
-        for _ in range(random.randint(1, 5)):
+        for _ in range(random.randint(1, 50)):
             AppointmentsFactory(
                 patient=patient,
                 doctor=doctor,
                 date=fake.date_time(),
                 doctor_specialization=random.choice(doctor_specializations),
+            )
+
+    def create_treatment_histories(self, doctor, patient):
+        for _ in range(random.randint(1, 60)):
+            img_for_analyzes = ImageForAnalyzesFactory(
+                image=load_image_from_url(fake.image_url()),
+                description=fake.text(max_nb_chars=10000),
+            )
+            treatment = TreatmentHistoryFactory(
+                title=fake.text(max_nb_chars=100),
+                short_description=fake.text(max_nb_chars=1000),
+                description=fake.text(max_nb_chars=10000),
+                conclusion=fake.text(max_nb_chars=10000),
+                date=fake.date_time(),
+                doctor=doctor,
+                patient=patient,
+            )
+            TreatmentHistoryImageForAnalyzesFactory(
+                treatment_history=treatment, image_for_analyzes=img_for_analyzes
             )

@@ -5,29 +5,35 @@ from ..serializers.appointments_serializer import AppointmentsSerializer
 
 class AppointmentsRepository:
     def get_list_of_appoitments_for_patient(self, user_slug: str) -> list:
-        instances = Appointments.objects.filter(
-            patient__user__slug=user_slug
-        ).select_related(
-            "patient",
-            "doctor",
-            "patient__user",
-            "doctor__user",
+        instances = (
+            Appointments.objects.filter(patient__user__slug=user_slug)
+            .select_related(
+                "patient",
+                "doctor",
+                "patient__user",
+                "doctor__user",
+            )
+            .order_by("-date")
         )
 
-        return AppointmentsSerializer(instance=instances, many=True).data
+        appointments = AppointmentsSerializer(instance=instances, many=True).data
+        return appointments
 
     def get_list_of_appointemnts_for_doctor(self, doctor_slug: str) -> list:
-        instances = Appointments.objects.filter(
-            doctor__user__slug=doctor_slug
-        ).select_related(
-            "patient",
-            "doctor",
-            "patient__user",
-            "doctor__user",
+        instances = (
+            Appointments.objects.filter(doctor__user__slug=doctor_slug)
+            .select_related(
+                "patient",
+                "doctor",
+                "patient__user",
+                "doctor__user",
+            )
+            .order_by("date")
         )
-        return AppointmentsSerializer(
+        appointments = AppointmentsSerializer(
             instance=instances, many=True, context={"is_doctor": True}
         ).data
+        return appointments
 
     def get_appoitment(self, user_slug: str, doctor_slug: str) -> dict:
         instance = (
@@ -42,7 +48,8 @@ class AppointmentsRepository:
             )
             .first()
         )
-        return AppointmentsSerializer(instance=instance).data
+        appointment = AppointmentsSerializer(instance=instance).data
+        return appointment
 
     def is_exist(self, user_slug: str, doctor_slug: str, appointment_date: str) -> bool:
         is_exist = Appointments.objects.filter(

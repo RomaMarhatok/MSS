@@ -7,7 +7,10 @@ import singleDocumentPage from "../pages/user/documents/singleDocumentPage"
 import doctorsListPage from "../pages/user/doctors/doctorsListPage" 
 import doctorSinglePage from "../pages/user/doctors/singleDoctorPage"
 import appointmentsPage from "../pages/user/appointments/appointmentsPage"
+import LogOutPage from "../pages/logOutPage"
+
 const routes = [
+    {path:"/logout/",name:"logut page",component:LogOutPage},
     {path:"/",name:"site-home-page",component:homePage},
     {path:"/registration/",name:"registration-page",component:registrationPage},
     {path:"/authentication/",name:"authentication-page",component:authenticationPage},

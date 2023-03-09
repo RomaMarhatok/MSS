@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from ..models.treatment_history import TreatmentHistory
+from ..models import TreatmentHistory
 from userApp.serializers.treatment_history_serializer import TreatmentHistorySerializer
 from userApp.repositories.doctor_repository import DoctorRepository
 from django.db.models import Q
@@ -19,7 +19,7 @@ class TreatmentHistoryRepository:
         treatment_histories = TreatmentHistory.objects.filter(
             Q(patient__user__slug=patient_slug)
             & Q(doctor__user__slug__in=doctors_slugs)
-        )
+        ).order_by("-date")
         serializer = TreatmentHistorySerializer(instance=treatment_histories, many=True)
         return serializer.data
 

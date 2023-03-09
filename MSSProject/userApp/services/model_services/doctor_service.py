@@ -3,6 +3,7 @@ from rest_framework import status
 from userApp.models import Doctor
 from ...repositories.user_repository import UserRepository
 from ...repositories.doctor_repository import DoctorRepository
+from django.core.handlers.wsgi import WSGIRequest
 
 
 @dataclass
@@ -10,9 +11,9 @@ class DoctorService:
     doctor_repository: DoctorRepository = DoctorRepository()
     user_repository: UserRepository = UserRepository()
 
-    def __get_doctor_info(self, doctor: Doctor):
+    def __get_doctor_info(self, doctor: Doctor, request: WSGIRequest = None):
         personal_info = self.doctor_repository.get_personal_info_without_fields(
-            self.user_repository, doctor
+            self.user_repository, doctor, request=request
         )
         specializations = self.doctor_repository.get_doctor_specializations(
             doctor, serialized=True
@@ -25,9 +26,11 @@ class DoctorService:
             "doctor_summary": summary,
         }
 
-    def get_doctors(self):
+    def get_doctors(self, request: WSGIRequest = None):
         all_doctors = self.doctor_repository.get_all_doctors()
-        doctors = [self.__get_doctor_info(doctor) for doctor in all_doctors]
+        doctors = [
+            self.__get_doctor_info(doctor, request=request) for doctor in all_doctors
+        ]
         return {"data": {"doctors": doctors}, "status": status.HTTP_200_OK}
 
     def is_exist(self, slug: str) -> bool:
@@ -37,11 +40,12 @@ class DoctorService:
                 return True
         return False
 
-    def get_doctor(self, slug: str):
+    def get_doctor(self, slug: str, request: WSGIRequest = None):
+        print("request1", request)
         if self.is_exist(slug):
             doctor = self.doctor_repository.get_doctor_by(slug=slug)
             return {
-                "data": self.__get_doctor_info(doctor),
+                "data": self.__get_doctor_info(doctor, request=request),
                 "status": status.HTTP_200_OK,
             }
         return {

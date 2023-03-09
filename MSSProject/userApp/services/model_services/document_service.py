@@ -18,11 +18,11 @@ class DocumentService:
         return {"data": {"document": document}, "status": status.HTTP_200_OK}
 
     def get_all_documents_with_content(self, user_slug: str):
-        return self.document_repository.get_all_user_documents(
+        return self.document_repository.get_patient_documents(
             user_slug, serialized=True, include_context=True
         )
 
     def get_all_documents_without_content(self, user_slug: str):
-        return self.document_repository.get_all_user_documents(
+        return self.document_repository.get_patient_documents(
             user_slug, serialized=True, include_context=False
         )

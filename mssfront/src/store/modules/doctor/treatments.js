@@ -1,13 +1,12 @@
 import TreatmentHistoryService from "@/../services/TreatmentHistoryService";
 const treatmentHistoryService = new TreatmentHistoryService()
-const state ={
-    selectedAppointment:null,
-    treatmentHistory:[]
+const state = {
+    treatmentHistories:[]
 }
 const getters = {
     getTreatmentsHistories:(state)=>{
         //TODO sort by date
-        return state.treatmentHistory??[]
+        return state.treatmentHistories??[]
     }
 }
 const actions = {
@@ -19,17 +18,13 @@ const actions = {
             patientSlug,
             doctorSpecializationSlug
         )
-        console.log("action fetchTreatments",state.treatmentHistory)
+        console.log("action fetchTreatments",state.treatmentHistories)
     }
 }
 const mutations = {
-    setTreatmentHistory:(state,treatmentHistory)=>{
-        console.log("mutations setTreatmentHistory",treatmentHistory)
-        state.treatmentHistory = treatmentHistory
-    },
-    setSelectedAppointment:(state,appointment)=>{
-        console.log("mutations setSelectedAppointment",appointment)
-        state.selectedAppointment = appointment
+    setTreatmentHistory:(state,treatmentHistories)=>{
+        console.log("mutations setTreatmentHistory",treatmentHistories)
+        state.treatmentHistories = treatmentHistories
     }
 }
 export default {

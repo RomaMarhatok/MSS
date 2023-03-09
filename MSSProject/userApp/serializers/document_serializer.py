@@ -4,7 +4,6 @@ from ..models import Document, User, DocumentType
 from .user_serializer import UserSerializer
 from .document_type_serializer import DocumentTypeSerializer
 from ..utils.date_utils import parse_date_iso_format
-from ..models import DocumentCreator
 
 
 class DocumentSerializer(ModelSerializer):

@@ -7,7 +7,7 @@ const state = {
 const getters = {
     getAllAppointmentsForCalendar:(state)=>{
             console.log("getters getAllAppointmentsForCalendar",state.appointments)
-            console.log(state.appointemnts)
+            console.log(state.appointments)
             let calendarAppointments = state.appointments.map((appointment,index)=>{
                     console.log(appointment)
                     let [days,months,years] = appointment.date.split(" ")[0].split("/")
@@ -29,7 +29,7 @@ const getters = {
         },
         getRecentAppointments:(state)=>{
             console.log("getters getRecentAppointments",state.appointments)
-            let recentAppointments = state.appointments.map(appointment=>{
+            let recentAppointments = state.appointments.filter(appointment=>{
                 // date example "23/8/2006 10:28"
                 console.log(appointment)
 
@@ -39,14 +39,19 @@ const getters = {
                 console.log(date)
                 let currentDate = new Date()
                 let dateDifference = Math.abs(date - currentDate)
-                let diffDays = Math.ceil(dateDifference / (1000 * 60 * 60 * 24)); 
-                if(diffDays <= 10000000) {
-                    return {
+                let diffDays = Math.ceil(dateDifference / (1000 * 60 * 60 * 24));
+
+                if(diffDays <= 1000) {
+                    console.log("if statement")
+                    return appointment
+                }
+            }).map(appointment=>{
+                return {
                         label:`date: ${appointment.date.split(" ")[0]} time: ${appointment.date.split(" ")[1]}`,
                         text:`appointments to ${appointment.doctor_specialization.name}`,
                     }
-                }
             })
+            console.log("recentAppointments",recentAppointments)
             return recentAppointments
         }
 }

@@ -6,8 +6,8 @@ const store = useStore()
 onBeforeMount(() => {
     store.dispatch("treatments/fetchTreatments",
         {
-            patientSlug: store.state.treatments.selectedAppointment.patient.user.slug,
-            doctorSpecializationSlug: store.state.treatments.selectedAppointment.doctor_specialization.slug
+            patientSlug: store.state.appointment.selectedAppointment.patient.user.slug,
+            doctorSpecializationSlug: store.state.appointment.selectedAppointment.doctor_specialization.slug
         }
     )
 })

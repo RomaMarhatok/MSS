@@ -8,7 +8,7 @@ const personalInfo = computed(() => store.getters["user/getPersonalInfo"])
 <template>
     <section class="personal-image">
         <div class="img">
-            <Image :src="'https://placehold.co/300x200/'" />
+            <Image :src="personalInfo.image" />
         </div>
         <div class="content">
             <p>{{ personalInfo.full_name }}</p>

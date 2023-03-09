@@ -11,5 +11,5 @@ class ProfileView(GenericViewSet):
 
     def retrieve(self, request: HttpRequest, user_slug=None):
         user_service = UserService()
-        response_data = user_service.get_user_info(user_slug)
+        response_data = user_service.get_user_info(user_slug, request=request)
         return JsonResponse(data=response_data["data"], status=response_data["status"])

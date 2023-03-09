@@ -3,13 +3,16 @@ from django.db import models
 from ..utils.slug_utils import generate_slug_from_str
 from .doctor import Doctor
 from .patient import Patient
-
-# TODO add short description
+from datetime import datetime
 
 
 class TreatmentHistory(models.Model):
     slug = models.SlugField(max_length=100, unique=True)
+    title = models.TextField(blank=True)
+    short_description = models.TextField(blank=True)
     description = models.TextField()
+    conclusion = models.TextField(blank=True)
+    date = models.DateTimeField(default=datetime.now)
     doctor = models.ForeignKey(Doctor, on_delete=models.SET_NULL, null=True)
     patient = models.ForeignKey(Patient, on_delete=models.SET_NULL, null=True)
     created_at = models.DateTimeField(auto_now_add=True)

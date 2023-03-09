@@ -6,7 +6,7 @@ import BaseForm from './Base/BaseForm.vue';
 import '@vuepic/vue-datepicker/dist/main.css'
 import Datepicker from '@vuepic/vue-datepicker';
 import FormSubmitButton from '../Buttons/FormSubmitButton.vue';
-import BaseSelector from '@/components/common/Selectors/Base/BaseSelector.vue';
+import Dropdown from 'primevue/dropdown';
 const store = useStore()
 const router = useRouter()
 const userSlug = computed(() => store.state.user.slug)
@@ -31,15 +31,18 @@ function submit() {
         }
     })
 
+
 }
 </script>
 
 <template>
-    <div class="flex w-full justify-center ">
+    <div class="flex w-full justify-center flex-col">
         <BaseForm @SubmitForm="submit">
             <Datepicker v-model="formData.appointment_date" placeholder="Input date ..." text-input></Datepicker>
-            <BaseSelector v-model="formData.doctor_specialization" :selection-values="doctorTypes"></BaseSelector>
-            <BaseSelector v-model="formData.doctor_slug" :selection-values="doctors"></BaseSelector>
+            <Dropdown v-model="formData.doctor_specialization" option-group-label="slug" option-label="name"
+                :options="doctorTypes"></Dropdown>
+            <Dropdown v-model="formData.doctor_slug" option-value="doctor_slug" option-label="personal_info.full_name"
+                :options="doctors"></Dropdown>
             <FormSubmitButton :button-text="'create appointment'"></FormSubmitButton>
         </BaseForm>
     </div>
