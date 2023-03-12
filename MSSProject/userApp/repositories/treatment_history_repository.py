@@ -1,38 +1,84 @@
 from dataclasses import dataclass
+from .base import AbstractRepository
 from ..models import TreatmentHistory
 from userApp.serializers.treatment_history_serializer import TreatmentHistorySerializer
 from userApp.repositories.doctor_repository import DoctorRepository
-from django.db.models import Q
+from django.db.models import QuerySet, Q
 
 
-@dataclass
-class TreatmentHistoryRepository:
-    doctor_repository: DoctorRepository = DoctorRepository()
-
-    def get_treatments_histories(
-        self, patient_slug: str, doctor_specialization_slug: str
-    ):
-        doctors_slugs = self.doctor_repository.get_doctors_by_specialization(
-            doctor_specialization_slug
+class TreatmentHistoryRepository(AbstractRepository):
+    def __init__(self):
+        self.doctor_repository = DoctorRepository()
+        self.__init_query = TreatmentHistory.objects.select_related(
+            "doctor",
+            "doctor__user",
+            "doctor__user__role",
+            "patient",
+            "patient__user",
+            "patient__user__role",
         )
 
-        treatment_histories = TreatmentHistory.objects.filter(
+    def list(self, **kwargs) -> QuerySet[TreatmentHistory]:
+        patient_slug = kwargs.get("patient_slug", None)
+        doctor_specialization_slug = kwargs.get("doctor_specialization_slug", None)
+        if patient_slug is None or doctor_specialization_slug is None:
+            return None
+        doctors_slugs = [
+            doctor.user.slug
+            for doctor, _ in self.doctor_repository.list(
+                doctor_specialization_slug=doctor_specialization_slug
+            )
+        ]
+        print(doctors_slugs)
+        treatment_histories = self.__init_query.filter(
             Q(patient__user__slug=patient_slug)
             & Q(doctor__user__slug__in=doctors_slugs)
         ).order_by("-date")
-        serializer = TreatmentHistorySerializer(instance=treatment_histories, many=True)
-        return serializer.data
+        return treatment_histories
 
-    def get_treatment_history(self, patient_slug: str, treatment_slug: str) -> dict:
-        treatment_history = (
-            TreatmentHistory.objects.filter(
-                patient__user__slug=patient_slug, slug=treatment_slug
-            )
-            .select_related("patient", "patient__user", "patient__user__role")
-            .first()
+    def get(self, **kwargs) -> TreatmentHistory:
+        treatment_history_slug = kwargs.get("treatment_history_slug", None)
+        patient_slug = kwargs.get("patient_slug", None)
+        if patient_slug is None or treatment_history_slug is None:
+            return None
+        treatment_history = self.__init_query.get(
+            Q(patient__user__slug=patient_slug) & Q(slug=treatment_history_slug)
         )
-        serializer = TreatmentHistorySerializer(instance=treatment_history)
-        return serializer.data
+        return treatment_history
 
-    def treatment_record_exist(self, treatment_slug: str):
-        return TreatmentHistory.objects.filter(slug=treatment_slug).exists()
+    def is_exist(self, **kwargs) -> bool:
+        treatment_history_slug = kwargs.get("treatment_history_slug", None)
+        if treatment_history_slug is None:
+            return False
+        return TreatmentHistory.objects.filter(slug=treatment_history_slug).exists()
+
+    def create(self, data: dict):
+        return super().create(data)
+
+    def delete(self, **kwargs):
+        return super().delete(**kwargs)
+
+    # def get_treatments_histories(
+    #     self, patient_slug: str, doctor_specialization_slug: str
+    # ):
+    #     doctors_slugs = self.doctor_repository.get_doctors_by_specialization(
+    #         doctor_specialization_slug
+    #     )
+
+    #     treatment_histories = TreatmentHistory.objects.filter(
+    #         Q(patient__user__slug=patient_slug)
+    #         & Q(doctor__user__slug__in=doctors_slugs)
+    #     ).order_by("-date")
+    #     serializer = TreatmentHistorySerializer(instance=treatment_histories, many=True)
+    #     return serializer.data
+
+    # def get_treatment_history(self, patient_slug: str, treatment_slug: str) -> dict:
+    #     treatment_history = (
+    #         TreatmentHistory.objects.filter(
+    #             patient__user__slug=patient_slug, slug=treatment_slug
+    #         )
+    #         .select_related("patient", "patient__user", "patient__user__role")
+    #         .first()
+    #     )
+    #     serializer = TreatmentHistorySerializer(instance=treatment_history)
+    #     return serializer.data

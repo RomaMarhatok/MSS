@@ -1,12 +1,29 @@
 from django.db.models import QuerySet
 from ..models import DoctorSpecialization
+from ..serializers import DoctorSpecializationSerializer
+from .base import AbstractRepository
 
 
-class DoctorSpecializationRepository:
-    def get_doctor_specializations(self) -> QuerySet[DoctorSpecialization]:
+class DoctorSpecializationRepository(AbstractRepository):
+    def list(self, **kwargs) -> QuerySet[DoctorSpecialization]:
         return DoctorSpecialization.objects.all()
 
-    def get_doctor_specialization(
-        self, doctor_specialization_slug: str
-    ) -> QuerySet[DoctorSpecialization]:
-        return DoctorSpecialization.objects.filter(slug=doctor_specialization_slug)
+    def get(self, **kwargs) -> DoctorSpecialization | None:
+        slug = kwargs.get("slug", None)
+        if slug is None:
+            return None
+        try:
+            return DoctorSpecialization.objects.get(slug=slug)
+        except DoctorSpecialization.DoesNotExist:
+            return None
+        except DoctorSpecialization.MultipleObjectsReturned:
+            return None
+
+    def is_exist(self, **kwargs) -> bool:
+        return super().is_exist(**kwargs)
+
+    def create(self, data: dict):
+        return super().create(data)
+
+    def delete(self, **kwargs):
+        return super().delete(**kwargs)

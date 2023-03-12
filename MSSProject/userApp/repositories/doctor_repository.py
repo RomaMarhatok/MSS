@@ -1,112 +1,70 @@
-from .mapper.mapper import Mapper
-from dataclasses import dataclass
-from .user_repository import UserRepository
-from ..models import Doctor, DoctorSummary, DoctorDoctorSpecialization
-from ..serializers.doctor_specialization_serializer import (
-    DoctorSpecializationSerializer,
-)
-from ..serializers.doctor_summary_serializer import DoctorSummarySerializer
+from .base import AbstractRepository
+from ..models import DoctorDoctorSpecialization, Doctor
 from django.db.models import QuerySet, Prefetch
-from django.core.handlers.wsgi import WSGIRequest
 
 
-@dataclass
-class DoctorRepository:
-
-    function_mapper: Mapper = Mapper()
-
-    def get_doctor_by(self, **kwargs) -> Doctor:
-        function_map = {("slug",): self.get_doctor_by_slug}
-        return (
-            self.function_mapper.mapping(function_map, kwargs=kwargs)
-            .prefetch_related(
-                Prefetch(
-                    "doctor_doctor_specialization",
-                    queryset=DoctorDoctorSpecialization.objects.select_related(
-                        "doctor_specialization"
-                    ).all(),
-                )
+class DoctorRepository(AbstractRepository):
+    def __init__(self):
+        self.__init_query_set = Doctor.objects.select_related(
+            "user",
+            "user__role",
+            "user__userpersonalinfo",
+            "user__userlocation",
+            "doctorsummary",
+        ).prefetch_related(
+            Prefetch(
+                "doctor_doctor_specialization",
+                queryset=DoctorDoctorSpecialization.objects.select_related(
+                    "doctor_specialization", "doctor"
+                ),
             )
-            .select_related(
-                "user",
-                "user__role",
-                "user__userpersonalinfo",
-                "user__userlocation",
-                "doctorsummary",
-            )
-            .first()
         )
 
-    def get_doctor_by_slug(self, slug) -> QuerySet[Doctor]:
-        return Doctor.objects.filter(user__slug=slug)
+    def get(
+        self, **kwargs
+    ) -> tuple[Doctor, QuerySet[DoctorDoctorSpecialization]] | None:
+        slug = kwargs.get("slug", None)
+        if slug is None:
+            return None
+        doctor = self.__init_query_set.get(user__slug=slug)
+        return (doctor, doctor.doctor_doctor_specialization.all())
 
-    def get_doctors_by_specialization(
-        self, doctor_specialization_slug: str
-    ) -> QuerySet[tuple[str]]:
-        return DoctorDoctorSpecialization.objects.filter(
-            doctor_specialization__slug=doctor_specialization_slug
-        ).values_list("doctor__user__slug")
+    def list(
+        self, **kwargs
+    ) -> list[tuple[Doctor, QuerySet[DoctorDoctorSpecialization]]]:
+        doctor_specialization_slug = kwargs.get("doctor_specialization_slug", None)
+        if doctor_specialization_slug is not None:
+            query_result = []
+            for doctor in self.__init_query_set.all():
+                if doctor.doctor_doctor_specialization.filter(
+                    doctor_specialization__slug=doctor_specialization_slug
+                ).exists():
+                    query_result.append(
+                        (
+                            doctor,
+                            doctor.doctor_doctor_specialization.all(),
+                        )
+                    )
+            return query_result
 
-    def get_doctor_summary(self, doctor, serialized=False) -> DoctorSummary | dict:
-        summary_serialized = DoctorSummarySerializer(instance=doctor.doctorsummary).data
-        return summary_serialized if serialized else doctor.doctorsummary
-
-    def get_all_doctors(self) -> QuerySet[Doctor]:
-        return (
-            Doctor.objects.prefetch_related(
-                Prefetch(
-                    "doctor_doctor_specialization",
-                    queryset=DoctorDoctorSpecialization.objects.select_related(
-                        "doctor_specialization"
-                    ).all(),
-                )
+        return [
+            (
+                doctor,
+                doctor.doctor_doctor_specialization.all(),
             )
-            .select_related(
-                "user",
-                "user__role",
-                "user__userpersonalinfo",
-                "user__userlocation",
-                "doctorsummary",
-            )
-            .all()
-        )
-
-    def get_full_doctor_personal_info(
-        self, user_repository: UserRepository, doctor: Doctor
-    ):
-        return user_repository.get_user_personal_info(doctor.user, serialized=True)
-
-    def get_personal_info_without_fields(
-        self,
-        user_repository: UserRepository,
-        doctor: Doctor,
-        request: WSGIRequest = None,
-    ):
-        return user_repository.get_user_personal_info(
-            doctor.user,
-            not_necessary_fields=[
-                "gender",
-                "email",
-                "health_status",
-            ],
-            serialized=True,
-            request=request,
-        )
-
-    def get_doctor_specializations(self, doctor: Doctor, serialized=False):
-        doctor_doctor_specialization_queryset = (
-            doctor.doctor_doctor_specialization.all()
-        )
-        doctor_specialization_instances = [
-            doctor_doctor_specialization.doctor_specialization
-            for doctor_doctor_specialization in doctor_doctor_specialization_queryset
+            for doctor in self.__init_query_set.all()
         ]
-        doctor_specialization_serialized = DoctorSpecializationSerializer(
-            instance=doctor_specialization_instances, many=True
-        ).data
 
-        return (
-            doctor_specialization_serialized
-            if serialized
-            else doctor_specialization_instances
-        )
+    def is_exist(self, **kwargs) -> bool:
+        slug = kwargs.get("slug", None)
+        if slug is None:
+            return False
+        return DoctorDoctorSpecialization.objects.filter(
+            doctor__user__slug=slug
+        ).exists()
+
+    def create(self, data: dict):
+        return super().create(data)
+
+    def delete(self, **kwargs):
+        return super().delete(**kwargs)
