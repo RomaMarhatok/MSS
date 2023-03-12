@@ -1,7 +1,7 @@
 from rest_framework.viewsets import GenericViewSet
 from django.http import JsonResponse, HttpRequest
 from ...permissions.is_user_authenticated import IsUserAuthenticated
-from ...services.model_services.doctor_service import DoctorService
+from ...services.doctor_service import DoctorService
 from django.core.handlers.wsgi import WSGIRequest
 
 

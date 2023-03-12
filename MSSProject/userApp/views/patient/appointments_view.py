@@ -1,7 +1,7 @@
 from rest_framework.viewsets import GenericViewSet
 from django.http import JsonResponse, HttpRequest
 from ...permissions.is_user_authenticated import IsUserAuthenticated
-from ...services.model_services.appointments_service import AppointmentsService
+from ...services.appointments_service import AppointmentsService
 
 
 class AppointmentsView(GenericViewSet):
@@ -17,8 +17,11 @@ class AppointmentsView(GenericViewSet):
         )
 
     def retrieve(self, request: HttpRequest, patient_slug=None, doctor_slug=None):
+        date = request.data.get("date", None)
         appointments_service = AppointmentsService()
-        data = appointments_service.get_patient_appointment(patient_slug, doctor_slug)
+        data = appointments_service.get_patient_appointment(
+            patient_slug, doctor_slug, date
+        )
         return JsonResponse(
             data=data["data"],
             status=data["status"],

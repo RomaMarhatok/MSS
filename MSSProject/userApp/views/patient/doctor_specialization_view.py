@@ -2,7 +2,7 @@ from rest_framework import status
 from rest_framework.viewsets import GenericViewSet
 from django.http import JsonResponse, HttpRequest
 from ...permissions.is_user_authenticated import IsUserAuthenticated
-from ...services.model_services.doctor_specialization_service import DoctorTypeService
+from ...services.doctor_specialization_service import DoctorTypeService
 
 
 class DoctorSpecializationView(GenericViewSet):
