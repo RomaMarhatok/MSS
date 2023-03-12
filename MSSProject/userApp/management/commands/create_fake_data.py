@@ -1,8 +1,17 @@
 from typing import Any, Optional
 import random
+import asyncio
 from django.core.management.base import BaseCommand
+from asgiref.sync import sync_to_async
 from faker import Faker
-from typing import List
+from userApp.models import (
+    Role,
+    Patient,
+    Doctor,
+    User,
+    DocumentType,
+    DoctorSpecialization,
+)
 from ...tests.factories.user_app_factories import (
     DoctorFactory,
     DoctorSpecializationFactory,
@@ -24,15 +33,14 @@ from ...tests.factories.user_app_factories import (
 from ...utils.string_utls import generate_valid_password, generate_valid_login
 from ...utils.image_utils import load_image_from_url
 
-fake = Faker()
+fake: Faker = Faker()
 
 
 class Command(BaseCommand):
     def handle(self, *args: Any, **options: Any) -> Optional[str]:
-        patient_role, doctor_role = self.prepare_roles()
+        patient_role, doctor_role = self.create_roles()
         document_types = self.prepare_documents_types()
-        for i in range(1, 25):
-            print(f"{i*4}%")
+        for _ in range(1, 25):
             user = UserFactory(
                 login=generate_valid_login(),
                 password=generate_valid_password(),
@@ -95,18 +103,18 @@ class Command(BaseCommand):
             )
             DocumentCreatorFactory(document=document, creator=doctor)
 
-    def prepare_roles(self):
-        patient_role = RoleFactory(name="patient")
-        doctor_role = RoleFactory(name="doctor")
+    def create_roles(self):
+        patient_role = RoleFactory(name=Role.DOCTOR)
+        doctor_role = RoleFactory(name=Role.PATIENT)
         return (
             patient_role,
             doctor_role,
         )
 
     def prepare_documents_types(self):
-        test = DocumentTypeFactory(name="test")
-        analyzes = DocumentTypeFactory(name="analyzes")
-        conclusions = DocumentTypeFactory(name="conclusions")
+        test = DocumentTypeFactory(name=DocumentType.TEST)
+        analyzes = DocumentTypeFactory(name=DocumentType.ANALYZES)
+        conclusions = DocumentTypeFactory(name=DocumentType.CONCLUSIONS)
         return [test, analyzes, conclusions]
 
     def prepare_doctor_specializations(self, doctor):
@@ -129,7 +137,7 @@ class Command(BaseCommand):
             )
 
     def create_treatment_histories(self, doctor, patient):
-        for _ in range(random.randint(1, 60)):
+        for _ in range(random.randint(1, 40)):
             img_for_analyzes = ImageForAnalyzesFactory(
                 image=load_image_from_url(fake.image_url()),
                 description=fake.text(max_nb_chars=10000),
