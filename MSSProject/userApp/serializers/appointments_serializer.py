@@ -6,15 +6,14 @@ from .doctor_serializer import DoctorSerializer
 from .patient_serializer import PatientSerializer
 from .doctor_specialization_serializer import DoctorSpecializationSerializer
 from rest_framework.serializers import ModelSerializer
+from .user_personal_info_serializer import UserPersonalInfoSerializer
 
 # utils
 from ..utils.date_utils import parse_date_iso_format
+from datetime import datetime
 
 # models
 from ..models import Appointments, Doctor, Patient, User, DoctorSpecialization
-
-# repositories
-from ..repositories.user_repository import UserRepository
 
 
 class AppointmentsSerializer(ModelSerializer):
@@ -53,9 +52,13 @@ class AppointmentsSerializer(ModelSerializer):
         return instance
 
     def to_representation(self, instance: Appointments):
+        rep = None
         if "is_doctor" in self.context and self.context["is_doctor"]:
-            return self.doctor_representation(instance)
-        return self.patient_representation(instance)
+            rep = self.doctor_representation(instance)
+        else:
+            rep = self.patient_representation(instance)
+        rep["is_cancelable"] = self.is_cancelable(instance.date)
+        return rep
 
     def patient_representation(self, instance: Appointments):
         rep = super().to_representation(instance)
@@ -67,6 +70,11 @@ class AppointmentsSerializer(ModelSerializer):
             instance.doctor.user
         )
         return rep
+
+    def is_cancelable(self, appoitment_data: datetime) -> bool:
+        d1 = appoitment_data.replace(tzinfo=None)
+        d2 = datetime.now().replace(tzinfo=None)
+        return (d1 - d2).days > 1
 
     def doctor_representation(self, instance: Appointments):
         rep = super().to_representation(instance)
@@ -80,8 +88,11 @@ class AppointmentsSerializer(ModelSerializer):
         return rep
 
     def __get_user_full_name(self, user: User) -> str:
-        user_repository = UserRepository()
-        user = user_repository.get_user_by_slug(user.slug)
-        return user_repository.get_user_personal_info(user, serialized=True).get(
-            "full_name", ""
+        personal_info = UserPersonalInfoSerializer(instance=user.userpersonalinfo).data
+        return (
+            personal_info.get("first_name", "")
+            + " "
+            + personal_info.get("second_name", "")
+            + " "
+            + personal_info.get("patronymic", "")
         )
