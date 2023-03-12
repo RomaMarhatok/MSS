@@ -19,9 +19,15 @@ class TreatmentHistory(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
+        # slug generation
         self.slug = generate_slug_from_str(
             self.patient.user.login
         ) + generate_slug_from_str(self.doctor.user.login)
+        # if slug already exist regenerate it
+        while TreatmentHistory.objects.filter(slug=self.slug).exists():
+            self.slug = generate_slug_from_str(
+                self.patient.user.login
+            ) + generate_slug_from_str(self.doctor.user.login)
         return super(TreatmentHistory, self).save(*args, **kwargs)
 
     class Meta:
