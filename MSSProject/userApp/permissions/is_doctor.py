@@ -19,7 +19,7 @@ class IsDoctor(BasePermission):
             return False
         if not Token.objects.filter(key=key).exists():
             return False
-        token: User = Token.objects.filter(key=key).first().user
-        if token.role.name == "doctor":
+        token = Token.objects.select_related("user", "user__role").get(key=key)
+        if token.user.role.name == Role.DOCTOR:
             return True
         raise NotAcceptable(detail=self.message)
