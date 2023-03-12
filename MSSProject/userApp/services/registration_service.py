@@ -4,7 +4,7 @@ from ..serializers.user_personal_info_serializer import UserPersonalInfoSerializ
 from rest_framework import status
 from django.http import HttpRequest
 from ..utils.list_utils import is_containe
-from ..services.model_services.user_service import UserService
+from .user_service import UserService
 
 
 class RegistrationService:
