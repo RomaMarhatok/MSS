@@ -1,5 +1,7 @@
 import pytest
+import random
 from faker import Faker
+from userApp.models import Role, DocumentType
 from userApp.utils.image_utils import load_image_from_url_to_file
 from ...utils.string_utls import generate_valid_password, generate_valid_login
 
@@ -8,12 +10,12 @@ fake = Faker()
 
 @pytest.fixture
 def role_fixture() -> dict:
-    return {"name": fake.pystr()}
+    return {"name": random.choice(Role.ROLE_CHOICES)[0]}
 
 
 @pytest.fixture
 def patient_role_fixture() -> dict:
-    return {"name": "patient"}
+    return {"name": Role.PATIENT}
 
 
 @pytest.fixture
@@ -28,7 +30,7 @@ def user_fixture(role_fixture) -> dict:
 @pytest.fixture
 def document_type_fixture() -> dict:
     return {
-        "name": fake.pystr(),
+        "name": random.choice(DocumentType.DOCUMENT_TYPE_CHOICES)[0],
     }
 
 

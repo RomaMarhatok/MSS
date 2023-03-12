@@ -7,13 +7,26 @@ from userApp.models import Role
 def test_serialization(role_fixture):
     serializer = RoleSerializer(data=role_fixture)
     assert serializer.is_valid(raise_exception=True)
-    instance = serializer.save()
-
+    instance: Role = serializer.save()
     assert Role.objects.all().count() == 1
     assert isinstance(instance, Role)
     assert hasattr(instance, "slug")
     assert instance.slug != "default"
     assert instance.slug != ""
+
+
+@pytest.mark.django_db
+def test_serialization_with_choices(role_fixture):
+    role_fixture["name"] = Role.DOCTOR
+    serializer = RoleSerializer(data=role_fixture)
+    assert serializer.is_valid(raise_exception=True)
+    instance: Role = serializer.save()
+    assert Role.objects.all().count() == 1
+    assert isinstance(instance, Role)
+    assert hasattr(instance, "slug")
+    assert instance.slug != "default"
+    assert instance.slug != ""
+    assert instance.name == Role.DOCTOR
 
 
 @pytest.mark.django_db
