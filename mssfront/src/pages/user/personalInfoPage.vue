@@ -6,7 +6,8 @@ import TabMenu from '@/components/ui/Menu/TabMenu.vue';
 import imageSection from '@/components/ui/Sections/UserPages/PersonalInfoPage/ImageSection.vue'
 import healthInfoSection from '@/components/ui/Sections/UserPages/PersonalInfoPage/HealthInfoSection.vue';
 import CalendarSection from '@/components/ui/Sections/UserPages/PersonalInfoPage/CalendarSection.vue';
-import RecentAppointmentsSection from '@/components/ui/Sections/UserPages/PersonalInfoPage/RecentAppointmentsSection.vue';
+import AppointmentsSection from '@/components/ui/Sections/UserPages/PersonalInfoPage/AppointmentsSection.vue'
+// import RecentAppointmentsSection from '@/components/ui/Sections/UserPages/PersonalInfoPage/RecentAppointmentsSection.vue';
 const store = useStore()
 const route = useRoute()
 const slug = computed(() => store.state.user.slug ? store.state.user.slug : route.params.userSlug)
@@ -25,7 +26,7 @@ onBeforeMount(() => {
         </section>
         <section class="flex__section flex_column">
             <section class="flex__section flex_row">
-                <RecentAppointmentsSection></RecentAppointmentsSection>
+                <AppointmentsSection></AppointmentsSection>
             </section>
             <CalendarSection></CalendarSection>
         </section>
