@@ -34,13 +34,6 @@ class AppointmentsRepository(AbstractRepository):
                     & Q(date=date)
                 )
             if patient_slug is not None and doctor_slug is not None:
-                print(
-                    "ASASA",
-                    self.__init_query.get(
-                        Q(patient__user__slug=patient_slug)
-                        & Q(doctor__user__slug=doctor_slug)
-                    ),
-                )
                 return self.__init_query.get(
                     Q(patient__user__slug=patient_slug)
                     & Q(doctor__user__slug=doctor_slug)
@@ -72,19 +65,16 @@ class AppointmentsRepository(AbstractRepository):
             serializer.errors,
         )
 
-    def delete(self, **kwargs) -> int | None:
+    def delete(self, **kwargs) -> int:
         patient_slug = kwargs.get("patient_slug", None)
         doctor_slug = kwargs.get("doctor_slug", None)
         date = kwargs.get("date", None)
         if patient_slug is None or doctor_slug is None or date is None:
             return None
-        instance = Appointments.objects.filter(
+        count_of_deleted_instantes, _ = Appointments.objects.filter(
             doctor__user__slug=doctor_slug, patient__user__slug=patient_slug, date=date
-        )
-        if instance.exists():
-            count_of_deleted_instantes, _ = instance.first().delete()
-            return count_of_deleted_instantes
-        return None
+        ).delete()
+        return count_of_deleted_instantes
 
     def is_exist(self, **kwargs) -> bool:
         patient_slug = kwargs.get("patient_slug", None)
