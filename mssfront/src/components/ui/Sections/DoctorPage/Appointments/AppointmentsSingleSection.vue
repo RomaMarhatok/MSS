@@ -10,15 +10,19 @@ import Column from 'primevue/column';
 import SelectButton from 'primevue/selectbutton'
 import ScrollPanel from 'primevue/scrollpanel';
 import ScrollTop from 'primevue/scrolltop';
+import Button from 'primevue/button';
 import "primevue/resources/themes/saga-blue/theme.css"
 import "primevue/resources/primevue.min.css"
+import { useRouter } from 'vue-router';
 const store = useStore()
+const router = useRouter()
 const getTreatmentsHistory = computed(() => {
     return store.getters["treatments/getTreatmentsHistories"]
 })
 const selectButtonOptions = ref(["list", "timeline"])
 const selectButtonValue = ref("list")
 const currentAppointment = computed(() => store.state.appointment.selectedAppointment)
+const redirect = () => router.push("/editor/")
 </script>
 <template>
     <main class="flex w-full p-6 flex-col">
@@ -26,6 +30,7 @@ const currentAppointment = computed(() => store.state.appointment.selectedAppoin
             <p>
                 Patient {{ currentAppointment.patient.user.full_name }}
             </p>
+            <Button label="create" class="p-button-info" @click="redirect"></Button>
             <SelectButton v-model="selectButtonValue" :options="selectButtonOptions" />
 
         </div>

@@ -130,13 +130,14 @@ class AppointmentsService:
             "status": status.HTTP_400_BAD_REQUEST,
         }
 
-    def destroy(self, request_data: str):
+    def destroy(self, request_data: dict):
         doctor_slug = request_data["doctor_slug"]
         patient_slug = request_data["patient_slug"]
+        date = request_data["date"]
         count_of_deleted_instantes = self.appointments_repository.delete(
-            doctor_slug=doctor_slug, patient_slug=patient_slug
+            doctor_slug=doctor_slug, patient_slug=patient_slug, date=date
         )
-        if count_of_deleted_instantes is not None:
+        if count_of_deleted_instantes > 0:
             return {
                 "data": {"message": "appointment was deleted"},
                 "status": status.HTTP_200_OK,

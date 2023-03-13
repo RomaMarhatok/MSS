@@ -44,8 +44,8 @@ class RegistrationService:
         )
 
     def __processing_registration(self, data: dict):
-        if not self.user_service.user_repository.is_user_exist(
-            data["user"]["login"], data["user"]["password"]
+        if not self.user_service.user_repository.is_exist(
+            login=data["user"]["login"], password=data["user"]["password"]
         ):
             serialization_result = self.__init__user(data)
             return serialization_result
@@ -54,7 +54,7 @@ class RegistrationService:
             "status": status.HTTP_400_BAD_REQUEST,
         }
 
-    def __init__user(self, data):
+    def __init__user(self, data: dict):
         user_serializer = UserSerializer(data=data["user"])
         if user_serializer.is_valid():
             user = user_serializer.save()
