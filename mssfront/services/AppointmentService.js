@@ -24,7 +24,7 @@ class AppointmentService extends RequestService{
         })
     }
     async destroyAppointments(cb,errorCb,data){
-        return await this.post(`mss/appointments/desctroy/`,data).then(response=>{
+        return await this.post(`mss/appointments/destroy/`,data).then(response=>{
             cb(response.data)
         }).catch(error=>{
             errorCb(error)
