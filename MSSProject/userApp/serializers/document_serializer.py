@@ -49,4 +49,5 @@ class DocumentSerializer(ModelSerializer):
             rep.pop("content")
         rep["created_at"] = parse_date_iso_format(rep["created_at"])
         rep["updated_at"] = parse_date_iso_format(rep["updated_at"])
+        rep["document_type"]["name"] = rep["document_type"]["name"].lower().capitalize()
         return rep
