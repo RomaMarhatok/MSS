@@ -8,3 +8,13 @@ class Patient(models.Model):
 
     class Meta:
         db_table = "patient"
+
+    def __str__(self) -> str:
+        full_name_patient = (
+            self.user.userpersonalinfo.first_name
+            + " "
+            + self.user.userpersonalinfo.second_name
+            + " "
+            + self.user.userpersonalinfo.patronymic
+        )
+        return full_name_patient

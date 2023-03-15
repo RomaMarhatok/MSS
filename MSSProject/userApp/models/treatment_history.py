@@ -32,3 +32,20 @@ class TreatmentHistory(models.Model):
 
     class Meta:
         db_table = "treatment_history"
+
+    def __str__(self) -> str:
+        full_name_patient = (
+            self.patient.user.userpersonalinfo.first_name
+            + " "
+            + self.patient.user.userpersonalinfo.second_name
+            + " "
+            + self.patient.user.userpersonalinfo.patronymic
+        )
+        full_name_doctor = (
+            self.doctor.user.userpersonalinfo.first_name
+            + " "
+            + self.doctor.user.userpersonalinfo.second_name
+            + " "
+            + self.doctor.user.userpersonalinfo.patronymic
+        )
+        return self.title + " " + full_name_patient + " " + full_name_doctor

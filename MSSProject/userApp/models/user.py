@@ -17,3 +17,6 @@ class User(AbstractUser):
 
     class Meta:
         db_table = "user"
+
+    def __str__(self) -> str:
+        return self.login

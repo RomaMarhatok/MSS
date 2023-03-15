@@ -18,5 +18,8 @@ class Role(models.Model):
         self.slug = generate_slug_from_str(self.name)
         return super(Role, self).save(*args, **kwargs)
 
+    def __str__(self) -> str:
+        return self.name
+
     class Meta:
         db_table = "role"

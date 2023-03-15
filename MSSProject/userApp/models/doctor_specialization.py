@@ -12,3 +12,6 @@ class DoctorSpecialization(models.Model):
 
     class Meta:
         db_table = "doctor_specialization"
+
+    def __str__(self) -> str:
+        return self.name

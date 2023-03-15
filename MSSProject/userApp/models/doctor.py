@@ -7,3 +7,6 @@ class Doctor(models.Model):
 
     class Meta:
         db_table = "doctor"
+
+    def __str__(self) -> str:
+        return self.user.login

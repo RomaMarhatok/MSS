@@ -21,3 +21,6 @@ class Document(models.Model):
     def save(self, *args, **kwargs):
         self.slug = generate_slug_from_str(self.name)
         return super(Document, self).save(*args, **kwargs)
+
+    def __str__(self) -> str:
+        return self.name

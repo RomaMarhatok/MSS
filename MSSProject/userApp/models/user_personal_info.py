@@ -35,9 +35,6 @@ class UserPersonalInfo(models.Model):
     age = models.IntegerField(blank=True, default=-1)
     health_status = models.TextField(blank=True, default="")
 
-    def __str__(self) -> str:
-        return self.user.login
-
     class Meta:
         db_table = "user_personal_info"
 
@@ -50,3 +47,6 @@ class UserPersonalInfo(models.Model):
         super(UserPersonalInfo, self).save(*args, **kwargs)
         if self.image:
             photo_service.resize_image(self.image.path)
+
+    def __str__(self) -> str:
+        return self.first_name + " " + self.second_name + " " + self.patronymic

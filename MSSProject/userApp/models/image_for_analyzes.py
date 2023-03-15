@@ -38,3 +38,6 @@ class ImageForAnalyzes(models.Model):
 
     class Meta:
         db_table = "image_for_analyzes"
+
+    def __str__(self) -> str:
+        return self.pk + " " + self.image.name

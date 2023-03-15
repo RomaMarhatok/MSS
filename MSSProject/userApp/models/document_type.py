@@ -22,3 +22,6 @@ class DocumentType(models.Model):
 
     class Meta:
         db_table = "document_type"
+
+    def __str__(self) -> str:
+        return self.name
