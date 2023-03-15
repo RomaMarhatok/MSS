@@ -1,7 +1,7 @@
 from rest_framework import status
 from ..repositories import TreatmentHistoryRepository
 from ..repositories import UserRepository
-from ..serializers import TreatmentHistorySerializer
+from ..serializers import TreatmentHistorySerializer, UserPersonalInfoSerializer
 
 
 class TreatmentHistoryService:
@@ -12,19 +12,23 @@ class TreatmentHistoryService:
         self.user_repository: UserRepository = UserRepository()
 
     def get_patient_treatment_histories(
-        self, patient_slug: str, doctor_specialization_slug: str
+        self, patient_slug: str, doctor_specialization_slug: str, request=None
     ):
         if self.user_repository.is_exist(slug=patient_slug):
             treatments_histories = self.treatment_repository.list(
                 patient_slug=patient_slug,
                 doctor_specialization_slug=doctor_specialization_slug,
             )
-
+            user = self.user_repository.get(slug=patient_slug)
+            user_personal_info = UserPersonalInfoSerializer(
+                instance=user.userpersonalinfo, context={"request": request}
+            ).data
             return {
                 "data": {
+                    "patient_info": user_personal_info,
                     "treatment_histories": TreatmentHistorySerializer(
                         instance=treatments_histories, many=True
-                    ).data
+                    ).data,
                 },
                 "status": status.HTTP_200_OK,
             }

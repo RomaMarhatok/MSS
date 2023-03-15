@@ -13,7 +13,7 @@ class PatientTreatmentView(GenericViewSet):
     ):
         service = TreatmentHistoryService()
         data = service.get_patient_treatment_histories(
-            patient_slug, doctor_specialization_slug
+            patient_slug, doctor_specialization_slug, request=request
         )
         return JsonResponse(
             data=data["data"],
