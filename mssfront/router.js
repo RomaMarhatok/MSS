@@ -1,52 +1,52 @@
 import {createRouter,createWebHashHistory} from "vue-router";
-import store from "./src/store/index"
-import homePage from "./src/pages/homePage"
-import registrationPage from "./src/pages/registrationPage"
-import authenticationPage from "./src/pages/authenticationPage"
-import documentsPage from './src/pages/user/documents/documentsListPage'
-import personalInfoPage from "./src/pages/user/personalInfoPage"  
-import singleDocumentPage from "./src/pages/user/documents/singleDocumentPage"
-import doctorsListPage from "./src/pages/user/doctors/doctorsListPage" 
-import doctorSinglePage from "./src/pages/user/doctors/singleDoctorPage"
-import appointmentsPage from "./src/pages/user/appointments/appointmentsPage"
-import doctorHomePage from "./src/pages/doctor/homePage"
-import noPermissionPage from './src/pages/noPermissionPage'
-import singleAppointmentPage from "./src/pages/doctor/appointments/singleAppointmentPage"
-import EditorPage from "./src/pages/doctor/editorPage"
-import LogOutPage from "./src/pages/logOutPage"
+// import store from "./src/store/index"
+import IndexView from "./src/view/IndexView"
+import SignupView from "./src/view/SignupView"
+import LoginView from "./src/view/LoginView"
+import DocumentsListView from './src/view/user/documents/DocumentsListView'
+// import PersonalInfoView from "./src/view/user/PersonalInfoView"  
+import DocumentView from "./src/view/user/documents/DocumentView"
+import DoctorListView from "./src/view/user/doctors/DoctorListView" 
+import DoctorView from "./src/view/user/doctors/DoctorView"
+import appointmentsPage from "./src/view/user/appointments/appointmentsPage"
+import DoctorHomeView from "./src/view/doctor/DoctorHomeView"
+import NoPermissionView from './src/view/NoPermissionView'
+import AppointmentView from "./src/view/doctor/appointments/AppointmentView"
+import EditorPage from "./src/view/doctor/editorPage"
+import LogoutView from "./src/view/LogoutView"
 import ROLES from "./roles/roles"
 const routes = [
     {
         path:"/logout/",
         name:"logut page",
-        component:LogOutPage,
+        component:LogoutView,
         meta:{authorize:[]}
     },
     {
         path:"/",
         name:"site-home-page",
-        component:homePage
+        component:IndexView
     },
     {
         path:"/registration/",
         name:"registration-page",
-        component:registrationPage
+        component:SignupView
     },
     {
         path:"/authentication/",
         name:"authentication-page",
-        component:authenticationPage
+        component:LoginView
     },
     {
         path:"/doctors/",
         name:"doctors-list-page",
-        component:doctorsListPage,
+        component:DoctorListView,
         meta:{authorize:[ROLES.Patient]}
     },
     {
         path:"/doctor/:doctorSlug",
         name:"doctor-sing-display-section",
-        component:doctorSinglePage,
+        component:DoctorView,
         meta:{authorize:[ROLES.Patient]}
     },
     {
@@ -56,19 +56,19 @@ const routes = [
             {
                 path:"",
                 name:"profile-page",
-                component:()=>store.state.user.role == ROLES.Patient?personalInfoPage:doctorHomePage,
+                component:DoctorHomeView,
                 meta:{authorize:[ROLES.Patient]},
             },
             {
                 path:"documents/",
                 name:"patuent-documents-page",
-                component:documentsPage,
+                component:DocumentsListView,
                 meta:{authorize:[ROLES.Patient]},
             },
             {
                 path:"document/:documentSlug/",
                 name:"single-patuent-document-page",
-                component:singleDocumentPage,
+                component:DocumentView,
                 meta:{authorize:[ROLES.Patient]},
             },
             
@@ -84,7 +84,7 @@ const routes = [
         path:"/appointment/",
         meta:{authorize:[ROLES.Doctor]},
         name:"single-appointment",
-        component:singleAppointmentPage
+        component:AppointmentView
     },
     {
         path:"/editor/",
@@ -94,25 +94,28 @@ const routes = [
     {
         path:"/nopermission/",
         name:"no-permission-page",
-        component:noPermissionPage
+        component:NoPermissionView
     },
 ]
 const router = createRouter({
     history:createWebHashHistory(),
     routes:routes
 })
-router.beforeEach((to,from,next)=>{
-    const { authorize } = to.meta
-    if(authorize){
-        if(authorize.length && authorize.includes(store.state.user.role)){
-            next()
-        }
-        else{
-            next("/nopermission/")
-        }
-    }
-    else{
-        next()
-    }
-})
+//need much fixes
+// TODO fix error with logout page
+// router.beforeEach((to,from,next)=>{
+//     const { authorize } = to.meta
+//     if(authorize){
+//         if(authorize.length && authorize.includes(store.state.user.role)){
+//             next()
+//         }
+//         else{
+//             console.log(authorize.length,authorize.includes(store.state.user.role))
+//             next("/nopermission/")
+//         }
+//     }
+//     else{
+//         next()
+//     }
+// })
 export default router

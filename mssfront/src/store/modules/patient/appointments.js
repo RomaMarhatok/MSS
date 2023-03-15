@@ -23,22 +23,9 @@ const getters = {
             console.log(calendarAppointments)
             return calendarAppointments
         },
-        getRecentAppointments:(state)=>{
-            console.log("getters getRecentAppointments",state.appointments)
-            let recentAppointments = state.appointments.filter(appointment=>{
-                //date example "23/8/2006 10:28"
-                console.log(appointment)
-
-                let date = new Date(appointment.date)
-                let currentDate = new Date()
-                let dateDifference = Math.abs(date - currentDate)
-                let diffDays = Math.ceil(dateDifference / (1000 * 60 * 60 * 24));
-
-                if(diffDays <= 1000) {
-                    console.log("if statement")
-                    return appointment
-                }
-            }).map(appointment=>{
+        getAppointments:(state)=>{
+            console.log("getters getAppointments",state.appointments)
+            return state.appointments.map(appointment=>{
                 return {
                         label:`date: ${appointment.date}`,
                         date:appointment.date,
@@ -47,8 +34,22 @@ const getters = {
                         is_cancelable: appointment.is_cancelable,
                     }
             })
-            console.log("recentAppointments",recentAppointments)
-            return recentAppointments
+            // .filter(appointment=>{
+            //     //date example "23/8/2006 10:28"
+            //     console.log(appointment)
+
+            //     let date = new Date(appointment.date)
+            //     let currentDate = new Date()
+            //     let dateDifference = Math.abs(date - currentDate)
+            //     let diffDays = Math.ceil(dateDifference / (1000 * 60 * 60 * 24));
+
+            //     if(diffDays <= 1000) {
+            //         console.log("if statement")
+            //         return appointment
+            //     }
+            // })
+            // console.log("recentAppointments",recentAppointments)
+            // return recentAppointments
         },
 }
 
