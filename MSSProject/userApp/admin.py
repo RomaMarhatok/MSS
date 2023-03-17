@@ -18,6 +18,9 @@ from .models import (
     DoctorDoctorSpecialization,
 )
 
+
+admin.site.site_header = "MSS Admin Panel"
+admin.site.site_title = "MSS Admin Panel"
 # Start Role Model
 
 
