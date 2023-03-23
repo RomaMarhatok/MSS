@@ -11,7 +11,7 @@ import FormPasswordInput from '@/components/ui/Inputs/FormPasswordInput.vue';
 import BodyLayout from '@/components/layout/BodyLayout.vue';
 import HeaderLayout from '@/components/layout/HeaderLayout.vue';
 import FooterLayout from '@/components/layout/FooterLayout.vue';
-import ChangePasswordLink from '@/components/common/Links/ChangePasswordLink.vue';
+import LoginAsAdminLink from '@/components/common/Links/LoginAsAdminLink.vue';
 
 const store = useStore()
 const router = useRouter()
@@ -51,7 +51,7 @@ function submitForm() {
             </BaseForm>
         </BodyLayout>
         <FooterLayout>
-            <ChangePasswordLink></ChangePasswordLink>
+            <LoginAsAdminLink />
         </FooterLayout>
     </main>
 </template>
