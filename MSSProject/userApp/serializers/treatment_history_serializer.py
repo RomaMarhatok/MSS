@@ -33,11 +33,9 @@ class TreatmentHistorySerializer(ModelSerializer):
         }
 
     def create(self, validated_data: OrderedDict) -> TreatmentHistory:
-        doctor = Doctor.objects.get(
-            user__login=validated_data["doctor"]["user"]["login"]
-        )
+        doctor = Doctor.objects.get(user__slug=validated_data["doctor"]["user"]["slug"])
         patient = Patient.objects.get(
-            user__login=validated_data["patient"]["user"]["login"]
+            user__slug=validated_data["patient"]["user"]["slug"]
         )
         validated_data.pop("doctor")
         validated_data.pop("patient")

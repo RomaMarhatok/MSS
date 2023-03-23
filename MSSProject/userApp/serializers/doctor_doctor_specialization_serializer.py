@@ -9,3 +9,7 @@ class DoctorDoctorSpecializationSerializer(ModelSerializer):
             "doctor",
             "doctor_specialization",
         )
+        extra_kwargs = {
+            "doctor": {"validators": []},
+            "doctor_specialization": {"validators": []},
+        }

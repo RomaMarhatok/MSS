@@ -24,7 +24,12 @@ class UserSerializer(ModelSerializer):
         extra_kwargs = {
             "login": {
                 "validators": [],
+                "required": False,
             },
+            "password": {
+                "required": False,
+            },
+            "role": {"required": False, "validators": []},
             "slug": {"required": False},
         }
         lookup_field = "slug"
@@ -58,5 +63,5 @@ class UserSerializer(ModelSerializer):
             role = Role.objects.get(name=validated_data["role"]["name"])
             validated_data.pop("role")
         else:
-            role = Role.objects.get(name="patient")
+            role = Role.objects.get(name=Role.PATIENT)
         return role, validated_data

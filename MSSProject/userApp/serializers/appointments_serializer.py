@@ -29,6 +29,11 @@ class AppointmentsSerializer(ModelSerializer):
             "doctor_specialization",
             "date",
         )
+        extra_kwargs = {
+            "doctor": {"validators": []},
+            "patient": {"validators": []},
+            "doctor_specialization": {"validators": []},
+        }
 
     def create(self, validated_data: OrderedDict) -> Appointments:
         doctor = Doctor.objects.get(

@@ -26,24 +26,23 @@ class UserPersonalInfoSerializer(ModelSerializer):
             "age",
             "health_status",
         )
-        extra_kwargs = {
-            "image": {"required": False},
-            "patronymic": {"required": False},
-            "email": {"required": False},
-            "gender": {"required": False},
-            "age": {"required": False},
-            "health_status": {"required": False},
-        }
+        extra_kwargs = {"user": {"validators": []}}
 
     def validate_first_name(self, value):
         if not TextValidator.is_valid(value):
-            message = "this field may contain only English letter"
+            message = "this field may contain only English or Russian letter"
             raise ValidationError(message)
         return value
 
     def validate_second_name(self, value):
         if not TextValidator.is_valid(value):
-            message = "this field may contain only English letter"
+            message = "this field may contain only English or Russian letter"
+            raise ValidationError(message)
+        return value
+
+    def validate_patronymic(self, value):
+        if not TextValidator.is_valid(value):
+            message = "this field may contain only English or Russian letter"
             raise ValidationError(message)
         return value
 

@@ -17,6 +17,7 @@ class UserLocationSerializer(ModelSerializer):
             "city",
             "address",
         )
+        extra_kwargs = {"user": {"validators": []}}
 
     def create(self, validated_data):
         user_login = validated_data["user"]["login"]
