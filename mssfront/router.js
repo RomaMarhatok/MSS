@@ -1,10 +1,10 @@
 import {createRouter,createWebHashHistory} from "vue-router";
-// import store from "./src/store/index"
+import store from "./src/store/index"
 import IndexView from "./src/view/IndexView"
 import SignupView from "./src/view/SignupView"
 import LoginView from "./src/view/LoginView"
 import DocumentsListView from './src/view/user/documents/DocumentsListView'
-// import PersonalInfoView from "./src/view/user/PersonalInfoView"  
+import PersonalInfoView from "./src/view/user/PersonalInfoView"  
 import DocumentView from "./src/view/user/documents/DocumentView"
 import DoctorListView from "./src/view/user/doctors/DoctorListView" 
 import DoctorView from "./src/view/user/doctors/DoctorView"
@@ -56,7 +56,7 @@ const routes = [
             {
                 path:"",
                 name:"profile-page",
-                component:DoctorHomeView,
+                component:()=>store.state.user.role==ROLES.Patient?PersonalInfoView:DoctorHomeView,
                 meta:{authorize:[ROLES.Patient]},
             },
             {
