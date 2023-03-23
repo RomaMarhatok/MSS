@@ -131,6 +131,11 @@ urlpatterns = [
                     PatientTreatmentView.as_view({"get": "retrieve"}),
                     name="treatment-history-retrieve",
                 ),
+                path(
+                    "create/",
+                    PatientTreatmentView.as_view({"post": "create"}),
+                    name="treatment-history-create",
+                ),
             ]
         ),
     ),
