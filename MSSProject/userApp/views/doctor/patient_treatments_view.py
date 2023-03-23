@@ -32,3 +32,11 @@ class PatientTreatmentView(GenericViewSet):
             data=data["data"],
             status=data["status"],
         )
+
+    def create(self, request: HttpRequest, *args, **kwargs):
+        service = TreatmentHistoryService()
+        data = service.create_treatment_history(request)
+        return JsonResponse(
+            data=data["data"],
+            status=data["status"],
+        )
