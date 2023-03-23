@@ -21,12 +21,6 @@ const doctor = computed(() => store.getters["doctors/getDoctorBySlug"](doctorSlu
                 <div class="content">
                     <p>{{ fullName }}</p>
                 </div>
-                <div class="flex flex-col gap-4">
-
-                    <button class="btn w-full border-1 border-black p-1" @click="showAppintmentForm">create
-                        appointment</button>
-                    <baseLink class="w-full" :href="'#/doctors/'" :text="'back'" />
-                </div>
             </section>
             <transition name="slide-fade">
                 <div class="m-4" v-if="show">

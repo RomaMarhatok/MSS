@@ -10,17 +10,25 @@ import Button from 'primevue/button'
 import Image from 'primevue/image'
 import Dropdown from 'primevue/dropdown'
 import PageHeader from '@/components/ui/Headers/PageHeader.vue'
+import AppointmentForm from '@/components/ui/Forms/AppointmentForm.vue'
 const store = useStore()
 const sortKey = ref("")
+const show = ref(false)
 const router = useRouter()
 const layout = ref("list")
 const doctors = computed(() => sortKey.value.length == 0 ? store.state.doctors.doctors : store.getters["doctors/getDoctorByDoctorTypeSlug"](sortKey.value))
 const doctorTypes = computed(() => store.state.doctors.doctorTypes)
 const redirect = (slug) => router.push(`/doctor/${slug}`)
+const onclick = () => {
+    show.value = !show.value
+    console.log(show.value)
+
+}
 onBeforeMount(() => {
     store.dispatch("doctors/fetchAllDoctors")
     store.dispatch("doctors/fetchAllDoctorTypes")
 })
+
 </script>
 <template>
     <HeaderLayout>
@@ -28,8 +36,7 @@ onBeforeMount(() => {
         <TabMenu />
     </HeaderLayout>
     <BodyLayout :class="'flex flex-row'">
-        
-        <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-4 w-full">
             <DataView :value="doctors" :paginator="true" :rows="10" :layout="layout">
                 <template #header>
                     <div class="flex justify-between">
@@ -41,7 +48,7 @@ onBeforeMount(() => {
                     </div>
                 </template>
                 <template #list="slotProps">
-                    <div class="doctor-list" @click="redirect(slotProps.data.doctor_slug)">
+                    <div class="doctor-list">
                         <div class="doctor-list-item">
                             <div class="image-container">
                                 <Image class="doctor-image" :src="slotProps.data.personal_info.image" />
@@ -52,7 +59,14 @@ onBeforeMount(() => {
                                     :key="doctor_type.slug">{{ doctor_type.name }}</div>
                             </div>
                             <div class="doctor-list-action">
-                                <Button label="Create appoitments" class="p-button-info w-full"></Button>
+                                <Button label="Create appoitments" class="p-button-info w-full" @click="onclick"></Button>
+                                <Transition>
+                                    <AppointmentForm v-if="show" :doctor_slug="slotProps.data.doctor_slug"
+                                        :doctor_full_name="slotProps.data.personal_info.full_name"
+                                        :doctor-types="slotProps.data.doctor_types" />
+                                </Transition>
+                                <Button label="Open doctor Info" class="p-button-info w-full"
+                                    @click="redirect(slotProps.data.doctor_slug)"></Button>
                             </div>
                         </div>
                     </div>
@@ -73,9 +87,7 @@ onBeforeMount(() => {
 
 .doctor-image {
     width: 150px;
-    height: 100px;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-    margin-right: 2rem;
 }
 
 .doctor-detail {
@@ -96,6 +108,12 @@ onBeforeMount(() => {
     display: flex;
     flex-direction: column;
     justify-content: center;
+}
+
+.doctor-list-action {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 @media screen and (max-width:600px) {
