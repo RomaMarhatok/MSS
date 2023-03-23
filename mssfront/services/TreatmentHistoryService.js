@@ -6,6 +6,11 @@ class TreatmentHistoryService extends RequestService{
             cb(response.data.treatment_histories,response.data.patient_info)
         }).catch(error=>errorCb(error))
     }
+    async createTreatmentHistory(cb,errorCb){
+        return await this.post(`mss/patient/treatment/create/`).then(response=>{
+            cb(response.data.treatment_history)
+        }).catch(error=>errorCb(error))
+    }
 }
 
 export default TreatmentHistoryService
