@@ -1,0 +1,2 @@
+from .doctor_repository import DoctorRepository
+from .doctor_specialization_repository import DoctorSpecializationRepository
