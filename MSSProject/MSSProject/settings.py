@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "document",
     "treatment_histories",
     "appointments",
+    "data_generator",
 ]
 
 MIDDLEWARE = [
