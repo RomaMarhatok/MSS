@@ -9,10 +9,6 @@ const getters = {
     getHealthInfo:(state)=>{
         return  [
             {
-                label: "Email",
-                text: state.personalInfo.email
-            },
-            {
                 label: "Age",
                 text: state.personalInfo.age
             },
@@ -32,6 +28,7 @@ const getters = {
             full_name:state.personalInfo.full_name,
             location:state.personalInfo.location,
             address:state.personalInfo.address,
+            email:state.personalInfo.email
         }
     },
 

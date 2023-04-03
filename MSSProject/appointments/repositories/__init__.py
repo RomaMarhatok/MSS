@@ -1,0 +1,1 @@
+from .appointments_repository import AppointmentsRepository

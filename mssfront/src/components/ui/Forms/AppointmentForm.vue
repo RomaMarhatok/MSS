@@ -1,7 +1,7 @@
 <script setup>
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router'
-import { reactive, computed } from 'vue'
+import { reactive, computed, defineProps } from 'vue'
 import BaseForm from './Base/BaseForm.vue';
 import '@vuepic/vue-datepicker/dist/main.css'
 import Datepicker from '@vuepic/vue-datepicker';
@@ -16,34 +16,45 @@ const formData = reactive({
     appointment_date: new Date(),
     patient_slug: userSlug.value
 })
-const doctorTypes = computed(() => {
-    return store.state.doctors.doctorTypes
-})
-const doctors = computed(() => {
-    console.log(formData.doctor_specialization)
-    return formData.doctor_specialization.length == 0 ? store.state.doctors.doctors : store.getters["doctors/getDoctorByDoctorTypeSlug"](formData.doctor_specialization)
+const props = defineProps({
+    doctorTypes: {
+        type: Array,
+        default: () => [],
+    },
+    doctor_slug: {
+        type: String
+    },
+    doctor_full_name: {
+        type: String
+    }
 })
 function submit() {
+    formData.doctor_slug = props.doctor_slug
     store.dispatch("appointments/fetchCreateAppointemtns", formData).then(responseStatus => {
         if (responseStatus == 200) {
             store.dispatch("response/resetErrors")
             router.push("/home/")
         }
     })
-
-
 }
+
 </script>
 
 <template>
-    <div class="flex w-full justify-center flex-col">
+    <div class="flex w-full justify-center flex-col my-12">
         <BaseForm @SubmitForm="submit">
+            <p>{{ props.doctor_full_name }}</p>
             <Datepicker v-model="formData.appointment_date" placeholder="Input date ..." text-input></Datepicker>
-            <Dropdown v-model="formData.doctor_specialization" option-group-label="slug" option-label="name"
-                :options="doctorTypes"></Dropdown>
-            <Dropdown v-model="formData.doctor_slug" option-value="doctor_slug" option-label="personal_info.full_name"
-                :options="doctors"></Dropdown>
+            <div class="card flex justify-content-center">
+                <Dropdown v-model="formData.doctor_specialization" option-value="slug" option-label="name"
+                    :options="props.doctorTypes" class="w-full md:w-14rem"></Dropdown>
+            </div>
             <FormSubmitButton :button-text="'create appointment'"></FormSubmitButton>
         </BaseForm>
     </div>
 </template>
+<style>
+.p-dropdown-items-wrapper {
+    z-index: 0;
+}
+</style>

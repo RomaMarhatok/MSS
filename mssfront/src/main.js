@@ -12,11 +12,13 @@ import store from "./store"
 import 'v-calendar/dist/style.css';
 import VCalendar from 'v-calendar';
 import Tooltip from 'primevue/tooltip'; 
+import ToastService from 'primevue/toastservice';
 library.add(fas)
 const app = createApp(App)
 app.use(PrimeVue)
 app.use(router)
 app.use(store)
+app.use(ToastService)
 app.use(VCalendar,{})
 app.component('font-awesome-icon', FontAwesomeIcon).mount('#app')
 app.directive('tooltip',Tooltip)

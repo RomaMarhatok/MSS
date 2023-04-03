@@ -10,9 +10,7 @@ const getters = {
             console.log(state.appointments)
             let calendarAppointments = state.appointments.map((appointment,index)=>{
                     console.log(appointment)
-                    let [days,months,years] = appointment.date.split(" ")[0].split("/")
-                    let [hours,minutes] = appointment.date.split(" ")[1].split(":")
-                    let date = new Date(years,months-1,days,hours,minutes)
+                    let date = new Date(appointment.date)
                     return {
                         key:index,
                         customData:{
@@ -20,40 +18,39 @@ const getters = {
                             class:'bg-pink-500 text-white',
                         },
                         dates:date
-                    }
-                // date example "23/8/2006 10:28"
-                
+                    }                
             })
             console.log(calendarAppointments)
             return calendarAppointments
         },
-        getRecentAppointments:(state)=>{
-            console.log("getters getRecentAppointments",state.appointments)
-            let recentAppointments = state.appointments.filter(appointment=>{
-                // date example "23/8/2006 10:28"
-                console.log(appointment)
-
-                let [days,months,years] = appointment.date.split(" ")[0].split("/")
-                let [hours,minutes] = appointment.date.split(" ")[1].split(":")
-                let date = new Date(years,months-1,days,hours,minutes)
-                console.log(date)
-                let currentDate = new Date()
-                let dateDifference = Math.abs(date - currentDate)
-                let diffDays = Math.ceil(dateDifference / (1000 * 60 * 60 * 24));
-
-                if(diffDays <= 1000) {
-                    console.log("if statement")
-                    return appointment
-                }
-            }).map(appointment=>{
+        getAppointments:(state)=>{
+            console.log("getters getAppointments",state.appointments)
+            return state.appointments.map(appointment=>{
                 return {
-                        label:`date: ${appointment.date.split(" ")[0]} time: ${appointment.date.split(" ")[1]}`,
+                        label:`date: ${appointment.date}`,
+                        date:appointment.date,
                         text:`appointments to ${appointment.doctor_specialization.name}`,
+                        doctor_slug:appointment.doctor.user.slug,
+                        is_cancelable: appointment.is_cancelable,
                     }
             })
-            console.log("recentAppointments",recentAppointments)
-            return recentAppointments
-        }
+            // .filter(appointment=>{
+            //     //date example "23/8/2006 10:28"
+            //     console.log(appointment)
+
+            //     let date = new Date(appointment.date)
+            //     let currentDate = new Date()
+            //     let dateDifference = Math.abs(date - currentDate)
+            //     let diffDays = Math.ceil(dateDifference / (1000 * 60 * 60 * 24));
+
+            //     if(diffDays <= 1000) {
+            //         console.log("if statement")
+            //         return appointment
+            //     }
+            // })
+            // console.log("recentAppointments",recentAppointments)
+            // return recentAppointments
+        },
 }
 
 const actions = {
@@ -65,7 +62,8 @@ const actions = {
         )
         console.log(state.appointments)
     },
-    async fetchDestroyAppointemtns(data){
+    async fetchDestroyAppointments({state},data){
+        console.log(data)
         await appointmentService.destroyAppointments(
             appointments=>console.log(appointments),
             error=>console.log(error),
@@ -89,7 +87,7 @@ const actions = {
             resolve(rootState.response.status)
             reject(null)
         })
-    }
+    },
 }
 
 const mutations = {

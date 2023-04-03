@@ -1,19 +1,27 @@
 import TreatmentHistoryService from "@/../services/TreatmentHistoryService";
 const treatmentHistoryService = new TreatmentHistoryService()
 const state = {
+    patientInfo:{},
     treatmentHistories:[]
 }
 const getters = {
     getTreatmentsHistories:(state)=>{
-        //TODO sort by date
-        return state.treatmentHistories??[]
+        return state.treatmentHistories
+    },
+    getPatientInfo:(state)=>{
+        console.log(state.patientInfo)
+        return state.patientInfo
     }
 }
 const actions = {
     async fetchTreatments({commit},{patientSlug,doctorSpecializationSlug}){
         console.log(patientSlug,doctorSpecializationSlug)
         await treatmentHistoryService.getTreatmentHistoriesForDoctor(
-            treatmentHistory =>commit("setTreatmentHistory",treatmentHistory),
+            (treatmentHistory,patientInfo) =>{
+                commit("setTreatmentHistory",treatmentHistory)
+                commit("setPatientInfo",patientInfo)
+            }
+                ,
             error=>console.log(error),
             patientSlug,
             doctorSpecializationSlug
@@ -25,6 +33,10 @@ const mutations = {
     setTreatmentHistory:(state,treatmentHistories)=>{
         console.log("mutations setTreatmentHistory",treatmentHistories)
         state.treatmentHistories = treatmentHistories
+    },
+    setPatientInfo:(state,patientInfo)=>{
+        console.log("mutations setPatient",patientInfo)
+        state.patientInfo = patientInfo
     }
 }
 export default {

@@ -1,5 +1,9 @@
 [flake8]
 ignore = F401,VNE003,SIM115,FNE003,W503,FNE008
-exclude = .git,__pycache__,./MSSProject/userApp/migrations/*
+exclude = 
+    .git, 
+    __pycache__,
+    */migrations/*,
+
 max-line-length = 100
 max-complexity = 18

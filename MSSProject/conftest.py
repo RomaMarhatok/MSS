@@ -1,4 +1,7 @@
 pytest_plugins = [
-    "userApp.tests.fixtures.dict_fixtures",
-    "userApp.tests.fixtures.factory_fixtures",
+    "user.tests.fixtures",
+    "doctor.tests.fixtures",
+    "document.tests.fixtures",
+    "treatment_histories.tests.fixtures",
+    "appointments.tests.fixtures",
 ]
