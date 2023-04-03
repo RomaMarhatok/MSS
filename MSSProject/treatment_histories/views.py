@@ -1,8 +1,8 @@
 from rest_framework.viewsets import GenericViewSet
 from django.http import HttpRequest, JsonResponse
 from .services.treatment_history_service import TreatmentHistoryService
-from userApp.permissions.is_doctor import IsDoctor
-from userApp.permissions.is_user_authenticated import IsUserAuthenticated
+from common.permissions.is_doctor import IsDoctor
+from common.permissions.is_user_authenticated import IsUserAuthenticated
 
 
 class PatientTreatmentView(GenericViewSet):

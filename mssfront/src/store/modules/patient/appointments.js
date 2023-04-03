@@ -55,7 +55,7 @@ const getters = {
 
 const actions = {
     async fetchAppointments({commit,state},slug){
-        await appointmentService.getAppointmentsForUser(
+        await appointmentService.getPatientAppointments(
             slug,
             appointments=>commit("setAppointments",appointments),
             error=>console.log(error)
@@ -64,7 +64,7 @@ const actions = {
     },
     async fetchDestroyAppointments({state},data){
         console.log(data)
-        await appointmentService.destroyAppointments(
+        await appointmentService.destroyPatientAppointments(
             appointments=>console.log(appointments),
             error=>console.log(error),
             data
@@ -72,7 +72,7 @@ const actions = {
         console.log("action destroy appointments",state.appointments)
     },
     async fetchCreateAppointemtns({commit,rootState },data){
-        await appointmentService.createAppointments( 
+        await appointmentService.createPatientAppointments( 
             (status,appointment)=>{
                 commit("response/setStatus", status, { root:true })
                 commit("addAppointment",appointment)

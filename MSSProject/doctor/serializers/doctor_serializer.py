@@ -25,4 +25,5 @@ class DoctorSerializer(ModelSerializer):
         return instance
 
     def to_representation(self, instance):
-        return super().to_representation(instance)
+        rep = super().to_representation(instance)
+        return rep

@@ -9,12 +9,12 @@ class AppointmentsRepository(AbstractRepository):
         self.__init_query = Appointments.objects.select_related(
             "patient",
             "doctor",
-            "patient__user",
+            "patient",
             "doctor__user",
-            "patient__user__role",
+            "patient__role",
             "doctor__user__role",
             "doctor_specialization",
-            "patient__user__userpersonalinfo",
+            "patient__userpersonalinfo",
             "doctor__user__userpersonalinfo",
         )
 
@@ -47,7 +47,7 @@ class AppointmentsRepository(AbstractRepository):
         patient_slug = kwargs.get("patient_slug", None)
         doctor_slug = kwargs.get("doctor_slug", None)
         if patient_slug is not None:
-            return self.__init_query.filter(patient__user__slug=patient_slug)
+            return self.__init_query.filter(patient__slug=patient_slug)
         if doctor_slug is not None:
             return self.__init_query.filter(doctor__user__slug=doctor_slug)
         return None

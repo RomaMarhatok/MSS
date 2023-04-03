@@ -6,11 +6,10 @@ from common.repository.base_repository import AbstractRepository
 class DocumentRepository(AbstractRepository):
     def __init__(self):
         self.__init_query = Document.objects.select_related(
-            "creator",
-            "document",
-            "document__document_type",
-            "document__user",
-            "document__user__role",
+            "user",
+            "user__role",
+            "user__userpersonalinfo",
+            "document_type",
             "creator__user",
             "creator__user__role",
         )
@@ -22,13 +21,11 @@ class DocumentRepository(AbstractRepository):
             return None
         try:
             if patient_slug is not None and slug is not None:
-                return self.__init_query.get(
-                    Q(document__slug=slug) & Q(document__user__slug=patient_slug)
-                )
+                return self.__init_query.get(Q(slug=slug) & Q(user__slug=patient_slug))
             if slug is not None:
-                return self.__init_query.get(document__slug=slug)
+                return self.__init_query.get(slug=slug)
             if patient_slug is not None:
-                return self.__init_query.get(document__user__slug=patient_slug)
+                return self.__init_query.get(user__slug=patient_slug)
         except Document.DoesNotExist:
             return None
         except Document.MultipleObjectsReturned:
@@ -37,7 +34,7 @@ class DocumentRepository(AbstractRepository):
     def list(self, **kwargs) -> QuerySet[Document]:
         patient_slug = kwargs.get("patient_slug", None)
         if patient_slug is not None:
-            return self.__init_query.filter(document__user__slug=patient_slug)
+            return self.__init_query.filter(user__slug=patient_slug)
 
     def create(self, data: dict):
         return super().create(data)

@@ -21,7 +21,7 @@ urlpatterns = [
         ),
     ),
     path(
-        "appointments/",
+        "patient/",
         include(
             [
                 path(

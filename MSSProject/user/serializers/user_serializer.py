@@ -65,3 +65,9 @@ class UserSerializer(ModelSerializer):
         else:
             role = Role.objects.get(name=Role.PATIENT)
         return role, validated_data
+
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        rep.pop("login")
+        rep.pop("password")
+        return rep

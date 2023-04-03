@@ -1,7 +1,7 @@
 import RequestService from "./base/RequestService"
 class UserService extends RequestService {
     async getUserPersonalInfo(slug,cb,errorCb){
-        return await this.post(`/mss/user/${slug}/profile/`).then(response=>{
+        return await this.get(`/user/profile/${slug}/`).then(response=>{
             cb(response.data)
         }).catch(error=>{
             errorCb(error)

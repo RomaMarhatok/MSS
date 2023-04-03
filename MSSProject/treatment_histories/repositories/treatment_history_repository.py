@@ -1,10 +1,13 @@
 from common.repository.base_repository import AbstractRepository
 from ..models import TreatmentHistory
-from userApp.repositories.doctor_repository import DoctorRepository
 from django.db.models import QuerySet, Q
 
 # user app imports
 from user.models import User
+
+
+# doctor app import
+from doctor.repositories.doctor_repository import DoctorRepository
 
 
 class TreatmentHistoryRepository(AbstractRepository):

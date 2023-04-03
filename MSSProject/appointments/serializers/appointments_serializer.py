@@ -63,8 +63,6 @@ class AppointmentsSerializer(ModelSerializer):
     def patient_representation(self, instance: Appointments):
         rep = super().to_representation(instance)
         rep["date"] = parse_date_iso_format(rep["date"])
-        rep["doctor"]["user"].pop("login")
-        rep["doctor"]["user"].pop("password")
         rep.pop("patient")
         rep["doctor"]["user"]["full_name"] = self.__get_user_full_name(
             instance.doctor.user

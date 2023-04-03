@@ -2,7 +2,7 @@ import RequestService from "./base/RequestService";
 
 class DocumentService extends RequestService{
     async getDocuments(slug,cb,errorCb){
-        return await this.get(`/mss/user/${slug}/documents/`).then(response=>{
+        return await this.get(`/document/documents/${slug}/`).then(response=>{
             console.log(response.data.user_documents)
             cb(response.status,response.data.user_documents)
         }).catch(error=>{
@@ -10,7 +10,7 @@ class DocumentService extends RequestService{
         })
     }
     async getDocumentTypes(cb,errorCb){
-        return await this.get(`/mss/documents/types/`).then(response=>{
+        return await this.get(`/document/documents/types/`).then(response=>{
             cb(response.data.document_types)
         }).catch(error=>{
             errorCb(error)

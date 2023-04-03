@@ -6,10 +6,10 @@ const getters = {}
 const actions = {
     async authenticate({ commit,state,rootState }, dataFromForm){   
         const authenticationService = new AuthenticationService()
-        await authenticationService.authenticateUser(
+        await authenticationService.authenticate(
             dataFromForm,
             (slug, role, status)=>{
-                console.log("cb",slug,role,state)
+                console.log("cb",slug,role,state,status)
                 commit("user/setSlug", slug, {root:true})
                 commit("user/setRole", role, {root:true})
                 commit("response/setStatus", status,{root:true})
