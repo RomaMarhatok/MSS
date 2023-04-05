@@ -3,12 +3,12 @@ import { defineProps } from 'vue';
 const props = defineProps({
     buttonText: String,
     buttonType: String,
-    buttonEvent: String,
+    buttonEvent: Function,
 })
 </script>
 <template>
     <button class="form__button border-1 border-black border-solid cursor-pointer text-base p-1 rounded-xl"
-        :type="props.buttonType">
+        :type="props.buttonType" @click="props.buttonEvent">
         {{ props.buttonText }}
     </button>
 </template>
