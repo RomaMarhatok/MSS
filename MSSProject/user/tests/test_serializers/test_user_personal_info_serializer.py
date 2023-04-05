@@ -1,10 +1,10 @@
 import pytest
-from user.models import UserPersonalInfo
-from user.serializers.user_serializer import UserSerializer
-from user.serializers.user_personal_info_serializer import UserPersonalInfoSerializer
-from user.serializers.role_serializer import RoleSerializer
-from rest_framework.validators import ValidationError
 from django.test.client import RequestFactory
+from rest_framework.validators import ValidationError
+from user.models import UserPersonalInfo
+from user.serializers.role_serializer import RoleSerializer
+from user.serializers.user_personal_info_serializer import UserPersonalInfoSerializer
+from user.serializers.user_serializer import UserSerializer
 
 
 @pytest.mark.django_db
@@ -17,7 +17,8 @@ def test_serialization(user_personal_info_with_image_fixture):
 
     user_serializer = UserSerializer(data=user_personal_info_with_image_fixture["user"])
     assert user_serializer.is_valid()
-    user_serializer.save()
+    user = user_serializer.save()
+    user_personal_info_with_image_fixture.update({"user_slug": user.slug})
 
     serializer = UserPersonalInfoSerializer(data=user_personal_info_with_image_fixture)
     assert serializer.is_valid(raise_exception=True)
@@ -48,11 +49,8 @@ def test_serialize_without_fields(user_personal_info_with_image_fixture):
             "second_name": user_personal_info_with_image_fixture["second_name"],
         }
     )
-    assert serializer.is_valid(raise_exception=True)
-    instance = serializer.save()
-    assert UserPersonalInfo.objects.all().count() == 1
-    assert isinstance(instance, UserPersonalInfo)
-    assert instance.image is not None
+    with pytest.raises(ValidationError):
+        serializer.is_valid(raise_exception=True)
 
 
 @pytest.mark.django_db

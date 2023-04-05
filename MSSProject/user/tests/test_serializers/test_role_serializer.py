@@ -1,6 +1,6 @@
 import pytest
-from user.serializers.role_serializer import RoleSerializer
 from user.models import Role
+from user.serializers.role_serializer import RoleSerializer
 
 
 @pytest.mark.django_db
