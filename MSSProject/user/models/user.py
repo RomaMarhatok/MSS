@@ -1,6 +1,6 @@
 from django.db import models
+from datetime import datetime
 from django.contrib.auth.models import AbstractUser
-
 from .role import Role
 
 from common.utils.string_utils import generate_slug_from_str
@@ -11,6 +11,8 @@ class User(AbstractUser):
     login = models.CharField("user login", max_length=100, unique=True)
     password = models.CharField("user password", max_length=100)
     role = models.ForeignKey(Role, on_delete=models.SET_NULL, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
         self.slug = generate_slug_from_str(self.login)
