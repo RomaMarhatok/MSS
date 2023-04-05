@@ -1,62 +1,80 @@
 <script setup>
-import { useStore } from 'vuex'
-import { useRouter } from "vue-router";
-import { reactive, onBeforeMount } from "vue"
+// libraries
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
+import { reactive, onMounted, ref } from 'vue'
 
-import BodyLayout from '@/components/layout/BodyLayout.vue';
-import HeaderLayout from '@/components/layout/HeaderLayout.vue';
+// services
+import RegistrationService from '@/../services/RegistrationService'
 
-import BaseForm from "@/components/ui/Forms/Base/BaseForm.vue"
-import FormEmailInput from '@/components/ui/Inputs/FormEmailInput.vue';
-import FormPasswordInput from '@/components/ui/Inputs/FormPasswordInput.vue';
-import FormSubmitButton from '@/components/ui/Buttons/FormSubmitButton.vue';
-import FormFirstNameInput from '@/components/ui/Inputs/FormFirstNameInput.vue';
-import FormSecondNameInput from '@/components/ui/Inputs/FormSecondNameInput.vue';
-
+// components
+import UserForm from '@/components/ui/Forms/registration/UserForm.vue';
+import UserPersonalInfoForm from '@/components/ui/Forms/registration/UserPersonalInfoForm.vue';
+import UserLocationForm from '@/components/ui/Forms/registration/UserLocationForm.vue';
+// store
 const store = useStore()
+
+// router
 const router = useRouter()
-const formData = reactive({
-    login: "",
-    password: "",
-    first_name: "",
-    second_name: "",
-})
 
-onBeforeMount(() => {
-    store.dispatch("response/resetErrors")
-    store.dispatch("registration/resetMessage")
-})
+// refs
+const step = ref(1)
+const user = reactive({})
+const userPersonalInfo = reactive({})
+const userLocation = reactive({})
+const registrationService = new RegistrationService()
 
-function submitForm() {
-    store.dispatch("response/resetErrors")
-    store.dispatch("registration/registrateUser", formData).then((status) => {
-        console.log("submit", status)
-        if (status == 200) {
+// hooks
+onMounted(() => store.commit("registration/clearErrors"))
+
+
+// methods
+const submitUserForm = async (data) => {
+    Object.assign(user, data)
+    await registrationService.validateUser(user).then(response => {
+        if (response.status == 200) {
+            store.commit("registration/clearErrors")
+            step.value++
+        }
+    }).catch(error => store.commit("registration/addError", error.response.data.description))
+}
+const submitUserPersonalInfoForm = async (data) => {
+    Object.assign(userPersonalInfo, data)
+    await registrationService.validateUserPersonalInfo(userPersonalInfo).then(response => {
+        if (response.status == 200) {
+            store.commit("registration/clearErrors")
+            step.value++
+        }
+    }).catch(error => {
+        console.log(error.response)
+        store.commit("registration/addError", error.response.data.description)
+    })
+}
+
+const submitUserLocationForm = async (data) => {
+    Object.assign(userLocation, data)
+    const requestData = {}
+    Object.assign(requestData, user, userPersonalInfo, userLocation)
+    await registrationService.registrate(requestData).then(response => {
+        if (response.status == 200) {
             router.push("/")
-            store.dispatch("response/resetErrors")
-            store.dispatch("registration/resetMessage")
         }
     })
 }
+
+
 </script>
 <template>
     <main class="flex flex-col justify-center items-center min-h-3/4 w-full">
-        <HeaderLayout>
-            <header class="flex flex-col gap-3 mb-5">
-                <div class="text-5xl font-black underline decoration-2">MSS</div>
-                <div class="text-lg font-black">Nice to meet you in our medical system!</div>
-            </header>
-        </HeaderLayout>
-        <BodyLayout :class="'w-4/5'">
-            <BaseForm @SubmitForm="submitForm">
-                <div class="flex flex-row gap-3">
-                    <FormFirstNameInput v-model="formData.first_name" />
-                    <FormSecondNameInput v-model="formData.second_name" />
-                </div>
-                <FormEmailInput v-model="formData.login" />
-                <FormPasswordInput v-model="formData.password" />
-                <FormSubmitButton :buttonText="'Sign up'" />
-            </BaseForm>
-        </BodyLayout>
+        <header class="flex flex-col gap-3 mb-5">
+            <div class="text-5xl font-black underline decoration-2">MSS</div>
+            <div class="text-lg font-black">Nice to meet you in our medical system! {{ step }}/3</div>
+        </header>
+
+        <section class="w-4/5">
+            <UserForm @SubmitUserForm="submitUserForm" v-if="step == 1" />
+            <UserPersonalInfoForm @SubmitUserPersonalInfoForm="submitUserPersonalInfoForm" v-if="step == 2" />
+            <UserLocationForm @SubmitUserLocationForm="submitUserLocationForm" v-if="step == 3" />
+        </section>
     </main>
 </template>
