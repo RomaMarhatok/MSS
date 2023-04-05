@@ -1,4 +1,4 @@
-from common.utils.string_utls import generate_hash_from_string
+from common.utils.string_utils import generate_hash_from_string
 
 
 def test_hash_generator():

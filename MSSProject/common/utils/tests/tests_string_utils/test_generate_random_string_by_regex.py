@@ -1,4 +1,4 @@
-from common.utils.string_utls import generate_random_string_by_regex
+from common.utils.string_utils import generate_random_string_by_regex
 
 
 def test_generate_random_string_by_regex():
