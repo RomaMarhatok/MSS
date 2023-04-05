@@ -1,20 +1,31 @@
 <script setup>
-import { computed } from 'vue';
-import { useStore } from 'vuex';
-import errorMessage from '@/components/common/Messages/ErrorMessage.vue';
-import successMessage from '@/components/common/Messages/SuccesMessage.vue';
-const store = useStore()
-const errors = computed(() => store.getters["response/generalErrors"])
-const message = computed(() => store.state.registration.message)
+import { defineProps, ref } from 'vue';
+import { Form } from 'vee-validate'
+import { ObjectSchema } from 'yup';
+
+const props = defineProps({
+    schema: ObjectSchema,
+    errors: {
+        type: Array,
+        default: () => [],
+    }
+})
+
+const invalidForm = ref(false)
 </script>
 <template>
-    <div class="section">
-        <successMessage v-if="message" :messageText="message" />
-        <div v-if="errors.length" class="flex flex-col">
-            <errorMessage severity="error" v-for="(error, index) in errors" :key="index" :errorText="error" />
-        </div>
-        <form @submit.prevent="$emit('SubmitForm')" class="flex flex-col" method="post">
+    <Form as="div" :validation-schema="props.schema" @submit="$emit('SubmitForm'); invalidForm = false"
+        @invalid-submit="invalidForm = true">
+        <form class="flex flex-col" method="post">
+            <div v-if="invalidForm">
+                <p class="text-red-500">Введите верные данные</p>
+            </div>
+            <div v-if="props.errors.length">
+                <p v-for="(error, index) in props.errors" :key="index" class="text-red-500">
+                    {{ error }}
+                </p>
+            </div>
             <slot>Fallback content</slot>
         </form>
-    </div>
+    </Form>
 </template>
