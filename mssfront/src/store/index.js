@@ -4,7 +4,6 @@ import authentication from './modules/authentication'
 import registration from './modules/registration'
 import user from './modules/user'
 import doctors from './modules/patient/doctors'
-import response from './modules/response'
 import documents from './modules/patient/documents'
 import appointments from './modules/patient/appointments'
 import doctorAppointments from './modules/doctor/doctorAppointments'
@@ -16,7 +15,6 @@ const store = createStore({
         authentication,
         user,
         doctors,
-        response,
         documents,
         appointments,
         doctorAppointments,

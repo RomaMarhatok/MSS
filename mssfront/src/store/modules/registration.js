@@ -1,45 +1,27 @@
-import RegistrationService from "@/../services/RegistrationService"
 
 const state = {
-    status:0,
-    message:"",
+    errors:[]
 }
 
 const getters = {
-    getMessage:(state)=>state.message
+    getErrors:(state)=>state.errors
 }
 
 const actions = {
-    async registrateUser({ commit,state }, dataFromForm){
-        commit("setMessage","")
-        const registrationService = new RegistrationService()
-        await registrationService.registerUser(
-            dataFromForm,
-            (status,message)=>{
-                commit("setStatus",status)
-                commit("setMessage",message)
-            },
-            error=>commit("response/setErrors", error,{ root:true })
-        )
-
-        return new Promise((resolve,reject)=>{
-            resolve(state.status)
-            reject(null)
-        })      
-    },
-    async resetMessage({commit}){
-        commit("setMessage","")
-    }
 }
 
 const mutations = {
-    setMessage:(state,message)=>{
-        console.log("mutation registration message",message)
-        state.message=message
+    setErrors:(state,errors)=>{
+        console.log("mutation registration message",errors)
+        state.errors=errors
     },
-    setStatus:(state,status)=>{
-        console.log("mutation registration status",status)
-        state.status = status
+    addError:(state,error)=>{
+        if(state.errors.indexOf(error)==-1){
+            state.errors.push(error)
+        }
+    },
+    clearErrors:(state)=>{
+        state.errors = []
     }
 }
 
