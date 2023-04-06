@@ -1,17 +1,28 @@
-from rest_framework.serializers import ModelSerializer
+# stdlib imports
 from typing import OrderedDict
-from .role_serializer import RoleSerializer
-from ..models import (
-    User,
-    Role,
+
+# Third-party app imports
+from rest_framework.serializers import (
+    ModelSerializer,
+    SerializerMethodField,
+    ValidationError,
+    CharField,
 )
-from rest_framework.serializers import ValidationError
-from common.validators.password_validator import PasswordValidator
+
+# app imports
+from ..models import Role, User
+from ..serializers import RoleSerializer
 from common.validators.login_validator import LoginValidator
+from common.validators.password_validator import PasswordValidator
+
+# override login field - for put away default validators
+# role and slug is default field and because i set them how SerializerMethodField
 
 
 class UserSerializer(ModelSerializer):
-    role = RoleSerializer(many=False, required=False)
+    login = CharField()
+    role = SerializerMethodField()
+    slug = SerializerMethodField()
 
     class Meta:
         model = User
@@ -21,53 +32,44 @@ class UserSerializer(ModelSerializer):
             "slug",
             "role",
         )
-        extra_kwargs = {
-            "login": {
-                "validators": [],
-                "required": False,
-            },
-            "password": {
-                "required": False,
-            },
-            "role": {"required": False, "validators": []},
-            "slug": {"required": False},
-        }
-        lookup_field = "slug"
+
+    def get_slug(self, instance: User):
+        return instance.slug
+
+    def get_role(self, instance: User):
+        return instance.role
 
     def validate_password(self, value):
         if not PasswordValidator.is_valid(value):
             message = (
-                "Enter a valid password. This value may contain only English letters and numbers "
-                "min length of password 8 max length pasword 15"
+                "Введите валидный пароль. Пароль может содержать только Английские символы и числа"
+                "минимальная длинна пароля 8"
             )
             raise ValidationError(message)
         return value
 
     def validate_login(self, value):
+        if User.objects.filter(login=value).exists():
+            message = "Пользователь с таким логином уже существует"
+            raise ValidationError(message)
         if not LoginValidator.is_valid(value):
             message = (
-                "Enter a valid login. This value may contain only English letters, "
-                "numbers, and optinal contain '_', '-' characters."
+                "Введите валидный логин. Логин может содержать только Английские символы, "
+                "числа, и эти сиволы '_', '-'."
             )
             raise ValidationError(message)
         return value
 
     def create(self, validated_data: OrderedDict) -> User:
-        role, validated_data = self.__get_role(validated_data)
-        instance, _ = User.objects.get_or_create(**validated_data, role=role)
+        if "role" in validated_data:
+            validated_data.pop("role")
+        role = Role.objects.get(name=Role.PATIENT)
+        instance = User.objects.create(**validated_data, role=role)
         return instance
 
-    def __get_role(self, validated_data: OrderedDict) -> Role:
-        role = None
-        if "role" in validated_data:
-            role = Role.objects.get(name=validated_data["role"]["name"])
-            validated_data.pop("role")
-        else:
-            role = Role.objects.get(name=Role.PATIENT)
-        return role, validated_data
-
-    def to_representation(self, instance):
+    def to_representation(self, instance: User):
         rep = super().to_representation(instance)
         rep.pop("login")
         rep.pop("password")
+        rep["role"] = instance.role.name
         return rep
