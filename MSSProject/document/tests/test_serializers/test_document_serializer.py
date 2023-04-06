@@ -29,8 +29,8 @@ def test_serialization(document_fixture):
 
     user_serializer = UserSerializer(data=document_fixture["user"])
     assert user_serializer.is_valid()
-    user_serializer.save()
-
+    user = user_serializer.save()
+    document_fixture["user_slug"] = user.slug
     user_serializer = UserSerializer(data=document_fixture["creator"]["user"])
     assert user_serializer.is_valid()
     user_serializer.save()
