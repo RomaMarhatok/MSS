@@ -6,6 +6,7 @@ from django.http import (
     HttpResponse,
     JsonResponse,
 )
+from django.db import transaction
 
 # Third-party app import
 from rest_framework.authtoken.models import Token
@@ -19,6 +20,7 @@ from responses.errors import JsonResponseForbidden, JsonResponseBadRequest
 class AuthenticationService:
     user_repository = UserRepository()
 
+    @transaction.atomic
     def authenticate(self, data: dict) -> HttpResponse:
         login = data.get("login", None)
         password = data.get("password", None)
