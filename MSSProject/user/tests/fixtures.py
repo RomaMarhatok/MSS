@@ -1,13 +1,14 @@
 import pytest
-from faker import Faker
 from common.utils.image_utils import load_image_from_url_to_file
 from common.utils.string_utils import generate_valid_login, generate_valid_password
-from ..models import Role, User, UserPersonalInfo, UserLocation
+from faker import Faker
+
+from ..models import Role, User, UserLocation, UserPersonalInfo
 from .factories import (
     RoleFactory,
     UserFactory,
-    UserPersonalInfoFactory,
     UserLocationFactory,
+    UserPersonalInfoFactory,
 )
 
 fake = Faker()
