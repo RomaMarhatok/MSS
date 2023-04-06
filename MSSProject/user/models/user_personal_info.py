@@ -50,3 +50,7 @@ class UserPersonalInfo(models.Model):
 
     def __str__(self) -> str:
         return self.first_name + " " + self.second_name + " " + self.patronymic
+
+    @property
+    def full_name(self):
+        return self.first_name + " " + self.second_name + " " + self.patronymic
