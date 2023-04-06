@@ -10,3 +10,7 @@ class UserLocation(models.Model):
 
     class Meta:
         db_table = "user_location"
+
+    @property
+    def location(self):
+        return self.country + " " + self.city
