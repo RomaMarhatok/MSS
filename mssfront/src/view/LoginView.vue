@@ -1,39 +1,44 @@
 <script setup>
+// libraries
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
-import { reactive, onBeforeMount } from "vue"
-
-import BaseForm from "@/components/ui/Forms/Base/BaseForm.vue"
-import FormEmailInput from '@/components/ui/Inputs/FormEmailInput.vue';
-import FormSubmitButton from '@/components/ui/Buttons/FormSubmitButton.vue';
-import FormPasswordInput from '@/components/ui/Inputs/FormPasswordInput.vue';
-
+import { onBeforeMount } from "vue";
+//services
+import AuthenticationService from "@/../services/AuthenticationService";
+// components
 import BodyLayout from '@/components/layout/BodyLayout.vue';
 import HeaderLayout from '@/components/layout/HeaderLayout.vue';
 import FooterLayout from '@/components/layout/FooterLayout.vue';
 import LoginAsAdminLink from '@/components/common/Links/LoginAsAdminLink.vue';
-
+import AuthenticationFrom from '@/components/ui/Forms/authentication/AuthenticationForm.vue'
+// //stores
 const store = useStore()
+
+// // router
 const router = useRouter()
-const formData = reactive({
-    login: "",
-    password: "",
-})
 
-onBeforeMount(() => {
-    store.dispatch("response/resetErrors")
-    store.dispatch("registration/resetMessage")
-})
+// services
+const authenticationService = new AuthenticationService()
 
-function submitForm() {
-    console.log(formData)
-    store.dispatch("authentication/authenticate", formData).then(status => {
-        console.log("status authentication", status)
-        if (status == 200) {
+
+// methods
+const submit = async (data) => {
+    console.log(data)
+    authenticationService.authenticate(data).then(response => {
+        if (response.status == 200) {
+            store.commit("user/setRole", response.data.role)
+            store.commit("user/setSlug", response.data.slug)
             router.push("/home/")
         }
+    }).catch(errors => {
+        store.commit("authentication/addError", errors.response.data.description)
     })
 }
+
+// hooks
+onBeforeMount(() => {
+    store.commit("authentication/clearErrors")
+})
 </script>
 <template>
     <main class="flex flex-col justify-center items-center min-h-3/4 w-full">
@@ -44,11 +49,7 @@ function submitForm() {
             </header>
         </HeaderLayout>
         <BodyLayout :class="'w-4/5'">
-            <BaseForm @SubmitForm="submitForm">
-                <FormEmailInput v-model="formData.login" />
-                <FormPasswordInput v-model="formData.password" />
-                <FormSubmitButton :buttonText="'Log in'" />
-            </BaseForm>
+            <AuthenticationFrom @SubmitLoginFrom="submit"></AuthenticationFrom>
         </BodyLayout>
         <FooterLayout>
             <LoginAsAdminLink />

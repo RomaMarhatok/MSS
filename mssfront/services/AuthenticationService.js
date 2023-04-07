@@ -1,17 +1,14 @@
 import RequestService from "./base/RequestService"
 
 class AuthenticationService extends RequestService{
-    async authenticate(userData,cb,errorCb){
-        return await this.post("/user/authentication/",userData).then((response) => {
-            console.log(response)
+    async authenticate(data){
+        return await this.post("/user/authentication/",data).then(response=>{
+            console.log("Authentication response",response)
             const token = response.data.token
             localStorage.setItem("auth_token", token)
-            const slug = response.data.slug
-            const role = response.data.role
-            const status = response.status
-            cb(slug,role,status)
-        }).catch(error => {
-            errorCb(error.response.data.errors??{})
+            return Promise.resolve(response)
+        }).catch(error=>{
+            return Promise.reject(error)
         })
     }
 }   
