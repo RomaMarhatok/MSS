@@ -29,14 +29,18 @@ def factory_doctor_role_fixture() -> Role:
 @pytest.fixture
 def factory_user_with_role_patient_fixture(factory_patient_role_fixture) -> User:
     return UserFactory.create(
-        login=generate_valid_login(), role=factory_patient_role_fixture
+        login=generate_valid_login(),
+        password=generate_valid_password(),
+        role=factory_patient_role_fixture,
     )
 
 
 @pytest.fixture
 def factory_user_with_role_doctor_fixture(factory_doctor_role_fixture) -> User:
     return UserFactory.create(
-        login=generate_valid_login(), role=factory_doctor_role_fixture
+        login=generate_valid_login(),
+        password=generate_valid_password(),
+        role=factory_doctor_role_fixture,
     )
 
 
