@@ -5,5 +5,5 @@ exclude =
     __pycache__,
     */migrations/*,
 
-max-line-length = 100
+max-line-length = 120
 max-complexity = 18
