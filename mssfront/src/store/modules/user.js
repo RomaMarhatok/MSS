@@ -31,6 +31,9 @@ const getters = {
             email:state.personalInfo.email
         }
     },
+    getRole:(state)=>{
+        return state.role
+    }
 
 }
 

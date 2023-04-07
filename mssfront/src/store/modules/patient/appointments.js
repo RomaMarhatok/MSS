@@ -1,7 +1,8 @@
 import AppointmentService from "@/../services/AppointmentService"
 const appointmentService = new AppointmentService()
 const state = {
-    appointments:[]
+    appointments:[],
+    errors:[]
 }
 
 const getters = {
@@ -51,6 +52,9 @@ const getters = {
             // console.log("recentAppointments",recentAppointments)
             // return recentAppointments
         },
+        getErrors:(state)=>{
+            return state.errors
+        }
 }
 
 const actions = {
@@ -73,14 +77,10 @@ const actions = {
     },
     async fetchCreateAppointemtns({commit,rootState },data){
         await appointmentService.createPatientAppointments( 
-            (status,appointment)=>{
-                commit("response/setStatus", status, { root:true })
+            (appointment)=>{
                 commit("addAppointment",appointment)
             },
-            (status,error)=>{
-                commit("response/setStatus", status, { root:true })
-                commit("response/setErrors", error, { root:true })
-            },
+            (error)=>console.log(error),
             data
         )
         return new Promise((resolve,reject)=>{
@@ -98,6 +98,20 @@ const mutations = {
     addAppointment:(state,appointment)=>{
         console.log("add appointments")
         state.appointments.push(appointment)
+    },
+    addError:(state,error)=>{
+        console.log("mutation appointemnts add error")
+        if(state.errors.indexOf(error)==-1){
+            state.errors.push()
+        }
+    },
+    clearError:(state)=>{
+        console.log("mutation appointemnts clear error")
+        state.error = []
+    },
+    setErrors:(state,errors)=>{
+        console.log("mutation appointemnts set error")
+        state.errors = errors
     }
 }
 
