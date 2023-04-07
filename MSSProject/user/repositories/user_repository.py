@@ -1,3 +1,4 @@
+from rest_framework import serializers
 from common.repository.base_repository import AbstractRepository
 from user.serializers import UserSerializer
 
@@ -5,26 +6,33 @@ from ..models import User
 
 
 class UserRepository(AbstractRepository):
+    class LoginSerializer(serializers.Serializer):
+        login = serializers.CharField()
+
+    class SlugSerializer(serializers.Serializer):
+        slug = serializers.SlugField()
+
+    def _validate_kwargs(self, kwargs) -> dict:
+        login_serializer = self.LoginSerializer(data=kwargs)
+        slug_serializer = self.SlugSerializer(data=kwargs)
+        if login_serializer.is_valid():
+            return login_serializer.validated_data
+        elif slug_serializer.is_valid():
+            return slug_serializer.validated_data
+        raise ValueError(
+            f"class:{self.__class__}"
+            "function:[_validate_kwargs method]"
+            "exception: Any kwargs arguments expected"
+        )
+
     def is_exist(self, **kwargs) -> bool:
-        login = kwargs.get("login", None)
-        if login is not None:
-            return User.objects.filter(login=login).exists()
-        slug = kwargs.get("slug", None)
-        if slug is not None:
-            return User.objects.filter(slug=slug).exists()
-        return False
+        data = self._validate_kwargs(kwargs)
+        return User.objects.filter(**data).exists()
 
     def get(self, **kwargs) -> User:
-
         qs = User.objects.select_related("role", "userpersonalinfo", "userlocation")
-
-        login = kwargs.get("login", None)
-        if login is not None:
-            return qs.get(login=login)
-
-        slug = kwargs.get("slug", None)
-        if slug is not None:
-            return qs.get(slug=slug)
+        data = self._validate_kwargs(kwargs)
+        return qs.get(**data)
 
     def list(self, **kwargs):
         return super().list(**kwargs)

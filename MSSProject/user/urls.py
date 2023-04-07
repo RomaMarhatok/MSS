@@ -1,5 +1,12 @@
-from django.urls import path, include
-from user.views import ProfileView, AuthenticationView, RegistrationView, LogOutView
+from django.urls import path
+from user.views import (
+    AuthenticationView,
+    LogOutView,
+    ProfileView,
+    RegistrationView,
+    UserPersonalInfoValidationView,
+    UserValidationView,
+)
 
 urlpatterns = [
     path(
@@ -10,7 +17,7 @@ urlpatterns = [
     path(
         "authentication/",
         AuthenticationView.as_view(),
-        name="token-user-authentication",
+        name="user-authentication",
     ),
     path(
         "registration/",
@@ -18,4 +25,6 @@ urlpatterns = [
         name="user-registration",
     ),
     path("logout/", LogOutView.as_view(), name="user-logout"),
+    path("validate/user/", UserValidationView.as_view()),
+    path("validate/info/", UserPersonalInfoValidationView.as_view()),
 ]

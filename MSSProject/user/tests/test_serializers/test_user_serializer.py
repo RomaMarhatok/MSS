@@ -88,3 +88,14 @@ def test_deserialization(factory_user_with_role_patient_fixture):
     assert "slug" in serializer.data
     assert serializer.data["slug"] != "default"
     assert serializer.data["slug"] != ""
+
+
+@pytest.mark.django_db
+def test_filter(patient_fixture):
+    Role.objects.create(name=Role.PATIENT)
+    serializer = UserSerializer(data=patient_fixture)
+    assert serializer.is_valid(raise_exception=True)
+    serializer.save()
+    patient_fixture.pop("role")
+    assert User.objects.filter(**patient_fixture).exists()
+    assert bool(User.objects.get(**patient_fixture))

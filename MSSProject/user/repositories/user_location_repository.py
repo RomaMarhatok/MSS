@@ -1,3 +1,4 @@
+from rest_framework import serializers
 from common.repository.base_repository import AbstractRepository
 from user.serializers import UserLocationSerializer
 
@@ -5,17 +6,22 @@ from ..models import UserLocation
 
 
 class UserLocationRepository(AbstractRepository):
-    def get(self, **kwargs) -> UserLocation:
-        slug = kwargs.get("slug", None)
-        if slug is None:
-            raise ValueError(
-                "class:UserLocationRepository"
-                "function:[GET method]"
-                "exception:argument slug"
-            )
-        return UserLocation.objects.select_related("user", "user__role").get(
-            user__slug=slug
+    class SlugSerializer(serializers.Serializer):
+        slug = serializers.SlugField()
+
+    def _validation_kwargs(self, kwargs):
+        slug_serialzer = self.SlugSerializer(data=kwargs)
+        if slug_serialzer.is_valid():
+            return slug_serialzer.validated_data
+        raise ValueError(
+            f"class:{self.__class__}"
+            "function:[_validate_kwargs method]"
+            "exception: Any kwargs arguments expected"
         )
+
+    def get(self, **kwargs) -> UserLocation:
+        data = self._validation_kwargs(kwargs)
+        return UserLocation.objects.select_related("user", "user__role").get(**data)
 
     def list(self, **kwargs):
         return super().list(**kwargs)
