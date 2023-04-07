@@ -2,3 +2,4 @@ from .json_response_bad_request import JsonResponseBadRequest
 from .json_response_validation_error import JsonResponseValidationErrors
 from .json_response_record_exist import JsonResponseRecordExist
 from .json_response_forbidden import JsonResponseForbidden
+from .json_response_not_found import JsonResponseNotFound
