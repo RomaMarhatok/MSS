@@ -4,12 +4,10 @@ import IndexView from "./src/view/IndexView"
 import SignupView from "./src/view/SignupView"
 import LoginView from "./src/view/LoginView"
 import DocumentsListView from './src/view/user/documents/DocumentsListView'
-import PersonalInfoView from "./src/view/user/PersonalInfoView"  
 import DocumentView from "./src/view/user/documents/DocumentView"
 import DoctorListView from "./src/view/user/doctors/DoctorListView" 
 import DoctorView from "./src/view/user/doctors/DoctorView"
 import appointmentsPage from "./src/view/user/appointments/appointmentsPage"
-import DoctorHomeView from "./src/view/doctor/DoctorHomeView"
 import NoPermissionView from './src/view/NoPermissionView'
 import AppointmentView from "./src/view/doctor/appointments/AppointmentView"
 import EditorPage from "./src/view/doctor/editorPage"
@@ -51,13 +49,21 @@ const routes = [
     },
     {
         path:"/home/",
-        meta:{authorize:[ROLES.Patient]},
+        meta:{authorize:[]},
         children:[
             {
                 path:"",
                 name:"profile-page",
-                component:()=>store.state.user.role==ROLES.Patient?PersonalInfoView:DoctorHomeView,
-                meta:{authorize:[ROLES.Patient]},
+                component:()=>{
+                    const userRole = store.getters["user/getRole"]
+                    if(userRole == "PATIENT"){
+                        return import("./src/view/user/PersonalInfoView" )
+                    }
+                    if(userRole == "DOCTOR"){
+                        return import("./src/view/doctor/DoctorHomeView")
+                    }
+                    return import("./src/view/NotFound")
+                }
             },
             {
                 path:"documents/",
