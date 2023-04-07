@@ -12,17 +12,15 @@ import Dropdown from 'primevue/dropdown'
 import PageHeader from '@/components/ui/Headers/PageHeader.vue'
 import AppointmentForm from '@/components/ui/Forms/AppointmentForm.vue'
 const store = useStore()
+const router = useRouter()
 const sortKey = ref("")
 const show = ref(false)
-const router = useRouter()
 const layout = ref("list")
 const doctors = computed(() => sortKey.value.length == 0 ? store.state.doctors.doctors : store.getters["doctors/getDoctorByDoctorTypeSlug"](sortKey.value))
-const doctorTypes = computed(() => store.state.doctors.doctorTypes)
+const doctorTypes = computed(() => store.getters["doctors/getDoctorTypes"])
 const redirect = (slug) => router.push(`/doctor/${slug}`)
 const onclick = () => {
     show.value = !show.value
-    console.log(show.value)
-
 }
 onBeforeMount(() => {
     store.dispatch("doctors/fetchAllDoctors")
@@ -37,7 +35,7 @@ onBeforeMount(() => {
     </HeaderLayout>
     <BodyLayout :class="'flex flex-row'">
         <div class="flex flex-col gap-4 w-full">
-            <DataView :value="doctors" :paginator="true" :rows="10" :layout="layout">
+            <DataView :value="doctors" :paginator="true" :rows="10" :layout="layout" :data-key="doctor_slug">
                 <template #header>
                     <div class="flex justify-between">
                         <div class="flex">

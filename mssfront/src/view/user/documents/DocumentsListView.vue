@@ -24,7 +24,13 @@ const filter = ref({
 const documents = computed(() => store.state.documents.documents)
 const slug = computed(() => route.params.userSlug ? route.params.userSlug : store.state.user.slug)
 
-const redirect = (slug) => router.push(`/home/document/${slug}/`)
+const redirect = (document_slug) => {
+    store.dispatch("documents/fetchDocument", {
+        slug: slug.value,
+        document_slug: document_slug
+    })
+    router.push(`/home/document/${document_slug}/`)
+}
 
 onMounted(() => {
     store.dispatch("documents/fetchDocuments", slug.value)

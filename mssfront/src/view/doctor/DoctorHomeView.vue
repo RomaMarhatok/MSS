@@ -31,7 +31,7 @@ onBeforeMount(() => {
                 <AccardionLayout>
                     <template #header>
                         <div class="accordion-tab-header">
-                            <p class="pt-2">Patient {{ slotProps.data.patient.user.full_name }}</p>
+                            <p class="pt-2">Patient {{ slotProps.data.patient.full_name }}</p>
                         </div>
                     </template>
                     <Panel header="Persnal info" :toggleable="true">
