@@ -1,34 +1,37 @@
-from rest_framework import status
+from django.http import JsonResponse
 from ..repositories import DocumentRepository
 from ..serializers import DocumentSerializer
+from responses.errors import JsonResponseNotFound
 
 
 class DocumentService:
     def __init__(self):
         self.document_repository: DocumentRepository = DocumentRepository()
 
-    def get_document_info(self, document_slug: str, patient_slug: str):
-        document_creator = self.document_repository.get(
+    def get_document(self, document_slug: str, patient_slug: str) -> JsonResponse:
+        if not self.document_repository.is_exist(
+            slug=document_slug, patient_slug=patient_slug
+        ):
+            return JsonResponseNotFound(
+                data={
+                    "message": "Документ не найден",
+                    "description": "Документ с такими параметрами не существует",
+                }
+            )
+        document = self.document_repository.get(
             slug=document_slug, patient_slug=patient_slug
         )
-        data = DocumentSerializer(
-            instance=document_creator,
-            context={"include_context": True},
-        ).data
-        return {"data": data, "status": status.HTTP_200_OK}
+        if document is not None:
+            data = DocumentSerializer(
+                instance=document,
+            ).data
+            return JsonResponse(data={"document": data})
 
-    def get_all_documents_with_content(self, patient_slug: str):
+    def get_document_list(self, patient_slug: str) -> JsonResponse:
+
         data = DocumentSerializer(
             instance=self.document_repository.list(patient_slug=patient_slug),
             many=True,
-            context={"include_context": True},
+            context={"repr": "list"},
         ).data
-        return {"data": {"user_documents": data}, "status": status.HTTP_200_OK}
-
-    def get_all_documents_without_content(self, patient_slug: str):
-        data = DocumentSerializer(
-            instance=self.document_repository.list(patient_slug=patient_slug),
-            many=True,
-            context={"include_context": False},
-        ).data
-        return {"data": {"user_documents": data}, "status": status.HTTP_200_OK}
+        return JsonResponse(data={"user_documents": data})
