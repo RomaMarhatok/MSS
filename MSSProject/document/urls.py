@@ -3,18 +3,18 @@ from document.views import DocumentTypeView, DocumentView
 
 urlpatterns = [
     path(
+        "documents/types/",
+        DocumentTypeView.as_view({"get": "list"}),
+        name="list-document-types",
+    ),
+    path(
         "documents/<str:user_slug>/",
         DocumentView.as_view({"get": "list"}),
-        name="user-documents",
+        name="list-user-documents",
     ),
     path(
         "document/<str:user_slug>/<str:doc_slug>/",
         DocumentView.as_view({"get": "retrieve"}),
         name="user-document",
-    ),
-    path(
-        "documents/types/",
-        DocumentTypeView.as_view({"get": "list"}),
-        name="list-document-types",
     ),
 ]
