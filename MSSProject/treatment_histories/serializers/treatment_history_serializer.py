@@ -1,5 +1,5 @@
 from typing import OrderedDict
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer, SlugField, SerializerMethodField
 from ..models import TreatmentHistory
 
 
@@ -8,13 +8,15 @@ from doctor.serializers import DoctorSerializer
 from doctor.models import Doctor
 
 # user app imports
-from user.serializers import UserSerializer
 from user.models import User
 
 
 class TreatmentHistorySerializer(ModelSerializer):
-    doctor = DoctorSerializer(many=False, required=True)
-    patient = UserSerializer(many=False, required=True)
+    doctor_slug = SlugField(source="doctor.user.slug")
+    patient_slug = SlugField(source="patient.slug")
+    slug = SerializerMethodField()
+    created_at = SerializerMethodField()
+    updated_at = SerializerMethodField()
 
     class Meta:
         model = TreatmentHistory
@@ -24,36 +26,28 @@ class TreatmentHistorySerializer(ModelSerializer):
             "conclusion",
             "description",
             "date",
-            "doctor",
-            "patient",
+            "doctor_slug",
+            "patient_slug",
             "slug",
             "created_at",
             "updated_at",
         )
-        extra_kwargs = {
-            "doctor": {"validators": []},
-            "patient": {"validators": []},
-            "slug": {"required": False},
-            "url": {"lookup_field": "slug"},
-            "created_at": {"required": False},
-            "updated_at": {"required": False},
-        }
+
+    def get_created_at(self, instance: TreatmentHistory):
+        return instance.created_at
+
+    def get_updated_at(self, instance: TreatmentHistory):
+        return instance.updated_at
+
+    def get_slug(self, instance: TreatmentHistory):
+        return instance.slug
 
     def create(self, validated_data: OrderedDict) -> TreatmentHistory:
-        doctor = Doctor.objects.get(
-            user__login=validated_data["doctor"]["user"]["login"]
-        )
-        patient = User.objects.get(login=validated_data["patient"]["login"])
+        doctor = Doctor.objects.get(user__slug=validated_data["doctor"]["user"]["slug"])
+        patient = User.objects.get(slug=validated_data["patient"]["slug"])
         validated_data.pop("doctor")
         validated_data.pop("patient")
-        instance, _ = TreatmentHistory.objects.get_or_create(
+        instance = TreatmentHistory.objects.create(
             **validated_data, doctor=doctor, patient=patient
         )
         return instance
-
-    def to_representation(self, instance):
-        rep = super().to_representation(instance)
-        rep.pop("doctor")
-        rep["patient_slug"] = rep["patient"]["slug"]
-        rep.pop("patient")
-        return rep
