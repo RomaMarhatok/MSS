@@ -5,7 +5,7 @@ from common.utils.string_utils import generate_slug_from_str
 from datetime import datetime
 
 # user app imports
-from user.models import User
+from user.models import User, UserPersonalInfo
 
 # doctor app imports
 from doctor.models import Doctor
@@ -39,18 +39,9 @@ class TreatmentHistory(models.Model):
         db_table = "treatment_history"
 
     def __str__(self) -> str:
-        full_name_patient = (
-            self.patient.userpersonalinfo.first_name
-            + " "
-            + self.patient.userpersonalinfo.second_name
-            + " "
-            + self.patient.userpersonalinfo.patronymic
-        )
-        full_name_doctor = (
-            self.doctor.user.userpersonalinfo.first_name
-            + " "
-            + self.doctor.user.userpersonalinfo.second_name
-            + " "
-            + self.doctor.user.userpersonalinfo.patronymic
-        )
+        try:
+            full_name_patient = self.patient.userpersonalinfo.full_name
+            full_name_doctor = self.doctor.user.userpersonalinfo.full_name
+        except UserPersonalInfo.DoesNotExist:
+            return self.title
         return self.title + " " + full_name_patient + " " + full_name_doctor
