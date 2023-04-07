@@ -64,9 +64,9 @@ class AppointmentsSerializer(ModelSerializer):
         rep = super().to_representation(instance)
         rep["date"] = parse_date_iso_format(rep["date"])
         rep.pop("patient")
-        rep["doctor"]["user"]["full_name"] = self.__get_user_full_name(
-            instance.doctor.user
-        )
+        rep["doctor"]["user"][
+            "full_name"
+        ] = instance.doctor.user.userpersonalinfo.full_name
         return rep
 
     def is_cancelable(self, appoitment_data: datetime) -> bool:
@@ -79,20 +79,8 @@ class AppointmentsSerializer(ModelSerializer):
         rep["date"] = parse_date_iso_format(rep["date"])
         slug = rep["patient"]["slug"]
         rep["patient"] = {
-            "full_name": self.__get_user_full_name(instance.patient),
+            "full_name": instance.patient.userpersonalinfo.full_name,
             "slug": slug,
         }
         rep.pop("doctor")
         return rep
-
-    def __get_user_full_name(self, user: User) -> str:
-        if not hasattr(user, "userpersonalinfo"):
-            return None
-        personal_info = UserPersonalInfoSerializer(instance=user.userpersonalinfo).data
-        return (
-            personal_info.get("first_name", "")
-            + " "
-            + personal_info.get("second_name", "")
-            + " "
-            + personal_info.get("patronymic", "")
-        )
