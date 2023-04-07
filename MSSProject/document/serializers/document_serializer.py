@@ -1,11 +1,12 @@
-from rest_framework.serializers import ModelSerializer, SlugField
+from rest_framework.serializers import ModelSerializer, SlugField, SerializerMethodField
 from typing import OrderedDict
 from ..models import Document, DocumentType
 from .document_type_serializer import DocumentTypeSerializer
-from common.utils.date_utils import parse_date_iso_format
+
+# from common.utils.date_utils import parse_date_iso_format
 
 # user app import
-from user.models import User
+from user.models import User, UserPersonalInfo
 
 # doctor app import
 from doctor.serializers import DoctorSerializer
@@ -16,6 +17,9 @@ class DocumentSerializer(ModelSerializer):
     user_slug = SlugField(source="user.slug")
     document_type = DocumentTypeSerializer(many=False, required=True)
     creator = DoctorSerializer(many=False, required=True)
+    slug = SerializerMethodField()
+    created_at = SerializerMethodField()
+    updated_at = SerializerMethodField()
 
     class Meta:
         model = Document
@@ -33,10 +37,16 @@ class DocumentSerializer(ModelSerializer):
             "document_type": {"validators": []},
             "creator": {"validators": []},
             "name": {"validators": []},
-            "slug": {"required": False},
-            "created_at": {"required": False},
-            "updated_at": {"required": False},
         }
+
+    def get_slug(self, instance: Document):
+        return instance.slug
+
+    def get_created_at(self, instance: Document):
+        return instance.created_at
+
+    def get_updated_at(self, instance: Document):
+        return instance.updated_at
 
     def create(self, validated_data: OrderedDict) -> Document:
         user = User.objects.get(slug=validated_data["user"]["slug"])
@@ -46,7 +56,7 @@ class DocumentSerializer(ModelSerializer):
         )
         validated_data.pop("document_type")
         creator = Doctor.objects.get(
-            user__login=validated_data["creator"]["user"]["login"]
+            user__slug=validated_data["creator"]["user"]["slug"]
         )
         validated_data.pop("creator")
         instance = Document.objects.create(
@@ -61,11 +71,14 @@ class DocumentSerializer(ModelSerializer):
             rep.pop("content")
             rep.pop("creator")
 
-        rep["created_at"] = parse_date_iso_format(rep["created_at"])
-        rep["updated_at"] = parse_date_iso_format(rep["updated_at"])
         rep["document_type"]["name"] = rep["document_type"]["name"].lower().capitalize()
         rep["creator"] = {
-            "full_name": instance.creator.user.userpersonalinfo.full_name,
             "creator_slug": instance.creator.user.slug,
         }
+        try:
+            rep["creator"]["full_name"] = (
+                instance.creator.user.userpersonalinfo.full_name,
+            )
+        except UserPersonalInfo.DoesNotExist:
+            rep["creator"]["full_name"] = ""
         return rep

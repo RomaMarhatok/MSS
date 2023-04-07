@@ -1,14 +1,16 @@
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer, SerializerMethodField
 from ..models import DocumentType
 
 
 class DocumentTypeSerializer(ModelSerializer):
+    slug = SerializerMethodField()
+
     class Meta:
         fields = (
             "name",
             "slug",
         )
         model = DocumentType
-        extra_kwargs = {
-            "slug": {"required": False},
-        }
+
+    def get_slug(self, instance: DocumentType):
+        return instance.slug
