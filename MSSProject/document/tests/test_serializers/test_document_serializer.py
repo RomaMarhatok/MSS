@@ -4,9 +4,8 @@ from document.serializers.document_serializer import DocumentSerializer
 from document.serializers.document_type_serializer import DocumentTypeSerializer
 
 # user app imports
-from user.serializers.role_serializer import RoleSerializer
 from user.serializers.user_serializer import UserSerializer
-from user.models import User
+from user.models import User, Role
 
 # doctor app imports
 from doctor.serializers import DoctorSerializer
@@ -19,26 +18,21 @@ def test_serialization(document_fixture):
     assert serializer.is_valid()
     serializer.save()
 
-    role_serializer = RoleSerializer(data=document_fixture["user"]["role"])
-    assert role_serializer.is_valid()
-    role_serializer.save()
-
-    role_serializer = RoleSerializer(data=document_fixture["creator"]["user"]["role"])
-    assert role_serializer.is_valid()
-    role_serializer.save()
+    Role.objects.create(name=Role.PATIENT)
+    Role.objects.create(name=Role.DOCTOR)
 
     user_serializer = UserSerializer(data=document_fixture["user"])
     assert user_serializer.is_valid()
     user = user_serializer.save()
     document_fixture["user_slug"] = user.slug
+
     user_serializer = UserSerializer(data=document_fixture["creator"]["user"])
     assert user_serializer.is_valid()
-    user_serializer.save()
-
+    user = user_serializer.save()
+    document_fixture["creator"]["user_slug"] = user.slug
     doctor_serializer = DoctorSerializer(data=document_fixture["creator"])
-    assert doctor_serializer.is_valid()
+    assert doctor_serializer.is_valid(raise_exception=True)
     doctor_serializer.save()
-
     document_serializer = DocumentSerializer(data=document_fixture)
     assert document_serializer.is_valid(raise_exception=True)
     instance = document_serializer.save()

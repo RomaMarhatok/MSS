@@ -34,3 +34,4 @@ def test(user_personal_info_with_image_fixture, user_location_fixture, patient_f
     url = reverse("user-profile", args=[slug])
     response = client.get(url, **headers)
     assert response.status_code == 200
+    assert bool(response.json())
