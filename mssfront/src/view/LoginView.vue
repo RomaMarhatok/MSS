@@ -31,7 +31,12 @@ const submit = async (data) => {
             router.push("/home/")
         }
     }).catch(errors => {
-        store.commit("authentication/addError", errors.response.data.description)
+        const errorsObj = errors.response.data
+        for (const key in errorsObj) {
+            store.commit("authentication/addError", errorsObj[key][0])
+        }
+
+        // store.commit("authentication/addError", errors.response.data.description)
     })
 }
 

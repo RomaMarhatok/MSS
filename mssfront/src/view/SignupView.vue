@@ -29,6 +29,7 @@ onMounted(() => store.commit("registration/clearErrors"))
 
 
 // methods
+
 const submitUserForm = async (data) => {
     Object.assign(user, data)
     await registrationService.validateUser(user).then(response => {
@@ -36,7 +37,13 @@ const submitUserForm = async (data) => {
             store.commit("registration/clearErrors")
             step.value++
         }
-    }).catch(error => store.commit("registration/addError", error.response.data.description))
+    }).catch(error => {
+        const errorsObj = error.response.data
+        for (const key in errorsObj) {
+            store.commit("registration/addError", errorsObj[key][0])
+        }
+        // store.commit("registration/addError", error.response.data.description)
+    })
 }
 const submitUserPersonalInfoForm = async (data) => {
     Object.assign(userPersonalInfo, data)
@@ -47,6 +54,10 @@ const submitUserPersonalInfoForm = async (data) => {
         }
     }).catch(error => {
         console.log(error.response)
+        const errorsObj = error.response.data
+        for (const key in errorsObj) {
+            store.commit("registration/addError", errorsObj[key][0])
+        }
         store.commit("registration/addError", error.response.data.description)
     })
 }
