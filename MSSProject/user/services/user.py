@@ -27,8 +27,8 @@ class UserService:
         except User.DoesNotExist:
             return JsonResponseBadRequest(
                 data={
-                    "message": "record don't exist",
-                    "description": f"user with slug {slug} don't exist",
+                    "message": "Записи не существует",
+                    "description": f"Пользователь с таким slug {slug} не существует",
                 }
             )
 
@@ -52,7 +52,7 @@ class UserService:
         if self.user_repository.is_exist(login=login):
             return JsonResponseBadRequest(
                 data={
-                    "message": "Bad request data",
+                    "message": "Не валидные данные в запросе",
                     "description": "Пользватель с таким логином уже существует",
                 },
                 status=400,
@@ -64,7 +64,7 @@ class UserService:
         if self.user_personal_info_repository.is_exist(email=email):
             return JsonResponseBadRequest(
                 data={
-                    "message": "Bad request data",
+                    "message": "Не валидные данные в запросе",
                     "description": "Пользователь с такой почтой уже существует",
                 },
                 status=400,

@@ -26,4 +26,4 @@ class RegistrationService:
 
         self.user_location_repository.create(data)
 
-        return JsonResponse(data={"message": "user was successful registrated"})
+        return JsonResponse(data={"message": "Пользователь зарегистрирован"})

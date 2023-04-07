@@ -31,7 +31,7 @@ class AuthenticationService:
             token, _ = Token.objects.get_or_create(user=user)
             return JsonResponse(
                 data={
-                    "message": "user successful authenticated",
+                    "message": "Пользователь авторизирован",
                     "token": token.key,
                     "role": user.role.name,
                     "slug": user.slug,
@@ -39,7 +39,7 @@ class AuthenticationService:
             )
         return JsonResponseBadRequest(
             data={
-                "message": "Not valid data in request",
+                "message": "Не валидные данные в запросе",
                 "description": "Пользователь с такими данными не существует",
             }
         )
