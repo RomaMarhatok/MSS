@@ -7,10 +7,10 @@ client = Client()
 
 
 @pytest.mark.django_db
-def test(user_personal_info_with_image_fixture, user_location_fixture, patient_fixture):
+def test(user_personal_info_fixture, user_location_fixture, patient_fixture):
     Role.objects.create(name=Role.PATIENT)
     data = {
-        **user_personal_info_with_image_fixture,
+        **user_personal_info_fixture,
         **user_location_fixture,
         **patient_fixture,
     }
@@ -28,12 +28,10 @@ def test(user_personal_info_with_image_fixture, user_location_fixture, patient_f
 
 
 @pytest.mark.django_db
-def test_bad(
-    user_personal_info_with_image_fixture, user_location_fixture, patient_fixture
-):
+def test_bad(user_personal_info_fixture, user_location_fixture, patient_fixture):
     Role.objects.create(name=Role.PATIENT)
     data = {
-        **user_personal_info_with_image_fixture,
+        **user_personal_info_fixture,
         **user_location_fixture,
         **patient_fixture,
     }

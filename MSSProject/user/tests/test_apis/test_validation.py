@@ -29,9 +29,7 @@ def test_user_bad(factory_user_with_role_patient_fixture):
 
 
 @pytest.mark.django_db
-def test_personal_info(
-    user_personal_info_with_image_fixture, user_personal_info_fixture
-):
+def test_personal_info(user_personal_info_fixture):
     url = reverse("validate-info")
     response = client.post(url, data=user_personal_info_fixture)
     assert response.status_code == 200
