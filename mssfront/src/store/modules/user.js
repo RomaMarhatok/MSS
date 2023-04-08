@@ -1,4 +1,6 @@
 import UserService from "@/../services/UserService"
+const userService = new UserService()
+
 const state = {
     slug:"",
     role:"",
@@ -6,30 +8,8 @@ const state = {
 }
 
 const getters = {
-    getHealthInfo:(state)=>{
-        return  [
-            {
-                label: "Age",
-                text: state.personalInfo.age
-            },
-            {
-                label: "Gender",
-                text: state.personalInfo.gender
-            },
-            {
-                label: "Health status",
-                text: state.personalInfo.health_status
-            }
-        ]
-    },
     getPersonalInfo:(state)=>{
-        return {
-            image:state.personalInfo.image,
-            full_name:state.personalInfo.full_name,
-            location:state.personalInfo.location,
-            address:state.personalInfo.address,
-            email:state.personalInfo.email
-        }
+        return state.personalInfo
     },
     getRole:(state)=>{
         return state.role
@@ -40,7 +20,6 @@ const getters = {
 const actions = {
     async fetchUserPersonalInfo({commit,state},slug){
         if(Object.keys(state.personalInfo).length == 0){
-            const userService = new UserService()
             await userService.getUserPersonalInfo(
                     slug,
                     personalInfo=>commit("setPersonalInfo",personalInfo),
