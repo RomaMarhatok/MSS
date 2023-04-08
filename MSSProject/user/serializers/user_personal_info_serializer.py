@@ -1,13 +1,12 @@
 from typing import OrderedDict
-
 from django.http import HttpRequest
-
 from rest_framework.serializers import (
     ModelSerializer,
     SlugField,
 )
 
 from ..models import User, UserPersonalInfo
+from common.utils.image_utils import resize_image
 
 
 class UserPersonalInfoSerializer(ModelSerializer):
@@ -17,7 +16,6 @@ class UserPersonalInfoSerializer(ModelSerializer):
         model = UserPersonalInfo
         fields = (
             "user_slug",
-            "image",
             "first_name",
             "second_name",
             "patronymic",
@@ -49,14 +47,4 @@ class UserPersonalInfoSerializer(ModelSerializer):
             for field in self.context["not_necessary_fields"]:
                 if field in rep:
                     rep.pop(field)
-
-        try:
-            if "request" in self.context and self.context["request"] is not None:
-                request: HttpRequest = self.context["request"]
-                photo_url = instance.image.url
-                rep["image"] = request.build_absolute_uri(photo_url)
-            else:
-                rep["image"] = "https://placehold.co/400"
-        except ValueError:
-            rep.pop("image")
         return rep

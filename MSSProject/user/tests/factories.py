@@ -2,7 +2,6 @@ from faker import Faker
 from factory import SubFactory
 from factory.django import DjangoModelFactory
 from ..models import Role, User, UserLocation, UserPersonalInfo
-from common.utils.image_utils import load_image_from_url
 from common.utils.string_utils import generate_valid_login, generate_valid_password
 
 fake = Faker()
@@ -30,7 +29,6 @@ class UserPersonalInfoFactory(DjangoModelFactory):
         model = UserPersonalInfo
 
     user = SubFactory(UserFactory)
-    image = load_image_from_url(fake.image_url())
     first_name = fake.first_name()
     second_name = fake.last_name()
     patronymic = fake.last_name()

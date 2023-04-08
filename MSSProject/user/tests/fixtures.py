@@ -94,16 +94,6 @@ def user_personal_info_fixture(patient_fixture) -> dict:
 
 
 @pytest.fixture
-def user_personal_info_with_image_fixture(user_personal_info_fixture) -> dict:
-    image_url = user_personal_info_fixture["image"]
-    gen = load_image_from_url_to_file(image_url)
-    img = next(gen)
-    user_personal_info_fixture["image"] = img
-    yield user_personal_info_fixture
-    print(f"Files and folders Was Removed?\nAnswer:{next(gen)}")
-
-
-@pytest.fixture
 def user_location_fixture(patient_fixture):
     return {
         "user": patient_fixture,
