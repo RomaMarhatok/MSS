@@ -10,7 +10,7 @@ def test_serialization(image_for_analyzes_with_image_fixture):
     serializer = ImageForAnlyzeSerializer(data=image_for_analyzes_with_image_fixture)
     assert serializer.is_valid(raise_exception=True)
     instance = serializer.save()
-    assert ImageForAnalyzes.objects.all().count() == 1
+    assert ImageForAnalyzes.objects.count() == 1
     assert isinstance(instance, ImageForAnalyzes)
     assert instance.image is not None
 
