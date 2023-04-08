@@ -14,6 +14,7 @@ class DocumentRepository(AbstractRepository):
             "document_type",
             "creator__user",
             "creator__user__role",
+            "creator__user__userpersonalinfo",
         )
 
     def get(self, **kwargs) -> None | Document:
