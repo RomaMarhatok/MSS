@@ -66,6 +66,7 @@ def load_image_from_url(image_url):
     pil_image = Image.open(BytesIO(resp_content)).convert("RGB")
     img_io = BytesIO()
     pil_image.save(img_io, format="JPEG")
+    img_io.seek(0)
     return InMemoryUploadedFile(
         img_io,
         field_name=None,
