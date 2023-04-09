@@ -13,7 +13,7 @@ from rest_framework.authtoken.models import Token
 
 # imports from apps
 from user.repositories import UserRepository
-from responses.errors import JsonResponseForbidden, JsonResponseBadRequest
+from responses.errors import JsonResponseBadRequest
 
 
 @dataclass

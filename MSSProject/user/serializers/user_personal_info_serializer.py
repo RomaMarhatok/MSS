@@ -1,12 +1,10 @@
 from typing import OrderedDict
-from django.http import HttpRequest
 from rest_framework.serializers import (
     ModelSerializer,
     SlugField,
 )
 
 from ..models import User, UserPersonalInfo
-from common.utils.image_utils import resize_image
 
 
 class UserPersonalInfoSerializer(ModelSerializer):

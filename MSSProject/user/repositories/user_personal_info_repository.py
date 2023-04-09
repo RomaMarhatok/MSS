@@ -26,8 +26,10 @@ class UserPersonalInfoRepository(AbstractRepository):
         )
 
     def get(self, **kwargs) -> UserPersonalInfo:
-        data = self._validate_kwargs(kwargs)
-        return UserPersonalInfo.objects.select_related("user", "user__role").get(**data)
+        slug = kwargs.get("slug", None)
+        return UserPersonalInfo.objects.select_related("user", "user__role").get(
+            user__slug=slug
+        )
 
     def list(self, **kwargs):
         return super().list(**kwargs)
