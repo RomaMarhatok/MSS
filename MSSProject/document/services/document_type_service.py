@@ -10,7 +10,8 @@ class DocumentTypeService:
     document_type_repository: DocumentTypeRepository = DocumentTypeRepository()
 
     def get_all_document_types(self) -> JsonResponse:
-        data = DocumentTypeSerializer(
-            instance=self.document_type_repository.list(), many=True
+        document_types_qs = self.document_type_repository.list()
+        document_types = DocumentTypeSerializer(
+            instance=document_types_qs, many=True
         ).data
-        return JsonResponse(data={"document_types": data})
+        return JsonResponse(data={"document_types": document_types})

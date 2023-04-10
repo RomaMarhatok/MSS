@@ -1,5 +1,3 @@
-import operator
-from functools import reduce
 from django.db.models import Q, QuerySet
 from ..models import Document
 from common.repository.base_repository import AbstractRepository
@@ -17,7 +15,7 @@ class DocumentRepository(AbstractRepository):
             "creator__user__userpersonalinfo",
         )
 
-    def get(self, **kwargs) -> None | Document:
+    def get(self, **kwargs) -> Document:
         slug = kwargs.get("slug", None)
         patient_slug = kwargs.get("patient_slug", None)
         if patient_slug is not None and slug is not None:

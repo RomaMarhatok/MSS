@@ -23,7 +23,7 @@ class Command(BaseCommand):
             for _ in range(15):
                 DocumentFactory(
                     name=fake.pystr(),
-                    content=fake.text(max_nb_chars=10000),
+                    content=fake.text(max_nb_chars=1000),
                     user=user,
                     creator=doctor,
                     document_type=random.choice(document_types),

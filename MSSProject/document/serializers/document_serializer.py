@@ -3,7 +3,6 @@ from typing import OrderedDict
 from ..models import Document, DocumentType
 from .document_type_serializer import DocumentTypeSerializer
 
-# from common.utils.date_utils import parse_date_iso_format
 
 # user app import
 from user.models import User, UserPersonalInfo
@@ -51,6 +50,7 @@ class DocumentSerializer(ModelSerializer):
     def create(self, validated_data: OrderedDict) -> Document:
         user = User.objects.get(slug=validated_data["user"]["slug"])
         validated_data.pop("user")
+        # change on slug
         document_type = DocumentType.objects.get(
             name=validated_data["document_type"]["name"]
         )

@@ -26,4 +26,4 @@ def test_bad(factory_document_fixture):
         "HTTP_AUTHORIZATION": "Bearer " + token,
     }
     response = client.get(url, **headers)
-    assert response.status_code == 200
+    assert response.status_code == 400

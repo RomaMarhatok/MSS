@@ -15,6 +15,6 @@ urlpatterns = [
     path(
         "document/<str:user_slug>/<str:doc_slug>/",
         DocumentView.as_view({"get": "retrieve"}),
-        name="user-document",
+        name="retrieve-user-document",
     ),
 ]
