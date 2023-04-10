@@ -40,6 +40,6 @@ const validationSchema = object({
         <FormInputPayload :label-text="'Пароль'" :id="'password'">
             <Field id="password" type='password' class="base" name="password" v-model="data.password" />
         </FormInputPayload>
-        <FormSubmitButton :buttonText="'Log in'" />
+        <FormSubmitButton :buttonText="'Войти'" />
     </BaseForm>
 </template>

@@ -1,6 +1,6 @@
 <template>
     <footer class="flex justify-center mt-7">
-        <a :href="'http://127.0.0.1:8000/admin/'" class="footer__link">Login As Admin ?</a>
+        <a :href="'http://127.0.0.1:8000/admin/'" class="footer__link">Войти как админ</a>
     </footer>
 </template>
 <style scoped>

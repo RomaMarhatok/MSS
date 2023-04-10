@@ -15,7 +15,7 @@ const invalidForm = ref(false)
 </script>
 <template>
     <Form as="div" :validation-schema="props.schema" @submit="$emit('SubmitForm'); invalidForm = false"
-        @invalid-submit="invalidForm = true">
+        @invalid-submit="invalidForm = true" class="form__wrapper">
         <form class="flex flex-col" method="post">
             <div v-if="invalidForm">
                 <p class="text-red-500">Введите верные данные</p>
@@ -29,3 +29,8 @@ const invalidForm = ref(false)
         </form>
     </Form>
 </template>
+<style lang="css" scoped>
+.form__wrapper {
+    width: 80%;
+}
+</style>
