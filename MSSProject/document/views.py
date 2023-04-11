@@ -1,5 +1,6 @@
 from rest_framework.permissions import AllowAny
 from rest_framework.viewsets import GenericViewSet
+from rest_framework.views import APIView
 from django.http import HttpRequest
 from common.permissions.is_user_authenticated import IsUserAuthenticated
 from .services import DocumentTypeService, DocumentService
@@ -12,6 +13,14 @@ class DocumentTypeView(GenericViewSet):
 
     def list(self, request: HttpRequest):
         return self.service.get_all_document_types()
+
+
+class NewestDocumentView(APIView):
+    permission_classes = [IsUserAuthenticated]
+    service = DocumentService()
+
+    def get(self, request: HttpRequest, patient_slug: str):
+        return self.service.get_newest_document(patient_slug)
 
 
 class DocumentView(GenericViewSet):

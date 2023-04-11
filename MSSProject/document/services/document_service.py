@@ -41,8 +41,7 @@ class DocumentService(IsUserExistMixin):
         ).data
         return JsonResponse(data={"user_documents": documents})
 
-    # TODO write tests,view,endpoints for api
-    def newest_document(self, patient_slug: str):
+    def get_newest_document(self, patient_slug: str):
         response = self.user_exist(patient_slug)
         if response.status_code == 400:
             return response

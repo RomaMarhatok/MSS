@@ -1,7 +1,12 @@
 from django.urls import path
-from document.views import DocumentTypeView, DocumentView
+from document.views import DocumentTypeView, DocumentView, NewestDocumentView
 
 urlpatterns = [
+    path(
+        "new/<str:patient_slug>",
+        NewestDocumentView.as_view(),
+        name="newest-patient-document",
+    ),
     path(
         "documents/types/",
         DocumentTypeView.as_view({"get": "list"}),

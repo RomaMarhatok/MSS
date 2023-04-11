@@ -16,6 +16,7 @@ def test(factory_document_fixture):
     }
     response = client.get(url, **headers)
     assert response.status_code == 200
+    assert bool(response.json())
 
 
 @pytest.mark.django_db
@@ -27,3 +28,4 @@ def test_bad(factory_document_fixture):
     }
     response = client.get(url, **headers)
     assert response.status_code == 400
+    assert bool(response.json())
