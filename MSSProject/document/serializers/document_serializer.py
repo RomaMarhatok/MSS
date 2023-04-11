@@ -2,7 +2,7 @@ from rest_framework.serializers import ModelSerializer, SlugField, SerializerMet
 from typing import OrderedDict
 from ..models import Document, DocumentType
 from .document_type_serializer import DocumentTypeSerializer
-
+from common.utils.date_utils import parse_date_to_dict
 
 # user app import
 from user.models import User, UserPersonalInfo
@@ -70,7 +70,7 @@ class DocumentSerializer(ModelSerializer):
         if "repr" in self.context and self.context["repr"] == "list":
             rep.pop("content")
             rep.pop("creator")
-
+        rep["parsed_date"] = parse_date_to_dict(str(rep["created_at"]))
         rep["document_type"]["name"] = rep["document_type"]["name"].lower().capitalize()
         rep["creator"] = {
             "creator_slug": instance.creator.user.slug,
