@@ -3,7 +3,8 @@ from appointments.models import Appointments
 from appointments.serializers import AppointmentsSerializer
 
 # user app imports
-from user.serializers import RoleSerializer, UserSerializer
+from user.serializers import UserSerializer
+from user.models import Role
 
 # doctor app imports
 from doctor.serializers import DoctorSerializer, DoctorSpecializationSerializer
@@ -11,33 +12,32 @@ from doctor.serializers import DoctorSerializer, DoctorSpecializationSerializer
 
 @pytest.mark.django_db
 def test_serialization(appoitment_fixture):
+    Role.objects.create(name=Role.PATIENT)
+    Role.objects.create(name=Role.DOCTOR)
+
     serializer = DoctorSpecializationSerializer(
         data=appoitment_fixture["doctor_specialization"]
     )
-    assert serializer.is_valid()
+    assert serializer.is_valid(raise_exception=True)
     doctor_specialization = serializer.save()
-    appoitment_fixture["doctor_specialization"]["slug"] = doctor_specialization.slug
-    serializer = RoleSerializer(data=appoitment_fixture["doctor"]["user"]["role"])
-    assert serializer.is_valid()
-    serializer.save()
-
-    serializer = UserSerializer(data=appoitment_fixture["doctor"]["user"])
-    assert serializer.is_valid()
-    serializer.save()
-
-    serializer = RoleSerializer(data=appoitment_fixture["patient"]["role"])
-    assert serializer.is_valid()
-    serializer.save()
+    appoitment_fixture["doctor_specialization_slug"] = doctor_specialization.slug
 
     serializer = UserSerializer(data=appoitment_fixture["patient"])
-    assert serializer.is_valid()
-    serializer.save()
+    assert serializer.is_valid(raise_exception=True)
+    user = serializer.save()
+    appoitment_fixture["patient_slug"] = user.slug
+
+    serializer = UserSerializer(data=appoitment_fixture["doctor"]["user"])
+    assert serializer.is_valid(raise_exception=True)
+    user = serializer.save()
+    appoitment_fixture["doctor"]["user_slug"] = user.slug
 
     serializer = DoctorSerializer(data=appoitment_fixture["doctor"])
-    assert serializer.is_valid()
+    assert serializer.is_valid(raise_exception=True)
     serializer.save()
 
     serializer = AppointmentsSerializer(data=appoitment_fixture)
+    print(repr(serializer))
     assert serializer.is_valid(raise_exception=True)
     serializer.save()
 
@@ -48,13 +48,3 @@ def test_serialization(appoitment_fixture):
 def test_deserializaition(factory_appointments_fixture):
     serializer = AppointmentsSerializer(instance=factory_appointments_fixture)
     assert isinstance(serializer.data, dict)
-    assert serializer.data["doctor"]["user"]["full_name"] is None or isinstance(
-        serializer.data["doctor"]["user"]["full_name"], str
-    )
-    serializer = AppointmentsSerializer(
-        instance=factory_appointments_fixture, context={"is_doctor": True}
-    )
-    assert isinstance(serializer.data, dict)
-    assert serializer.data["patient"]["full_name"] is None or isinstance(
-        serializer.data["patient"]["full_name"], str
-    )
