@@ -10,4 +10,5 @@ urlpatterns = [
         ),
         name="doctor-types-list",
     ),
+    path("<str:doctor_slug>/", DoctorView.as_view({"get": "retrieve"})),
 ]

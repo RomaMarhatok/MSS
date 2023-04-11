@@ -8,29 +8,19 @@ from django.core.handlers.wsgi import WSGIRequest
 class DoctorView(GenericViewSet):
     permission_classes = [IsUserAuthenticated]
     lookup_field = "slug"
+    service = DoctorService()
 
-    def list(self, request: WSGIRequest):
-        doctor_service = DoctorService()
-        data = doctor_service.get_doctors(request=request)
-        return JsonResponse(
-            data=data["data"],
-            status=data["status"],
-        )
+    def list(self, request: HttpRequest):
+        return self.service.get_doctors()
 
-    def retrieve(self, request: WSGIRequest, doctor_slug: str = None):
-        doctor_service = DoctorService()
-        data = doctor_service.get_doctor(doctor_slug, request)
-        return JsonResponse(data=data["data"], status=data["status"])
+    def retrieve(self, request: HttpRequest, doctor_slug: str = None):
+        return self.service.get_doctor(doctor_slug)
 
 
 class DoctorSpecializationView(GenericViewSet):
     permission_classes = [IsUserAuthenticated]
     lookup_field = "slug"
+    service = DoctorSpecializationService()
 
     def list(self, request: HttpRequest):
-        doctor_service = DoctorSpecializationService()
-        data = doctor_service.get_doctor_specializations()
-        return JsonResponse(
-            data=data["data"],
-            status=data["status"],
-        )
+        return self.service.get_doctor_specializations()
