@@ -1,25 +1,31 @@
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpRequest
 from django.db import transaction
 
-from user.repositories import UserRepository
+from user.repositories import UserRepository, UserPersonalInfoRepository
 from user.serializers import UserPersonalInfoSerializer
+from user.services.mixins.is_user_exist_mixin import IsUserExistMixin
 from responses.errors import JsonResponseBadRequest
-from doctor.repositories import DoctorRepository
 from user.models import UserPersonalInfo
-from ..models import TreatmentHistory
+from ..models import TreatmentHistory, ImageForAnalyzes
 from ..repositories import (
     TreatmentHistoryRepository,
+    ImageForAnalyzesRepository,
+    TreatmentHistoryImageForAnalyzesRepository,
 )
 from ..serializers import TreatmentHistorySerializer, ImageForAnlyzeSerializer
 
 
-class TreatmentHistoryService:
+class TreatmentHistoryService(IsUserExistMixin):
     def __init__(self) -> None:
-        self.treatment_repository: TreatmentHistoryRepository = (
+        self.treatment_history_repository: TreatmentHistoryRepository = (
             TreatmentHistoryRepository()
         )
         self.user_repository: UserRepository = UserRepository()
-        self.doctor_repository: DoctorRepository = DoctorRepository()
+        self.user_personal_info_repository = UserPersonalInfoRepository()
+        self.image_for_analyzes_repository = ImageForAnalyzesRepository()
+        self.treatment_history_image_for_analyzes_repository = (
+            TreatmentHistoryImageForAnalyzesRepository()
+        )
 
     def _response_formation(self, ts: TreatmentHistory, request):
         imgs = [
@@ -35,42 +41,8 @@ class TreatmentHistoryService:
             "images_for_analyzes": imgs_serialized,
         }
 
-    def get_patient_treatment_histories(
-        self, patient_slug: str, doctor_specialization_slug: str, request=None
-    ) -> JsonResponse:
-        if not self.user_repository.is_exist(slug=patient_slug):
-            return JsonResponseBadRequest(
-                data={
-                    "message": "Не валидные данные в запросе",
-                    "description": "Пользователь с таким slug не существует",
-                }
-            )
-
-        treatments_histories = self.treatment_repository.list(
-            patient_slug=patient_slug,
-            doctor_specialization_slug=doctor_specialization_slug,
-        )
-
-        tss = [self._response_formation(ts, request) for ts in treatments_histories]
-        # TODO relocate in another repository or change on physical parameters
-        try:
-            user_personal_info = UserPersonalInfoSerializer(
-                instance=treatments_histories[0].patient.userpersonalinfo,
-                context={"request": request},
-            ).data
-        except UserPersonalInfo.DoesNotExist or IndexError:
-            user_personal_info = {}
-        # END TODO
-
-        return JsonResponse(
-            data={
-                "patient_info": user_personal_info,
-                "treatment_histories": tss,
-            }
-        )
-
-    def get_patient_treatment_history(self, treatment_history_slug: str, request):
-        if not self.treatment_repository.is_exist(
+    def _get(self, treatment_history_slug: str, request: HttpRequest) -> JsonResponse:
+        if not self.treatment_history_repository.is_exist(
             treatment_history_slug=treatment_history_slug
         ):
             return JsonResponseBadRequest(
@@ -80,7 +52,7 @@ class TreatmentHistoryService:
                 },
             )
 
-        treatment_history = self.treatment_repository.get(
+        treatment_history = self.treatment_history_repository.get(
             treatment_history_slug=treatment_history_slug,
         )
         ts = self._response_formation(treatment_history, request)
@@ -91,14 +63,89 @@ class TreatmentHistoryService:
             }
         )
 
-    @transaction.atomic
-    def create_treatment_history(self, data: dict):
-        treatment_history = self.treatment_repository.create(data)
-        serializer = TreatmentHistorySerializer(
-            instance=treatment_history,
+    def _list(
+        self, patient_slug: str, doctor_specialization_slug: str = None, request=None
+    ) -> list:
+        if doctor_specialization_slug is not None:
+            treatments_histories_qs = self.treatment_history_repository.list(
+                patient_slug=patient_slug,
+                doctor_specialization_slug=doctor_specialization_slug,
+            )
+
+            treatments_histories = [
+                self._response_formation(ts, request) for ts in treatments_histories_qs
+            ]
+            return treatments_histories
+        treatments_histories_qs = self.treatment_history_repository.list(
+            patient_slug=patient_slug,
         )
+        treatments_histories = [
+            self._response_formation(ts, request) for ts in treatments_histories_qs
+        ]
+        return treatments_histories
+
+    def get_patient_treatment_histories_list(
+        self, patient_slug: str, doctor_specialization_slug: str, request=None
+    ) -> JsonResponse:
+        response = self.user_exist(patient_slug)
+        if response.status_code == 400:
+            return response
+        treatments_histories = self._list(
+            patient_slug,
+            doctor_specialization_slug=doctor_specialization_slug,
+            request=request,
+        )
+        user = self.user_repository.get(slug=patient_slug)
+        try:
+            user_personal_info = self.user_personal_info_repository.get(slug=user.slug)
+            patient_info = UserPersonalInfoSerializer(instance=user_personal_info).data
+        except UserPersonalInfo.DoesNotExist:
+            patient_info = {}
         return JsonResponse(
             data={
-                "treatment_history": serializer.data,
+                "patient_info": patient_info,
+                "treatment_histories": treatments_histories,
             }
         )
+
+    def get_user_treatments_histories_list(
+        self, patient_slug: str, request
+    ) -> JsonResponse:
+        response = self.user_exist(patient_slug)
+        if response.status_code == 400:
+            return response
+        treatments_histories = self._list(patient_slug)
+        return JsonResponse(
+            data={
+                "treatment_histories": treatments_histories,
+            }
+        )
+
+    def get_patient_treatment_history(self, treatment_history_slug: str, request):
+        return self._get(treatment_history_slug, request)
+
+    def get_user_treatments_history(self, treatment_history_slug: str, request):
+        return self._get(treatment_history_slug, request)
+
+    @transaction.atomic
+    def create_treatment_history(self, data: dict):
+        treatment_history_qs = self.treatment_history_repository.create(data)
+        return JsonResponse(data={"treatment_history_slug": treatment_history_qs.slug})
+
+    @transaction.atomic
+    def create_image_for_analyzes(self, data: dict):
+        treatment_history_slug = data.get("treatment_history_slug", None)
+        treatment_history = self.treatment_history_repository.get(
+            treatment_history_slug=treatment_history_slug
+        )
+        img_qs = self.image_for_analyzes_repository.create(data)
+        serializerd_img = ImageForAnlyzeSerializer(instance=img_qs).data
+        self.create_union(treatment_history, img_qs)
+        return JsonResponse(data=serializerd_img)
+
+    @transaction.atomic
+    def create_union(self, treatment_history: TreatmentHistory, img: ImageForAnalyzes):
+        self.treatment_history_image_for_analyzes_repository.create(
+            {"treatment_history": treatment_history, "image_for_analyzes": img}
+        )
+        return JsonResponse(data={})

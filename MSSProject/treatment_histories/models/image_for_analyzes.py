@@ -27,12 +27,10 @@ class ImageForAnalyzes(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
-        self.image.name = generate_hash_from_string(self.description[:10]) + ".jpg"
+        ext = self.image.name.split(".")[1]
+        old_name = self.image.name.split(".")[0]
+        self.image.name = generate_hash_from_string(old_name) + "." + ext
         super(ImageForAnalyzes, self).save(*args, **kwargs)
-        # if self.image:
-        #     img = Image.open(self.image.path).convert("RGB")
-        #     img = img.resize((340, 300), Image.Resampling.LANCZOS)
-        #     img.save(self.image.path)
 
     class Meta:
         db_table = "image_for_analyzes"

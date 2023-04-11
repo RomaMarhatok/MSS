@@ -30,9 +30,9 @@ class Command(BaseCommand):
                 )
                 treatment = TreatmentHistoryFactory(
                     title=fake.text(max_nb_chars=100),
-                    short_description=fake.text(max_nb_chars=1000),
-                    description=fake.text(max_nb_chars=10000),
-                    conclusion=fake.text(max_nb_chars=10000),
+                    short_description=fake.text(max_nb_chars=100),
+                    description=fake.text(max_nb_chars=1000),
+                    conclusion=fake.text(max_nb_chars=100),
                     date=fake.date_time(),
                     doctor=doctor,
                     patient=user,

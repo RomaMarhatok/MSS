@@ -26,7 +26,8 @@ class TreatmentHistoryRepository(AbstractRepository):
     def list(self, **kwargs) -> QuerySet[TreatmentHistory]:
         ps = kwargs.get("patient_slug", None)
         ds_slug = kwargs.get("doctor_specialization_slug", None)
-
+        if ds_slug is None:
+            return self.qs.filter(patient__slug=ps)
         return self.qs.filter(
             Q(patient__slug=ps)
             & Q(
