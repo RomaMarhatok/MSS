@@ -1,23 +1,21 @@
 <script setup>
 import { ref } from "vue";
-import HeaderLayout from "@/components/layout/HeaderLayout.vue";
 import BodyLayout from "@/components/layout/BodyLayout.vue";
 import FooterLayout from "@/components/layout/FooterLayout.vue";
 import HomePageNavBar from "@/components/layout/Navbars/HomePageNavBar.vue"
 import IndexViewCard from "@/components/common/Cards/IndexViewCard.vue"
-
 const title = ref("SOME TEXT")
 const text = ref("Lorem Ipsum is simply dummy text of the printing and typesetting industry.")
 </script>
 <template>
-  <HeaderLayout>
-    <div class="flex flex-row">
+  <header>
+    <div class="flex flex-row pl-2">
       <div class="items-center self-center">
         <span class="font-black underline text-black text-4xl">MSS</span>
       </div>
       <HomePageNavBar></HomePageNavBar>
     </div>
-  </HeaderLayout>
+  </header>
   <BodyLayout>
     <div class="relative w-full h-full pt-1">
       <div class="absolute text-center font-black left-10 top-10">
