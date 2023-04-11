@@ -61,7 +61,7 @@ def load_image_from_url_to_file(
     yield True
 
 
-def load_image_from_url(image_url):
+def load_image_from_url(image_url) -> InMemoryUploadedFile:
     resp_content = Client.get(image_url)
     pil_image = Image.open(BytesIO(resp_content)).convert("RGB")
     img_io = BytesIO()
