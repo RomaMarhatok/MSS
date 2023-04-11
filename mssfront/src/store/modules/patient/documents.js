@@ -4,6 +4,7 @@ const state = {
     documents:[],
     documentsTypes:[],
     activeDocument:{},
+    newestDocument:[],
 }
 const getters = {
     getDocumentBySlug:(state)=>(slug)=>{
@@ -17,6 +18,9 @@ const getters = {
     },
     getActiveDocument:(state)=>{
         return state.activeDocument
+    },
+    getNewestDocuments:(state)=>{
+        return state.newestDocument
     }
 }
 const actions = {
@@ -44,6 +48,14 @@ const actions = {
             documentsTypes=>commit("setDocumentsTypes",documentsTypes)
         )
         console.log("actions documents types",state.documentsTypes)
+    },
+    async fetchNewestDocument({commit,state},slug){
+        await documentService.getNewestDocument(
+            slug,
+            data=>commit("setNewestDocuments",data),
+            error=>console.log(error)
+        )
+        console.log("action new document",state.newestDocument)
     }
 }
 const mutations = {
@@ -54,6 +66,10 @@ const mutations = {
     setDocumentsTypes:(state,documentsTypes)=>{
         console.log("mutation document types",documentsTypes)
         state.documentsTypes = documentsTypes
+    },
+    setNewestDocuments:(state,newestDocument)=>{
+        console.log("mutation new document",newestDocument)
+        state.newestDocument = newestDocument
     },
     setActiveDocument:(state,document)=>{
         console.log("set active document")
