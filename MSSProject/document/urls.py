@@ -3,7 +3,7 @@ from document.views import DocumentTypeView, DocumentView, NewestDocumentView
 
 urlpatterns = [
     path(
-        "new/<str:patient_slug>",
+        "new/<str:patient_slug>/",
         NewestDocumentView.as_view(),
         name="newest-patient-document",
     ),
