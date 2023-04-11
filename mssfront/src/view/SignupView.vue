@@ -40,7 +40,7 @@ const submitUserForm = async (data) => {
     }).catch(error => {
         const errorsObj = error.response.data
         for (const key in errorsObj) {
-            store.commit("registration/addError", errorsObj[key][0])
+            store.commit("registration/addError", errorsObj[key])
         }
         // store.commit("registration/addError", error.response.data.description)
     })
@@ -56,7 +56,7 @@ const submitUserPersonalInfoForm = async (data) => {
         console.log(error.response)
         const errorsObj = error.response.data
         for (const key in errorsObj) {
-            store.commit("registration/addError", errorsObj[key][0])
+            store.commit("registration/addError", errorsObj[key])
         }
         store.commit("registration/addError", error.response.data.description)
     })
