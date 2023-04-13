@@ -55,7 +55,7 @@ def load_image_from_url_to_file(
     img.close()
 
     folder_controller.remove_file(path_to_loaded_file)
-    # folder_controller.remove_dir("media")
+    folder_controller.remove_dir("media")
     folder_controller.remove_dir(path_to_folder)
 
     yield True
