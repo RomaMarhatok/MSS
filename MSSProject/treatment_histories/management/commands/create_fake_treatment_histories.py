@@ -23,7 +23,7 @@ class Command(BaseCommand):
     def handle(self, *args: Any, **options: Any) -> Optional[str]:
         users = User.objects.filter(role__name=Role.PATIENT)
         doctors = Doctor.objects.all()
-        for user in users:
+        for user, doctor in zip(users, doctors):
             for _ in range(random.randint(1, 10)):
                 img_for_analyzes = ImageForAnalyzesFactory(
                     image=load_image_from_url(fake.image_url()),
@@ -38,7 +38,7 @@ class Command(BaseCommand):
                         start_date=datetime.now(),
                         end_date=datetime.now() + timedelta(days=300),
                     ),
-                    doctor=random.choice(doctors),
+                    doctor=doctor,
                     patient=user,
                 )
                 TreatmentHistoryImageForAnalyzesFactory(
