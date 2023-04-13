@@ -32,9 +32,7 @@ class DoctorRepository(AbstractRepository):
         slug = kwargs.get("slug", None)
         if slug is None:
             return False
-        return DoctorDoctorSpecialization.objects.filter(
-            doctor__user__slug=slug
-        ).exists()
+        return Doctor.objects.filter(user__slug=slug).exists()
 
     def create(self, data: dict):
         return super().create(data)

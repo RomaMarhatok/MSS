@@ -1,8 +1,7 @@
 from rest_framework.viewsets import GenericViewSet
-from django.http import JsonResponse, HttpRequest
+from django.http import HttpRequest
 from common.permissions.is_user_authenticated import IsUserAuthenticated
 from .services import DoctorService, DoctorSpecializationService
-from django.core.handlers.wsgi import WSGIRequest
 
 
 class DoctorView(GenericViewSet):
@@ -18,7 +17,6 @@ class DoctorView(GenericViewSet):
 
 
 class DoctorSpecializationView(GenericViewSet):
-    permission_classes = [IsUserAuthenticated]
     lookup_field = "slug"
     service = DoctorSpecializationService()
 
