@@ -22,4 +22,9 @@ urlpatterns = [
         DocumentView.as_view({"get": "retrieve"}),
         name="retrieve-user-document",
     ),
+    path(
+        "create/",
+        DocumentView.as_view({"post": "create"}),
+        name="create-user-document",
+    ),
 ]

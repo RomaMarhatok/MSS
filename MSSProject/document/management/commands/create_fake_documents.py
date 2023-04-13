@@ -2,7 +2,7 @@ from faker import Faker
 import random
 from typing import Any, Optional
 from django.core.management.base import BaseCommand
-from document.models import DocumentType
+from document.enums import BaseDocumentTypesEnum
 from document.tests.factories import DocumentTypeFactory, DocumentFactory
 
 # user app imports
@@ -30,7 +30,7 @@ class Command(BaseCommand):
                 )
 
     def generate_document_types(self):
-        test = DocumentTypeFactory(name=DocumentType.TEST)
-        analyzes = DocumentTypeFactory(name=DocumentType.ANALYZES)
-        conclusions = DocumentTypeFactory(name=DocumentType.CONCLUSIONS)
+        test = DocumentTypeFactory(name=BaseDocumentTypesEnum.TEST.value)
+        analyzes = DocumentTypeFactory(name=BaseDocumentTypesEnum.ANALYZE.value)
+        conclusions = DocumentTypeFactory(name=BaseDocumentTypesEnum.CONCLUSION.value)
         return [test, analyzes, conclusions]

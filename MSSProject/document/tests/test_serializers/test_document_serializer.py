@@ -9,27 +9,31 @@ from user.models import User, Role
 
 # doctor app imports
 from doctor.serializers import DoctorSerializer
+from doctor.models import Doctor
 
 
 @pytest.mark.django_db
 def test_serialization(document_fixture):
 
     serializer = DocumentTypeSerializer(data=document_fixture["document_type"])
-    assert serializer.is_valid()
-    serializer.save()
+    assert serializer.is_valid(raise_exception=True)
+    dt = serializer.save()
+    document_fixture["document_type_slug"] = dt.slug
 
     Role.objects.create(name=Role.PATIENT)
     Role.objects.create(name=Role.DOCTOR)
 
     user_serializer = UserSerializer(data=document_fixture["user"])
-    assert user_serializer.is_valid()
+    assert user_serializer.is_valid(raise_exception=True)
     user = user_serializer.save()
     document_fixture["user_slug"] = user.slug
 
     user_serializer = UserSerializer(data=document_fixture["creator"]["user"])
-    assert user_serializer.is_valid()
-    user = user_serializer.save()
-    document_fixture["creator"]["user_slug"] = user.slug
+    assert user_serializer.is_valid(raise_exception=True)
+    doctor_user = user_serializer.save()
+    document_fixture["creator"]["user_slug"] = doctor_user.slug
+    document_fixture["creator_slug"] = doctor_user.slug
+
     doctor_serializer = DoctorSerializer(data=document_fixture["creator"])
     assert doctor_serializer.is_valid(raise_exception=True)
     doctor_serializer.save()

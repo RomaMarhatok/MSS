@@ -2,6 +2,7 @@ import pytest
 import random
 from ..models import DocumentType, Document
 from .factories import DocumentTypeFactory, DocumentFactory
+from ..enums import BaseDocumentTypesEnum
 from faker import Faker
 
 fake = Faker()
@@ -30,7 +31,13 @@ def factory_document_fixture(
 @pytest.fixture
 def document_type_fixture() -> dict:
     return {
-        "name": random.choice(DocumentType.DOCUMENT_TYPE_CHOICES)[0],
+        "name": random.choice(
+            [
+                BaseDocumentTypesEnum.TEST.value,
+                BaseDocumentTypesEnum.ANALYZE.value,
+                BaseDocumentTypesEnum.CONCLUSION.value,
+            ]
+        ),
     }
 
 

@@ -1,21 +1,16 @@
-from rest_framework.serializers import ModelSerializer, SlugField, SerializerMethodField
 from typing import OrderedDict
-from ..models import Document, DocumentType
-from .document_type_serializer import DocumentTypeSerializer
+from rest_framework.serializers import ModelSerializer, SlugField, SerializerMethodField
 from common.utils.date_utils import parse_date_to_dict
+from ..models import Document, DocumentType
 
-# user app import
-from user.models import User, UserPersonalInfo
-
-# doctor app import
-from doctor.serializers import DoctorSerializer
+from user.models import User
 from doctor.models import Doctor
 
 
 class DocumentSerializer(ModelSerializer):
     user_slug = SlugField(source="user.slug")
-    document_type = DocumentTypeSerializer(many=False, required=True)
-    creator = DoctorSerializer(many=False, required=True)
+    document_type_slug = SlugField(source="document_type.slug")
+    creator_slug = SlugField(source="creator.user.slug")
     slug = SerializerMethodField()
     created_at = SerializerMethodField()
     updated_at = SerializerMethodField()
@@ -26,9 +21,9 @@ class DocumentSerializer(ModelSerializer):
             "name",
             "slug",
             "user_slug",
-            "creator",
+            "creator_slug",
             "content",
-            "document_type",
+            "document_type_slug",
             "created_at",
             "updated_at",
         )
@@ -49,36 +44,35 @@ class DocumentSerializer(ModelSerializer):
 
     def create(self, validated_data: OrderedDict) -> Document:
         user = User.objects.get(slug=validated_data["user"]["slug"])
-        validated_data.pop("user")
-        # change on slug
         document_type = DocumentType.objects.get(
-            name=validated_data["document_type"]["name"]
+            slug=validated_data["document_type"]["slug"]
         )
-        validated_data.pop("document_type")
         creator = Doctor.objects.get(
             user__slug=validated_data["creator"]["user"]["slug"]
         )
-        validated_data.pop("creator")
         instance = Document.objects.create(
-            **validated_data, user=user, document_type=document_type, creator=creator
+            name=validated_data["name"],
+            content=validated_data["content"],
+            user=user,
+            document_type=document_type,
+            creator=creator,
         )
         return instance
 
     def to_representation(self, instance: Document):
         rep = super().to_representation(instance)
-
         if "repr" in self.context and self.context["repr"] == "list":
             rep.pop("content")
-            rep.pop("creator")
         rep["parsed_date"] = parse_date_to_dict(str(rep["created_at"]))
-        rep["document_type"]["name"] = rep["document_type"]["name"].lower().capitalize()
+        rep["document_type"] = {
+            "name": instance.document_type.name.lower().capitalize(),
+            "slug": instance.document_type.slug,
+        }
         rep["creator"] = {
             "creator_slug": instance.creator.user.slug,
         }
-        try:
-            rep["creator"]["full_name"] = (
-                instance.creator.user.userpersonalinfo.full_name,
-            )
-        except UserPersonalInfo.DoesNotExist:
-            rep["creator"]["full_name"] = ""
+        if hasattr(instance.creator.user, "userpersonalinfo"):
+            rep["creator"][
+                "full_name"
+            ] = instance.creator.user.userpersonalinfo.full_name
         return rep
