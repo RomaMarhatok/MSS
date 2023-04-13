@@ -53,7 +53,6 @@ def test_doctor(factory_appointments_fixture):
         },
         **headers
     )
-    print(response.json())
     assert response.status_code == 200
     assert bool(response.json())
     assert Appointments.objects.count() == 0

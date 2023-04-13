@@ -37,7 +37,6 @@ def test_serialization(appoitment_fixture):
     serializer.save()
 
     serializer = AppointmentsSerializer(data=appoitment_fixture)
-    print(repr(serializer))
     assert serializer.is_valid(raise_exception=True)
     serializer.save()
 
