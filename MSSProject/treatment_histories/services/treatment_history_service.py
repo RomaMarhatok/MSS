@@ -36,6 +36,7 @@ class TreatmentHistoryService(IsUserExistMixin):
             instance=imgs, context={"request": request}, many=True
         ).data
         ts_serialized = TreatmentHistorySerializer(instance=ts).data
+        ts_serialized.update({"count_of_images": len(imgs)})
         return {
             "treatment_history": ts_serialized,
             "images_for_analyzes": imgs_serialized,

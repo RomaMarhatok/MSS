@@ -1,10 +1,9 @@
 from typing import OrderedDict
 from rest_framework.serializers import ModelSerializer, SlugField, SerializerMethodField
 from ..models import TreatmentHistory
-
+from common.utils.date_utils import parse_date_to_dict
 
 # doctor app imports
-from doctor.serializers import DoctorSerializer
 from doctor.models import Doctor
 
 # user app imports
@@ -51,3 +50,8 @@ class TreatmentHistorySerializer(ModelSerializer):
             **validated_data, doctor=doctor, patient=patient
         )
         return instance
+
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        rep["parsed_date"] = parse_date_to_dict(rep["date"])
+        return rep
