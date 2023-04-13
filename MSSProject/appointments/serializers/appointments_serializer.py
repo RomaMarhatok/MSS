@@ -51,7 +51,7 @@ class AppointmentsSerializer(ModelSerializer):
             rep["doctor"]["full_name"] = instance.doctor.user.userpersonalinfo.full_name
         rep["patient"] = {"slug": rep["patient_slug"]}
         if hasattr(instance.patient, "userpersonalinfo"):
-            rep["patient"] = instance.patient.userpersonalinfo.full_name
+            rep["patient"]["full_name"] = instance.patient.userpersonalinfo.full_name
         rep["doctor_specialization"] = {
             "slug": rep["doctor_specialization_slug"],
             "name": instance.doctor_specialization.name,
