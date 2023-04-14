@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.db import transaction
 from django.http import JsonResponse
 from ...repositories import AppointmentsRepository
@@ -11,6 +12,14 @@ from responses.errors import JsonResponseBadRequest
 class CreateAppointmentMxin:
     @transaction.atomic
     def create(self, data: dict):
+        appointment_date: datetime = data.get("date", None)
+        if datetime.now().timestamp() > appointment_date.timestamp():
+            return JsonResponseBadRequest(
+                data={
+                    "message": "Не валидные данные в запросе",
+                    "description": "Нельзя создать запись к врачу в прошлом",
+                }
+            )
         user_repository = UserRepository()
         patient_slug = data.get("patient_slug", None)
         if not user_repository.is_exist(slug=patient_slug):
