@@ -2,15 +2,17 @@
 import { useStore } from 'vuex';
 import { onBeforeMount, computed, ref } from 'vue';
 import { useRouter } from 'vue-router'
-import TabMenu from '@/components/ui/Menu/TabMenu'
-import HeaderLayout from '@/components/layout/HeaderLayout.vue';
-import BodyLayout from '@/components/layout/BodyLayout.vue';
+
 import DataView from 'primevue/dataview'
 import Button from 'primevue/button'
-import Image from 'primevue/image'
 import Dropdown from 'primevue/dropdown'
-import PageHeader from '@/components/ui/Headers/PageHeader.vue'
+
+import HeaderLayout from '@/components/layout/HeaderLayout.vue';
+import BodyLayout from '@/components/layout/BodyLayout.vue';
+import TabMenu from '@/components/ui/Menu/TabMenu.vue'
 import AppointmentForm from '@/components/ui/Forms/AppointmentForm.vue'
+
+
 const store = useStore()
 const router = useRouter()
 const sortKey = ref("")
@@ -30,12 +32,11 @@ onBeforeMount(() => {
 </script>
 <template>
     <HeaderLayout>
-        <PageHeader />
         <TabMenu />
     </HeaderLayout>
     <BodyLayout :class="'flex flex-row'">
         <div class="flex flex-col gap-4 w-full">
-            <DataView :value="doctors" :paginator="true" :rows="10" :layout="layout" :data-key="doctor_slug">
+            <DataView :value="doctors" :paginator="true" :rows="10" :layout="layout" data-key="doctor_slug">
                 <template #header>
                     <div class="flex justify-between">
                         <div class="flex">
@@ -49,8 +50,7 @@ onBeforeMount(() => {
                     <div class="doctor-list">
                         <div class="doctor-list-item">
                             <div class="image-container">
-                                <Image class="doctor-image" :src="slotProps.data.personal_info.image" />
-                                <div class="doctor-name">{{ slotProps.data.personal_info.full_name }}</div>
+                                <div class="doctor-name">{{ slotProps.data.full_name }}</div>
                             </div>
                             <div class="doctor-detail">
                                 <div class="doctor-types" v-for="doctor_type in slotProps.data.doctor_types"

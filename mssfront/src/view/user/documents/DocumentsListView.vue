@@ -8,8 +8,7 @@ import { useStore } from 'vuex';
 import { onMounted, computed, ref } from 'vue';
 import { Field } from "vee-validate";
 
-import Checkbox from "primevue/checkbox";
-
+import RadioButton from 'primevue/radiobutton';
 import HeaderLayout from '@/components/layout/HeaderLayout.vue';
 import TabMenu from '@/components/ui/Menu/TabMenu.vue'
 import CheckBoxPayload from "@/components/ui/Payloads/CheckBoxPayload.vue";
@@ -19,48 +18,45 @@ const route = useRoute()
 const documentTypeFilter = ref([])
 const documentDateFilter = ref(null)
 const documentNameFilter = ref("")
-const documentByDateOrder = ref(false)
-// const documentByNameOrder = ref(false)
+const documentOrder = ref("")
 
 const documentsTypes = computed(() => store.getters["documents/getDocumentTypes"])
 const slug = computed(() => route.params.userSlug ? route.params.userSlug : store.state.user.slug)
 const filterDocuments = computed(() => {
     let documents = store.getters["documents/getDocuments"]
+
     if (documentTypeFilter.value.length) {
         documents = documents.filter((document) => documentTypeFilter.value.indexOf(document.document_type.slug) != -1)
     }
 
-    if (documentDateFilter.value !== null) {
+    if (documentDateFilter.value != null && documentDateFilter.value != "") {
         const compareDate = new Date(documentDateFilter.value)
         documents = documents.filter((document) => {
             const documentDate = new Date(document.created_at)
-            return compareDate.getDay() == documentDate.getDay()
+            return compareDate.getDate() == documentDate.getDate()
                 && compareDate.getFullYear() == documentDate.getFullYear()
                 && compareDate.getMonth() == documentDate.getMonth()
         })
     }
+
     if (documentNameFilter.value) {
         documents = documents.filter((document) => document.name.toLowerCase().includes(documentNameFilter.value.toLowerCase()))
     }
+    if (documentOrder.value != "") {
+        if (documentOrder.value == "name") {
+            documents.sort((a, b) => {
+                return a.name.localeCompare(b.name)
+            })
+        }
 
-    if (documentByDateOrder.value) {
-        documents.sort((a, b) => {
-            return new Date(b.created_at) - new Date(a.created_at);
-        })
-    } else {
-        documents.sort((a, b) => {
-            return new Date(a.created_at) - new Date(b.created_at);
-        })
+        if (documentOrder.value == "date") {
+            documents.sort((a, b) => {
+                return new Date(b.created_at) - new Date(a.created_at);
+            })
+        }
     }
-    // if (documentByNameOrder.value) {
-    //     documents.sort((a, b) => {
-    //         return a.name.localeCompare(b.name)
-    //     })
-    // } else {
-    //     documents.sort((a, b) => {
-    //         return b.name.localeCompare(a.name)
-    //     })
-    // }
+
+
     return documents
 })
 
@@ -103,12 +99,16 @@ onMounted(() => {
                 </div>
                 <div class="p-2 flex gap-2">
                     <p class="text-sm">Сортировать по дате</p>
-                    <Checkbox v-model="documentByDateOrder" :binary="true" />
+                    <RadioButton v-model="documentOrder" name="name_order" value="name" />
                 </div>
-                <!-- <div class="p-2">
-                            <p class="text-sm">Сортировать по алфавиту</p>
-                            <Checkbox v-model="documentByNameOrder" :binary="true" />
-                        </div> -->
+                <div class="p-2 flex gap-2">
+                    <p class="text-sm">Сортировать по алфавиту</p>
+                    <RadioButton v-model="documentOrder" name="date_order" value="date" />
+                </div>
+                <div class="p-2 flex gap-2">
+                    <p class="text-sm">Не сортировать</p>
+                    <RadioButton v-model="documentOrder" name="none_order" value="" />
+                </div>
             </section>
         </aside>
         <section class="w-full">
