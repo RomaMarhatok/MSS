@@ -18,7 +18,7 @@ class AppointmentService extends RequestService{
     }
     async createPatientAppointments(cb,errorCb,data){
         return await this.post(`/appointments/patient/appointments/create/`,data).then(response=>{
-            cb(response.status,response.data.appointment)
+            cb(response.data.appointment)
         }).catch(error=>{
             errorCb(error.response.status,error.response.data.errors??{})
         })

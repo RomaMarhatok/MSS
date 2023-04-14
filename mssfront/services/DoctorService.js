@@ -8,7 +8,7 @@ class DoctorService extends RequestService {
         })
     }
     async getAllDoctorTypes(cb,errorCb){
-        return await this.get(`/doctor/doctors/specializations/`).then(response=>{
+        return await this.get(`/doctor/specializations/`).then(response=>{
             console.log("doctor types",response)
             cb(response.data.doctor_types)
         }).catch((error)=>{

@@ -19,6 +19,11 @@ class DocumentService extends RequestService{
             errorCb(error)
         })
     }
+    async getNewestDocument(slug,cb,errorCb){
+        return await this.get(`/document/new/${slug}/`).then(response=>
+            cb(response.data.user_documents)
+            ).catch(error=>errorCb(error))
+    }
 }
 
 export default DocumentService
