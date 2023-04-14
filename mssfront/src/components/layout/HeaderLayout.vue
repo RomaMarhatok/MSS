@@ -1,5 +1,4 @@
 <script setup>
-import TabMenu from '@/components/ui/Menu/TabMenu.vue'
 import { useRouter } from 'vue-router'
 const router = useRouter()
 const redirect = () => router.push("/home/")
@@ -7,7 +6,7 @@ const redirect = () => router.push("/home/")
 <template>
   <header class="header__wrapper">
     <p class="text" @click="redirect">MSS</p>
-    <TabMenu />
+    <slot></slot>
   </header>
 </template>
 <style lang="css" scoped>
