@@ -30,14 +30,12 @@ class CreateTreatmentHistoryView(APIView):
 
     class InputSerializer(serializers.Serializer):
         date = serializers.DateTimeField()
-        patient_slug = serializers.CharField()
-        doctor_slug = serializers.CharField()
+        patient_slug = serializers.SlugField()
+        doctor_slug = serializers.SlugField()
         title = serializers.CharField()
-        short_description = serializers.CharField()
+        short_description = serializers.CharField(allow_blank=True)
         description = serializers.CharField()
         conclusion = serializers.CharField()
-        doctor_slug = serializers.CharField()
-        patient_slug = serializers.CharField()
 
     def post(self, request: HttpRequest):
         serializer = self.InputSerializer(data=request.data)

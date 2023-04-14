@@ -131,7 +131,8 @@ class TreatmentHistoryService(IsUserExistMixin):
     @transaction.atomic
     def create_treatment_history(self, data: dict):
         treatment_history_qs = self.treatment_history_repository.create(data)
-        return JsonResponse(data={"treatment_history_slug": treatment_history_qs.slug})
+        serialized_ts = TreatmentHistorySerializer(instance=treatment_history_qs).data
+        return JsonResponse(data={"treatment_history": serialized_ts})
 
     @transaction.atomic
     def create_image_for_analyzes(self, data: dict):
@@ -142,7 +143,7 @@ class TreatmentHistoryService(IsUserExistMixin):
         img_qs = self.image_for_analyzes_repository.create(data)
         serializerd_img = ImageForAnlyzeSerializer(instance=img_qs).data
         self.create_union(treatment_history, img_qs)
-        return JsonResponse(data=serializerd_img)
+        return JsonResponse(data={"image_for_analyze": serializerd_img})
 
     @transaction.atomic
     def create_union(self, treatment_history: TreatmentHistory, img: ImageForAnalyzes):

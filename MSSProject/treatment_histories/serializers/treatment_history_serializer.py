@@ -31,6 +31,7 @@ class TreatmentHistorySerializer(ModelSerializer):
             "created_at",
             "updated_at",
         )
+        extra_kwargs = {"short_description": {"allow_blank": True}}
 
     def get_created_at(self, instance: TreatmentHistory):
         return instance.created_at
@@ -51,7 +52,23 @@ class TreatmentHistorySerializer(ModelSerializer):
         )
         return instance
 
-    def to_representation(self, instance):
+    def to_representation(self, instance: TreatmentHistory):
         rep = super().to_representation(instance)
         rep["parsed_date"] = parse_date_to_dict(rep["date"])
+        rep["doctor"] = {
+            "slug": instance.doctor.user.slug,
+        }
+        if hasattr(instance.doctor.user, "userpersonalinfo"):
+            rep["doctor"]["full_name"] = instance.doctor.user.userpersonalinfo.full_name
+        rep["string_date"] = (
+            str(rep["parsed_date"]["hours"])
+            + ":"
+            + str(rep["parsed_date"]["minutes"])
+            + " "
+            + str(rep["parsed_date"]["day"])
+            + " "
+            + str(rep["parsed_date"]["mounth"])
+            + " "
+            + str(rep["parsed_date"]["year"])
+        )
         return rep
