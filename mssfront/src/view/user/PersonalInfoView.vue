@@ -11,7 +11,7 @@ import Dialog from 'primevue/dialog';
 import SelectButton from "primevue/selectbutton";
 
 import HeaderLayout from '@/components/layout/HeaderLayout.vue'
-
+import TabMenu from '@/components/ui/Menu/TabMenu.vue'
 const store = useStore()
 const route = useRoute()
 const select = ref("upcoming")
@@ -24,6 +24,10 @@ const options = ref([
     {
         name: "Прошедшие записи",
         value: "past"
+    },
+    {
+        name: "Календарь",
+        value: "calendar",
     }
 ])
 const personalInfo = computed(() => store.getters["user/getPersonalInfo"])
@@ -42,40 +46,44 @@ onBeforeMount(() => {
 })
 </script>
 <template>
-    <HeaderLayout />
+    <HeaderLayout>
+        <TabMenu />
+    </HeaderLayout>
     <main class="p-2 flex gap-2 flex-col">
         <section class="flex-media__section gap-8">
-            <section class="p-4 rounded-2xl w-fit flex-media__section bg__section bordered__section">
-                <div class="border-media_section  p-4">
-                    <p class="text-2xl font-bold text-center">
-                        {{ personalInfo.first_name }} {{ personalInfo.second_name }}
-                    </p>
-                    <p class="text-slate-400 font-thin max-[900px]:text-center">{{ personalInfo.email }}</p>
-                </div>
-                <div class="flex flex-col w-full p-4">
-                    <div class="grid grid-cols-2 grid-rows-2 gap-9">
-                        <div class="flex flex-col">
-                            <p class="pb-4 font-normal">Пол</p>
-                            <p class="pb-2 border-b-slate-200 border-b-2 font-thin">{{ personalInfo.gender }}ale</p>
-                        </div>
-                        <div class="flex flex-col">
-                            <p class="pb-4 text-slate-400 font-normal">Возраст</p>
-                            <p class="pb-2 border-b-slate-200 border-b-2 font-thin">{{ personalInfo.age }}</p>
-                        </div>
-                        <div class="flex flex-col">
-                            <p class="pb-4 text-slate-400 font-normal">Город</p>
-                            <p class="pb-2 border-b-slate-200 border-b-2 font-thin h-full">{{ personalInfo.city }}ale
-                            </p>
-                        </div>
-                        <div class="flex flex-col">
-                            <p class="pb-4 text-slate-400 font-normal">Адресс</p>
-                            <p class="pb-2 border-b-slate-200 border-b-2 font-thin">{{ personalInfo.address }}</p>
-                        </div>
-                        <div class="col-span-2">
-                            <p class="pb-4 text-slate-400 font-normal ">Здоровье</p>
-                            <p class="font-thin">{{ personalInfo.health_status }}</p>
+            <section class="bg__section bordered__section p-4 rounded-2xl w-fit flex flex-col">
+                <div>
+                    <div class="p-4">
+                        <p class="text-2xl font-bold text-center">
+                            {{ personalInfo.first_name }} {{ personalInfo.second_name }}
+                        </p>
+                        <p class="text-slate-400 font-thin text-center">{{ personalInfo.email }}</p>
+                    </div>
+                    <div class="flex flex-col w-full p-4">
+                        <div class="grid grid-cols-2 grid-rows-2 gap-9">
+                            <div class="flex flex-col">
+                                <p class="pb-4 text-slate-400 font-normal">Пол</p>
+                                <p class="pb-2 border-b-slate-200 border-b-2 font-thin">{{ personalInfo.gender }}ale</p>
+                            </div>
+                            <div class="flex flex-col">
+                                <p class="pb-4 text-slate-400 font-normal">Возраст</p>
+                                <p class="pb-2 border-b-slate-200 border-b-2 font-thin">{{ personalInfo.age }}</p>
+                            </div>
+                            <div class="flex flex-col">
+                                <p class="pb-4 text-slate-400 font-normal">Город</p>
+                                <p class="pb-2 border-b-slate-200 border-b-2 font-thin h-full">{{ personalInfo.city }}ale
+                                </p>
+                            </div>
+                            <div class="flex flex-col">
+                                <p class="pb-4 text-slate-400 font-normal">Адресс</p>
+                                <p class="pb-2 border-b-slate-200 border-b-2 font-thin">{{ personalInfo.address }}</p>
+                            </div>
                         </div>
                     </div>
+                </div>
+                <div class="col-span-2">
+                    <p class="pb-4 text-slate-400 font-normal ">Здоровье</p>
+                    <p class="font-thin">{{ personalInfo.health_status }}</p>
                 </div>
             </section>
             <section class="bordered__section flex-width__section document__section w-full p-4 flex flex-col gap-1">
@@ -104,44 +112,51 @@ onBeforeMount(() => {
                         <button class="add-appointment-button" @click="visible = true">Добавить запись</button>
                     </div>
                 </header>
-                <section class="bordered__section m-4 p-4 bg__section">
-                    <div v-if="!getAppointments.length">
-                        <p class="text-2xl font-bold text-center">Записей пока нет</p>
-                    </div>
-                    <div v-else v-for="(appointment, index) in getAppointments" :key="index" class="flex">
-                        <div class="bg-white rounded-xl p-4 flex w-full flex-media__section">
-                            <div class="flex flex-col px-4 border-media_section justify-center">
-                                <div class="flex gap-2 max-[900px]:justify-center">
-                                    <p class="text-2xl font-bold">{{ appointment.parsed_date.day }}</p>
-                                    <p class="text-2xl font-bold">{{ appointment.parsed_date.mounth }}</p>
-                                    <p class="text-2xl font-bold">{{ appointment.parsed_date.year }}</p>
+                <section class="bordered__section bg__section flex flex-col m-4 p-4  gap-3">
+                    <div v-if="select != 'calendar'">
+                        <div v-if="!getAppointments.length">
+                            <p class="text-2xl font-bold text-center">Записей пока нет</p>
+                        </div>
+                        <div v-else v-for="(appointment, index) in getAppointments" :key="index">
+                            <div class="flex-media__section bg-white rounded-xl p-4 flex w-full gap-2">
+                                <div
+                                    class="border-media_section flex-width__section flex flex-col px-4 justify-center w-1/4">
+                                    <div class="flex gap-2 max-[900px]:justify-center">
+                                        <p class="text-2xl font-bold">{{ appointment.parsed_date.day }}</p>
+                                        <p class="text-2xl font-bold">{{ appointment.parsed_date.mounth }}</p>
+                                        <p class="text-2xl font-bold">{{ appointment.parsed_date.year }}</p>
+                                    </div>
+                                    <div class="max-[900px]:text-center">
+                                        <p class="text-lg text-slate-400">{{ appointment.parsed_date.hours }}:{{
+                                            appointment.parsed_date.minutes
+                                        }}</p>
+                                    </div>
                                 </div>
-                                <div class="max-[900px]:text-center">
-                                    <p class="text-lg text-slate-400">{{ appointment.parsed_date.hours }}:{{
-                                        appointment.parsed_date.minutes
-                                    }}</p>
+                                <div
+                                    class="flex-width__section border-media_section flex flex-col gap-2 px-4 text-center w-1/4">
+                                    <p class="font-extralight text-slate-400">Доктор</p>
+                                    <p class="text-2xl font-bold self-center">{{ appointment.doctor.full_name }}</p>
                                 </div>
-                            </div>
-                            <div class="flex flex-col gap-2 px-4 text-center border-media_section">
-                                <p class="font-extralight text-slate-400">Доктор</p>
-                                <p class="text-2xl font-bold self-center">{{ appointment.doctor.full_name }}</p>
-                            </div>
-                            <div class="flex flex-col gap-2 px-4 text-center border-media_section ">
-                                <p class="font-extralight text-slate-400"> Специадизация доктора</p>
-                                <p class="text-2xl font-bold self-center whitespace-normal break-all">{{
-                                    appointment.doctor_specialization.name }}
-                                </p>
+                                <div
+                                    class="flex-width__section border-media_section flex flex-col gap-2 px-4 text-center w-1/3">
+                                    <p class="font-extralight text-slate-400"> Специадизация доктора</p>
+                                    <p class="text-2xl font-bold self-center whitespace-normal break-all">{{
+                                        appointment.doctor_specialization.name }}
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <div v-else>
+                        <v-calendar show-weeknumbers="right" :attributes="calendarAppointments" is-expanded />
+                    </div>
                 </section>
             </section>
-            <v-calendar show-weeknumbers="right" :attributes="calendarAppointments" />
         </main>
         <Dialog v-model:visible="visible" header="Создать запись" :style="{ width: '50vw' }" />
     </main>
 </template>
-<style scoped>
+<style lang="css" scoped>
 .bg__section {
     background-color: rgba(110, 131, 165, 0.103);
 }
