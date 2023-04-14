@@ -59,7 +59,7 @@ const routes = [
                     if(userRole == "PATIENT"){
                         return import("./src/view/user/PersonalInfoView" )
                     }
-                    if(userRole == "DOCTOR"){
+                    else if(userRole == "DOCTOR"){
                         return import("./src/view/doctor/DoctorHomeView")
                     }
                     return import("./src/view/NotFound")
