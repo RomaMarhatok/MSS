@@ -7,20 +7,33 @@ const props = defineProps({
 })
 </script>
 <template>
-    <button class="form__button border-1 border-black border-solid cursor-pointer text-base p-1 rounded-xl"
-        :type="props.buttonType" @click="props.buttonEvent">
+    <button class="button" :type="props.buttonType" @click="props.buttonEvent">
         {{ props.buttonText }}
     </button>
 </template>
 <style scoped>
-.form__button {
-    background-color: rgba(19, 48, 94, 1);
-    color: rgba(171, 134, 69, 1);
+.button {
+    appearance: none;
+    background-color: rgb(48, 103, 192);
+    color: #fff;
+    border: 1px solid rgba(27, 31, 35, .15);
+    border-radius: 6px;
+    cursor: pointer;
+    display: inline-block;
+    font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+    font-size: 1em;
+    line-height: 2em;
+    font-weight: 600;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    user-select: none;
+    touch-action: manipulation;
+    vertical-align: middle;
+    white-space: nowrap;
 }
 
-.form__button:hover {
-    color: rgb(194, 153, 81);
-    background-color: rgb(31, 70, 131);
-    transition: 0.5s;
+.button:hover {
+    background-color: rgb(43, 91, 168);
 }
 </style>
