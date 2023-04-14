@@ -1,4 +1,5 @@
 <script setup>
+import "primeflex/primeflex.css";
 // libraries
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
@@ -6,15 +7,14 @@ import { onBeforeMount } from "vue";
 //services
 import AuthenticationService from "@/../services/AuthenticationService";
 // components
-import BodyLayout from '@/components/layout/BodyLayout.vue';
-import HeaderLayout from '@/components/layout/HeaderLayout.vue';
-import FooterLayout from '@/components/layout/FooterLayout.vue';
 import LoginAsAdminLink from '@/components/common/Links/LoginAsAdminLink.vue';
 import AuthenticationFrom from '@/components/ui/Forms/authentication/AuthenticationForm.vue'
-// //stores
+
+import Divider from 'primevue/divider'
+// stores
 const store = useStore()
 
-// // router
+// router
 const router = useRouter()
 
 // services
@@ -31,15 +31,14 @@ const submit = async (data) => {
             router.push("/home/")
         }
     }).catch(errors => {
+        console.log(errors)
         const errorsObj = errors.response.data
         for (const key in errorsObj) {
-            store.commit("authentication/addError", errorsObj[key][0])
+            store.commit("authentication/addError", errorsObj[key])
         }
-
-        // store.commit("authentication/addError", errors.response.data.description)
     })
 }
-
+const signUpRedirect = () => router.push("/registration/")
 // hooks
 onBeforeMount(() => {
     store.commit("authentication/clearErrors")
@@ -47,17 +46,85 @@ onBeforeMount(() => {
 </script>
 <template>
     <main class="flex flex-col justify-center items-center min-h-3/4 w-full">
-        <HeaderLayout :class="'pt-3'">
+        <section class="pt-3">
             <header class="flex flex-col gap-3 mb-5">
                 <div class="text-5xl font-black underline decoration-2">MSS</div>
                 <div class="text-lg font-black">Log in to improve your medical experience!</div>
             </header>
-        </HeaderLayout>
-        <BodyLayout :class="'w-4/5'">
-            <AuthenticationFrom @SubmitLoginFrom="submit"></AuthenticationFrom>
-        </BodyLayout>
-        <FooterLayout>
-            <LoginAsAdminLink />
-        </FooterLayout>
+        </section>
+        <main class="content__wrapper">
+            <div class="inner__wrapper">
+                <AuthenticationFrom @SubmitLoginFrom="submit"></AuthenticationFrom>
+                <footer>
+                    <LoginAsAdminLink />
+                </footer>
+            </div>
+            <Divider layout="vertical" class="hidden md:flex"><b>ИЛИ</b></Divider>
+            <Divider layout="horizontal" class="flex sm:hidden" align="center"><b>ИЛИ</b></Divider>
+            <div class="inner__wrapper">
+                <button class="button__sign_up" @click="signUpRedirect">Регистрация</button>
+            </div>
+        </main>
     </main>
 </template>
+<style lang="css" scoped>
+.content__wrapper {
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+}
+
+.inner__wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.button__sign_up {
+    appearance: none;
+    background-color: #2ea44f;
+    border: 1px solid rgba(27, 31, 35, .15);
+    border-radius: 6px;
+    box-shadow: rgba(27, 31, 35, .1) 0 1px 0;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+    font-size: 1em;
+    font-weight: 600;
+    line-height: 20px;
+    padding: 6px 16px;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    user-select: none;
+    touch-action: manipulation;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.button__sign_up:focus:not(:focus-visible):not(.focus-visible) {
+    box-shadow: none;
+    outline: none;
+}
+
+.button__sign_up:hover {
+    background-color: #2c974b;
+}
+
+.button__sign_up:focus {
+    box-shadow: rgba(46, 164, 79, .4) 0 0 0 3px;
+    outline: none;
+}
+
+
+
+@media screen and (max-width:650px) {
+    .content__wrapper {
+        flex-direction: column;
+    }
+}
+</style>
