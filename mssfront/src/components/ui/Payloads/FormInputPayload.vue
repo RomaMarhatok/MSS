@@ -7,30 +7,50 @@ const props = defineProps({
 })
 </script>
 <template>
-    <div class="field flex flex-col gap-1 w-full focus:shadow-outline">
-        <label class="font-black text-lg" :for="props.id">{{ props.labelText }}</label>
+    <div class="field__wrapper">
+        <label class="field__label" :for="props.id">{{ props.labelText }}</label>
         <slot></slot>
-        <small class="text-red-500" :id=props.id>
+        <small class="error" :id=props.id>
             <ErrorMessage :name="props.id" />
         </small>
     </div>
 </template>
 <style>
+.field__wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.field__label {
+    font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+    font-size: 1.15em;
+    line-height: 30px;
+    font-weight: 600;
+    position: relative;
+}
+
+.error {
+    padding: 5px;
+    color: rgb(239 68 68);
+    line-height: 15px;
+    font-weight: 400;
+    font-size: 0.9em;
+}
+
 .base {
     padding: 0.5rem;
-    background-color: white;
-    border: 2px solid#D1D5DB;
+    border: 1px solid #D1D5DB;
     border-radius: 0.75rem;
     font-size: 1rem;
     line-height: 1.5rem;
     margin-bottom: 0.25rem;
     appearance: none;
-    margin: 0
+    margin: 0;
 }
 
 .base:focus {
     outline: none;
-    border-color: #93C5FD;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+    border: 1px solid #93C5FD;
+    box-shadow: rgba(23, 0, 0, 0.5) 3px;
 }
 </style>
