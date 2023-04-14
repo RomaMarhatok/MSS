@@ -13,7 +13,7 @@ const getters = {
                         highlight: true,  // Boolean, String, Object
                         dates:new Date(appointment.date),
                         popover:{
-                            label:`appointments to ${appointment.doctor_specialization.name}`
+                            label:`Запись к ${appointment.doctor_specialization.name}`
                         }
                     }            
             })
@@ -23,6 +23,14 @@ const getters = {
         getAppointments:(state)=>{
             console.log(state.appointments)
             return state.appointments
+        },
+        getUpComingAppointments:(state)=>{
+            const now = new Date().getTime()
+            return state.appointments.filter(appointment=>new Date(appointment.date).getTime()>=now)
+        },
+        getPastAppointments:(state)=>{
+            const now = new Date().getTime()
+            return state.appointments.filter(appointment=>new Date(appointment.date).getTime()<=now)
         },
         getErrors:(state)=>{
             return state.errors

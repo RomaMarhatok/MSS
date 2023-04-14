@@ -9,12 +9,18 @@ const getters = {
         return state.treatmentHistories
     },
     getPatientInfo:(state)=>{
-        console.log(state.patientInfo)
         return state.patientInfo
+    },
+    getTreatmentHistoryBySlug:(state)=>(slug)=>{
+        console.log(slug)
+        state.treatmentHistories.filter(ts=>ts.slug===slug)[0]
+        return state.treatmentHistories.filter(ts=>{
+            return ts.treatment_history.slug==slug
+        })[0]
     }
 }
 const actions = {
-    async fetchTreatments({commit},{patientSlug,doctorSpecializationSlug}){
+    async fetchTreatmentsHistories({commit},{patientSlug,doctorSpecializationSlug}){
         console.log(patientSlug,doctorSpecializationSlug)
         await treatmentHistoryService.getTreatmentHistoriesForDoctor(
             (treatmentHistory,patientInfo) =>{
@@ -26,13 +32,16 @@ const actions = {
             patientSlug,
             doctorSpecializationSlug
         )
-        console.log("action fetchTreatments",state.treatmentHistories)
-    }
+    },
 }
 const mutations = {
     setTreatmentHistory:(state,treatmentHistories)=>{
         console.log("mutations setTreatmentHistory",treatmentHistories)
         state.treatmentHistories = treatmentHistories
+    },
+    addTreatmentHistory:(state,treatmentHistory)=>{
+        console.log("mutations addTreatmentHistory",treatmentHistory)
+        state.treatmentHistories.push(treatmentHistory)
     },
     setPatientInfo:(state,patientInfo)=>{
         console.log("mutations setPatient",patientInfo)

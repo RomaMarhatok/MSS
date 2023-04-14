@@ -19,17 +19,12 @@ const getters = {
 
 const actions = {
     async fetchUserPersonalInfo({commit,state},slug){
-        if(Object.keys(state.personalInfo).length == 0){
-            await userService.getUserPersonalInfo(
-                    slug,
-                    personalInfo=>commit("setPersonalInfo",personalInfo),
-                    error=>console.log(error)
-                )
-            console.log("action personal info",state.personalInfo)
-        }
-        else{
-            console.log("action without request",state.personalInfo)
-        }
+        await userService.getUserPersonalInfo(
+                slug,
+                personalInfo=>commit("setPersonalInfo",personalInfo),
+                error=>console.log(error)
+            )
+        console.log("action personal info",state.personalInfo)
     },
 }
 

@@ -16,11 +16,20 @@ const getters = {
     getDocumentsByDocumentType:(state)=>(documentType)=>{
         return state.documents.filter(d=>d.document_type.name === documentType.name)
     },
+    getDocumentsByDocumentTypes:(state)=>(documentTypes)=>{
+        return state.documents.filter(d=>documentTypes.indexOf(d.document_type.name))
+    },
     getActiveDocument:(state)=>{
         return state.activeDocument
     },
     getNewestDocuments:(state)=>{
         return state.newestDocument
+    },
+    getDocuments:(state)=>{
+        return state.documents
+    },
+    getDocumentTypes:(state)=>{
+        return state.documentsTypes
     }
 }
 const actions = {
@@ -30,6 +39,7 @@ const actions = {
             (documents)=>{
                 commit("setDocuments",documents)
             },   
+            (error)=>console.log(error)
         )
         console.log("actions documents",state.documents)
     },
