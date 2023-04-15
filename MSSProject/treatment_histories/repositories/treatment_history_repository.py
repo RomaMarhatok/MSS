@@ -65,3 +65,12 @@ class TreatmentHistoryRepository(AbstractRepository):
     def is_valid(self, data: dict) -> bool:
         serializer = TreatmentHistorySerializer(data=data)
         return serializer.is_valid(raise_exception=True)
+
+    def update(
+        self, data: dict, treatment_history: TreatmentHistory
+    ) -> TreatmentHistory:
+        serializer = TreatmentHistorySerializer(
+            instance=treatment_history, data=data, partial=True
+        )
+        if serializer.is_valid(raise_exception=True):
+            return serializer.save()

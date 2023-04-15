@@ -26,6 +26,7 @@ class PatientTreatmentsView(GenericViewSet):
 
 
 class CreateTreatmentHistoryView(APIView):
+    permission_classes = [IsUserAuthenticated, IsDoctor]
     service = TreatmentHistoryService()
 
     class InputSerializer(serializers.Serializer):
@@ -41,6 +42,23 @@ class CreateTreatmentHistoryView(APIView):
         serializer = self.InputSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         return self.service.create_treatment_history(serializer.validated_data)
+
+
+class UpdateTreatmentHistoryView(APIView):
+    permission_classes = [IsUserAuthenticated, IsDoctor]
+    service = TreatmentHistoryService()
+
+    class InputSerializer(serializers.Serializer):
+        treatment_history_slug = serializers.SlugField()
+        title = serializers.CharField(allow_blank=True)
+        short_description = serializers.CharField(allow_blank=True)
+        description = serializers.CharField(allow_blank=True)
+        conclusion = serializers.CharField(allow_blank=True)
+
+    def post(self, request: HttpRequest):
+        serializer = self.InputSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return self.service.update_treatment_history(serializer.validated_data)
 
 
 class UserTreatmentHistoriesView(GenericViewSet):

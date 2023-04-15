@@ -1,9 +1,10 @@
-from django.urls import path, include
+from django.urls import path
 from treatment_histories.views import (
     PatientTreatmentsView,
     UserTreatmentHistoriesView,
     CreateImageForAnalyzesView,
     CreateTreatmentHistoryView,
+    UpdateTreatmentHistoryView,
 )
 
 urlpatterns = [
@@ -36,5 +37,10 @@ urlpatterns = [
         "create/image/",
         CreateImageForAnalyzesView.as_view(),
         name="create-image-for-analyzes",
+    ),
+    path(
+        "update/",
+        UpdateTreatmentHistoryView.as_view(),
+        name="update-treatment-history",
     ),
 ]

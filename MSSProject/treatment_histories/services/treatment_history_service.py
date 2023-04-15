@@ -151,3 +151,21 @@ class TreatmentHistoryService(IsUserExistMixin):
             {"treatment_history": treatment_history, "image_for_analyzes": img}
         )
         return JsonResponse(data={})
+
+    def update_treatment_history(self, data: dict):
+        treatment_history_slug = data.get("treatment_history_slug", None)
+        if not self.treatment_history_repository.is_exist(
+            treatment_history_slug=treatment_history_slug
+        ):
+            return JsonResponseBadRequest(
+                data={
+                    "message": "Не валидные данные в запросе",
+                    "description": f"Лечебная запись с slug {treatment_history_slug} не существует",
+                }
+            )
+        treatment_history_qs = self.treatment_history_repository.get(
+            treatment_history_slug=treatment_history_slug
+        )
+        ts = self.treatment_history_repository.update(data, treatment_history_qs)
+        serialized_ts = TreatmentHistorySerializer(instance=ts).data
+        return JsonResponse(data={"treatment_history": serialized_ts})
