@@ -112,8 +112,8 @@ onBeforeMount(() => {
                         <button class="add-appointment-button" @click="visible = true">Добавить запись</button>
                     </div>
                 </header>
-                <section class="bordered__section bg__section flex flex-col m-4 p-4  gap-3">
-                    <div v-if="select != 'calendar'">
+                <section class="bordered__section bg__section">
+                    <div v-if="select != 'calendar'" class="flex flex-col m-4 p-4 gap-3">
                         <div v-if="!getAppointments.length">
                             <p class="text-2xl font-bold text-center">Записей пока нет</p>
                         </div>
