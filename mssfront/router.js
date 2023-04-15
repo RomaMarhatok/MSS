@@ -1,17 +1,20 @@
 import {createRouter,createWebHashHistory} from "vue-router";
-import store from "./src/store/index"
 import IndexView from "./src/view/IndexView"
 import SignupView from "./src/view/SignupView"
 import LoginView from "./src/view/LoginView"
+import LogoutView from "./src/view/LogoutView"
+import NoPermissionView from './src/view/NoPermissionView'
+
+import PatinetPersonalInfoVIew from "./src/view/user/PersonalInfoView"
 import DocumentsListView from './src/view/user/documents/DocumentsListView'
 import DocumentView from "./src/view/user/documents/DocumentView"
 import DoctorListView from "./src/view/user/doctors/DoctorListView" 
 import DoctorView from "./src/view/user/doctors/DoctorView"
 import appointmentsPage from "./src/view/user/appointments/appointmentsPage"
-import NoPermissionView from './src/view/NoPermissionView'
-import AppointmentView from "./src/view/doctor/appointments/AppointmentView"
-import EditorPage from "./src/view/doctor/editorPage"
-import LogoutView from "./src/view/LogoutView"
+
+import DoctorHomeView from './src/view/doctor/DoctorHomeView'
+import DoctorAppointmentView from './src/view/doctor/appointments/AppointmentView'
+// import AppointmentView from "./src/view/doctor/appointments/AppointmentView"
 import ROLES from "./roles/roles"
 const routes = [
     {
@@ -36,34 +39,13 @@ const routes = [
         component:LoginView
     },
     {
-        path:"/doctors/",
-        name:"doctors-list-page",
-        component:DoctorListView,
-        meta:{authorize:[ROLES.Patient]}
-    },
-    {
-        path:"/doctor/:doctorSlug",
-        name:"doctor-sing-display-section",
-        component:DoctorView,
-        meta:{authorize:[ROLES.Patient]}
-    },
-    {
         path:"/home/",
         meta:{authorize:[]},
         children:[
             {
                 path:"",
                 name:"profile-page",
-                component:()=>{
-                    const userRole = store.getters["user/getRole"]
-                    if(userRole == "PATIENT"){
-                        return import("./src/view/user/PersonalInfoView" )
-                    }
-                    else if(userRole == "DOCTOR"){
-                        return import("./src/view/doctor/DoctorHomeView")
-                    }
-                    return import("./src/view/NotFound")
-                }
+                component:PatinetPersonalInfoVIew,
             },
             {
                 path:"documents/",
@@ -83,19 +65,36 @@ const routes = [
                 name:"patient-appointments",
                 component:appointmentsPage,
                 meta:{authorize:[ROLES.Patient]},
-            }
+            },
+            {
+                path:"doctors/",
+                name:"doctors-list-page",
+                component:DoctorListView,
+                meta:{authorize:[ROLES.Patient]}
+            },
+            {
+                path:"doctor/:doctorSlug",
+                name:"doctor-sing-display-section",
+                component:DoctorView,
+                meta:{authorize:[ROLES.Patient]}
+            },
         ]
     },
     {
-        path:"/appointment/",
+        path:"/doctor/",
         meta:{authorize:[ROLES.Doctor]},
-        name:"single-appointment",
-        component:AppointmentView
-    },
-    {
-        path:"/editor/",
-        meta:{authorize:[ROLES.Doctor]},
-        name:"editor",component:EditorPage
+        children:[
+            {
+                path:"",
+                meta:{authorize:[ROLES.Doctor]},
+                component:DoctorHomeView,
+            },
+            {
+                path:"appointment/",
+                meta:{authorize:[ROLES.Doctor]},
+                component:DoctorAppointmentView,
+            }
+        ]
     },
     {
         path:"/nopermission/",
