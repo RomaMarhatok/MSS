@@ -24,7 +24,7 @@ urlpatterns = [
         RegistrationView.as_view(),
         name="user-registration",
     ),
-    path("logout/", LogOutView.as_view(), name="user-logout"),
+    path("logout/<str:user_slug>/", LogOutView.as_view(), name="user-logout"),
     path("validate/user/", UserValidationView.as_view(), name="validate-user"),
     path(
         "validate/info/", UserPersonalInfoValidationView.as_view(), name="validate-info"
