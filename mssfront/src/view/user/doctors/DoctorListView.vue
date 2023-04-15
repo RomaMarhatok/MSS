@@ -20,7 +20,7 @@ const show = ref(false)
 const layout = ref("list")
 const doctors = computed(() => sortKey.value.length == 0 ? store.state.doctors.doctors : store.getters["doctors/getDoctorByDoctorTypeSlug"](sortKey.value))
 const doctorTypes = computed(() => store.getters["doctors/getDoctorTypes"])
-const redirect = (slug) => router.push(`/doctor/${slug}`)
+const redirect = (slug) => router.push(`/home/doctor/${slug}`)
 const onclick = () => {
     show.value = !show.value
 }
