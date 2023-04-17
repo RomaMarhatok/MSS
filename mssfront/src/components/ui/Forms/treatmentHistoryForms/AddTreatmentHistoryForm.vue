@@ -1,15 +1,13 @@
 <script setup>
-import { string, object } from 'yup'
 import { Field } from 'vee-validate'
 import { reactive, defineProps } from 'vue'
 import { useStore } from 'vuex'
 import { useToast } from "primevue/usetoast";
 import FormInputPayload from '@/components/ui/Payloads/FormInputPayload.vue'
 import FormSubmitButton from '@/components/ui/Buttons/FormSubmitButton.vue'
-import BaseForm from '@/components/ui/Forms/Base/BaseForm.vue'
+import BaseTreatmentHistoryForm from './BaseTreatmentHistoryForm.vue';
 import TreatmentHistoryService from '@/../services/TreatmentHistoryService'
 import Textarea from 'primevue/textarea'
-import Toast from 'primevue/toast';
 const store = useStore()
 const toast = useToast()
 const props = defineProps({
@@ -25,17 +23,10 @@ const data = reactive({
     patient_slug: props.patient_slug,
     doctor_slug: props.doctor_slug,
 })
-const validationSchema = object({
-    title: string().required("Название обязательно"),
-    short_description: string(),
-    description: string().required("Описание обязательно"),
-    conclusion: string().required("Заключение обязательно")
-})
 const treatmentHistoryService = new TreatmentHistoryService()
 const submit = () => {
     data.date = new Date()
     console.log(data)
-    console.log(treatmentHistoryService)
     treatmentHistoryService.createTreatmentHistory(data)
         .then(response => {
             if (response.status == 200) {
@@ -47,8 +38,7 @@ const submit = () => {
 
 </script>
 <template>
-    <Toast />
-    <BaseForm :schema="validationSchema" @SubmitForm="submit">
+    <BaseTreatmentHistoryForm :submit="submit">
         <FormInputPayload id="title" label-text="Название записи">
             <Field name="title" type="text" class="base" id="title" v-model="data.title" />
         </FormInputPayload>
@@ -71,5 +61,5 @@ const submit = () => {
             </Field>
         </FormInputPayload>
         <FormSubmitButton button-text="Добавить" />
-    </BaseForm>
+    </BaseTreatmentHistoryForm>
 </template>

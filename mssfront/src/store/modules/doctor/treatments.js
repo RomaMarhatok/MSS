@@ -12,11 +12,10 @@ const getters = {
         return state.patientInfo
     },
     getTreatmentHistoryBySlug:(state)=>(slug)=>{
-        state.treatmentHistories.filter(ts=>ts.slug===slug)[0]
         return state.treatmentHistories.filter(ts=>{
             return ts.treatment_history.slug==slug
         })[0]
-    }
+    },
 }
 const actions = {
     async fetchTreatmentsHistories({commit},{patientSlug,doctorSpecializationSlug}){
@@ -53,6 +52,14 @@ const mutations = {
         for(let tsIndex in state.treatmentHistories){
             if(state.treatmentHistories[tsIndex].treatment_history.slug == treatmentHistory.slug){
                 state.treatmentHistories[tsIndex].treatment_history = treatmentHistory
+            }
+        }
+    },
+    deleteImageForAnalyze:(state,{imageSlug,treatmentHistory})=>{
+        console.log("mutations deleteImageForAnalyze",imageSlug,treatmentHistory)
+        for(let tsIndex in state.treatmentHistories){
+            if(state.treatmentHistories[tsIndex].treatment_history.slug == treatmentHistory.slug){
+                state.treatmentHistories[tsIndex].images_for_analyzes = state.treatmentHistories[tsIndex].images_for_analyzes.map(img=>img.slug!=imageSlug)
             }
         }
     }
