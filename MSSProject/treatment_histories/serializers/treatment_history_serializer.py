@@ -52,6 +52,12 @@ class TreatmentHistorySerializer(ModelSerializer):
         )
         return instance
 
+    def update(self, instance: TreatmentHistory, validated_data) -> int:
+        return TreatmentHistory.objects.filter(slug=instance.slug).update(
+            **validated_data
+        )
+        # return super().update(instance, validated_data)
+
     def to_representation(self, instance: TreatmentHistory):
         rep = super().to_representation(instance)
         rep["parsed_date"] = parse_date_to_dict(rep["date"])

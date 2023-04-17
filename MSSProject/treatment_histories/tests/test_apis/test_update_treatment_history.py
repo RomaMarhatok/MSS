@@ -17,15 +17,19 @@ def test(factory_treatment_history_fixture):
     headers = {
         "HTTP_AUTHORIZATION": "Bearer " + token,
     }
-    conclusion = "test"
     ts_dict = TreatmentHistorySerializer(
         instance=factory_treatment_history_fixture
     ).data
     ts_dict["treatment_history_slug"] = factory_treatment_history_fixture.slug
     data = ts_dict
+    conclusion = "test"
     data["conclusion"] = conclusion
+    assert factory_treatment_history_fixture.conclusion != conclusion
     response = client.post(url, data, **headers)
     assert response.status_code == 200
     assert bool(response.json())
+    assert TreatmentHistory.objects.count() == 1
     ts = TreatmentHistory.objects.first()
     assert ts.conclusion == conclusion
+    print(ts.conclusion, ts.slug, factory_treatment_history_fixture.slug)
+    assert ts.slug == factory_treatment_history_fixture.slug

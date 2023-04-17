@@ -73,4 +73,6 @@ class TreatmentHistoryRepository(AbstractRepository):
             instance=treatment_history, data=data, partial=True
         )
         if serializer.is_valid(raise_exception=True):
-            return serializer.save()
+            count_of_updated_rows = serializer.save()
+            if count_of_updated_rows == 1:
+                return self.get(treatment_history_slug=treatment_history.slug)
