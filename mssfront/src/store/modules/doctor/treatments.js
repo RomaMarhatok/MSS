@@ -12,7 +12,6 @@ const getters = {
         return state.patientInfo
     },
     getTreatmentHistoryBySlug:(state)=>(slug)=>{
-        console.log(slug)
         state.treatmentHistories.filter(ts=>ts.slug===slug)[0]
         return state.treatmentHistories.filter(ts=>{
             return ts.treatment_history.slug==slug
@@ -46,6 +45,16 @@ const mutations = {
     setPatientInfo:(state,patientInfo)=>{
         console.log("mutations setPatient",patientInfo)
         state.patientInfo = patientInfo
+    },
+    updateTreatmentHistory:(state,treatmentHistory)=>{
+        console.log("mutations updateTreatmentHistory",treatmentHistory)
+        console.log(state.treatmentHistories)
+        
+        for(let tsIndex in state.treatmentHistories){
+            if(state.treatmentHistories[tsIndex].treatment_history.slug == treatmentHistory.slug){
+                state.treatmentHistories[tsIndex].treatment_history = treatmentHistory
+            }
+        }
     }
 }
 export default {
