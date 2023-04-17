@@ -11,17 +11,23 @@ from common.utils.string_utils import generate_hash_from_string
 
 
 class ImageForAnlyzeSerializer(ModelSerializer):
+    slug = SerializerMethodField()
     created_at = SerializerMethodField()
     updated_at = SerializerMethodField()
 
     class Meta:
         model = ImageForAnalyzes
         fields = (
+            "slug",
             "image",
             "description",
             "created_at",
             "updated_at",
         )
+        extra_kwargs = {"image": {"validators": []}}
+
+    def get_slug(self, instance: ImageForAnalyzes):
+        return instance.slug
 
     def validate_image(self, value: InMemoryUploadedFile):
         name = generate_hash_from_string(value.name.split(".")[0])[:51]
