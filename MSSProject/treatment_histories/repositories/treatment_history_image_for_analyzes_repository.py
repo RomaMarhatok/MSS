@@ -19,7 +19,11 @@ class TreatmentHistoryImageForAnalyzesRepository(AbstractRepository):
         )
 
     def delete(self, **kwargs):
-        super().delete(**kwargs)
+        ts = kwargs.get("ts", None)
+        img = kwargs.get("img", None)
+        return TreatmentHistoryImageForAnalyzes.objects.filter(
+            treatment_history=ts, image_for_analyzes=img
+        ).delete()
 
     def is_exist(self, **kwargs) -> bool:
         super().is_exist(**kwargs)

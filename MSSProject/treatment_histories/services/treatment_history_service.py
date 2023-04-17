@@ -142,16 +142,19 @@ class TreatmentHistoryService(IsUserExistMixin):
         )
         img_qs = self.image_for_analyzes_repository.create(data)
         serializerd_img = ImageForAnlyzeSerializer(instance=img_qs).data
-        self.create_union(treatment_history, img_qs)
+        self.create_union_table(treatment_history, img_qs)
         return JsonResponse(data={"image_for_analyze": serializerd_img})
 
     @transaction.atomic
-    def create_union(self, treatment_history: TreatmentHistory, img: ImageForAnalyzes):
+    def create_union_table(
+        self, treatment_history: TreatmentHistory, img: ImageForAnalyzes
+    ):
         self.treatment_history_image_for_analyzes_repository.create(
             {"treatment_history": treatment_history, "image_for_analyzes": img}
         )
         return JsonResponse(data={})
 
+    @transaction.atomic
     def update_treatment_history(self, data: dict):
         treatment_history_slug = data.get("treatment_history_slug", None)
         if not self.treatment_history_repository.is_exist(
@@ -169,3 +172,24 @@ class TreatmentHistoryService(IsUserExistMixin):
         ts = self.treatment_history_repository.update(data, treatment_history_qs)
         serialized_ts = TreatmentHistorySerializer(instance=ts).data
         return JsonResponse(data={"treatment_history": serialized_ts})
+
+    @transaction.atomic
+    def delete_img_for_analyzes(self, data: dict):
+        treatment_history_slug = data.get("treatment_history_slug", None)
+        ts = self.treatment_history_repository.get(
+            treatment_history_slug=treatment_history_slug
+        )
+        image_for_analyzes_slug = data.get("image_for_analyzes_slug", None)
+        img_for_analyzes = self.image_for_analyzes_repository.get(
+            slug=image_for_analyzes_slug
+        )
+        self.treatment_history_image_for_analyzes_repository.delete(
+            ts=ts, img=img_for_analyzes
+        )
+        img_for_analyzes.delete()
+        return JsonResponse(
+            data={
+                "message": "Изображение удалено",
+                "description": "Изображение удалено",
+            }
+        )

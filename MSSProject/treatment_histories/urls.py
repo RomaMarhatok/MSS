@@ -3,6 +3,7 @@ from treatment_histories.views import (
     PatientTreatmentsView,
     UserTreatmentHistoriesView,
     CreateImageForAnalyzesView,
+    DeleteImageForAnalyzesView,
     CreateTreatmentHistoryView,
     UpdateTreatmentHistoryView,
 )
@@ -37,6 +38,11 @@ urlpatterns = [
         "create/image/",
         CreateImageForAnalyzesView.as_view(),
         name="create-image-for-analyzes",
+    ),
+    path(
+        "delete/image/",
+        DeleteImageForAnalyzesView.as_view(),
+        name="delete-image-for-analyzes",
     ),
     path(
         "update/",

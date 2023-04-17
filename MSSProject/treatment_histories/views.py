@@ -77,6 +77,8 @@ class UserTreatmentHistoriesView(GenericViewSet):
 
 
 class CreateImageForAnalyzesView(APIView):
+    permission_classes = [IsUserAuthenticated, IsDoctor]
+
     service = TreatmentHistoryService()
 
     class InputSerializer(serializers.Serializer):
@@ -88,3 +90,17 @@ class CreateImageForAnalyzesView(APIView):
         serializer = self.InputSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         return self.service.create_image_for_analyzes(serializer.validated_data)
+
+
+class DeleteImageForAnalyzesView(APIView):
+    permission_classes = [IsUserAuthenticated, IsDoctor]
+    service = TreatmentHistoryService()
+
+    class InputSerializer(serializers.Serializer):
+        treatment_history_slug = serializers.SlugField()
+        image_for_analyzes_slug = serializers.SlugField()
+
+    def post(self, request):
+        serializer = self.InputSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return self.service.delete_img_for_analyzes(serializer.validated_data)
