@@ -1,7 +1,7 @@
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from responses.errors import JsonResponseBadRequest
 
-from ..models import User, UserLocation, UserPersonalInfo
+from ..models import UserLocation, UserPersonalInfo
 from ..repositories import (
     UserLocationRepository,
     UserPersonalInfoRepository,
