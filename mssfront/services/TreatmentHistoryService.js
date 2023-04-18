@@ -9,11 +9,11 @@ class TreatmentHistoryService extends RequestService{
     async createTreatmentHistory(data){
         return await this.post(`/treatment_histories/create/`,data)
     }
-    async createTreatmentHistoryImageForAnalyze(cb,errorCb,data){
-        return await this.post(`/create/image/`,data).then(response=>cb(response)).catch(error=>errorCb(error))
+    async createTreatmentHistoryImageForAnalyze(data){
+        return await this.post(`/treatment_histories/create/image/`,data)
     }
     async deleteTreatmentHistoryImageForAnalyze(data){
-        return await this.post(`/delete/image/`,data)
+        return await this.post(`/treatment_histories/delete/image/`,data)
     }
     async updateTreatmentHistory(data){
         return await this.post(`/treatment_histories/update/`,data)

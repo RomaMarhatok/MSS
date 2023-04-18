@@ -107,7 +107,7 @@ const toggleMenu = (event) => {
                         </div>
                         <div>
                             <p class="font-medium pb-2">{{ ts.treatment_history.title }}</p>
-                            <Tag :value="'кол-во изображений ' + ts.treatment_history.count_of_images" severity="info" />
+                            <Tag :value="'кол-во изображений ' + ts.images_for_analyzes.length" severity="info" />
                         </div>
                     </div>
                 </div>

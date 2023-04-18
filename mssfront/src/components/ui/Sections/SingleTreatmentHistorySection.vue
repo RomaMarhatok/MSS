@@ -3,6 +3,8 @@ import { useStore } from 'vuex';
 import { ref, defineProps, computed } from 'vue'
 import ChangeTreatmentHistoryForm from '../Forms/treatmentHistoryForms/ChangeTreatmentHistoryForm.vue';
 import TreatmentHistoryImageListSection from "@/components/ui/Sections/TreatmentHistoryImageListSection.vue"
+import ChangeTreatmentHistoryImageSection from './ChangeTreatmentHistoryImageSection.vue';
+import addImageDialog from '@/components/ui/Dialogs/addImageDialog.vue';
 const props = defineProps({
     swapOnChangeForm: {
         type: Boolean,
@@ -40,8 +42,10 @@ const toggleForms = () => {
         <div v-else class="flex flex-col w-full">
             <ChangeTreatmentHistoryForm :treatment-history="selectedTreatmentHistoryAndImages.treatment_history"
                 @changeSuccess="toggleForms" />
-            <div class="bordered__section w-full">
-                <TreatmentHistoryImageListSection :images="selectedTreatmentHistoryAndImages.images_for_analyzes" />
+            <div class="bordered__section w-full mt-4 bg-white p-2">
+                <addImageDialog :treatment-history-slug="selectedTreatmentHistoryAndImages.treatment_history.slug" />
+                <ChangeTreatmentHistoryImageSection
+                    :treatment-history-slug="selectedTreatmentHistoryAndImages.treatment_history.slug" />
             </div>
         </div>
     </div>

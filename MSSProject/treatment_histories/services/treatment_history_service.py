@@ -36,7 +36,6 @@ class TreatmentHistoryService(IsUserExistMixin):
             instance=imgs, context={"request": request}, many=True
         ).data
         ts_serialized = TreatmentHistorySerializer(instance=ts).data
-        ts_serialized.update({"count_of_images": len(imgs)})
         return {
             "treatment_history": ts_serialized,
             "images_for_analyzes": imgs_serialized,
@@ -126,17 +125,18 @@ class TreatmentHistoryService(IsUserExistMixin):
     def create_treatment_history(self, data: dict):
         treatment_history_qs = self.treatment_history_repository.create(data)
         serialized_ts = TreatmentHistorySerializer(instance=treatment_history_qs).data
-        serialized_ts.update({"count_of_images": 0})
         return JsonResponse(data={"treatment_history": serialized_ts})
 
     @transaction.atomic
-    def create_image_for_analyzes(self, data: dict):
+    def create_image_for_analyzes(self, data: dict, request=None):
         treatment_history_slug = data.get("treatment_history_slug", None)
         treatment_history = self.treatment_history_repository.get(
             treatment_history_slug=treatment_history_slug
         )
         img_qs = self.image_for_analyzes_repository.create(data)
-        serializerd_img = ImageForAnlyzeSerializer(instance=img_qs).data
+        serializerd_img = ImageForAnlyzeSerializer(
+            instance=img_qs, context={"request": request}
+        ).data
         self.create_union_table(treatment_history, img_qs)
         return JsonResponse(data={"image_for_analyze": serializerd_img})
 
@@ -169,7 +169,6 @@ class TreatmentHistoryService(IsUserExistMixin):
 
     @transaction.atomic
     def delete_img_for_analyzes(self, data: dict):
-        request = data.get("request", None)
         treatment_history_slug = data.get("treatment_history_slug", None)
         ts = self.treatment_history_repository.get(
             treatment_history_slug=treatment_history_slug
@@ -182,7 +181,9 @@ class TreatmentHistoryService(IsUserExistMixin):
             ts=ts, img=img_for_analyzes
         )
         img_for_analyzes.delete()
-        return self._get(
-            ts.slug,
-            request,
+        return JsonResponse(
+            data={
+                "treatment_history_slug": ts.slug,
+                "deleted_image_slug": image_for_analyzes_slug,
+            }
         )

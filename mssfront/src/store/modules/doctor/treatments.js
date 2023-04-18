@@ -2,7 +2,7 @@ import TreatmentHistoryService from "@/../services/TreatmentHistoryService";
 const treatmentHistoryService = new TreatmentHistoryService()
 const state = {
     patientInfo:{},
-    treatmentHistories:[]
+    treatmentHistories:[],
 }
 const getters = {
     getTreatmentsHistories:(state)=>{
@@ -16,6 +16,13 @@ const getters = {
             return ts.treatment_history.slug==slug
         })[0]
     },
+    getImageForAnalyzes:(state)=>(treatmentHistorySlug)=>{
+        for(let tsIndex in state.treatmentHistories){
+            if(state.treatmentHistories[tsIndex].treatment_history.slug == treatmentHistorySlug){
+               return state.treatmentHistories[tsIndex].images_for_analyzes
+            }
+        }
+    }
 }
 const actions = {
     async fetchTreatmentsHistories({commit},{patientSlug,doctorSpecializationSlug}){
@@ -55,14 +62,24 @@ const mutations = {
             }
         }
     },
-    deleteImageForAnalyze:(state,{imageSlug,treatmentHistory})=>{
-        console.log("mutations deleteImageForAnalyze",imageSlug,treatmentHistory)
+    addImageForAnalyze:(state,{img,treatmentHistorySlug})=>{
+        console.log("mutations addImageForAnalyze",img,treatmentHistorySlug)
         for(let tsIndex in state.treatmentHistories){
-            if(state.treatmentHistories[tsIndex].treatment_history.slug == treatmentHistory.slug){
-                state.treatmentHistories[tsIndex].images_for_analyzes = state.treatmentHistories[tsIndex].images_for_analyzes.map(img=>img.slug!=imageSlug)
+            if(state.treatmentHistories[tsIndex].treatment_history.slug == treatmentHistorySlug){
+                state.treatmentHistories[tsIndex].images_for_analyzes.push(img)
+                break
             }
         }
-    }
+    },
+    deleteImageForAnalyze:(state,{imageSlug,treatmentHistorySlug})=>{
+        console.log("mutations deleteImageForAnalyze",imageSlug,treatmentHistorySlug)
+        for(let tsIndex in state.treatmentHistories){
+            if(state.treatmentHistories[tsIndex].treatment_history.slug == treatmentHistorySlug){
+                state.treatmentHistories[tsIndex].images_for_analyzes = state.treatmentHistories[tsIndex].images_for_analyzes.filter(img=>img.slug!=imageSlug)
+                break
+            }
+        }
+    },
 }
 export default {
     namespaced: true,
