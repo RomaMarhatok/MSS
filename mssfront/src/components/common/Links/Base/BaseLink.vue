@@ -25,7 +25,7 @@ const props = defineProps({
     display: flex;
     padding-top: 5px;
     padding-bottom: 5px;
-    border: 1px solid black;
+    border: 1px solid rgb(165, 165, 165);
     color: black;
 }
 

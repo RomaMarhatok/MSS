@@ -52,8 +52,8 @@ const deleteImage = (imgSlug) => {
         <div v-if="!images.length">
             <p>НЕТ</p>
         </div>
-        <div v-else v-for="img in images" :key="img.slug" class="flex justify-between">
-            <p @click="selectImage(img.slug)" class="cursor-pointer">{{ img.description }}</p>
+        <div v-else v-for="(img, index) in images" :key="img.slug" class="flex justify-between">
+            <p @click="selectImage(img.slug)" class="cursor-pointer">{{ index + 1 }}.{{ img.description }}</p>
             <button @click="deleteImage(img.slug)"><i class="pi pi-times"></i></button>
         </div>
     </div>
