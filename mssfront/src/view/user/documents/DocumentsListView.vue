@@ -3,7 +3,7 @@ import "primeflex/primeflex.css";
 import "primevue/resources/themes/lara-light-blue/theme.css";
 import "primevue/resources/primevue.min.css";
 
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { onMounted, computed, ref } from 'vue';
 import { Field } from "vee-validate";
@@ -15,6 +15,7 @@ import CheckBoxPayload from "@/components/ui/CheckBoxes/PrimaryCheckBox.vue";
 
 const store = useStore()
 const route = useRoute()
+const router = useRouter()
 const documentTypeFilter = ref([])
 const documentDateFilter = ref(null)
 const documentNameFilter = ref("")
@@ -68,7 +69,13 @@ const addDocumentTypeFilter = (value) => {
         documentTypeFilter.value.splice(value[0], 1)
     }
 }
-
+const redirect = (documentSlug) => {
+    store.dispatch("documents/fetchDocument", {
+        slug: slug.value,
+        document_slug: documentSlug
+    })
+    router.push(`/home/document/${documentSlug}/`)
+}
 onMounted(() => {
     store.dispatch("documents/fetchDocuments", slug.value)
     store.dispatch("documents/fetchDocumentsTypes")
@@ -113,7 +120,7 @@ onMounted(() => {
         </aside>
         <section class="w-full">
             <section class="media-grid__section p-4 ">
-                <div v-for="(document, index) in filterDocuments" :key="index">
+                <div v-for="(document, index) in filterDocuments" :key="index" @click="redirect(document.slug)">
                     <div class="shadow-container border-container flex">
                         <div class="flex p-4">
                             <font-awesome-icon :icon="['fas', 'file-medical']" size="3x" style="color: #265fba;" />
@@ -146,7 +153,6 @@ onMounted(() => {
 <style lang="css" scoped>
 .font {
     font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
-
 }
 
 .sidebar-shadow {

@@ -2,17 +2,15 @@
 import { useStore } from 'vuex';
 import { ref, computed } from 'vue';
 import baseLink from '@/components/common/Links/Base/BaseLink.vue';
-import TabMenu from '@/components/ui/Menu/TabMenu.vue'
 import HeaderLayout from '@/components/layout/HeaderLayout.vue';
-import PageHeader from '@/components/ui/Headers/PageHeader.vue';
 import BodyLayout from '@/components/layout/BodyLayout.vue';
+import TabMenu from '@/components/ui/Menu/TabMenu.vue'
 const store = useStore()
 const redirectHref = ref(`#/home/documents/`)
 const document = computed(() => store.getters["documents/getActiveDocument"])
 </script>
 <template>
     <HeaderLayout>
-        <PageHeader />
         <TabMenu />
     </HeaderLayout>
     <BodyLayout>
@@ -24,7 +22,7 @@ const document = computed(() => store.getters["documents/getActiveDocument"])
                             <p>{{ document.document_type.name }}</p>
                             <p>{{ document.name }}</p>
                         </div>
-                        <p>{{ document.creator.full_name }}</p>
+                        <p>Cоздатель {{ document.creator.full_name }}</p>
                         <p>{{ document.updated_at }}</p>
                         <p>{{ document.created_at }}</p>
                     </div>
