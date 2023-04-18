@@ -12,7 +12,6 @@ import DoctorListView from "./src/view/user/doctors/DoctorListView"
 import DoctorView from "./src/view/user/doctors/DoctorView"
 import DoctorHomeView from './src/view/doctor/DoctorHomeView'
 import DoctorAppointmentView from './src/view/doctor/appointments/AppointmentView'
-// import AppointmentView from "./src/view/doctor/appointments/AppointmentView"
 import ROLES from "./roles/roles"
 const routes = [
     {
