@@ -56,13 +56,7 @@ class TreatmentHistoryService(IsUserExistMixin):
         treatment_history = self.treatment_history_repository.get(
             treatment_history_slug=treatment_history_slug,
         )
-        ts = self._response_formation(treatment_history, request)
-
-        return JsonResponse(
-            data={
-                "treatment_history": ts,
-            }
-        )
+        return self._response_formation(treatment_history, request)
 
     def _list(
         self, patient_slug: str, doctor_specialization_slug: str = None, request=None
@@ -132,6 +126,7 @@ class TreatmentHistoryService(IsUserExistMixin):
     def create_treatment_history(self, data: dict):
         treatment_history_qs = self.treatment_history_repository.create(data)
         serialized_ts = TreatmentHistorySerializer(instance=treatment_history_qs).data
+        serialized_ts.update({"count_of_images": 0})
         return JsonResponse(data={"treatment_history": serialized_ts})
 
     @transaction.atomic
@@ -148,11 +143,10 @@ class TreatmentHistoryService(IsUserExistMixin):
     @transaction.atomic
     def create_union_table(
         self, treatment_history: TreatmentHistory, img: ImageForAnalyzes
-    ):
+    ) -> None:
         self.treatment_history_image_for_analyzes_repository.create(
             {"treatment_history": treatment_history, "image_for_analyzes": img}
         )
-        return JsonResponse(data={})
 
     @transaction.atomic
     def update_treatment_history(self, data: dict):
@@ -175,6 +169,7 @@ class TreatmentHistoryService(IsUserExistMixin):
 
     @transaction.atomic
     def delete_img_for_analyzes(self, data: dict):
+        request = data.get("request", None)
         treatment_history_slug = data.get("treatment_history_slug", None)
         ts = self.treatment_history_repository.get(
             treatment_history_slug=treatment_history_slug
@@ -187,9 +182,7 @@ class TreatmentHistoryService(IsUserExistMixin):
             ts=ts, img=img_for_analyzes
         )
         img_for_analyzes.delete()
-        return JsonResponse(
-            data={
-                "message": "Изображение удалено",
-                "description": "Изображение удалено",
-            }
+        return self._get(
+            ts.slug,
+            request,
         )
