@@ -11,7 +11,7 @@ import { Field } from "vee-validate";
 import RadioButton from 'primevue/radiobutton';
 import HeaderLayout from '@/components/layout/HeaderLayout.vue';
 import TabMenu from '@/components/ui/Menu/TabMenu.vue'
-import CheckBoxPayload from "@/components/ui/Payloads/CheckBoxPayload.vue";
+import CheckBoxPayload from "@/components/ui/CheckBoxes/PrimaryCheckBox.vue";
 
 const store = useStore()
 const route = useRoute()

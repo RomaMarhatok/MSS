@@ -9,8 +9,10 @@ import AuthenticationService from "@/../services/AuthenticationService";
 // components
 import LoginAsAdminLink from '@/components/common/Links/LoginAsAdminLink.vue';
 import AuthenticationFrom from '@/components/ui/Forms/authentication/AuthenticationForm.vue'
-
 import Divider from 'primevue/divider'
+
+import ROLES from "@/../roles/roles"
+
 // stores
 const store = useStore()
 
@@ -28,7 +30,12 @@ const submit = async (data) => {
         if (response.status == 200) {
             store.commit("user/setRole", response.data.role)
             store.commit("user/setSlug", response.data.slug)
-            router.push("/home/")
+            if (response.data.role == ROLES.Patient) {
+                router.push("/home/")
+            }
+            if (response.data.role == ROLES.Doctor) {
+                router.push("/doctor/")
+            }
         }
     }).catch(errors => {
         console.log(errors)

@@ -10,8 +10,6 @@ import DocumentsListView from './src/view/user/documents/DocumentsListView'
 import DocumentView from "./src/view/user/documents/DocumentView"
 import DoctorListView from "./src/view/user/doctors/DoctorListView" 
 import DoctorView from "./src/view/user/doctors/DoctorView"
-import appointmentsPage from "./src/view/user/appointments/appointmentsPage"
-
 import DoctorHomeView from './src/view/doctor/DoctorHomeView'
 import DoctorAppointmentView from './src/view/doctor/appointments/AppointmentView'
 // import AppointmentView from "./src/view/doctor/appointments/AppointmentView"
@@ -57,13 +55,6 @@ const routes = [
                 path:"document/:documentSlug/",
                 name:"single-patuent-document-page",
                 component:DocumentView,
-                meta:{authorize:[ROLES.Patient]},
-            },
-            
-            {
-                path:"appointments/",
-                name:"patient-appointments",
-                component:appointmentsPage,
                 meta:{authorize:[ROLES.Patient]},
             },
             {
