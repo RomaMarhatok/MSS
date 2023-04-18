@@ -58,6 +58,6 @@ onBeforeMount(() => {
                 <Textarea v-bind="field" name="conclusion" />
             </Field>
         </FormInputPayload>
-        <FormSubmitButton button-text="Добавить" />
+        <FormSubmitButton button-text="Изменить" />
     </BaseTreatmentHistoryForm>
 </template>

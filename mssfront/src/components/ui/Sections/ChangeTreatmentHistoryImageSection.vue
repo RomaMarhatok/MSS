@@ -40,7 +40,6 @@ const deleteImage = (imgSlug) => {
                 imageSlug: response.data.deleted_image_slug,
                 treatmentHistorySlug: response.data.treatment_history_slug
             })
-            // images.value = images.value.filter(img => img.slug != response.data.deleted_image_slug)
             toast.add({ severity: 'success', summary: 'Успех', detail: 'Запись удалена', life: 3000 });
         }
     }).catch(error => console.log(error))

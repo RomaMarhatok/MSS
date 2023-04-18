@@ -4,6 +4,7 @@ import "primevue/resources/primevue.min.css"
 
 import { useStore } from 'vuex'
 import { onBeforeMount, computed, ref } from 'vue';
+import DoctorTabMenu from "@/components/ui/Menu/DoctorTabMenu.vue";
 import Tag from 'primevue/tag';
 import Menu from 'primevue/menu'
 import HeaderLayout from '@/components/layout/HeaderLayout.vue';
@@ -58,7 +59,9 @@ const toggleMenu = (event) => {
 
 </script>
 <template>
-    <HeaderLayout />
+    <HeaderLayout>
+        <DoctorTabMenu />
+    </HeaderLayout>
     <main class="main-flex__section">
         <section class="patinet_info__section">
             <div class="flex bg__section bordered__section">
