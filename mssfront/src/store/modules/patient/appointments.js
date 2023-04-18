@@ -55,19 +55,6 @@ const actions = {
         )
         console.log("action destroy appointments",state.appointments)
     },
-    async fetchCreateAppointemtns({commit,rootState },data){
-        await appointmentService.createPatientAppointments( 
-            (appointment)=>{
-                commit("addAppointment",appointment)
-            },
-            (error)=>console.log(error),
-            data
-        )
-        return new Promise((resolve,reject)=>{
-            resolve(rootState.response.status)
-            reject(null)
-        })
-    },
 }
 
 const mutations = {

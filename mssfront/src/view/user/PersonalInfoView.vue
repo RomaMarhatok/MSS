@@ -12,6 +12,7 @@ import SelectButton from "primevue/selectbutton";
 
 import HeaderLayout from '@/components/layout/HeaderLayout.vue'
 import TabMenu from '@/components/ui/Menu/TabMenu.vue'
+import AppointmentForm from '@/components/ui/Forms/AppointmentForm.vue'
 const store = useStore()
 const route = useRoute()
 const select = ref("upcoming")
@@ -153,7 +154,9 @@ onBeforeMount(() => {
                 </section>
             </section>
         </main>
-        <Dialog v-model:visible="visible" header="Создать запись" :style="{ width: '50vw' }" />
+        <Dialog v-model:visible="visible" header="Создать запись" :style="{ width: '50vw' }">
+            <AppointmentForm />
+        </Dialog>
     </main>
 </template>
 <style lang="css" scoped>

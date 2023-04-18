@@ -16,12 +16,8 @@ class AppointmentService extends RequestService{
             cb(response.data.doctor_appointments)
         }).catch(errors=>errorCb(errors))
     }
-    async createPatientAppointments(cb,errorCb,data){
-        return await this.post(`/appointments/patient/appointments/create/`,data).then(response=>{
-            cb(response.data.appointment)
-        }).catch(error=>{
-            errorCb(error.response.status,error.response.data.errors??{})
-        })
+    async createPatientAppointments(data){
+        return await this.post(`/appointments/patient/create/`,data)
     }
     async destroyPatientAppointments(cb,errorCb,data){
         return await this.post(`/appointments/patient/destroy/`,data).then(response=>{

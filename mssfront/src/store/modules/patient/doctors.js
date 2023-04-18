@@ -19,6 +19,9 @@ const getters = {
     },
     getDoctorTypes:(state)=>{
         return state.doctorTypes
+    },
+    getAllDoctors:(state)=>{
+        return state.doctors
     }
 }
 

@@ -13,6 +13,9 @@ const getters = {
     },
     getRole:(state)=>{
         return state.role
+    },
+    getSlug:(state)=>{
+        return state.slug
     }
 
 }
