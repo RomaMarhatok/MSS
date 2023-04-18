@@ -64,8 +64,8 @@ const toggleMenu = (event) => {
     </HeaderLayout>
     <main class="main-flex__section">
         <section class="patinet_info__section">
-            <div class="flex bg__section bordered__section">
-                <div class="w-1/3 p-4">
+            <div class="patinet_info_flex__section bg__section bordered__section">
+                <div class="patinet_info__section w-1/3 p-4">
                     <p class="text-xl font-bold text-center">Пациент</p>
                     <p class="text-2xl font-bold text-center">
                         {{ patientPersonalInfo.first_name }} {{ patientPersonalInfo.second_name }}
@@ -101,10 +101,10 @@ const toggleMenu = (event) => {
                     <div v-for="(ts, index) in treatmentHistories" :key="index" class="treatment_history__item bg-white"
                         @click="selectTreatementHistory(ts.treatment_history.slug, true)">
                         <div class="flex justify-between">
-                            <div class="flex gap-1 text-sm font-medium justify-end">
+                            <div class="flex gap-1 text-sm font-medium justify-end max-[470px]:p-1">
                                 <Tag :value="'Создано ' + ts.treatment_history.string_date" severity="info" />
                             </div>
-                            <div class="flex justify-end text-sm font-medium">
+                            <div class="flex gap-1 text-sm font-medium justify-end max-[470px]:p-1">
                                 <Tag :value="'Создатель ' + ts.treatment_history.doctor.full_name" severity="success" />
                             </div>
                         </div>
@@ -132,6 +132,10 @@ const toggleMenu = (event) => {
     </main>
 </template>
 <style lang="css" scoped>
+.patinet_info_flex__section {
+    display: flex;
+}
+
 .patinet_info__section {
     border-radius: 1rem;
 }
@@ -169,6 +173,11 @@ const toggleMenu = (event) => {
     }
 
     .patinet_info__section {
+        width: 100%;
+    }
+
+    .patinet_info_flex__section {
+        flex-direction: column;
         width: 100%;
     }
 }
