@@ -3,7 +3,7 @@ import "primevue/resources/themes/saga-blue/theme.css"
 import "primevue/resources/primevue.min.css"
 
 import { useStore } from 'vuex'
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { onBeforeMount, computed, ref } from 'vue';
 
 import Tag from 'primevue/tag';
@@ -15,6 +15,7 @@ import TabMenu from '@/components/ui/Menu/TabMenu.vue'
 import AppointmentForm from '@/components/ui/Forms/AppointmentForm.vue'
 const store = useStore()
 const route = useRoute()
+const router = useRouter()
 const select = ref("upcoming")
 const visible = ref(false)
 const options = ref([
@@ -39,6 +40,13 @@ const newestDocuments = computed(() => store.getters["documents/getNewestDocumen
 const calendarAppointments = computed(() => store.getters["appointments/getAllAppointmentsForCalendar"])
 const slug = computed(() => store.state.user.slug ? store.state.user.slug : route.params.userSlug)
 
+const redirect = (documentSlug) => {
+    store.dispatch("documents/fetchDocument", {
+        slug: slug.value,
+        document_slug: documentSlug
+    })
+    router.push(`/home/document/${documentSlug}/`)
+}
 onBeforeMount(() => {
     console.log("on mounted")
     store.dispatch("user/fetchUserPersonalInfo", slug.value)
@@ -91,12 +99,12 @@ onBeforeMount(() => {
                 <p class="text-2xl font-semibold text-left">Недавно добавленные документы</p>
                 <Tag value="New"></Tag>
                 <div v-for="(document, index) in newestDocuments" :key="index"
-                    class="document_wrapper bordered__section bg-white p-3">
+                    class="document_wrapper bordered__section bg-white p-3" @click="redirect(document.slug)">
                     <div>
                         <div class="flex justify-between">
                             <p class="text-gray-600">{{ document.document_type.name }}</p>
                             <Tag severity="info" class="inline-block"
-                                :value="document.parsed_date.day + ' ' + document.parsed_date.mounth + ' ' + document.parsed_date.year">
+                                :value="'Добавлен ' + document.parsed_date.day + ' ' + document.parsed_date.mounth + ' ' + document.parsed_date.year">
                             </Tag>
                         </div>
                         <p>{{ document.name }}</p>
