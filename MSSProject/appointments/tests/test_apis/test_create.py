@@ -9,7 +9,7 @@ client = Client()
 
 
 @pytest.mark.django_db
-def test(
+def test_patient(
     factory_user_with_role_patient_fixture,
     factory_doctor_doctor_specialization_fixture,
 ):
