@@ -6,9 +6,12 @@ import user from './modules/user'
 import doctors from './modules/patient/doctors'
 import documents from './modules/patient/documents'
 import appointments from './modules/patient/appointments'
+import patientTreatments from './modules/patient/patientTreatments'
 import doctorAppointments from './modules/doctor/doctorAppointments'
 import treatments from './modules/doctor/treatments'
 import appointment from './modules/doctor/appointment'
+import doctorDocuments from './modules/doctor/documents'
+import patients from './modules/doctor/patients'
 const store = createStore({
     modules:{
         registration,
@@ -20,6 +23,9 @@ const store = createStore({
         doctorAppointments,
         appointment,
         treatments,
+        patientTreatments,
+        doctorDocuments,
+        patients,
     },
      plugins: [createPersistedState({
         storage: window.sessionStorage,

@@ -4,11 +4,11 @@ const state = {
     documents:[],
     documentsTypes:[],
     activeDocument:{},
-    newestDocument:[],
+    activeDocumentSlug:"",
 }
 const getters = {
     getDocumentBySlug:(state)=>(slug)=>{
-        return state.documents.filter(document=>document.slug===slug)[0]
+        return state.documents.find(document=>document.slug===slug)
     },
     getDocumentByString:(state)=>(searchString)=>{
         return state.documents.filter(document=>document.name.toLowerCase().includes(searchString.toLowerCase()))
@@ -22,51 +22,47 @@ const getters = {
     getActiveDocument:(state)=>{
         return state.activeDocument
     },
-    getNewestDocuments:(state)=>{
-        return state.newestDocument
-    },
     getDocuments:(state)=>{
         return state.documents
     },
     getDocumentTypes:(state)=>{
         return state.documentsTypes
+    },
+    getActiveDocumentSlug:(state)=>{
+        return state.activeDocumentSlug
     }
 }
+
 const actions = {
-    async fetchDocuments({commit,state},slug){
-        await documentService.getPatientDocuments(
-            slug,
-            (documents)=>{
-                commit("setDocuments",documents)
-            },   
-            (error)=>console.log(error)
+    async fetchDocumentsTypes({commit,state}){
+        await documentService.getDocumentTypes(
+            documentsTypes=>commit("setDocumentsTypes",documentsTypes),
+            error=>console.log(error)
         )
-        console.log("actions documents",state.documents)
+        console.log("actions documents types",state.documentsTypes)
     },
-    async fetchDocument({commit,state},{slug,document_slug}){
-        await documentService.getPatientDocument(slug,document_slug).then(
+    async fetchDocuments({commit,state},slug){
+        await documentService.getDoctorDocuments(
+            doctor_documents=>commit("setDocuments",doctor_documents),
+            error=>console.log(error),
+            slug,
+        )
+        console.log("actions doctor documents",state.documents)
+    },
+    async fetchActiveDocument({commit,state},{slug,documentSlug}){
+        await documentService.getDoctorDocument(slug,documentSlug).then(
             response=>{
-                commit("setActiveDocument",response.data.document)
+                commit("setActiveDocument",response.data.doctor_document)
             }
         )
         console.log("actions documents",state.activeDocument)
     },
-    async fetchDocumentsTypes({commit,state}){
-        await documentService.getDocumentTypes(
-            documentsTypes=>commit("setDocumentsTypes",documentsTypes)
-        )
-        console.log("actions documents types",state.documentsTypes)
-    },
-    async fetchNewestDocument({commit,state},slug){
-        await documentService.getPatientNewestDocument(
-            slug,
-            data=>commit("setNewestDocuments",data),
-            error=>console.log(error)
-        )
-        console.log("action new document",state.newestDocument)
-    }
 }
 const mutations = {
+    setActiveDocumentSlug:(state,documentSlug)=>{
+        console.log("setActiveDocumentSlug",documentSlug)
+        state.activeDocumentSlug = documentSlug
+    },
     setDocuments:( state, documents )=>{
         console.log("mutation documents",documents)
         state.documents = documents
@@ -75,15 +71,27 @@ const mutations = {
         console.log("mutation document types",documentsTypes)
         state.documentsTypes = documentsTypes
     },
-    setNewestDocuments:(state,newestDocument)=>{
-        console.log("mutation new document",newestDocument)
-        state.newestDocument = newestDocument
+    addDocument:(state,document)=>{
+        console.log("add document",document)
+        state.documents.push(document)
+    },
+    changeDocument:(state,document)=>{
+        for (let i = 0; i < state.documents.length; i++) {
+            if(state.documents[i].slug==document.slug){
+                state.documents[i]=document
+                break
+            }
+        }
+    },
+    deleteDocument:(state,documentSlug)=>{
+        state.documents = state.documents.filter(d=>d.slug!=documentSlug)
     },
     setActiveDocument:(state,document)=>{
-        console.log("set active document")
+        console.log("set active document",document)
         state.activeDocument = document
     },
     clearActiveDocument:(state)=>{
+        console.log("clear active document")
         state.activeDocument = {}
     }
 }
