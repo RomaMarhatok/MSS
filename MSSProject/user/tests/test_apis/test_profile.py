@@ -62,5 +62,5 @@ def test_bad(user_personal_info_fixture, user_location_fixture, patient_fixture)
     }
     url = reverse("user-profile", args=["not-exist"])
     response = client.get(url, **headers)
-    assert response.status_code == 404
+    assert response.status_code == 400
     assert bool(response.json())

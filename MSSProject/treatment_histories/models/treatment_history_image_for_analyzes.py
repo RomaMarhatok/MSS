@@ -7,11 +7,13 @@ class TreatmentHistoryImageForAnalyzes(models.Model):
     treatment_history = models.ForeignKey(
         TreatmentHistory,
         related_name="treatment_history_image_for_analyzes",
+        related_query_name="treatment_history_image_for_analyzes",
         on_delete=models.CASCADE,
     )
     image_for_analyzes = models.ForeignKey(
         ImageForAnalyzes,
         related_name="treatment_history_image_for_analyzes",
+        related_query_name="treatment_history_image_for_analyzes",
         on_delete=models.CASCADE,
     )
 

@@ -17,9 +17,7 @@ class PatientAppointmentsService(
         self.user_repository: UserRepository = UserRepository()
 
     def get_patient_appointments(self, patient_slug: str) -> JsonResponse:
-        response = self.user_exist(patient_slug)
-        if response.status_code == 400:
-            return response
+        self.is_user_exist(patient_slug)
         appointments_qs = self.appointments_repository.list(
             patient_slug=patient_slug,
         )

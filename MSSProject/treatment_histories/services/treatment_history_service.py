@@ -83,15 +83,13 @@ class TreatmentHistoryService(IsUserExistMixin):
     def get_patient_treatment_histories_list(
         self, patient_slug: str, doctor_specialization_slug: str, request=None
     ) -> JsonResponse:
-        response = self.user_exist(patient_slug)
-        if response.status_code == 400:
-            return response
+        if self.is_user_exist(patient_slug):
+            user = self.user_repository.get(slug=patient_slug)
         treatments_histories = self._list(
             patient_slug,
             doctor_specialization_slug=doctor_specialization_slug,
             request=request,
         )
-        user = self.user_repository.get(slug=patient_slug)
         try:
             user_personal_info = self.user_personal_info_repository.get(slug=user.slug)
             patient_info = UserPersonalInfoSerializer(instance=user_personal_info).data
@@ -107,10 +105,8 @@ class TreatmentHistoryService(IsUserExistMixin):
     def get_user_treatments_histories_list(
         self, patient_slug: str, request
     ) -> JsonResponse:
-        response = self.user_exist(patient_slug)
-        if response.status_code == 400:
-            return response
-        treatments_histories = self._list(patient_slug)
+        if self.is_user_exist(patient_slug):
+            treatments_histories = self._list(patient_slug)
         return JsonResponse(
             data={
                 "treatment_histories": treatments_histories,

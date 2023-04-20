@@ -19,9 +19,7 @@ class DoctorAppointmentService(
         self.user_repository: UserRepository = UserRepository()
 
     def get_doctor_appointments(self, doctor_slug: str) -> JsonResponse:
-        response = self.user_exist(doctor_slug)
-        if response.status_code == 400:
-            return response
+        self.is_user_exist(doctor_slug)
         appointments_qs = self.appointments_repository.list(doctor_slug=doctor_slug)
         appointments = AppointmentsSerializer(instance=appointments_qs, many=True).data
         return JsonResponse(

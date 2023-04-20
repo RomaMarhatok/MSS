@@ -23,12 +23,10 @@ class PhysicalParametersSservice(IsUserExistMixin):
         return JsonResponse(data={"physical_parameter": serializer.data})
 
     def list_physical_parameters(self, patient_slug: str):
-        response = self.user_exist(patient_slug)
-        if response.status_code == 400:
-            return response
-        physical_parameters = self.physical_parameters_repository.list(
-            patient_slug=patient_slug
-        )
+        if self.is_user_exist(patient_slug):
+            physical_parameters = self.physical_parameters_repository.list(
+                patient_slug=patient_slug
+            )
         serializerd_ps = PhysicalParametersSerializer(
             instance=physical_parameters, many=True
         ).data
@@ -41,9 +39,7 @@ class PhysicalParametersSservice(IsUserExistMixin):
     @transaction.atomic
     def create_physical_parameters(self, data: dict):
         user_slug = data.get("user_slug", None)
-        response = self.user_exist(user_slug)
-        if response.status_code == 400:
-            return response
+        self.is_user_exist(user_slug)
         ph = self.physical_parameters_repository.create(data)
         serializer = PhysicalParametersSerializer(instance=ph)
         return JsonResponse(data={"physical_parameters": serializer.data})
@@ -64,9 +60,7 @@ class PhysicalParametersSservice(IsUserExistMixin):
     @transaction.atomic
     def update_physical_parameters(self, data):
         patient_slug = data.get("user_slug", None)
-        response = self.user_exist(patient_slug)
-        if response.status_code == 400:
-            return response
+        self.is_user_exist(patient_slug)
         slug = data.get("slug", None)
         if not self.physical_parameters_repository.is_exist(slug=slug):
             raise exceptions.NotFound(

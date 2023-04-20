@@ -23,10 +23,8 @@ class UserService(IsUserExistMixin):
         self.user_location_repository: UserLocationRepository = UserLocationRepository()
 
     def get_user_info(self, slug, request: HttpRequest) -> HttpResponse:
-        response = self.user_exist(slug)
-        if response.status_code == 400:
-            return response
-        user = self.user_repository.get(slug=slug)
+        if self.is_user_exist(slug):
+            user = self.user_repository.get(slug=slug)
         try:
             user_personal_info = UserPersonalInfoSerializer(
                 instance=user.userpersonalinfo, context={"request": request}

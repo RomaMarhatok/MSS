@@ -14,9 +14,7 @@ class DocumentDoctorService(IsUserExistMixin):
         self.document_type_repository: DocumentTypeRepository = DocumentTypeRepository()
 
     def get_doctor_document(self, document_slug, creator_slug):
-        response = self.user_exist(creator_slug)
-        if response.status_code == 400:
-            return response
+        self.is_user_exist(creator_slug)
 
         if not self.document_repository.is_exist(
             slug=document_slug, creator_slug=creator_slug
@@ -36,9 +34,7 @@ class DocumentDoctorService(IsUserExistMixin):
         return JsonResponse(data={"doctor_document": documents})
 
     def get_doctor_document_list(self, creator_slug: str) -> JsonResponse:
-        response = self.user_exist(creator_slug)
-        if response.status_code == 400:
-            return response
+        self.is_user_exist(creator_slug)
         documents_qs = self.document_repository.list(creator_slug=creator_slug)
         documents = DocumentSerializer(
             instance=documents_qs, many=True, context={"repr": "list"}
@@ -48,15 +44,9 @@ class DocumentDoctorService(IsUserExistMixin):
     @transaction.atomic
     def create_document(self, data: dict):
         user_slug = data.get("user_slug", None)
-        response = self.user_exist(user_slug)
-        if response.status_code == 400:
-            return response
-
+        self.is_user_exist(user_slug)
         creator_slug = data.get("creator_slug", None)
-        response = self.user_exist(creator_slug)
-        if response.status_code == 400:
-            return response
-
+        self.is_user_exist(creator_slug)
         document_name = data.get("name", None)
         if self.document_repository.is_exist(document_name=document_name):
             return JsonResponseBadRequest(
@@ -74,10 +64,7 @@ class DocumentDoctorService(IsUserExistMixin):
     def delete_document(self, data: dict):
         document_slug = data.get("document_slug", None)
         creator_slug = data.get("creator_slug", None)
-        response = self.user_exist(creator_slug)
-        if response.status_code == 400:
-            return response
-
+        self.is_user_exist(creator_slug)
         if not self.document_repository.is_exist(
             slug=document_slug, creator_slug=creator_slug
         ):
