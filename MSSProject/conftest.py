@@ -4,4 +4,5 @@ pytest_plugins = [
     "document.tests.fixtures",
     "treatment_histories.tests.fixtures",
     "appointments.tests.fixtures",
+    "physical.test.fixtures",
 ]
