@@ -2,7 +2,6 @@
 import { computed } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
-import TabMenu from '@/components/ui/Menu/TabMenu.vue';
 import HeaderLayout from '@/components/layout/HeaderLayout.vue'
 import BodyLayout from '@/components/layout/BodyLayout.vue'
 const route = useRoute()
@@ -11,9 +10,7 @@ const doctorSlug = route.params.doctorSlug
 const doctor = computed(() => store.getters["doctors/getDoctorBySlug"](doctorSlug))
 </script>
 <template>
-    <HeaderLayout>
-        <TabMenu />
-    </HeaderLayout>
+    <HeaderLayout />
     <BodyLayout>
         <section class="main-data-section">
             <section class="personal-image">

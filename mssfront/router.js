@@ -10,8 +10,13 @@ import DocumentsListView from './src/view/user/documents/DocumentsListView'
 import DocumentView from "./src/view/user/documents/DocumentView"
 import DoctorListView from "./src/view/user/doctors/DoctorListView" 
 import DoctorView from "./src/view/user/doctors/DoctorView"
+import TreatmentHistoryList from './src/view/user/treatments/TreatmentHistoryListView'
+
 import DoctorHomeView from './src/view/doctor/DoctorHomeView'
 import DoctorAppointmentView from './src/view/doctor/appointments/AppointmentView'
+import DoctorDocumentListView from './src/view/doctor/documents/DoctorDocumentListView'
+import AddDocumentView from './src/view/doctor/documents/AddDocumentView'
+import ChangeDocumentView from './src/view/doctor/documents/ChangeDocumentView'
 import ROLES from "./roles/roles"
 const routes = [
     {
@@ -68,6 +73,12 @@ const routes = [
                 component:DoctorView,
                 meta:{authorize:[ROLES.Patient]}
             },
+            {
+                path:'treatments/',
+                name:"treatment-history-list",
+                component:TreatmentHistoryList,
+                meta:{authorize:[ROLES.Patient]}
+            }
         ]
     },
     {
@@ -81,9 +92,28 @@ const routes = [
             },
             {
                 path:"appointment/",
-                meta:{authorize:[ROLES.Doctor]},
                 component:DoctorAppointmentView,
+                meta:{authorize:[ROLES.Doctor]},
+            },
+            {
+                path:"documents/",
+                component:DoctorDocumentListView,
+                meta:{authorize:[ROLES.Doctor]},
+                
+            },
+            {
+                path:"add/document/",
+                name:"add-doctor-document",
+                component:AddDocumentView,
+                meta:{authorize:[ROLES.Doctor]},
+            },
+            {
+                path:"change/document/",
+                name:"add-doctor-document",
+                component:ChangeDocumentView,
+                meta:{authorize:[ROLES.Doctor]},
             }
+            
         ]
     },
     {

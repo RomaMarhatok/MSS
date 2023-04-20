@@ -120,9 +120,12 @@ const toggleMenu = (event) => {
                     <p class="text-center">История лечения не выбрана</p>
                 </div>
                 <div v-else class="flex flex-col p-1 justify-start w-full">
-                    <button class="p-panel-header-icon p-link mr-2" @click="toggleMenu">
-                        <span class="pi pi-cog"></span>
-                    </button>
+                    <div class="flex w-full">
+                        <button class="p-panel-header-icon p-link mr-2" @click="toggleMenu">
+                            <span class="pi pi-cog"></span>
+                        </button>
+                    </div>
+
                     <Menu ref="menu" :model="menuOptions" id="config_change_menu" popup />
                     <SingleTreatmentHistorySection :treatment-history-slug="selectedTSSlug"
                         :swap-on-change-form="swapOnChangeForm" />

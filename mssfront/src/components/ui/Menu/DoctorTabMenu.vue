@@ -5,6 +5,7 @@ import "primevue/resources/primevue.min.css"
 import { ref } from 'vue'
 const items = ref([
     { label: 'Home', icon: 'pi pi-fw pi-home', to: "/doctor/" },
+    { label: 'Documents', icon: 'pi pi-fw pi-file', to: "/doctor/documents/" },
     { label: 'Log out', icon: 'pi pi-fw pi-sign-out', to: '/logout/' },
 ])
 </script>
