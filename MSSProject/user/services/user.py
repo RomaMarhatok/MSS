@@ -1,13 +1,13 @@
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from responses.errors import JsonResponseBadRequest
-
-from ..models import UserLocation, UserPersonalInfo
+from ..models import UserLocation, UserPersonalInfo, Role
 from ..repositories import (
     UserLocationRepository,
     UserPersonalInfoRepository,
     UserRepository,
 )
 from ..serializers import (
+    UserSerializer,
     UserLocationSerializer,
     UserPersonalInfoSerializer,
 )
@@ -41,6 +41,19 @@ class UserService(IsUserExistMixin):
         except UserLocation.DoesNotExist:
             user_location = {}
         return JsonResponse(data={**user_personal_info, **user_location})
+
+    def get_all_patients(self):
+        users = self.user_repository.list()
+        serializerd_patients = [
+            UserSerializer(instance=user).data
+            for user in users
+            if user.role.name == Role.PATIENT
+        ]
+        return JsonResponse(
+            data={
+                "patients": serializerd_patients,
+            }
+        )
 
     def validate_user(self, data: dict) -> JsonResponse:
         login = data.get("login", None)

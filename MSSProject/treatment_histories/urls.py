@@ -10,12 +10,12 @@ from treatment_histories.views import (
 
 urlpatterns = [
     path(
-        "treatment/patient/<str:patient_slug>/",
+        "treatments/patient/<str:patient_slug>/",
         UserTreatmentHistoriesView.as_view({"get": "list"}),
         name="patient-treatment-history-list",
     ),
     path(
-        "treatments/patient/<str:treatment_slug>/",
+        "treatment/patient/<str:treatment_slug>/",
         UserTreatmentHistoriesView.as_view({"get": "retrieve"}),
         name="patient-treatment-history-retrieve",
     ),

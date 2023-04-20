@@ -25,13 +25,12 @@ def test(
         "user_slug": user_slug,
         "creator_slug": creator_slug,
     }
-    token = Token.objects.create(user=factory_user_with_role_patient_fixture).key
+    token = Token.objects.create(user=factory_doctor_fixture.user).key
     headers = {
         "HTTP_AUTHORIZATION": "Bearer " + token,
     }
     url = reverse("create-user-document")
     response = client.post(url, data, **headers)
-    print(response.json())
     assert response.status_code == 200
     assert bool(response.json())
     assert Document.objects.count() == 1

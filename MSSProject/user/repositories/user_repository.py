@@ -35,7 +35,8 @@ class UserRepository(AbstractRepository):
         return qs.get(**data)
 
     def list(self, **kwargs):
-        return super().list(**kwargs)
+        qs = User.objects.select_related("role", "userpersonalinfo", "userlocation")
+        return qs.all()
 
     def create(self, data: dict) -> User:
         serializer = UserSerializer(data=data)

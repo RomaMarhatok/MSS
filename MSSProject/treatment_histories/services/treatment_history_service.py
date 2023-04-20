@@ -41,7 +41,9 @@ class TreatmentHistoryService(IsUserExistMixin):
             "images_for_analyzes": imgs_serialized,
         }
 
-    def _get(self, treatment_history_slug: str, request: HttpRequest) -> JsonResponse:
+    def _get(
+        self, treatment_history_slug: str, request: HttpRequest
+    ) -> JsonResponse | dict:
         if not self.treatment_history_repository.is_exist(
             treatment_history_slug=treatment_history_slug
         ):
@@ -116,10 +118,16 @@ class TreatmentHistoryService(IsUserExistMixin):
         )
 
     def get_patient_treatment_history(self, treatment_history_slug: str, request):
-        return self._get(treatment_history_slug, request)
+        result = self._get(treatment_history_slug, request)
+        if isinstance(result, dict):
+            return JsonResponse(data={**result})
+        return result
 
     def get_user_treatments_history(self, treatment_history_slug: str, request):
-        return self._get(treatment_history_slug, request)
+        result = self._get(treatment_history_slug, request)
+        if isinstance(result, dict):
+            return JsonResponse(data={**result})
+        return result
 
     @transaction.atomic
     def create_treatment_history(self, data: dict):

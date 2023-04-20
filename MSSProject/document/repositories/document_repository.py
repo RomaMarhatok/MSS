@@ -28,24 +28,34 @@ class DocumentRepository(AbstractRepository):
 
     def list(self, **kwargs) -> QuerySet[Document]:
         patient_slug = kwargs.get("patient_slug", None)
+        creator_slug = kwargs.get("creator_slug", None)
         if patient_slug is not None:
             return self.qs.filter(user__slug=patient_slug)
+        if creator_slug is not None:
+            return self.qs.filter(creator__user__slug=creator_slug)
 
     def create(self, data: dict) -> Document:
         serializer = DocumentSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
             return serializer.save()
 
-    def delete(self, **kwargs):
-        return super().delete(**kwargs)
+    def delete(self, **kwargs) -> int:
+        document_slug = kwargs.get("document_slug", None)
+        creator_slug = kwargs.get("creator_slug", None)
+        return Document.objects.filter(
+            Q(slug=document_slug) & Q(creator__user__slug=creator_slug)
+        ).delete()
 
     def is_exist(self, **kwargs) -> bool:
         slug = kwargs.get("slug", None)
         patient_slug = kwargs.get("patient_slug", None)
         document_name = kwargs.get("document_name", None)
-        if patient_slug is not None and slug is not None and document_name:
+        creator_slug = kwargs.get("creator_slug", None)
+        if patient_slug is not None and slug is not None:
+            return self.qs.filter(Q(slug=slug) & Q(user__slug=patient_slug)).exists()
+        if creator_slug is not None and slug is not None:
             return self.qs.filter(
-                Q(slug=slug) & Q(user__slug=patient_slug) & Q(name=document_name)
+                Q(slug=slug) & Q(creator__user__slug=creator_slug)
             ).exists()
         if slug is not None:
             return self.qs.filter(slug=slug).exists()
@@ -53,3 +63,10 @@ class DocumentRepository(AbstractRepository):
             return self.qs.filter(user__slug=patient_slug).exists()
         if document_name is not None:
             return self.qs.filter(name=document_name).exists()
+
+    def update(self, data: dict, document: Document) -> Document:
+        serializer = DocumentSerializer(instance=document, data=data, partial=True)
+        if serializer.is_valid(raise_exception=True):
+            count_of_updated_rows = serializer.save()
+            if count_of_updated_rows == 1:
+                return self.get(slug=document.slug)

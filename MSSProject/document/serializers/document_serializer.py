@@ -59,6 +59,11 @@ class DocumentSerializer(ModelSerializer):
         )
         return instance
 
+    def update(self, instance: Document, validated_data):
+        return Document.objects.filter(slug=instance.slug).update(
+            name=validated_data["name"], content=validated_data["content"]
+        )
+
     def to_representation(self, instance: Document):
         rep = super().to_representation(instance)
         if "repr" in self.context and self.context["repr"] == "list":
@@ -75,4 +80,6 @@ class DocumentSerializer(ModelSerializer):
             rep["creator"][
                 "full_name"
             ] = instance.creator.user.userpersonalinfo.full_name
+        if "document_type_slug" in rep:
+            rep.pop("document_type_slug")
         return rep

@@ -1,4 +1,4 @@
-from common.permissions import IsUserAuthenticated
+from common.permissions import IsUserAuthenticated, IsDoctor
 from django.http import HttpRequest, JsonResponse
 from rest_framework import status
 from rest_framework.permissions import AllowAny
@@ -11,6 +11,14 @@ from .services import (
     RegistrationService,
     UserService,
 )
+
+
+class PatientView(GenericViewSet):
+    permission_classes = [IsUserAuthenticated, IsDoctor]
+    service = UserService()
+
+    def list(self, request):
+        return self.service.get_all_patients()
 
 
 class ProfileView(GenericViewSet):

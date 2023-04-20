@@ -72,4 +72,6 @@ class UserSerializer(ModelSerializer):
         rep.pop("login")
         rep.pop("password")
         rep["role"] = instance.role.name
+        if hasattr(instance, "userpersonalinfo"):
+            rep["full_name"] = instance.userpersonalinfo.full_name
         return rep

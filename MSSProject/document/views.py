@@ -4,7 +4,8 @@ from rest_framework.views import APIView
 from rest_framework import serializers
 from django.http import HttpRequest
 from common.permissions.is_user_authenticated import IsUserAuthenticated
-from .services import DocumentTypeService, DocumentService
+from common.permissions.is_doctor import IsDoctor
+from .services import DocumentTypeService, DocumentService, DocumentDoctorService
 
 
 class DocumentTypeView(GenericViewSet):
@@ -21,28 +22,59 @@ class NewestDocumentView(APIView):
     service = DocumentService()
 
     def get(self, request: HttpRequest, patient_slug: str):
-        return self.service.get_newest_documents(patient_slug)
+        return self.service.get_patient_newest_documents(patient_slug)
 
 
-class DocumentView(GenericViewSet):
+class PatientDocumentView(GenericViewSet):
     permission_classes = [IsUserAuthenticated]
     lookup_field = "slug"
     service = DocumentService()
 
-    class InputSerializer(serializers.Serializer):
+    def list(self, request: HttpRequest, user_slug=None):
+        return self.service.get_patient_document_list(user_slug)
+
+    def retrieve(self, request, user_slug=None, doc_slug=None):
+        return self.service.get_patient_document(doc_slug, user_slug)
+
+
+class DoctorDocumentView(GenericViewSet):
+    permission_classes = [IsUserAuthenticated, IsDoctor]
+    service = DocumentDoctorService()
+
+    def list(self, request: HttpRequest, creator_slug=None):
+        return self.service.get_doctor_document_list(creator_slug)
+
+    def retrieve(self, request, creator_slug=None, doc_slug=None):
+        return self.service.get_doctor_document(doc_slug, creator_slug)
+
+    class CreateInputSerializer(serializers.Serializer):
         name = serializers.CharField()
         content = serializers.CharField()
         user_slug = serializers.SlugField()
         creator_slug = serializers.SlugField()
         document_type_slug = serializers.SlugField()
 
-    def list(self, request: HttpRequest, user_slug=None):
-        return self.service.get_document_list(user_slug)
-
-    def retrieve(self, request, user_slug=None, doc_slug=None):
-        return self.service.get_document(doc_slug, user_slug)
-
-    def create(self, request: HttpRequest):
-        serializer = self.InputSerializer(data=request.data)
+    def create(self, request):
+        serializer = self.CreateInputSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         return self.service.create_document(serializer.validated_data)
+
+    class UpdateInputSerializer(serializers.Serializer):
+        name = serializers.CharField()
+        content = serializers.CharField()
+        document_slug = serializers.SlugField()
+        creator_slug = serializers.SlugField()
+
+    def update(self, request):
+        serializer = self.UpdateInputSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return self.service.update_document(serializer.validated_data)
+
+    class DeleteInputSerializer(serializers.Serializer):
+        document_slug = serializers.SlugField()
+        creator_slug = serializers.SlugField()
+
+    def delete(self, request):
+        serializer = self.DeleteInputSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return self.service.delete_document(serializer.validated_data)
