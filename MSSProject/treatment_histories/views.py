@@ -3,14 +3,26 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework.views import APIView
 from rest_framework import serializers
 from rest_framework.parsers import MultiPartParser, FormParser
-from .services.treatment_history_service import TreatmentHistoryService
 from common.permissions.is_doctor import IsDoctor
 from common.permissions.is_user_authenticated import IsUserAuthenticated
+from .services import DoctorTreatmentHistoryService, PatientTreatmentHistoryService
 
 
+class UserTreatmentHistoriesView(GenericViewSet):
+    permission_classes = [IsUserAuthenticated]
+    service = PatientTreatmentHistoryService()
+
+    def list(self, request: HttpRequest, patient_slug: str):
+        return self.service.get_user_treatments_histories_list(patient_slug, request)
+
+    def retrieve(self, request: HttpRequest, treatment_slug: str):
+        return self.service.get_user_treatments_history(treatment_slug, request)
+
+
+# doctor views
 class PatientTreatmentsView(GenericViewSet):
     permission_classes = [IsUserAuthenticated, IsDoctor]
-    service = TreatmentHistoryService()
+    service = DoctorTreatmentHistoryService()
 
     def list(
         self, request: HttpRequest, patient_slug: str, doctor_specialization_slug: str
@@ -27,7 +39,7 @@ class PatientTreatmentsView(GenericViewSet):
 
 class CreateTreatmentHistoryView(APIView):
     permission_classes = [IsUserAuthenticated, IsDoctor]
-    service = TreatmentHistoryService()
+    service = DoctorTreatmentHistoryService()
 
     class InputSerializer(serializers.Serializer):
         date = serializers.DateTimeField()
@@ -46,7 +58,7 @@ class CreateTreatmentHistoryView(APIView):
 
 class UpdateTreatmentHistoryView(APIView):
     permission_classes = [IsUserAuthenticated, IsDoctor]
-    service = TreatmentHistoryService()
+    service = DoctorTreatmentHistoryService()
 
     class InputSerializer(serializers.Serializer):
         treatment_history_slug = serializers.SlugField()
@@ -61,21 +73,10 @@ class UpdateTreatmentHistoryView(APIView):
         return self.service.update_treatment_history(serializer.validated_data)
 
 
-class UserTreatmentHistoriesView(GenericViewSet):
-    permission_classes = [IsUserAuthenticated]
-    service = TreatmentHistoryService()
-
-    def list(self, request: HttpRequest, patient_slug: str):
-        return self.service.get_user_treatments_histories_list(patient_slug, request)
-
-    def retrieve(self, request: HttpRequest, treatment_slug: str):
-        return self.service.get_user_treatments_history(treatment_slug, request)
-
-
 class CreateImageForAnalyzesView(APIView):
     permission_classes = [IsUserAuthenticated, IsDoctor]
 
-    service = TreatmentHistoryService()
+    service = DoctorTreatmentHistoryService()
     parser_classes = (
         MultiPartParser,
         FormParser,
@@ -96,7 +97,7 @@ class CreateImageForAnalyzesView(APIView):
 
 class DeleteImageForAnalyzesView(APIView):
     permission_classes = [IsUserAuthenticated, IsDoctor]
-    service = TreatmentHistoryService()
+    service = DoctorTreatmentHistoryService()
 
     class InputSerializer(serializers.Serializer):
         treatment_history_slug = serializers.SlugField()
@@ -105,4 +106,4 @@ class DeleteImageForAnalyzesView(APIView):
     def post(self, request):
         serializer = self.InputSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        return self.service.delete_img_for_analyzes(serializer.validated_data)
+        return self.service.delete_image_for_analyzes(serializer.validated_data)

@@ -1,7 +1,6 @@
 from common.repository.base_repository import AbstractRepository
 from ..serializers import ImageForAnlyzeSerializer
 from ..models import ImageForAnalyzes
-from common.utils.string_utils import generate_hash_from_string
 
 
 class ImageForAnalyzesRepository(AbstractRepository):
@@ -10,7 +9,10 @@ class ImageForAnalyzesRepository(AbstractRepository):
         return ImageForAnalyzes.objects.get(slug=slug)
 
     def list(self, **kwargs):
-        super().list(**kwargs)
+        treatment_history = kwargs.get("treatment_history", None)
+        return ImageForAnalyzes.objects.filter(
+            treatment_history_image_for_analyzes__treatment_history=treatment_history
+        )
 
     def create(self, data: dict) -> ImageForAnalyzes:
         serializer = ImageForAnlyzeSerializer(data=data)
