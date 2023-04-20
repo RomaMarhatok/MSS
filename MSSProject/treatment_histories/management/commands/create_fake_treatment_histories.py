@@ -25,11 +25,7 @@ class Command(BaseCommand):
         doctors = Doctor.objects.all()
         for user, doctor in zip(users, doctors):
             for _ in range(random.randint(1, 10)):
-                img_for_analyzes = ImageForAnalyzesFactory(
-                    image=load_image_from_url(fake.image_url()),
-                    description=fake.text(max_nb_chars=100),
-                )
-                treatment = TreatmentHistoryFactory(
+                treatment_history = TreatmentHistoryFactory(
                     title=fake.text(max_nb_chars=100),
                     short_description=fake.text(max_nb_chars=100),
                     description=fake.text(max_nb_chars=1000),
@@ -41,6 +37,21 @@ class Command(BaseCommand):
                     doctor=doctor,
                     patient=user,
                 )
-                TreatmentHistoryImageForAnalyzesFactory(
-                    treatment_history=treatment, image_for_analyzes=img_for_analyzes
-                )
+                images_for_analyzes = self.create_images()
+                self.create_union_table(treatment_history, images_for_analyzes)
+
+    def create_images(self):
+        return [
+            ImageForAnalyzesFactory(
+                image=load_image_from_url(fake.image_url()),
+                description=fake.text(max_nb_chars=100),
+            )
+            for _ in range(random.randint(1, 10))
+        ]
+
+    def create_union_table(self, treatment_history, images_for_analyzes):
+        for image_for_analyze in images_for_analyzes:
+            TreatmentHistoryImageForAnalyzesFactory(
+                treatment_history=treatment_history,
+                image_for_analyzes=image_for_analyze,
+            )
