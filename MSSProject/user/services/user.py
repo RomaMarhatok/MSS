@@ -1,84 +1,80 @@
-from rest_framework import status
-from django.core.handlers.wsgi import WSGIRequest
-from ..models import User
-from ..repositories import UserRepository
-from ..serializers import (
-    UserPersonalInfoSerializer,
-    UserLocationSerializer,
-    UserSerializer,
+from django.http import HttpRequest, HttpResponse, JsonResponse
+from responses.errors import JsonResponseBadRequest
+from ..models import UserLocation, UserPersonalInfo, Role
+from ..repositories import (
+    UserLocationRepository,
+    UserPersonalInfoRepository,
+    UserRepository,
 )
+from ..serializers import (
+    UserSerializer,
+    UserLocationSerializer,
+    UserPersonalInfoSerializer,
+)
+from .mixins.is_user_exist_mixin import IsUserExistMixin
 
 
-class UserService:
+class UserService(IsUserExistMixin):
     def __init__(self) -> None:
         self.user_repository: UserRepository = UserRepository()
+        self.user_personal_info_repository: UserPersonalInfoRepository = (
+            UserPersonalInfoRepository()
+        )
+        self.user_location_repository: UserLocationRepository = UserLocationRepository()
 
-    def get_user_info(self, slug, request: WSGIRequest) -> dict | None:
+    def get_user_info(self, slug, request: HttpRequest) -> HttpResponse:
+        response = self.user_exist(slug)
+        if response.status_code == 400:
+            return response
         user = self.user_repository.get(slug=slug)
-        if user is not None:
+        try:
             user_personal_info = UserPersonalInfoSerializer(
                 instance=user.userpersonalinfo, context={"request": request}
             ).data
+        except UserPersonalInfo.DoesNotExist:
+            user_personal_info = {}
+
+        try:
             user_location = UserLocationSerializer(
                 instance=user.userlocation,
             ).data
-            return {
-                "data": {**user_personal_info, **user_location},
-                "status": status.HTTP_200_OK,
-            }
-        return {
-            "data": {"errors": {"general": ["user don't exist"]}},
-            "status": status.HTTP_403_FORBIDDEN,
-        }
+        except UserLocation.DoesNotExist:
+            user_location = {}
+        return JsonResponse(data={**user_personal_info, **user_location})
 
-    def create_user(self, data: dict) -> dict:
-        # user
-        user = data.get("user", None)
-        if user is None:
-            return {
-                "data": {"errors": {"general": ["data about user don't provided"]}},
-                "status": status.HTTP_400_BAD_REQUEST,
+    def get_all_patients(self):
+        users = self.user_repository.list()
+        serializerd_patients = [
+            UserSerializer(instance=user).data
+            for user in users
+            if user.role.name == Role.PATIENT
+        ]
+        return JsonResponse(
+            data={
+                "patients": serializerd_patients,
             }
-        user_serializer = UserSerializer(data=user)
-        if not user_serializer.is_valid():
-            return {"data": {"errors": {user_serializer.errors}}}
-        user_serializer.save()
-
-        # user personal info
-        user_personal_info = data.get("user_personal_info", None)
-        if user_personal_info is None:
-            return {
-                "data": {
-                    "errors": {
-                        "general": ["data about user personal info don't provided"]
-                    }
-                },
-                "status": status.HTTP_400_BAD_REQUEST,
-            }
-        user_personal_info_serializer = UserPersonalInfoSerializer(
-            data=user_personal_info, context={"user": user}
         )
-        if not user_personal_info_serializer.is_valid():
-            return {"data": {"errors": {user_personal_info_serializer.errors}}}
-        user_personal_info_serializer.save()
 
-        # user location
-        user_location = data.get("user_location", None)
-        if user_location is None:
-            return {
-                "data": {
-                    "errors": {"general": ["data about user location don't provided"]}
+    def validate_user(self, data: dict) -> JsonResponse:
+        login = data.get("login", None)
+        if self.user_repository.is_exist(login=login):
+            return JsonResponseBadRequest(
+                data={
+                    "message": "Не валидные данные в запросе",
+                    "description": "Пользватель с таким логином уже существует",
                 },
-                "status": status.HTTP_400_BAD_REQUEST,
-            }
+                status=400,
+            )
+        return HttpResponse()
 
-        user_location_serializer = UserLocationSerializer(
-            data=user_location, context={"user": user}
-        )
-        if user_location_serializer.is_valid():
-            return {"data": {"errors": {user_location_serializer.errors}}}
-        user_location_serializer.save()
-        return {
-            "data": {"message": "user was successful registrated"},
-            "status": status.HTTP_200_OK,
-        }
+    def validate_personal_info(self, data: dict) -> JsonResponse:
+        email = data.get("email", None)
+        if self.user_personal_info_repository.is_exist(email=email):
+            return JsonResponseBadRequest(
+                data={
+                    "message": "Не валидные данные в запросе",
+                    "description": "Пользователь с такой почтой уже существует",
+                },
+                status=400,
+            )
+        return HttpResponse()

@@ -1,19 +1,22 @@
 import {createRouter,createWebHashHistory} from "vue-router";
-import store from "./src/store/index"
 import IndexView from "./src/view/IndexView"
 import SignupView from "./src/view/SignupView"
 import LoginView from "./src/view/LoginView"
+import LogoutView from "./src/view/LogoutView"
+import NoPermissionView from './src/view/NoPermissionView'
+
+import PatinetPersonalInfoVIew from "./src/view/user/PersonalInfoView"
 import DocumentsListView from './src/view/user/documents/DocumentsListView'
-import PersonalInfoView from "./src/view/user/PersonalInfoView"  
 import DocumentView from "./src/view/user/documents/DocumentView"
 import DoctorListView from "./src/view/user/doctors/DoctorListView" 
 import DoctorView from "./src/view/user/doctors/DoctorView"
-import appointmentsPage from "./src/view/user/appointments/appointmentsPage"
-import DoctorHomeView from "./src/view/doctor/DoctorHomeView"
-import NoPermissionView from './src/view/NoPermissionView'
-import AppointmentView from "./src/view/doctor/appointments/AppointmentView"
-import EditorPage from "./src/view/doctor/editorPage"
-import LogoutView from "./src/view/LogoutView"
+import TreatmentHistoryList from './src/view/user/treatments/TreatmentHistoryListView'
+
+import DoctorHomeView from './src/view/doctor/DoctorHomeView'
+import DoctorAppointmentView from './src/view/doctor/appointments/AppointmentView'
+import DoctorDocumentListView from './src/view/doctor/documents/DoctorDocumentListView'
+import AddDocumentView from './src/view/doctor/documents/AddDocumentView'
+import ChangeDocumentView from './src/view/doctor/documents/ChangeDocumentView'
 import ROLES from "./roles/roles"
 const routes = [
     {
@@ -38,26 +41,13 @@ const routes = [
         component:LoginView
     },
     {
-        path:"/doctors/",
-        name:"doctors-list-page",
-        component:DoctorListView,
-        meta:{authorize:[ROLES.Patient]}
-    },
-    {
-        path:"/doctor/:doctorSlug",
-        name:"doctor-sing-display-section",
-        component:DoctorView,
-        meta:{authorize:[ROLES.Patient]}
-    },
-    {
         path:"/home/",
-        meta:{authorize:[ROLES.Patient]},
+        meta:{authorize:[]},
         children:[
             {
                 path:"",
                 name:"profile-page",
-                component:()=>store.state.user.role==ROLES.Patient?PersonalInfoView:DoctorHomeView,
-                meta:{authorize:[ROLES.Patient]},
+                component:PatinetPersonalInfoVIew,
             },
             {
                 path:"documents/",
@@ -71,25 +61,60 @@ const routes = [
                 component:DocumentView,
                 meta:{authorize:[ROLES.Patient]},
             },
-            
             {
-                path:"appointments/",
-                name:"patient-appointments",
-                component:appointmentsPage,
-                meta:{authorize:[ROLES.Patient]},
+                path:"doctors/",
+                name:"doctors-list-page",
+                component:DoctorListView,
+                meta:{authorize:[ROLES.Patient]}
+            },
+            {
+                path:"doctor/:doctorSlug",
+                name:"doctor-sing-display-section",
+                component:DoctorView,
+                meta:{authorize:[ROLES.Patient]}
+            },
+            {
+                path:'treatments/',
+                name:"treatment-history-list",
+                component:TreatmentHistoryList,
+                meta:{authorize:[ROLES.Patient]}
             }
         ]
     },
     {
-        path:"/appointment/",
+        path:"/doctor/",
         meta:{authorize:[ROLES.Doctor]},
-        name:"single-appointment",
-        component:AppointmentView
-    },
-    {
-        path:"/editor/",
-        meta:{authorize:[ROLES.Doctor]},
-        name:"editor",component:EditorPage
+        children:[
+            {
+                path:"",
+                meta:{authorize:[ROLES.Doctor]},
+                component:DoctorHomeView,
+            },
+            {
+                path:"appointment/",
+                component:DoctorAppointmentView,
+                meta:{authorize:[ROLES.Doctor]},
+            },
+            {
+                path:"documents/",
+                component:DoctorDocumentListView,
+                meta:{authorize:[ROLES.Doctor]},
+                
+            },
+            {
+                path:"add/document/",
+                name:"add-doctor-document",
+                component:AddDocumentView,
+                meta:{authorize:[ROLES.Doctor]},
+            },
+            {
+                path:"change/document/",
+                name:"add-doctor-document",
+                component:ChangeDocumentView,
+                meta:{authorize:[ROLES.Doctor]},
+            }
+            
+        ]
     },
     {
         path:"/nopermission/",

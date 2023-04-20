@@ -1,4 +1,5 @@
 import pytest
+from datetime import datetime, timedelta
 from ..models import Appointments
 from .factories import AppointmentsFactory
 from faker import Faker
@@ -28,6 +29,9 @@ def appoitment_fixture(doctor_fixture, patient_fixture, doctor_specialization_fi
     return {
         "doctor": doctor_fixture,
         "patient": patient_fixture,
-        "date": fake.date_time(),
+        "date": fake.date_time_between(
+            start_date=datetime.now(),
+            end_date=datetime.now() + timedelta(days=300),
+        ),
         "doctor_specialization": doctor_specialization_fixture,
     }

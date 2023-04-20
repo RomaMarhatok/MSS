@@ -5,9 +5,9 @@ import "primevue/resources/primevue.min.css"
 import { ref } from 'vue'
 const items = ref([
     { label: 'Home', icon: 'pi pi-fw pi-home', to: "/home/" },
-    { label: 'Doctors', icon: 'pi pi-fw pi-calendar', to: "/doctors/" },
+    { label: 'Doctors', icon: 'pi pi-fw pi-calendar', to: "/home/doctors/" },
     { label: 'Documents', icon: 'pi pi-fw pi-file', to: "/home/documents/" },
-    { label: 'Appointments', icon: 'pi pi-fw pi-calendar', to: "/home/appointments/" },
+    { label: "Treatments", icon: 'pi pi-file', to: "/home/treatments/" },
     { label: 'Log out', icon: 'pi pi-fw pi-sign-out', to: '/logout/' },
 ])
 </script>
@@ -15,7 +15,7 @@ const items = ref([
     <TabMenu :model="items"></TabMenu>
 </template>
 <style>
-@media screen and (max-width:515px) {
+@media screen and (max-width:660px) {
     .p-tabmenu-nav {
         display: flex;
         flex-direction: column;

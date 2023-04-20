@@ -1,4 +1,4 @@
-from rest_framework import status
+from django.http import JsonResponse
 from ..repositories import (
     DoctorSpecializationRepository,
 )
@@ -17,14 +17,10 @@ class DoctorSpecializationService:
         data = DoctorSpecializationSerializer(
             instance=self.doctor_type_repository.list(), many=True
         ).data
-
-        return {
-            "data": {"doctor_types": data},
-            "status": status.HTTP_200_OK,
-        }
+        return JsonResponse(data={"doctor_types": data})
 
     def get_doctor_specialization(self, doctor_specialization_slug: str):
         data = DoctorSpecializationSerializer(
             instance=self.doctor_type_repository.get(slug=doctor_specialization_slug)
         ).data
-        return {"data": {"doctor_type": data}, "status": status.HTTP_200_OK}
+        return JsonResponse(data={"doctor_type": data})

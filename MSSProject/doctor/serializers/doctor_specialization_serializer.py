@@ -1,16 +1,16 @@
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer, SerializerMethodField
 from ..models import DoctorSpecialization
 
 
 class DoctorSpecializationSerializer(ModelSerializer):
+    slug = SerializerMethodField()
+
     class Meta:
         model = DoctorSpecialization
         fields = (
             "name",
             "slug",
         )
-        extra_kwargs = {
-            "url": {"lookup_field": "slug"},
-            "slug": {"required": False, "validators": []},
-            "name": {"required": False, "validators": []},
-        }
+
+    def get_slug(self, instance: DoctorSpecialization):
+        return instance.slug

@@ -1,12 +1,13 @@
 import RequestService from "./base/RequestService"
 class RegistrationService extends RequestService {
-    async registerUser(userData,cb,errorCb){
-        return await this.post("/mss/auth/registration/",userData).then(response=>{
-            cb(response.status,response.data.message)
-        }).catch(error=>{
-            console.log("Registration error",error)
-            errorCb(error.response.data.errors)
-        })
+    async registrate(data){
+        return this.post("/user/registration/",data)
+    }
+    async validateUser(userData){
+        return await this.post("/user/validate/user/",userData)
+    }
+    async validateUserPersonalInfo(userPersonalInfo){
+        return await this.post("/user/validate/info/",userPersonalInfo)
     }
 }
 export default RegistrationService

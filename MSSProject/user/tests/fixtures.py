@@ -1,13 +1,14 @@
 import pytest
-from faker import Faker
 from common.utils.image_utils import load_image_from_url_to_file
 from common.utils.string_utils import generate_valid_login, generate_valid_password
-from ..models import Role, User, UserPersonalInfo, UserLocation
+from faker import Faker
+
+from ..models import Role, User, UserLocation, UserPersonalInfo
 from .factories import (
     RoleFactory,
     UserFactory,
-    UserPersonalInfoFactory,
     UserLocationFactory,
+    UserPersonalInfoFactory,
 )
 
 fake = Faker()
@@ -28,14 +29,18 @@ def factory_doctor_role_fixture() -> Role:
 @pytest.fixture
 def factory_user_with_role_patient_fixture(factory_patient_role_fixture) -> User:
     return UserFactory.create(
-        login=generate_valid_login(), role=factory_patient_role_fixture
+        login=generate_valid_login(),
+        password=generate_valid_password(),
+        role=factory_patient_role_fixture,
     )
 
 
 @pytest.fixture
 def factory_user_with_role_doctor_fixture(factory_doctor_role_fixture) -> User:
     return UserFactory.create(
-        login=generate_valid_login(), role=factory_doctor_role_fixture
+        login=generate_valid_login(),
+        password=generate_valid_password(),
+        role=factory_doctor_role_fixture,
     )
 
 
@@ -86,16 +91,6 @@ def user_personal_info_fixture(patient_fixture) -> dict:
         "age": fake.random_number(digits=2),
         "health_status": fake.text(),
     }
-
-
-@pytest.fixture
-def user_personal_info_with_image_fixture(user_personal_info_fixture) -> dict:
-    image_url = user_personal_info_fixture["image"]
-    gen = load_image_from_url_to_file(image_url)
-    img = next(gen)
-    user_personal_info_fixture["image"] = img
-    yield user_personal_info_fixture
-    print(f"Files and folders Was Removed?\nAnswer:{next(gen)}")
 
 
 @pytest.fixture

@@ -1,9 +1,11 @@
 const state = {
-    selectedAppointment:null
+    selectedAppointment:{}
 }
 
 const getters = {
-
+    getSelectedAppointment:(state)=>{
+        return state.selectedAppointment
+    }
 }
 const actions = {
 

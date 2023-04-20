@@ -37,7 +37,6 @@ class Command(BaseCommand):
     def generate_user_info(self, user: User) -> None:
         UserPersonalInfoFactory(
             user=user,
-            image=load_image_from_url(fake.image_url()),
             first_name=fake.first_name(),
             second_name=fake.last_name(),
             patronymic=fake.last_name(),

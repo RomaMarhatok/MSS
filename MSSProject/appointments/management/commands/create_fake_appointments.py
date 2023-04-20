@@ -1,4 +1,5 @@
 import random
+from datetime import datetime, timedelta
 from faker import Faker
 from typing import Any, Optional
 from django.core.management.base import BaseCommand
@@ -22,7 +23,10 @@ class Command(BaseCommand):
                 AppointmentsFactory(
                     patient=user,
                     doctor=doctor,
-                    date=fake.date_time(),
+                    date=fake.date_time_between(
+                        start_date=datetime.now(),
+                        end_date=datetime.now() + timedelta(days=300),
+                    ),
                     doctor_specialization=random.choice(
                         self.get_doctor_specializations(doctor)
                     ),

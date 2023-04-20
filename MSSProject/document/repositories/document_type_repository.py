@@ -8,7 +8,12 @@ class DocumentTypeRepository(AbstractRepository):
         return DocumentType.objects.all()
 
     def get(self, **kwargs):
-        return super().get(**kwargs)
+        name = kwargs.get("name", None)
+        if name is not None:
+            return DocumentType.objects.get(name=name)
+        slug = kwargs.get("slug", None)
+        if slug is not None:
+            return DocumentType.objects.get(slug=slug)
 
     def is_exist(self, **kwargs) -> bool:
         return super().is_exist(**kwargs)

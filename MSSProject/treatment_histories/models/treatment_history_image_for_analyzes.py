@@ -4,8 +4,16 @@ from .image_for_analyzes import ImageForAnalyzes
 
 
 class TreatmentHistoryImageForAnalyzes(models.Model):
-    treatment_history = models.ForeignKey(TreatmentHistory, on_delete=models.CASCADE)
-    image_for_analyzes = models.ForeignKey(ImageForAnalyzes, on_delete=models.CASCADE)
+    treatment_history = models.ForeignKey(
+        TreatmentHistory,
+        related_name="treatment_history_image_for_analyzes",
+        on_delete=models.CASCADE,
+    )
+    image_for_analyzes = models.ForeignKey(
+        ImageForAnalyzes,
+        related_name="treatment_history_image_for_analyzes",
+        on_delete=models.CASCADE,
+    )
 
     class Meta:
         db_table = "treatment_history_image_for_analyzes"

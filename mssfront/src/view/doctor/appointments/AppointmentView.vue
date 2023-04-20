@@ -1,185 +1,202 @@
 <script setup>
-//vue
-import { computed, ref, onBeforeMount } from 'vue';
-import { useStore } from 'vuex'
-//layouts
-import PageHeader from '@/components/ui/Headers/PageHeader.vue'
-import BodyLayout from '@/components/layout/BodyLayout.vue';
-import HeaderLayout from '@/components/layout/HeaderLayout.vue';
-//primevue
-import Panel from 'primevue/panel'
-import Timeline from 'primevue/timeline'
-import Card from 'primevue/card';
-import DataTable from 'primevue/datatable'
-import Column from 'primevue/column';
-import SelectButton from 'primevue/selectbutton'
-import ScrollPanel from 'primevue/scrollpanel';
-import ScrollTop from 'primevue/scrolltop';
-import Menu from 'primevue/menu';
-import Avatar from 'primevue/avatar'
-//primevue styles
 import "primevue/resources/themes/saga-blue/theme.css"
 import "primevue/resources/primevue.min.css"
-//before init
+
+import { useStore } from 'vuex'
+import { onBeforeMount, computed, ref } from 'vue';
+import DoctorTabMenu from "@/components/ui/Menu/DoctorTabMenu.vue";
+import Tag from 'primevue/tag';
+import Menu from 'primevue/menu'
+import HeaderLayout from '@/components/layout/HeaderLayout.vue';
+import AddTreatmentHistoryDialog from '@/components/ui/Dialogs/addTreatmentHistoryDialog.vue'
+import SingleTreatmentHistorySection from "@/components/ui/Sections/SingleTreatmentHistorySection.vue"
+
+const store = useStore()
+const treatmentHistoryIsSelected = ref(false)
+const selectedTSSlug = ref("")
+const selectedAppointment = computed(() => store.getters["appointment/getSelectedAppointment"])
+const treatmentHistories = computed(() => {
+    return store.getters["treatments/getTreatmentsHistories"]
+})
+const patientPersonalInfo = computed(() => {
+    return store.getters["treatments/getPatientInfo"]
+})
+const selectTreatementHistory = (tsSlug, IsSelected) => {
+    selectedTSSlug.value = tsSlug
+    treatmentHistoryIsSelected.value = IsSelected
+    swapOnChangeForm.value = false
+}
 onBeforeMount(() => {
-    store.dispatch("treatments/fetchTreatments",
+    store.dispatch("treatments/fetchTreatmentsHistories",
         {
-            patientSlug: store.state.appointment.selectedAppointment.patient.user.slug,
-            doctorSpecializationSlug: store.state.appointment.selectedAppointment.doctor_specialization.slug
+            patientSlug: selectedAppointment.value.patient.slug,
+            doctorSpecializationSlug: selectedAppointment.value.doctor_specialization.slug
         }
     )
 })
 
-//init
-const store = useStore()
-const treatmentHistories = computed(() => {
-    return store.getters["treatments/getTreatmentsHistories"]
-})
-const patientInfo = computed(() => {
-    return store.getters["treatments/getPatientInfo"]
-})
-const selectButtonValue = ref('list')
-const selectButtonValues = ref(['list', 'timeline'])
-const items = ref([
+const menuLabel = computed(() => !swapOnChangeForm.value ? "Изменить" : "Отмена")
+const menuIcon = computed(() => !swapOnChangeForm.value ? 'pi pi-plus' : 'pi pi-minus')
+const swapOnChangeForm = ref(false)
+const menu = ref(false)
+const menuOptions = ref([
     {
-        label: 'Actions',
+        label: "Действия",
         items: [
             {
-                label: 'Update',
-                icon: 'pi pi-refresh',
+                label: menuLabel,
+                icon: menuIcon,
                 command: () => {
-                    console.log("Update")
-
-                }
-            },
-            {
-                label: 'Delete',
-                icon: 'pi pi-times',
-                command: () => {
-                    console.log("Delete")
-                }
-            },
-            {
-                label: 'Add',
-                icon: 'pi pi-times',
-                command: () => {
-                    console.log("Delete")
+                    swapOnChangeForm.value = !swapOnChangeForm.value
                 }
             }
         ]
-    },
+    }
 ])
-const menu = ref()
-const toggle = (event) => {
-    menu.value.toggle(event);
-};
+const toggleMenu = (event) => {
+    menu.value.toggle(event)
+}
+
 </script>
 <template>
     <HeaderLayout>
-        <PageHeader />
+        <DoctorTabMenu />
     </HeaderLayout>
-    <BodyLayout :class="'flex w-full p-6 flex-row justify-center'">
-        <main class="flex w-full p-6 flex-col">
-            <section v-if="selectButtonValue == 'timeline'">
-                <p>Treatment histories</p>
-                <ScrollPanel class="w-full m-3 border-y-3 pt-2 scroll-panel">
-                    <SelectButton v-model="selectButtonValue" :options="selectButtonValues" />
-                    <Timeline :value="treatmentHistories" :align="'alternate'">
-                        <template #opposite="slotProps">
-                            <small class="p-text-secondary">{{ slotProps.item.created_at }}</small>
-                        </template>
-                        <template #content="slotProps">
-                            <Card>
-                                <template #title>
-                                    <p class="font-bold text-base text-left">
-                                        {{ slotProps.item.title }}
-                                    </p>
-                                </template>
-                                <template #content>
-                                    <p class="text-left">
-                                        {{ slotProps.item.short_description }}
-                                    </p>
-                                </template>
-                            </Card>
-                        </template>
-                    </Timeline>
-                    <ScrollTop target="parent" :threshold="100" class="custom-scroll-top" icon="pi pi-arrow-up" />
-                </ScrollPanel>
-            </section>
-
-            <section v-if="selectButtonValue == 'list'">
-                <DataTable :value="treatmentHistories" :rows="10" :paginator="true">
-                    <template #empty>
-                        No treatment histories found found.
-                    </template>
-                    <template #loading>
-                        Loading patient data. Please wait.
-                    </template>
-                    <Column>
-                        <template #header>
-                            <div class="flex flex-row justify-between w-full items-center">
-                                <p>Treatment histories</p>
-                                <SelectButton v-model="selectButtonValue" :options="selectButtonValues" />
+    <main class="main-flex__section">
+        <section class="patinet_info__section">
+            <div class="patinet_info_flex__section bg__section bordered__section">
+                <div class="patinet_info__section w-1/3 p-4">
+                    <p class="text-xl font-bold text-center">Пациент</p>
+                    <p class="text-2xl font-bold text-center">
+                        {{ patientPersonalInfo.first_name }} {{ patientPersonalInfo.second_name }}
+                    </p>
+                    <p class="text-slate-400 font-thin text-center">{{ patientPersonalInfo.email }}</p>
+                    <div class="flex flex-col">
+                        <p class="pb-4 text-slate-400 font-normal">Пол</p>
+                        <p class="pb-2 border-b-slate-200 border-b-2 font-thin">{{ patientPersonalInfo.gender }}ale
+                        </p>
+                    </div>
+                    <div class="flex flex-col">
+                        <p class="pb-4 text-slate-400 font-normal">Возраст</p>
+                        <p class="pb-2 border-b-slate-200 border-b-2 font-thin">{{ patientPersonalInfo.age }}</p>
+                    </div>
+                </div>
+                <div class="flex flex-col p-4">
+                    <div class="grid grid-cols-2 grid-rows-2 gap-9">
+                        <div class="col-span-2">
+                            <p class="pb-4 text-slate-400 font-normal ">Здоровье</p>
+                            <p class="font-thin">{{ patientPersonalInfo.health_status }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="flex-section">
+            <section class="treatment_history__section w-5/12">
+                <div class="bordered__section bg__section flex flex-col p-2 gap-3 w-full">
+                    <div class="flex justify-between">
+                        <p class="text-2xl font-bold text-center">Истории лечения</p>
+                        <AddTreatmentHistoryDialog />
+                    </div>
+                    <div v-for="(ts, index) in treatmentHistories" :key="index" class="treatment_history__item bg-white"
+                        @click="selectTreatementHistory(ts.treatment_history.slug, true)">
+                        <div class="flex justify-between">
+                            <div class="flex gap-1 text-sm font-medium justify-end max-[470px]:p-1">
+                                <Tag :value="'Создано ' + ts.treatment_history.string_date" severity="info" />
                             </div>
-
-                        </template>
-                        <template #body="{ data }">
-                            <Panel toggleable>
-                                <template #header>
-                                    <div class="flex items-center gap-3">
-                                        <Avatar :image=patientInfo.image shape="circle" />
-                                        <div class="flex flex-col">
-                                            <p>{{ data.date }}</p>
-                                            <p>{{ data.title }}</p>
-                                        </div>
-                                    </div>
-                                </template>
-                                <template #icons>
-                                    <button class="p-panel-header-icon p-link mr-2" @click="toggle">
-                                        <span class="pi pi-cog"></span>
-                                    </button>
-                                    <Menu ref="menu" id="config_menu" :model="items" popup />
-                                </template>
-                                <Card>
-                                    <template #content>
-                                        <p class="text-left">
-                                            {{ data.short_description }}
-                                        </p>
-                                    </template>
-                                </Card>
-                            </Panel>
-                        </template>
-                    </Column>
-                </DataTable>
+                            <div class="flex gap-1 text-sm font-medium justify-end max-[470px]:p-1">
+                                <Tag :value="'Создатель ' + ts.treatment_history.doctor.full_name" severity="success" />
+                            </div>
+                        </div>
+                        <div>
+                            <p class="font-medium pb-2">{{ ts.treatment_history.title }}</p>
+                            <Tag :value="'кол-во изображений ' + ts.images_for_analyzes.length" severity="info" />
+                        </div>
+                    </div>
+                </div>
             </section>
-        </main>
-    </BodyLayout>
+            <section class="flex treatment_history__section bg__section bordered__section w-7/12">
+                <div v-if="!treatmentHistoryIsSelected" class="self-center w-full items-center">
+                    <p class="text-center">История лечения не выбрана</p>
+                </div>
+                <div v-else class="flex flex-col p-1 justify-start w-full">
+                    <div class="flex w-full">
+                        <button class="p-panel-header-icon p-link mr-2" @click="toggleMenu">
+                            <span class="pi pi-cog"></span>
+                        </button>
+                    </div>
+
+                    <Menu ref="menu" :model="menuOptions" id="config_change_menu" popup />
+                    <SingleTreatmentHistorySection :treatment-history-slug="selectedTSSlug"
+                        :swap-on-change-form="swapOnChangeForm" />
+                </div>
+            </section>
+        </div>
+    </main>
 </template>
-<style lang="css">
-.p-scrollpanel .p-scrollpanel-bar {
-    background-color: #3B82F6;
-    opacity: 1;
-    transition: background-color .2s;
-
-
+<style lang="css" scoped>
+.patinet_info_flex__section {
+    display: flex;
 }
 
-.p-scrollpanel-bar:hover {
-    background-color: #007ad9;
+.patinet_info__section {
+    border-radius: 1rem;
 }
 
-.scroll-panel {
-    height: 550px;
-    max-height: 550px;
+.bg__section {
+    background-color: rgba(110, 131, 165, 0.103);
 }
 
-.p-scrolltop.p-link {
-    background-color: #3B82F6;
-
+.bordered__section {
+    border: 1px solid rgb(218, 218, 218);
+    border-radius: 5px;
 }
 
-.p-scrolltop.p-link:hover {
-    background-color: #007ad9;
+.treatment_history__item {
+    border: 1px solid rgb(218, 218, 218);
+    border-radius: 10px;
+    padding: 0.5em;
+}
+
+.flex-section {
+    display: flex;
+    gap: 1em;
+}
+
+.main-flex__section {
+    display: flex;
+    gap: 1em;
+    padding: 1em;
+    flex-direction: column;
+}
+
+@media screen and (max-width:900px) {
+    .flex-section {
+        flex-direction: column;
+    }
+
+    .patinet_info__section {
+        width: 100%;
+    }
+
+    .patinet_info_flex__section {
+        flex-direction: column;
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 1250px) {
+    .main-flex__section {
+        flex-direction: column;
+    }
+
+    .treatment_history__section {
+        width: 100%;
+    }
+
+    .flex-section {
+        justify-content: space-evenly;
+    }
 
 }
 </style>

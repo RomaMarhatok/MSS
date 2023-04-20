@@ -1,5 +1,13 @@
-from django.urls import path, include
-from user.views import ProfileView, AuthenticationView, RegistrationView, LogOutView
+from django.urls import path
+from user.views import (
+    AuthenticationView,
+    LogOutView,
+    ProfileView,
+    RegistrationView,
+    UserPersonalInfoValidationView,
+    UserValidationView,
+    PatientView,
+)
 
 urlpatterns = [
     path(
@@ -10,12 +18,21 @@ urlpatterns = [
     path(
         "authentication/",
         AuthenticationView.as_view(),
-        name="token-user-authentication",
+        name="user-authentication",
     ),
     path(
         "registration/",
         RegistrationView.as_view(),
         name="user-registration",
     ),
-    path("logout/", LogOutView.as_view(), name="user-logout"),
+    path("logout/<str:user_slug>/", LogOutView.as_view(), name="user-logout"),
+    path("validate/user/", UserValidationView.as_view(), name="validate-user"),
+    path(
+        "validate/info/", UserPersonalInfoValidationView.as_view(), name="validate-info"
+    ),
+    path(
+        "patients/",
+        PatientView.as_view({"get": "list"}),
+        name="patients-list",
+    ),
 ]

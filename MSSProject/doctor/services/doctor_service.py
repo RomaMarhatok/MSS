@@ -1,15 +1,11 @@
-from rest_framework import status
-from ..models import Doctor, DoctorDoctorSpecialization, DoctorSummary
-from ..repositories import DoctorRepository
+from django.http import JsonResponse
+from responses.errors import JsonResponseBadRequest
 from ..serializers import (
     DoctorSpecializationSerializer,
     DoctorSummarySerializer,
 )
-from django.core.handlers.wsgi import WSGIRequest
-from django.db.models import QuerySet
-
-# user app import
-from user.serializers import UserPersonalInfoSerializer
+from ..models import Doctor, DoctorSummary
+from ..repositories import DoctorRepository
 from user.models import UserPersonalInfo
 
 
@@ -17,82 +13,45 @@ class DoctorService:
     def __init__(self):
         self.doctor_repository: DoctorRepository = DoctorRepository()
 
-    def __get_doctor_info(
-        self,
-        doctor: Doctor,
-        doctor_doctor_specialozations: QuerySet[DoctorDoctorSpecialization],
-        request: WSGIRequest = None,
-    ):
-        specializations = self.__get_doctor_specializations(
-            doctor_doctor_specialozations
-        )
-        summary = self.__get_doctor_summary(doctor)
-        personal_info = self.__get_doctor_personal_info(doctor, request=request)
-        return {
-            "doctor_slug": doctor.user.slug,
-            "personal_info": personal_info,
-            "doctor_types": specializations,
-            "doctor_summary": summary,
-        }
-
-    def get_doctors(self, request: WSGIRequest = None):
-        doctors = [
-            self.__get_doctor_info(doctor, doctor_specializations, request=request)
-            for (doctor, doctor_specializations) in self.doctor_repository.list()
-        ]
-        return {"data": {"doctors": doctors}, "status": status.HTTP_200_OK}
-
-    def get_doctor(self, slug: str, request: WSGIRequest = None):
-        if self.doctor_repository.is_exist(slug=slug):
-            doctor, doctor_doctor_specialozations = self.doctor_repository.get(
-                slug=slug
-            )
-            return {
-                "data": self.__get_doctor_info(
-                    doctor, doctor_doctor_specialozations, request=request
-                ),
-                "status": status.HTTP_200_OK,
-            }
-        return {
-            "data": {"errors": ["doctor don't exist"]},
-            "status": status.HTTP_404_NOT_FOUND,
-        }
-
-    def __get_doctor_specializations(
-        self, doctor_doctor_specialozations: QuerySet[DoctorDoctorSpecialization]
-    ):
-        specializations = [
-            doctor_doctor_specialozation.doctor_specialization
-            for doctor_doctor_specialozation in doctor_doctor_specialozations
-        ]
-        serialized_specializations = DoctorSpecializationSerializer(
-            instance=specializations, many=True
-        ).data
-        return serialized_specializations
-
-    def __get_doctor_summary(self, doctor: Doctor) -> dict:
+    def _response_formation(self, doctor: Doctor):
+        doctor_slug = doctor.user.slug
         try:
-            return DoctorSummarySerializer(instance=doctor.doctorsummary).data
+            doctor_summary = DoctorSummarySerializer(instance=doctor.doctorsummary).data
         except DoctorSummary.DoesNotExist:
-            return {}
-
-    def __get_doctor_personal_info(
-        self,
-        doctor: Doctor,
-        request: WSGIRequest = None,
-    ) -> dict:
-        try:
-            not_necessary_fields = [
-                "gender",
-                "email",
-                "health_status",
-            ]
-            return UserPersonalInfoSerializer(
-                instance=doctor.user.userpersonalinfo,
-                context={
-                    "not_necessary_fields": not_necessary_fields,
-                    "request": request,
-                },
+            doctor_summary = {}
+        ds = [
+            DoctorSpecializationSerializer(
+                instance=doctor_doctor_specialization.doctor_specialization
             ).data
-        except UserPersonalInfo.DoesNotExist:
-            return {}
+            for doctor_doctor_specialization in doctor.doctor_doctor_specialization.all()
+        ]
+        if not hasattr(doctor.user, "userpersonalinfo"):
+            return {
+                "doctor_slug": doctor_slug,
+                "doctor_summary": doctor_summary,
+                "doctor_types": ds,
+            }
+        full_name = doctor.user.userpersonalinfo.full_name
+        return {
+            "doctor_slug": doctor_slug,
+            "doctor_full_name": full_name,
+            "doctor_summary": doctor_summary,
+            "doctor_types": ds,
+        }
+
+    def get_doctors(self):
+        doctors = [
+            self._response_formation(doctor) for doctor in self.doctor_repository.list()
+        ]
+        return JsonResponse(data={"doctors": doctors})
+
+    def get_doctor(self, slug: str):
+        if not self.doctor_repository.is_exist(slug=slug):
+            return JsonResponseBadRequest(
+                data={
+                    "message": "Не валидные данные в запросе",
+                    "description": "Доктора с таким slug не существует",
+                },
+            )
+        doctor = self.doctor_repository.get(slug=slug)
+        return JsonResponse(data={"doctors": self._response_formation(doctor)})

@@ -1,6 +1,6 @@
 import pytest
 from faker import Faker
-from common.utils.image_utils import load_image_from_url_to_file
+from common.utils.image_utils import load_image_from_url_to_file, load_image_from_url
 from .factories import (
     ImageForAnalyzesFactory,
     TreatmentHistoryFactory,
@@ -48,7 +48,7 @@ def factory_treatment_history_image_for_analyzes(
 def image_for_analyzes_fixture() -> dict:
     return {
         "image": fake.image_url(),
-        "description": fake.text(max_nb_chars=10000),
+        "description": fake.text(max_nb_chars=100),
     }
 
 
@@ -60,6 +60,13 @@ def image_for_analyzes_with_image_fixture(image_for_analyzes_fixture) -> dict:
     image_for_analyzes_fixture["image"] = img
     yield image_for_analyzes_fixture
     print(f"Files and folders Was Removed?\nAnswer:{next(gen)}")
+
+
+@pytest.fixture
+def image_for_analyzes_with_image_in_memory(image_for_analyzes_fixture):
+    image_url = image_for_analyzes_fixture["image"]
+    image_for_analyzes_fixture["image"] = load_image_from_url(image_url)
+    return image_for_analyzes_fixture
 
 
 @pytest.fixture

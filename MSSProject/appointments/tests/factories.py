@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 from factory import SubFactory
 from factory.django import DjangoModelFactory
 from ..models import Appointments
@@ -19,4 +20,6 @@ class AppointmentsFactory(DjangoModelFactory):
     doctor = SubFactory(DoctorFactory)
     patient = SubFactory(UserFactory)
     doctor_specialization = SubFactory(DoctorSpecializationFactory)
-    date = fake.date_time()
+    date = fake.date_time_between(
+        start_date=datetime.now(), end_date=datetime.now() + timedelta(days=300)
+    )

@@ -1,25 +1,16 @@
 <script setup>
 import { useStore } from 'vuex';
-import { useRoute } from 'vue-router';
-import { onBeforeMount, ref, computed } from 'vue';
+import { ref, computed } from 'vue';
 import baseLink from '@/components/common/Links/Base/BaseLink.vue';
-import TabMenu from '@/components/ui/Menu/TabMenu.vue'
 import HeaderLayout from '@/components/layout/HeaderLayout.vue';
-import PageHeader from '@/components/ui/Headers/PageHeader.vue';
 import BodyLayout from '@/components/layout/BodyLayout.vue';
+import TabMenu from '@/components/ui/Menu/TabMenu.vue'
 const store = useStore()
-const route = useRoute()
 const redirectHref = ref(`#/home/documents/`)
-const documentSlug = route.params.documentSlug
-const document = computed(() => store.getters["documents/getDocumentBySlug"](documentSlug))
-const creator = computed(() => store.getters["doctors/getDoctorBySlug"](document.value.creator.slug))
-onBeforeMount(() => {
-    store.dispatch("doctors/fetchAllDoctors")
-})
+const document = computed(() => store.getters["documents/getActiveDocument"])
 </script>
 <template>
     <HeaderLayout>
-        <PageHeader />
         <TabMenu />
     </HeaderLayout>
     <BodyLayout>
@@ -31,7 +22,7 @@ onBeforeMount(() => {
                             <p>{{ document.document_type.name }}</p>
                             <p>{{ document.name }}</p>
                         </div>
-                        <p>{{ creator.personal_info.full_name }}</p>
+                        <p>Cоздатель {{ document.creator.full_name }}</p>
                         <p>{{ document.updated_at }}</p>
                         <p>{{ document.created_at }}</p>
                     </div>

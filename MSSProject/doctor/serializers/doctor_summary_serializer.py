@@ -15,8 +15,9 @@ class DoctorSummarySerializer(ModelSerializer):
         )
 
     def create(self, validated_data):
-        user_login = validated_data["doctor"]["user"]["login"]
-        doctor = Doctor.objects.filter(user__login=user_login).first()
+        doctor = Doctor.objects.filter(
+            user__slug=validated_data["doctor"]["user"]["slug"]
+        ).first()
         validated_data.pop("doctor")
         instance, _ = DoctorSummary.objects.get_or_create(
             **validated_data, doctor=doctor

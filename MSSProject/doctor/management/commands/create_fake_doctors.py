@@ -13,7 +13,6 @@ from ...tests.factories import (
 
 # user app imports
 from user.models import User, Role
-from user.tests.factories import UserFactory
 
 fake = Faker()
 
@@ -25,8 +24,8 @@ class Command(BaseCommand):
             doctor = DoctorFactory(user=user)
             DoctorSummaryFactory(
                 doctor=doctor,
-                short_summary=fake.text(max_nb_chars=1000),
-                summary=fake.text(max_nb_chars=100000),
+                short_summary=fake.text(max_nb_chars=100),
+                summary=fake.text(max_nb_chars=1000),
             )
             self.generate_doctor_specializations(doctor)
 

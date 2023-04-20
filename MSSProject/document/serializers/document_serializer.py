@@ -1,67 +1,85 @@
-from rest_framework.serializers import ModelSerializer
 from typing import OrderedDict
+from rest_framework.serializers import ModelSerializer, SlugField, SerializerMethodField
+from common.utils.date_utils import parse_date_to_dict
 from ..models import Document, DocumentType
-from .document_type_serializer import DocumentTypeSerializer
-from common.utils.date_utils import parse_date_iso_format
 
-# user app import
-from user.serializers import UserSerializer
 from user.models import User
-
-# doctor app import
-from doctor.serializers import DoctorSerializer
 from doctor.models import Doctor
 
 
 class DocumentSerializer(ModelSerializer):
-    user = UserSerializer(many=False, required=True)
-    document_type = DocumentTypeSerializer(many=False, required=True)
-    creator = DoctorSerializer(many=False, required=True)
+    user_slug = SlugField(source="user.slug")
+    document_type_slug = SlugField(source="document_type.slug")
+    creator_slug = SlugField(source="creator.user.slug")
+    slug = SerializerMethodField()
+    created_at = SerializerMethodField()
+    updated_at = SerializerMethodField()
 
     class Meta:
         model = Document
         fields = (
             "name",
             "slug",
-            "user",
-            "creator",
+            "user_slug",
+            "creator_slug",
             "content",
-            "document_type",
+            "document_type_slug",
             "created_at",
             "updated_at",
         )
         extra_kwargs = {
-            "user": {"validators": [], "lookup_field": "slug"},
             "document_type": {"validators": []},
             "creator": {"validators": []},
             "name": {"validators": []},
-            "slug": {"required": False},
-            "created_at": {"required": False},
-            "updated_at": {"required": False},
         }
 
+    def get_slug(self, instance: Document):
+        return instance.slug
+
+    def get_created_at(self, instance: Document):
+        return instance.created_at
+
+    def get_updated_at(self, instance: Document):
+        return instance.updated_at
+
     def create(self, validated_data: OrderedDict) -> Document:
-        user = User.objects.get(login=validated_data["user"]["login"])
-        validated_data.pop("user")
+        user = User.objects.get(slug=validated_data["user"]["slug"])
         document_type = DocumentType.objects.get(
-            name=validated_data["document_type"]["name"]
+            slug=validated_data["document_type"]["slug"]
         )
-        validated_data.pop("document_type")
         creator = Doctor.objects.get(
-            user__login=validated_data["creator"]["user"]["login"]
+            user__slug=validated_data["creator"]["user"]["slug"]
         )
-        validated_data.pop("creator")
-        instance, _ = Document.objects.get_or_create(
-            **validated_data, user=user, document_type=document_type, creator=creator
+        instance = Document.objects.create(
+            name=validated_data["name"],
+            content=validated_data["content"],
+            user=user,
+            document_type=document_type,
+            creator=creator,
         )
         return instance
 
-    def to_representation(self, instance):
+    def update(self, instance: Document, validated_data):
+        return Document.objects.filter(slug=instance.slug).update(
+            name=validated_data["name"], content=validated_data["content"]
+        )
+
+    def to_representation(self, instance: Document):
         rep = super().to_representation(instance)
-        rep.pop("user")
-        if "include_context" in self.context and not self.context["include_context"]:
+        if "repr" in self.context and self.context["repr"] == "list":
             rep.pop("content")
-        rep["created_at"] = parse_date_iso_format(rep["created_at"])
-        rep["updated_at"] = parse_date_iso_format(rep["updated_at"])
-        rep["document_type"]["name"] = rep["document_type"]["name"].lower().capitalize()
+        rep["parsed_date"] = parse_date_to_dict(str(rep["created_at"]))
+        rep["document_type"] = {
+            "name": instance.document_type.name.lower().capitalize(),
+            "slug": instance.document_type.slug,
+        }
+        rep["creator"] = {
+            "creator_slug": instance.creator.user.slug,
+        }
+        if hasattr(instance.creator.user, "userpersonalinfo"):
+            rep["creator"][
+                "full_name"
+            ] = instance.creator.user.userpersonalinfo.full_name
+        if "document_type_slug" in rep:
+            rep.pop("document_type_slug")
         return rep

@@ -1,32 +1,28 @@
-import AuthenticationService from "@/../services/AuthenticationService"
 
-const state = {}
-const getters = {}
+const state = {
+    errors:[]
+}
+const getters = {
+    getErrors:(state)=>state.errors
+}
 
 const actions = {
-    async authenticate({ commit,state,rootState }, dataFromForm){   
-        const authenticationService = new AuthenticationService()
-        await authenticationService.authenticateUser(
-            dataFromForm,
-            (slug, role, status)=>{
-                console.log("cb",slug,role,state)
-                commit("user/setSlug", slug, {root:true})
-                commit("user/setRole", role, {root:true})
-                commit("response/setStatus", status,{root:true})
-            },
-            error=>commit("response/setErrors", error, { root:true })
-        )
-        return new Promise((resolve,reject)=>{
-            resolve(rootState.response.status)
-            reject(null)
-        })
-    },
 }
 
 const mutations = {
-    setStatus:(state,status)=>{
-        console.log("mutation authentication",status)
-        state.status = status
+    setErrors:(state,errors)=>{
+        console.log("set mutation authentication",errors)
+        state.errors = errors
+    },
+    addError:(state,error)=>{
+        console.log("add mutation authentication",error)
+        if(state.errors.indexOf(error)==-1){
+            state.errors.push(error)
+        }
+    },
+    clearErrors:(state)=>{
+        console.log("clear mutation authentication")
+        state.errors = []
     }
 }
 

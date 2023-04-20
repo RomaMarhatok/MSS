@@ -55,17 +55,18 @@ def load_image_from_url_to_file(
     img.close()
 
     folder_controller.remove_file(path_to_loaded_file)
-    # folder_controller.remove_dir("media")
+    folder_controller.remove_dir("media")
     folder_controller.remove_dir(path_to_folder)
 
     yield True
 
 
-def load_image_from_url(image_url):
+def load_image_from_url(image_url) -> InMemoryUploadedFile:
     resp_content = Client.get(image_url)
     pil_image = Image.open(BytesIO(resp_content)).convert("RGB")
     img_io = BytesIO()
     pil_image.save(img_io, format="JPEG")
+    img_io.seek(0)
     return InMemoryUploadedFile(
         img_io,
         field_name=None,

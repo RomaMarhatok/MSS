@@ -42,7 +42,7 @@ const actions = {
         console.log(state.appointments)
     },
     async fetchDestroyAppointemtns(data){
-        await appointmentService.destroyAppointments(
+        await appointmentService.destroyPatientAppointments(
             appointments=>console.log(appointments),
             error=>console.log(error),
             data

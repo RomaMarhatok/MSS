@@ -1,6 +1,6 @@
 from datetime import datetime
 from django.db import models
-from common.utils.string_utils import generate_hash_from_string
+from common.utils.string_utils import generate_hash_from_string, generate_slug_from_str
 
 
 def media_path_builder_for_analyzes_images(instance, filename):
@@ -16,6 +16,7 @@ def media_path_builder_for_analyzes_images(instance, filename):
 
 
 class ImageForAnalyzes(models.Model):
+    slug = models.SlugField(unique=True, max_length=1000)
     image = models.ImageField(
         "image for analyzes",
         upload_to=media_path_builder_for_analyzes_images,
@@ -27,12 +28,11 @@ class ImageForAnalyzes(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
-        self.image.name = generate_hash_from_string(self.description[:10]) + ".jpg"
+        ext = self.image.name.split(".")[1]
+        old_name = self.image.name.split(".")[0]
+        self.slug = generate_slug_from_str(generate_hash_from_string(old_name))
+        self.image.name = generate_hash_from_string(old_name) + "." + ext
         super(ImageForAnalyzes, self).save(*args, **kwargs)
-        # if self.image:
-        #     img = Image.open(self.image.path).convert("RGB")
-        #     img = img.resize((340, 300), Image.Resampling.LANCZOS)
-        #     img.save(self.image.path)
 
     class Meta:
         db_table = "image_for_analyzes"

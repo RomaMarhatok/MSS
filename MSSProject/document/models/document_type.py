@@ -1,23 +1,16 @@
 from django.db import models
-from common.utils.string_utils import generate_slug_from_str
+from django.utils.text import slugify
+from unidecode import unidecode
 
 
 class DocumentType(models.Model):
-    TEST = "TEST"
-    ANALYZES = "ANALYZES"
-    CONCLUSIONS = "CONCLUSIONS"
-
-    DOCUMENT_TYPE_CHOICES = (
-        (TEST, "Test"),
-        (ANALYZES, "Analyzes"),
-        (CONCLUSIONS, "Conclusions"),
-    )
-
     slug = models.SlugField(max_length=100, unique=True)
-    name = models.CharField(max_length=255, choices=DOCUMENT_TYPE_CHOICES)
+    name = models.CharField(max_length=255, unique=True)
+    unicode_name = models.CharField(max_length=255, unique=True)
 
     def save(self, *args, **kwargs):
-        self.slug = generate_slug_from_str(self.name)
+        self.unicode_name = unidecode(self.name)
+        self.slug = slugify(self.unicode_name, allow_unicode=True)
         return super(DocumentType, self).save(*args, **kwargs)
 
     class Meta:

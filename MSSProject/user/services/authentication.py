@@ -1,40 +1,45 @@
-from rest_framework.authtoken.models import Token
-from rest_framework import status
-from django.http import HttpRequest
-from user.repositories import UserRepository
+# stdlib imports
 from dataclasses import dataclass
+
+# core django imports
+from django.http import (
+    HttpResponse,
+    JsonResponse,
+)
+from django.db import transaction
+
+# Third-party app import
+from rest_framework.authtoken.models import Token
+
+# imports from apps
+from user.repositories import UserRepository
+from responses.errors import JsonResponseBadRequest
 
 
 @dataclass
 class AuthenticationService:
     user_repository = UserRepository()
 
-    def authenticate(self, request: HttpRequest):
-        if self._is_valid(request):
-            return self._get_response(request.data["login"], request.data["password"])
-        return {
-            "data": {"errors": {"general": ["login or password don't provided"]}},
-            "status": status.HTTP_400_BAD_REQUEST,
-        }
-
-    def _is_valid(self, request: HttpRequest) -> bool:
-        return "login" in request.data and "password" in request.data
-
-    def _get_response(self, login, password):
-        if self.user_repository.is_exist(login=login, password=password):
+    @transaction.atomic
+    def authenticate(self, data: dict) -> HttpResponse:
+        login = data.get("login", None)
+        password = data.get("password", None)
+        if (
+            login is not None or password is not None
+        ) and self.user_repository.is_exist(login=login, password=password):
             user = self.user_repository.get(login=login)
             token, _ = Token.objects.get_or_create(user=user)
-            return {
-                "data": {
-                    "message": "user successful authenticated",
+            return JsonResponse(
+                data={
+                    "message": "Пользователь авторизирован",
                     "token": token.key,
                     "role": user.role.name,
                     "slug": user.slug,
                 },
-                "status": status.HTTP_200_OK,
+            )
+        return JsonResponseBadRequest(
+            data={
+                "message": "Не валидные данные в запросе",
+                "description": "Пользователь с такими данными не существует",
             }
-
-        return {
-            "data": {"errors": {"general": ["user don't exist"]}},
-            "status": status.HTTP_403_FORBIDDEN,
-        }
+        )

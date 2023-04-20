@@ -11,7 +11,7 @@ from doctor.models import Doctor
 
 class Document(models.Model):
     slug = models.SlugField(max_length=255, unique=True)
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
     content = models.TextField("document content")
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     creator = models.ForeignKey(Doctor, on_delete=models.CASCADE)

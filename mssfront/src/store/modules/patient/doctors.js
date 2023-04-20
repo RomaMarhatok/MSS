@@ -15,46 +15,35 @@ const getters = {
         return state.doctors.filter(doctor=>doctor.doctor_types.some(dt=>dt.slug==doctorType.slug))
     },
     getDoctorByDoctorTypeSlug:(state)=>(doctorTypeSlug)=>{
-        const filteredDoctors = state.doctors.filter(doctor=>doctor.doctor_types.some(dt=>dt.slug==doctorTypeSlug))
-        return filteredDoctors
-        // return filteredDoctors.map(doctor=>{
-        //     return {
-        //         slug:doctor.doctor_slug,
-        //         full_name:doctor.personal_info.full_name
-        //     }
-        // })
+        return state.doctors.filter(doctor=>doctor.doctor_types.some(dt=>dt.slug==doctorTypeSlug))
     },
+    getDoctorTypes:(state)=>{
+        return state.doctorTypes
+    },
+    getAllDoctors:(state)=>{
+        return state.doctors
+    }
 }
 
 const actions = {
     async fetchAllDoctors({commit, state}){
-        if(state.doctors.length == 0){
-            const doctorService = new DoctorService()
-            await doctorService.getAllDoctors(
-                doctors=>{
-                    console.log("cb",doctors)
-                    commit("setDoctors",doctors)
-                },
-                error=>console.log(error)
-                )
-            console.log("action doctors",state.doctors)
-        }
-        else{
-            console.log("action without request",state.doctorTypes)
-        }
+        const doctorService = new DoctorService()
+        await doctorService.getAllDoctors(
+            doctors=>{
+                console.log("cb",doctors)
+                commit("setDoctors",doctors)
+            },
+            error=>console.log(error)
+            )
+        console.log("action doctors",state.doctors)
     },
     async fetchAllDoctorTypes({commit,state}){
-        if(state.doctorTypes.length == 0){
-            const doctorService = new DoctorService()
-            await doctorService.getAllDoctorTypes(
-                doctorTypes=>commit("setDoctorType",doctorTypes),
-                error=>console.log(error)
-            )
-            console.log("action doctor types",state.doctorTypes)
-        }
-        else{
-            console.log("action without request",state.doctorTypes)
-        }
+        const doctorService = new DoctorService()
+        await doctorService.getAllDoctorTypes(
+            doctorTypes=>commit("setDoctorType",doctorTypes),
+            error=>console.log(error)
+        )
+        console.log("action doctor types",state.doctorTypes)
     }
 }
 
