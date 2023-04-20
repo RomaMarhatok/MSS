@@ -1,5 +1,6 @@
 from django.http import JsonResponse
 from django.db import transaction
+from rest_framework import exceptions
 from ..repositories import DocumentRepository, DocumentTypeRepository
 from ..serializers import DocumentSerializer
 from responses.errors import JsonResponseBadRequest
@@ -13,25 +14,28 @@ class DocumentDoctorService(IsUserExistMixin):
         self.doctor_repository: DoctorRepository = DoctorRepository()
         self.document_type_repository: DocumentTypeRepository = DocumentTypeRepository()
 
-    def get_doctor_document(self, document_slug, creator_slug):
+    def get_doctor_document(self, document_slug, creator_slug) -> JsonResponse:
         self.is_user_exist(creator_slug)
-
         if not self.document_repository.is_exist(
             slug=document_slug, creator_slug=creator_slug
         ):
-            return JsonResponseBadRequest(
-                data={
+            raise exceptions.ValidationError(
+                detail={
                     "message": "Документ не найден",
                     "description": "Документ с такими параметрами не существует",
                 }
             )
-        documents_qs = self.document_repository.get(
+        document_serializer = self.document_repository.get(
             slug=document_slug, creator_slug=creator_slug
         )
-        documents = DocumentSerializer(
-            instance=documents_qs,
-        ).data
-        return JsonResponse(data={"doctor_document": documents})
+        document_serializer = DocumentSerializer(
+            instance=document_serializer,
+        )
+        return JsonResponse(
+            data={
+                "doctor_document": document_serializer.data,
+            }
+        )
 
     def get_doctor_document_list(self, creator_slug: str) -> JsonResponse:
         self.is_user_exist(creator_slug)

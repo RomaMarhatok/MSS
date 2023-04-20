@@ -89,8 +89,10 @@ const addDocumentTypeFilter = (value) => {
 }
 
 const onDocumentRightClick = (event, documentSlug) => {
-    activeDocumentSlug.value = documentSlug
-    store.dispatch("doctorDocuments/fetchActiveDocument", { slug: slug.value, documentSlug: activeDocumentSlug.value })
+    if (activeDocumentSlug.value != documentSlug) {
+        activeDocumentSlug.value = documentSlug
+        store.dispatch("doctorDocuments/fetchActiveDocument", { slug: slug.value, documentSlug: activeDocumentSlug.value })
+    }
     contextMenu.value.show(event);
 };
 const deleteDocument = async () => {
