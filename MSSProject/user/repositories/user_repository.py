@@ -20,9 +20,9 @@ class UserRepository(AbstractRepository):
         elif slug_serializer.is_valid():
             return slug_serializer.validated_data
         raise ValueError(
-            f"class:{self.__class__}"
-            "function:[_validate_kwargs method]"
-            "exception: Any kwargs arguments expected"
+            f"class:{self.__class__}\n"
+            "function:[_validate_kwargs method]\n"
+            "exception: Any kwargs arguments expected\n"
         )
 
     def is_exist(self, **kwargs) -> bool:
