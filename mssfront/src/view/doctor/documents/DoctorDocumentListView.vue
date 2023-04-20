@@ -24,7 +24,7 @@ const contextMenu = ref()
 const contextMenuOptions = ref([
     {
         label: 'Change',
-        icon: 'pi pi-fw pi-search',
+        icon: 'pi pi-fw pi-file-edit',
         command: () => {
             router.push("/doctor/change/document/")
         }
@@ -107,8 +107,12 @@ const deleteDocument = async () => {
         })
         .catch(error => console.log(error))
 }
-const redirectAddDocument = () => {
+const addDocumentRedicrect = () => {
     router.push(`/doctor/add/document/`)
+}
+const showDocumentRedirect = (documentSlug) => {
+    store.dispatch("doctorDocuments/fetchActiveDocument", { slug: slug.value, documentSlug: documentSlug })
+    router.push(`/doctor/document/`)
 }
 onMounted(() => {
     store.dispatch("doctorDocuments/fetchDocuments", slug.value)
@@ -150,14 +154,14 @@ onMounted(() => {
                     <RadioButton v-model="DOCUMENT_ORDER_FILTER" name="date_order" value="date" />
                 </div>
                 <div class="p-2">
-                    <button @click="redirectAddDocument">Добавить документ</button>
+                    <button @click="addDocumentRedicrect">Добавить документ</button>
                 </div>
             </section>
         </aside>
         <section class="w-full">
             <section v-if="filterDocuments.length" class="media-grid__section p-4 ">
                 <div v-for="(document, index) in filterDocuments" :key="index"
-                    @contextmenu="onDocumentRightClick($event, document.slug)">
+                    @contextmenu="onDocumentRightClick($event, document.slug)" @click="showDocumentRedirect(document.slug)">
                     <div class="shadow-container border-container flex">
                         <div class="flex p-4">
                             <font-awesome-icon :icon="['fas', 'file-medical']" size="3x" style="color: #265fba;" />

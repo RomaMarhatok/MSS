@@ -17,6 +17,7 @@ import DoctorAppointmentView from './src/view/doctor/appointments/AppointmentVie
 import DoctorDocumentListView from './src/view/doctor/documents/DoctorDocumentListView'
 import AddDocumentView from './src/view/doctor/documents/AddDocumentView'
 import ChangeDocumentView from './src/view/doctor/documents/ChangeDocumentView'
+import DoctorDocumentView from './src/view/doctor/documents/DocumentView'
 import ROLES from "./roles/roles"
 const routes = [
     {
@@ -100,6 +101,11 @@ const routes = [
                 component:DoctorDocumentListView,
                 meta:{authorize:[ROLES.Doctor]},
                 
+            },
+            {
+                path:"document/",
+                component:DoctorDocumentView,
+                meta:{authorize:[ROLES.Doctor]},
             },
             {
                 path:"add/document/",
