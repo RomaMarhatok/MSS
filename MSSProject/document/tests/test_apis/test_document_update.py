@@ -15,11 +15,11 @@ def test(factory_document_fixture):
         "HTTP_AUTHORIZATION": "Bearer " + token,
     }
     serializer = DocumentSerializer(instance=factory_document_fixture)
-    serializer.data.pop("content")
     data = {
         "document_slug": factory_document_fixture.slug,
+        "name": serializer.data["name"],
         "content": "test",
-        **serializer.data,
+        "creator_slug": serializer.data["creator"]["creator_slug"],
     }
     url = reverse("update-user-document")
     response = client.post(url, data, **headers)
