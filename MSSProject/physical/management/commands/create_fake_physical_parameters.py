@@ -18,7 +18,7 @@ class Command(BaseCommand):
             for _ in range(random.randint(1, 30)):
                 PhysicalParametersFactory(
                     user=user,
-                    weight=fake.pyfloat(positive=True, min_value=60.0),
-                    height=fake.pyfloat(positive=True, min_value=100.0),
-                    pressure=fake.pyfloat(positive=True, min_value=120.0),
+                    weight=round(random.uniform(60, 300), 2),
+                    height=round(random.uniform(100, 250), 2),
+                    pressure=round(random.uniform(60, 250), 2),
                 )

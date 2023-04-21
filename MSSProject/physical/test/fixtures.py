@@ -1,8 +1,6 @@
 import pytest
-from faker import Faker
+import random
 from .factories import PhysicalParametersFactory
-
-fake = Faker()
 
 
 @pytest.fixture
@@ -14,7 +12,7 @@ def factory_physical_parameters_fixture(factory_user_with_role_patient_fixture):
 def physical_parameters_fixture(patient_fixture):
     return {
         "user": patient_fixture,
-        "weight": fake.pyfloat(positive=True),
-        "height": fake.pyfloat(positive=True),
-        "pressure": fake.pyfloat(positive=True),
+        "weight": round(random.uniform(60, 300), 2),
+        "height": round(random.uniform(100, 250), 2),
+        "pressure": round(random.uniform(60, 250), 2),
     }
