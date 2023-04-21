@@ -1,4 +1,5 @@
 from django.http import HttpRequest, HttpResponse, JsonResponse
+from rest_framework import exceptions
 from responses.errors import JsonResponseBadRequest
 from ..models import UserLocation, UserPersonalInfo, Role
 from ..repositories import (
@@ -56,23 +57,21 @@ class UserService(IsUserExistMixin):
     def validate_user(self, data: dict) -> JsonResponse:
         login = data.get("login", None)
         if self.user_repository.is_exist(login=login):
-            return JsonResponseBadRequest(
-                data={
+            raise exceptions.ValidationError(
+                detail={
                     "message": "Не валидные данные в запросе",
                     "description": "Пользватель с таким логином уже существует",
                 },
-                status=400,
             )
         return HttpResponse()
 
     def validate_personal_info(self, data: dict) -> JsonResponse:
         email = data.get("email", None)
         if self.user_personal_info_repository.is_exist(email=email):
-            return JsonResponseBadRequest(
-                data={
+            raise exceptions.ValidationError(
+                detail={
                     "message": "Не валидные данные в запросе",
                     "description": "Пользователь с такой почтой уже существует",
                 },
-                status=400,
             )
         return HttpResponse()

@@ -46,3 +46,24 @@ def test_bad(user_personal_info_fixture, user_location_fixture, patient_fixture)
     url = reverse("user-authentication")
     response = client.post(url, authentication_data)
     assert response.status_code == 400
+
+
+@pytest.mark.django_db
+def test_not_exist(user_personal_info_fixture, user_location_fixture, patient_fixture):
+    Role.objects.create(name=Role.PATIENT)
+    data = {
+        **user_personal_info_fixture,
+        **user_location_fixture,
+        **patient_fixture,
+    }
+    url = reverse("user-registration")
+    response = client.post(url, data)
+    assert response.status_code == 200
+
+    authentication_data = {
+        "login": "not-exist",
+        "password": "not-exist",
+    }
+    url = reverse("user-authentication")
+    response = client.post(url, authentication_data)
+    assert response.status_code == 404
