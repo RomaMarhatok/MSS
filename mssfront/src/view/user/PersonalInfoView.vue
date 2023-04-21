@@ -13,6 +13,7 @@ import SelectButton from "primevue/selectbutton";
 import HeaderLayout from '@/components/layout/HeaderLayout.vue'
 import TabMenu from '@/components/ui/Menu/TabMenu.vue'
 import AppointmentForm from '@/components/ui/Forms/AppointmentForm.vue'
+import PhysicalParametersSection from "@/components/ui/Sections/PhysicalParametersSection.vue";
 const store = useStore()
 const route = useRoute()
 const router = useRouter()
@@ -30,6 +31,10 @@ const options = ref([
     {
         name: "Календарь",
         value: "calendar",
+    },
+    {
+        name: "Физ. параметры",
+        value: "physical"
     }
 ])
 const personalInfo = computed(() => store.getters["user/getPersonalInfo"])
@@ -122,7 +127,7 @@ onBeforeMount(() => {
                     </div>
                 </header>
                 <section class="bordered__section bg__section">
-                    <div v-if="select != 'calendar'" class="flex flex-col m-4 p-4 gap-3">
+                    <div v-if="select != 'calendar' && select != 'physical'" class="flex flex-col m-4 p-4 gap-3">
                         <div v-if="!getAppointments.length">
                             <p class="text-2xl font-bold text-center">Записей пока нет</p>
                         </div>
@@ -156,8 +161,11 @@ onBeforeMount(() => {
                             </div>
                         </div>
                     </div>
+                    <div v-else-if="select == 'physical'" class="p-4">
+                        <PhysicalParametersSection />
+                    </div>
                     <div v-else>
-                        <v-calendar show-weeknumbers="right" :attributes="calendarAppointments" is-expanded />
+                        <v-calendar show-weeknumbers="right" :attributes="calendarAppointments" expanded />
                     </div>
                 </section>
             </section>
