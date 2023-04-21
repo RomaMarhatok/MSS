@@ -14,15 +14,22 @@ class TreatmentHistoryService extends RequestService{
     async createTreatmentHistory(data){
         return await this.post(`/treatment_histories/create/`,data)
     }
+    async updateTreatmentHistory(data){
+        return await this.post(`/treatment_histories/update/`,data)
+    }
     async createTreatmentHistoryImageForAnalyze(data){
         return await this.post(`/treatment_histories/create/image/`,data)
     }
     async deleteTreatmentHistoryImageForAnalyze(data){
         return await this.post(`/treatment_histories/delete/image/`,data)
     }
-    async updateTreatmentHistory(data){
-        return await this.post(`/treatment_histories/update/`,data)
+    async createTreatmentHistoryDocument(data){
+        return await this.post(`/treatment_histories/add/document/`,data)
     }
+    async deleteTreatmentHistoryDocument(data){
+        return await this.post(`/treatment_histories/delete/document/`,data)
+    } 
+
 }
 
 export default TreatmentHistoryService
