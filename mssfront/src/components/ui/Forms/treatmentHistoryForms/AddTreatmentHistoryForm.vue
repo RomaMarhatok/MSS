@@ -1,6 +1,6 @@
 <script setup>
 import { Field } from 'vee-validate'
-import { reactive, defineProps } from 'vue'
+import { reactive, defineProps, defineEmits } from 'vue'
 import { useStore } from 'vuex'
 import { useToast } from "primevue/usetoast";
 import FormInputPayload from '@/components/ui/Payloads/FormInputPayload.vue'
@@ -14,6 +14,7 @@ const props = defineProps({
     patient_slug: String,
     doctor_slug: String,
 })
+const emit = defineEmits(["onAddTreatmentHistory"])
 const data = reactive({
     date: new Date(),
     title: "",
@@ -32,6 +33,7 @@ const submit = () => {
             if (response.status == 200) {
                 toast.add({ severity: 'success', summary: 'Успех', detail: 'Запись добавлена', life: 3000 });
                 store.commit("treatments/addTreatmentHistory", response.data)
+                emit("onAddTreatmentHistory")
             }
         }).catch(error => console.log(error))
 }

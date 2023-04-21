@@ -32,7 +32,7 @@ const toggle = (event) => menu.value.toggle(event)
         <Menu ref="menu" :model="menuOptions" id="config_menu" popup />
         <Dialog v-model:visible="dialog" modal header="Добавить запись" :style="{ width: '50vw' }">
             <AddTreatmentHistoryForm :patient_slug="selectedAppointment.patient.slug"
-                :doctor_slug="selectedAppointment.doctor.slug" />
+                :doctor_slug="selectedAppointment.doctor.slug" @on-add-treatment-history="dialog = false" />
         </Dialog>
     </main>
 </template>

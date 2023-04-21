@@ -56,7 +56,9 @@ const menuOptions = ref([
 const toggleMenu = (event) => {
     menu.value.toggle(event)
 }
-
+const swap = () => {
+    swapOnChangeForm.value = false
+}
 </script>
 <template>
     <HeaderLayout>
@@ -98,20 +100,25 @@ const toggleMenu = (event) => {
                         <p class="text-2xl font-bold text-center">Истории лечения</p>
                         <AddTreatmentHistoryDialog />
                     </div>
-                    <div v-for="(ts, index) in treatmentHistories" :key="index" class="treatment_history__item bg-white"
-                        @click="selectTreatementHistory(ts.treatment_history.slug, true)">
-                        <div class="flex justify-between">
-                            <div class="flex gap-1 text-sm font-medium justify-end max-[470px]:p-1">
-                                <Tag :value="'Создано ' + ts.treatment_history.string_date" severity="info" />
+                    <div v-if="treatmentHistories.length">
+                        <div v-for="(ts, index) in treatmentHistories" :key="index" class="treatment_history__item bg-white"
+                            @click="selectTreatementHistory(ts.treatment_history.slug, true)">
+                            <div class="flex justify-between">
+                                <div class="flex gap-1 text-sm font-medium justify-end max-[470px]:p-1">
+                                    <Tag :value="'Создано ' + ts.treatment_history.string_date" severity="info" />
+                                </div>
+                                <div class="flex gap-1 text-sm font-medium justify-end max-[470px]:p-1">
+                                    <Tag :value="'Создатель ' + ts.treatment_history.doctor.full_name" severity="success" />
+                                </div>
                             </div>
-                            <div class="flex gap-1 text-sm font-medium justify-end max-[470px]:p-1">
-                                <Tag :value="'Создатель ' + ts.treatment_history.doctor.full_name" severity="success" />
+                            <div>
+                                <p class="font-medium pb-2">{{ ts.treatment_history.title }}</p>
+                                <Tag :value="'кол-во изображений ' + ts.images_for_analyzes.length" severity="info" />
                             </div>
                         </div>
-                        <div>
-                            <p class="font-medium pb-2">{{ ts.treatment_history.title }}</p>
-                            <Tag :value="'кол-во изображений ' + ts.images_for_analyzes.length" severity="info" />
-                        </div>
+                    </div>
+                    <div v-else class="flex justify-center">
+                        <p>Историй лечения у даннного типа врача пока нет</p>
                     </div>
                 </div>
             </section>
@@ -120,7 +127,7 @@ const toggleMenu = (event) => {
                     <p class="text-center">История лечения не выбрана</p>
                 </div>
                 <div v-else class="flex flex-col p-1 justify-start w-full">
-                    <div class="flex w-full">
+                    <div class="flex w-full p-2">
                         <button class="p-panel-header-icon p-link mr-2" @click="toggleMenu">
                             <span class="pi pi-cog"></span>
                         </button>
@@ -128,7 +135,7 @@ const toggleMenu = (event) => {
 
                     <Menu ref="menu" :model="menuOptions" id="config_change_menu" popup />
                     <SingleTreatmentHistorySection :treatment-history-slug="selectedTSSlug"
-                        :swap-on-change-form="swapOnChangeForm" />
+                        :swap-on-change-form="swapOnChangeForm" @onChangeTreatmentHistory="swap" />
                 </div>
             </section>
         </div>

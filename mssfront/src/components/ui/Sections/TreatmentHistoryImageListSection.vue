@@ -28,7 +28,7 @@ const selectedImage = computed(() => {
     <div class="p-2">
         <p>Прилогающиеся изображения</p>
         <div v-if="!props.images.length">
-            <p>НЕТ</p>
+            <p>Нет прилогающихся изображений</p>
         </div>
         <div v-else v-for="(img, index) in props.images" :key="img.slug">
             <p @click="selectImage(img.slug)" class="cursor-pointer">{{ index + 1 }}. {{ img.description }}</p>
