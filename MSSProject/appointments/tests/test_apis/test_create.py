@@ -71,7 +71,7 @@ def test_doctor_slug(
         "date": datetime.now(),
     }
     response = client.post(url, data, **headers)
-    assert response.status_code == 400
+    assert response.status_code == 404
     assert bool(response.json())
     assert Appointments.objects.count() == 0
 
@@ -93,7 +93,7 @@ def test_patient_slug(
         "date": datetime.now(),
     }
     response = client.post(url, data, **headers)
-    assert response.status_code == 400
+    assert response.status_code == 404
     assert bool(response.json())
     assert Appointments.objects.count() == 0
 

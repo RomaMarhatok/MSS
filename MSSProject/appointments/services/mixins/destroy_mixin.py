@@ -1,5 +1,6 @@
 from django.db import transaction
 from django.http import JsonResponse
+from rest_framework import exceptions
 from ...repositories import AppointmentsRepository
 from responses.errors import JsonResponseBadRequest
 
@@ -14,8 +15,8 @@ class DestroyAppointmentMixin:
         if not appointments_repository.is_exist(
             patient_slug=patient_slug, doctor_slug=doctor_slug, date=date
         ):
-            return JsonResponseBadRequest(
-                data={
+            raise exceptions.NotFound(
+                detail={
                     "message": "Не валидныйе данные в запросе",
                     "description": "Запись к доктору с такими данными не существует",
                 }

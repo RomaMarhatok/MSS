@@ -77,7 +77,7 @@ def test_user_slug(factory_appointments_fixture):
         },
         **headers
     )
-    assert response.status_code == 400
+    assert response.status_code == 404
     assert bool(response.json())
     assert Appointments.objects.count() == 1
     assert User.objects.count() == 2
@@ -102,7 +102,7 @@ def test_doctor_slug(factory_appointments_fixture):
         },
         **headers
     )
-    assert response.status_code == 400
+    assert response.status_code == 404
     assert bool(response.json())
     assert Appointments.objects.count() == 1
     assert User.objects.count() == 2
@@ -128,7 +128,7 @@ def test_date(factory_appointments_fixture):
         },
         **headers
     )
-    assert response.status_code == 400
+    assert response.status_code == 404
     assert bool(response.json())
     assert Appointments.objects.count() == 1
     assert User.objects.count() == 2
