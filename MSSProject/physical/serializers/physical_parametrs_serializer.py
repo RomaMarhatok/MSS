@@ -2,6 +2,7 @@ from typing import OrderedDict
 from rest_framework.serializers import ModelSerializer, SlugField, SerializerMethodField
 from ..models import PhysicalParameters
 from user.models import User
+from common.utils.date_utils import parse_date_to_dict
 
 
 class PhysicalParametersSerializer(ModelSerializer):
@@ -37,3 +38,8 @@ class PhysicalParametersSerializer(ModelSerializer):
         return PhysicalParameters.objects.filter(user=instance.user).update(
             **validated_data
         )
+
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        rep["parsed_date"] = parse_date_to_dict(str(rep["created_at"]))
+        return rep
