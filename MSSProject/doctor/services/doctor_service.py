@@ -1,19 +1,18 @@
 from django.http import JsonResponse
-from responses.errors import JsonResponseBadRequest
+from rest_framework import exceptions
 from ..serializers import (
     DoctorSpecializationSerializer,
     DoctorSummarySerializer,
 )
 from ..models import Doctor, DoctorSummary
 from ..repositories import DoctorRepository
-from user.models import UserPersonalInfo
 
 
 class DoctorService:
     def __init__(self):
         self.doctor_repository: DoctorRepository = DoctorRepository()
 
-    def _response_formation(self, doctor: Doctor):
+    def _get_response_data(self, doctor: Doctor):
         doctor_slug = doctor.user.slug
         try:
             doctor_summary = DoctorSummarySerializer(instance=doctor.doctorsummary).data
@@ -41,17 +40,17 @@ class DoctorService:
 
     def get_doctors(self):
         doctors = [
-            self._response_formation(doctor) for doctor in self.doctor_repository.list()
+            self._get_response_data(doctor) for doctor in self.doctor_repository.list()
         ]
         return JsonResponse(data={"doctors": doctors})
 
     def get_doctor(self, slug: str):
         if not self.doctor_repository.is_exist(slug=slug):
-            return JsonResponseBadRequest(
-                data={
+            raise exceptions.NotFound(
+                detail={
                     "message": "Не валидные данные в запросе",
                     "description": "Доктора с таким slug не существует",
                 },
             )
         doctor = self.doctor_repository.get(slug=slug)
-        return JsonResponse(data={"doctors": self._response_formation(doctor)})
+        return JsonResponse(data={"doctors": self._get_response_data(doctor)})

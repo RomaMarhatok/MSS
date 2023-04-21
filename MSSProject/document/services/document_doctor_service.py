@@ -53,8 +53,8 @@ class DocumentDoctorService(IsUserExistMixin):
         self.is_user_exist(creator_slug)
         document_name = data.get("name", None)
         if self.document_repository.is_exist(document_name=document_name):
-            return JsonResponseBadRequest(
-                data={
+            raise exceptions.NotFound(
+                detail={
                     "message": "Не валидныйе данные в запросе",
                     "description": "Документ с таким название уже существует",
                 }
@@ -72,7 +72,7 @@ class DocumentDoctorService(IsUserExistMixin):
         if not self.document_repository.is_exist(
             slug=document_slug, creator_slug=creator_slug
         ):
-            return JsonResponseBadRequest(
+            raise exceptions.NotFound(
                 data={
                     "message": "Документ не найден",
                     "description": "Документ с такими параметрами не существует",
@@ -96,7 +96,7 @@ class DocumentDoctorService(IsUserExistMixin):
         if not self.document_repository.is_exist(
             slug=document_slug, creator_slug=creator_slug
         ):
-            return JsonResponseBadRequest(
+            raise exceptions.NotFound(
                 data={
                     "message": "Документ не найден",
                     "description": "Документ с такими параметрами не существует",

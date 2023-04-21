@@ -36,5 +36,5 @@ def test_bad(factory_treatment_history_fixture):
         "HTTP_AUTHORIZATION": "Bearer " + token,
     }
     response = client.get(url, **headers)
-    assert response.status_code == 400
+    assert response.status_code == 404
     assert bool(response.json())

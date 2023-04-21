@@ -37,6 +37,6 @@ def test_bad(factory_document_fixture):
     }
     url = reverse("doctor-delete-document")
     response = client.post(url, data, **headers)
-    assert response.status_code == 400
+    assert response.status_code == 404
     assert bool(response.json())
     assert Document.objects.count() == 1

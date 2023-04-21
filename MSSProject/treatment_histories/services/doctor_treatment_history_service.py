@@ -69,7 +69,7 @@ class DoctorTreatmentHistoryService(BaseTreatmentHistoryService):
         if not self.treatment_history_repository.is_exist(
             treatment_history_slug=treatment_history_slug
         ):
-            raise exceptions.ValidationError(
+            raise exceptions.NotFound(
                 detail={
                     "message": "Не валидные данные в запросе",
                     "description": f"Лечебная запись с slug {treatment_history_slug} не существует",

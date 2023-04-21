@@ -44,6 +44,6 @@ def test_bad(
         **physical_parameters_fixture,
     }
     response = client.post(url, data, **headers)
-    assert response.status_code == 400
+    assert response.status_code == 404
     assert bool(response.json())
     assert PhysicalParameters.objects.count() == 0

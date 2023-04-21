@@ -1,7 +1,7 @@
 from django.http import JsonResponse
+from rest_framework import exceptions
 from ..repositories import DocumentRepository, DocumentTypeRepository
 from ..serializers import DocumentSerializer
-from responses.errors import JsonResponseBadRequest
 from user.services.mixins.is_user_exist_mixin import IsUserExistMixin
 from doctor.repositories import DoctorRepository
 
@@ -19,8 +19,8 @@ class DocumentService(IsUserExistMixin):
         if not self.document_repository.is_exist(
             slug=document_slug, patient_slug=patient_slug
         ):
-            return JsonResponseBadRequest(
-                data={
+            raise exceptions.NotFound(
+                detail={
                     "message": "Документ не найден",
                     "description": "Документ с такими параметрами не существует",
                 }

@@ -74,9 +74,7 @@ class DocumentSerializer(ModelSerializer):
             "name": instance.document_type.name.lower().capitalize(),
             "slug": instance.document_type.slug,
         }
-        rep["name"] = (
-            instance.document_type.name.lower().capitalize() + " " + rep["name"]
-        )
+        rep["document_type_name"] = rep["document_type"]["name"]
         rep["creator"] = {
             "creator_slug": instance.creator.user.slug,
         }

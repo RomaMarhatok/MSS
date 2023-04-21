@@ -1,6 +1,6 @@
 from datetime import datetime
 from django.http import JsonResponse
-
+from rest_framework import exceptions
 from responses.errors import JsonResponseBadRequest
 from user.repositories import UserRepository
 from user.services.mixins.is_user_exist_mixin import IsUserExistMixin
@@ -34,8 +34,8 @@ class DoctorAppointmentService(
         if not self.appointments_repository.is_exist(
             patient_slug=patient_slug, doctor_slug=doctor_slug, date=date
         ):
-            return JsonResponseBadRequest(
-                data={
+            raise exceptions.NotFound(
+                detail={
                     "message": "Не валидныйе данные в запросе",
                     "description": "Запись к доктору с такими данными не существует",
                 }
