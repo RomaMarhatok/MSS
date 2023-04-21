@@ -18,10 +18,10 @@ class Command(BaseCommand):
     def handle(self, *args: Any, **options: Any) -> Optional[str]:
         users = User.objects.filter(role__name=Role.PATIENT)
         doctors = Doctor.objects.all()
-        for user, doctor in zip(users, doctors):
+        for _, doctor in zip(users, doctors):
             for _ in range(random.randint(1, 15)):
                 AppointmentsFactory(
-                    patient=user,
+                    patient=random.choice(users),
                     doctor=doctor,
                     date=fake.date_time_between(
                         start_date=datetime.now(),
