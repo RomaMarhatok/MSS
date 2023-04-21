@@ -1,24 +1,49 @@
 <script setup>
 import { useStore } from 'vuex';
+import { useRouter } from 'vue-router'
 import { ref, computed } from 'vue';
+import ContextMenu from 'primevue/contextmenu';
 import baseLink from '@/components/common/Links/Base/BaseLink.vue';
 import HeaderLayout from '@/components/layout/HeaderLayout.vue';
-import BodyLayout from '@/components/layout/BodyLayout.vue';
 import DoctorTabMenu from '@/components/ui/Menu/DoctorTabMenu.vue'
+import ChangeDocumentForm from '@/components/ui/Forms/documentForms/ChangeDocumentForm.vue';
 const store = useStore()
-const redirectHref = ref(`#/home/documents/`)
+const router = useRouter()
+const redirectHref = ref(`#/doctor/documents/`)
 const document = computed(() => store.getters["doctorDocuments/getActiveDocument"])
+const contextMenu = ref()
+const swapOnChangeForm = ref(false)
+const contextMenuOptions = ref([
+    {
+        label: 'Изменить',
+        icon: 'pi pi-fw pi-file-edit',
+        command: () => {
+            router.push("/doctor/change/document/")
+        }
+    },
+    // {
+    //     label: 'Delete',
+    //     icon: 'pi pi-fw pi-trash',
+    //     command: () => {
+    //         console.log("DELETE")
+    //     }
+    // }
+]);
+const onDocumentRightClick = (event) => {
+    contextMenu.value.show(event);
+};
 </script>
 <template>
     <HeaderLayout>
         <DoctorTabMenu />
     </HeaderLayout>
-    <BodyLayout>
-        <div class="main">
+    <main @contextmenu="onDocumentRightClick">
+        <div v-if="!swapOnChangeForm" class="main">
             <div class="main-container">
                 <div class="document-header">
                     <div class="content-container">
                         <div class="header-container">
+                            <p>{{ document.document_type.name }}</p>
                             <p>{{ document.name }}</p>
                         </div>
                         <p>Создано
@@ -34,7 +59,11 @@ const document = computed(() => store.getters["doctorDocuments/getActiveDocument
                 <baseLink :text="'Back'" :href="redirectHref" />
             </div>
         </div>
-    </BodyLayout>
+        <div v-else>
+            <ChangeDocumentForm :document="document" />
+        </div>
+        <ContextMenu ref="contextMenu" :model="contextMenuOptions" />
+    </main>
 </template>
 <style scoped>
 .main {

@@ -23,14 +23,14 @@ const activeDocumentSlug = ref("")
 const contextMenu = ref()
 const contextMenuOptions = ref([
     {
-        label: 'Change',
+        label: 'Изменить',
         icon: 'pi pi-fw pi-file-edit',
         command: () => {
             router.push("/doctor/change/document/")
         }
     },
     {
-        label: 'Delete',
+        label: 'Удалить',
         icon: 'pi pi-fw pi-trash',
         command: () => {
             deleteDocument()
@@ -111,8 +111,9 @@ const addDocumentRedicrect = () => {
     router.push(`/doctor/add/document/`)
 }
 const showDocumentRedirect = (documentSlug) => {
-    store.dispatch("doctorDocuments/fetchActiveDocument", { slug: slug.value, documentSlug: documentSlug })
-    router.push(`/doctor/document/`)
+    store.dispatch("doctorDocuments/fetchActiveDocument", { slug: slug.value, documentSlug: documentSlug }).then(
+        () => router.push(`/doctor/document/`)
+    )
 }
 onMounted(() => {
     store.dispatch("doctorDocuments/fetchDocuments", slug.value)
@@ -183,7 +184,6 @@ onMounted(() => {
                     </div>
                 </div>
                 <ContextMenu ref="contextMenu" :model="contextMenuOptions" />
-
             </section>
             <section v-else class="flex justify-center items-center h-full">
                 <div class="flex gap-2">

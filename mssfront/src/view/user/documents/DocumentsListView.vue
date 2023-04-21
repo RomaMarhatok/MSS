@@ -73,8 +73,8 @@ const redirect = (documentSlug) => {
     store.dispatch("documents/fetchDocument", {
         slug: slug.value,
         document_slug: documentSlug
-    })
-    router.push(`/home/document/${documentSlug}/`)
+    }).then(() => router.push(`/home/document/${documentSlug}/`))
+
 }
 onMounted(() => {
     store.dispatch("documents/fetchDocuments", slug.value)

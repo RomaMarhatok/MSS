@@ -23,8 +23,11 @@ const document = computed(() => store.getters["documents/getActiveDocument"])
                             <p>{{ document.name }}</p>
                         </div>
                         <p>Cоздатель {{ document.creator.full_name }}</p>
-                        <p>{{ document.updated_at }}</p>
-                        <p>{{ document.created_at }}</p>
+                        <p>Создано
+                            {{ document.parsed_date.day +
+                                " " + document.parsed_date.mounth +
+                                " " + document.parsed_date.year
+                            }} в {{ document.parsed_date.hours + ":" + document.parsed_date.minutes }}</p>
                     </div>
                 </div>
                 <div class="main">
