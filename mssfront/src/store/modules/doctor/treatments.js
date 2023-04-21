@@ -22,6 +22,13 @@ const getters = {
                return state.treatmentHistories[tsIndex].images_for_analyzes
             }
         }
+    },
+    getTreatmentHistoryDocuments:(state)=>(treatmentHistorySlug)=>{
+        for(let tsIndex in state.treatmentHistories){
+            if(state.treatmentHistories[tsIndex].treatment_history.slug == treatmentHistorySlug){
+               return state.treatmentHistories[tsIndex].documents
+            }
+        }
     }
 }
 const actions = {
@@ -76,6 +83,23 @@ const mutations = {
         for(let tsIndex in state.treatmentHistories){
             if(state.treatmentHistories[tsIndex].treatment_history.slug == treatmentHistorySlug){
                 state.treatmentHistories[tsIndex].images_for_analyzes = state.treatmentHistories[tsIndex].images_for_analyzes.filter(img=>img.slug!=imageSlug)
+                break
+            }
+        }
+    },
+    addDocument:(state,{document,treatmentHistorySlug})=>{
+        for(let tsIndex in state.treatmentHistories){
+            if(state.treatmentHistories[tsIndex].treatment_history.slug == treatmentHistorySlug){
+                state.treatmentHistories[tsIndex].documents.push(document)
+                break
+            }
+        }
+    },
+    deleteDocument:(state,{documentSlug,treatmentHistorySlug})=>{
+        for(let tsIndex in state.treatmentHistories){
+            if(state.treatmentHistories[tsIndex].treatment_history.slug == treatmentHistorySlug){
+                console.log("IF")
+                state.treatmentHistories[tsIndex].documents = state.treatmentHistories[tsIndex].documents.filter(d=>d.slug!=documentSlug)
                 break
             }
         }
