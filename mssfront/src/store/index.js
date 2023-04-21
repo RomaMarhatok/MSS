@@ -7,6 +7,7 @@ import doctors from './modules/patient/doctors'
 import documents from './modules/patient/documents'
 import appointments from './modules/patient/appointments'
 import patientTreatments from './modules/patient/patientTreatments'
+import physicalParameters from './modules/patient/physicalParameters'
 import doctorAppointments from './modules/doctor/doctorAppointments'
 import treatments from './modules/doctor/treatments'
 import appointment from './modules/doctor/appointment'
@@ -26,6 +27,7 @@ const store = createStore({
         patientTreatments,
         doctorDocuments,
         patients,
+        physicalParameters,
     },
      plugins: [createPersistedState({
         storage: window.sessionStorage,

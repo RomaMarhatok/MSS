@@ -35,7 +35,7 @@ const selectedImage = computed(() => {
         </div>
     </div>
     <Dialog v-model:visible="dialog" modal header="Изображение" :style="{ width: '70vw' }">
-        <p>{{ selectedImage.description }}</p>
+        <p>Текстовое описание {{ selectedImage.description }}</p>
         <Image :src="selectedImage.image" width="320" preview />
     </Dialog>
 </template>
