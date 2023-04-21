@@ -5,9 +5,6 @@ from django.core.management.base import BaseCommand
 from ...test.factories import PhysicalParametersFactory
 from user.models import User, Role
 
-# doctor app imports
-from doctor.models import Doctor
-
 fake = Faker()
 
 
