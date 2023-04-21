@@ -107,3 +107,30 @@ class DeleteImageForAnalyzesView(APIView):
         serializer = self.InputSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         return self.service.delete_image_for_analyzes(serializer.validated_data)
+
+
+class DocumentTreatmentHistoryView(GenericViewSet):
+    permission_classes = [IsUserAuthenticated, IsDoctor]
+    service = DoctorTreatmentHistoryService()
+
+    class CreateInputSerializer(serializers.Serializer):
+        treatment_history_slug = serializers.SlugField()
+        document_slug = serializers.SlugField()
+
+    def create(self, request):
+        serializer = self.CreateInputSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return self.service.add_document_to_treatment_history(
+            **serializer.validated_data
+        )
+
+    class DeleteInputSerializer(serializers.Serializer):
+        treatment_history_slug = serializers.SlugField()
+        document_slug = serializers.SlugField()
+
+    def delete(self, request):
+        serializer = self.DeleteInputSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return self.service.delete_document_from_treatment_history(
+            **serializer.validated_data
+        )

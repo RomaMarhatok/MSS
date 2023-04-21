@@ -1,9 +1,11 @@
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.db import transaction
 from rest_framework import exceptions
 from ..serializers import TreatmentHistorySerializer, ImageForAnlyzeSerializer
 from .base.base_treatment_history_service import BaseTreatmentHistoryService
 from user.serializers import UserPersonalInfoSerializer
+from document.serializers import DocumentSerializer
+from document.models import Document
 
 
 class DoctorTreatmentHistoryService(BaseTreatmentHistoryService):
@@ -11,12 +13,14 @@ class DoctorTreatmentHistoryService(BaseTreatmentHistoryService):
         self, patient_slug: str, doctor_specialization_slug: str, request=None
     ) -> JsonResponse:
         if self.is_user_exist(patient_slug):
+            print("USER EXIST")
             user = self.user_repository.get(slug=patient_slug)
         treatments_histories = self.list(
             patient_slug,
             doctor_specialization_slug=doctor_specialization_slug,
             request=request,
         )
+        print(treatments_histories)
         patient_info = (
             UserPersonalInfoSerializer(instance=user.userpersonalinfo).data
             if hasattr(user, "userpersonalinfo")
@@ -41,7 +45,11 @@ class DoctorTreatmentHistoryService(BaseTreatmentHistoryService):
             instance=treatment_history
         )
         return JsonResponse(
-            data={"treatment_history": treatment_history_serializer.data},
+            data={
+                "treatment_history": treatment_history_serializer.data,
+                "images_for_analyzes": [],
+                "documents": [],
+            },
         )
 
     @transaction.atomic
@@ -102,5 +110,67 @@ class DoctorTreatmentHistoryService(BaseTreatmentHistoryService):
             data={
                 "treatment_history_slug": treatment_history_slug,
                 "deleted_image_slug": image_for_analyzes_slug,
+            }
+        )
+
+    @transaction.atomic
+    def add_document_to_treatment_history(
+        self, treatment_history_slug: str = None, document_slug: str = None
+    ) -> Document:
+        if not self.treatment_history_repository.is_exist(
+            treatment_history_slug=treatment_history_slug
+        ):
+            raise exceptions.NotFound(
+                detail={
+                    "message": "Не валидные данные в запросе",
+                    "description": f"Лечебная запись с slug {treatment_history_slug} не существует",
+                }
+            )
+        treatment_history = self.treatment_history_repository.get(
+            treatment_history_slug=treatment_history_slug
+        )
+        if not self.document_repository.is_exist(slug=document_slug):
+            raise exceptions.NotFound(
+                detail={
+                    "message": "Документ не найден",
+                    "description": "Документ с такими параметрами не существует",
+                }
+            )
+        if self.treatment_history_document_repository.is_exist(
+            treatment_history_slug=treatment_history_slug,
+            document_slug=document_slug,
+        ):
+            raise exceptions.ValidationError(
+                detail={
+                    "message": "Конфликт",
+                    "description": "Данный документ уже добавлен",
+                }
+            )
+        document = self.document_repository.get(slug=document_slug)
+        self.treatment_history_document_repository.create(
+            {
+                "document": document,
+                "treatment_history": treatment_history,
+            }
+        )
+        document_serializer = DocumentSerializer(instance=document)
+        return JsonResponse(
+            data={
+                "document": document_serializer.data,
+            }
+        )
+
+    @transaction.atomic
+    def delete_document_from_treatment_history(
+        self, treatment_history_slug: str = None, document_slug: str = None
+    ):
+        self.treatment_history_document_repository.delete(
+            treatment_history_slug=treatment_history_slug,
+            document_slug=document_slug,
+        )
+        return JsonResponse(
+            data={
+                "treatment_history_slug": treatment_history_slug,
+                "deleted_document_slug": document_slug,
             }
         )

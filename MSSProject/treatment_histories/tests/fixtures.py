@@ -5,11 +5,13 @@ from .factories import (
     ImageForAnalyzesFactory,
     TreatmentHistoryFactory,
     TreatmentHistoryImageForAnalyzesFactory,
+    TreatmentHistoryDocumentFactory,
 )
 from ..models import (
     ImageForAnalyzes,
     TreatmentHistory,
     TreatmentHistoryImageForAnalyzes,
+    TreatmentHistoryDocument,
 )
 
 fake = Faker()
@@ -38,6 +40,17 @@ def factory_treatment_history_image_for_analyzes(
     return TreatmentHistoryImageForAnalyzesFactory.create(
         treatment_history=factory_treatment_history_fixture,
         image_for_analyzes=factory_image_for_analyzes_fixture,
+    )
+
+
+@pytest.fixture
+def factory_treatment_history_document_fixture(
+    factory_treatment_history_fixture,
+    factory_document_fixture,
+) -> TreatmentHistoryDocument:
+    return TreatmentHistoryDocumentFactory.create(
+        treatment_history=factory_treatment_history_fixture,
+        document=factory_document_fixture,
     )
 
 

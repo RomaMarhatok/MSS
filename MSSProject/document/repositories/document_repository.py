@@ -29,10 +29,15 @@ class DocumentRepository(AbstractRepository):
     def list(self, **kwargs) -> QuerySet[Document]:
         patient_slug = kwargs.get("patient_slug", None)
         creator_slug = kwargs.get("creator_slug", None)
+        treatment_history = kwargs.get("treatment_history", None)
         if patient_slug is not None:
             return self.qs.filter(user__slug=patient_slug)
         if creator_slug is not None:
             return self.qs.filter(creator__user__slug=creator_slug)
+        if treatment_history is not None:
+            return self.qs.filter(
+                treatment_history_document__treatment_history=treatment_history
+            )
 
     def create(self, data: dict) -> Document:
         serializer = DocumentSerializer(data=data)

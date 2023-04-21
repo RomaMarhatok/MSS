@@ -7,6 +7,7 @@ from ...tests.factories import (
     ImageForAnalyzesFactory,
     TreatmentHistoryFactory,
     TreatmentHistoryImageForAnalyzesFactory,
+    TreatmentHistoryDocumentFactory,
 )
 from common.utils.image_utils import load_image_from_url
 
@@ -15,6 +16,8 @@ from user.models import User, Role
 
 # doctor app imports
 from doctor.models import Doctor
+
+from document.models import Document
 
 fake = Faker()
 
@@ -39,6 +42,7 @@ class Command(BaseCommand):
                 )
                 images_for_analyzes = self.create_images()
                 self.create_union_table(treatment_history, images_for_analyzes)
+                self.create_treatment_history_documents(doctor, treatment_history)
 
     def create_images(self):
         return [
@@ -54,4 +58,11 @@ class Command(BaseCommand):
             TreatmentHistoryImageForAnalyzesFactory(
                 treatment_history=treatment_history,
                 image_for_analyzes=image_for_analyze,
+            )
+
+    def create_treatment_history_documents(self, doctor: Doctor, treatment_history):
+        documents = Document.objects.filter(creator=doctor)
+        for _ in range(random.randint(1, 10)):
+            TreatmentHistoryDocumentFactory(
+                treatment_history=treatment_history, document=random.choice(documents)
             )

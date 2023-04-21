@@ -6,10 +6,13 @@ from ...repositories import (
     TreatmentHistoryRepository,
     ImageForAnalyzesRepository,
     TreatmentHistoryImageForAnalyzesRepository,
+    TreatmentHistoryDocumentRepository,
 )
 from ...serializers import TreatmentHistorySerializer, ImageForAnlyzeSerializer
 
 from user.services.mixins.is_user_exist_mixin import IsUserExistMixin
+from document.repositories import DocumentRepository
+from document.serializers import DocumentSerializer
 
 
 class BaseTreatmentHistoryService(IsUserExistMixin):
@@ -23,6 +26,10 @@ class BaseTreatmentHistoryService(IsUserExistMixin):
         self.treatment_history_image_for_analyzes_repository = (
             TreatmentHistoryImageForAnalyzesRepository()
         )
+        self.treatment_history_document_repository = (
+            TreatmentHistoryDocumentRepository()
+        )
+        self.document_repository = DocumentRepository()
 
     def _get_response_data(self, treatment_history: TreatmentHistory, request) -> dict:
         image_for_analyzes = self.image_for_analyzes_repository.list(
@@ -31,12 +38,15 @@ class BaseTreatmentHistoryService(IsUserExistMixin):
         image_for_analyzes_serializer = ImageForAnlyzeSerializer(
             instance=image_for_analyzes, context={"request": request}, many=True
         )
+        documents = self.document_repository.list(treatment_history=treatment_history)
+        documents_serializer = DocumentSerializer(instance=documents, many=True)
         treatment_history_serializer = TreatmentHistorySerializer(
             instance=treatment_history
         )
         return {
             "treatment_history": treatment_history_serializer.data,
             "images_for_analyzes": image_for_analyzes_serializer.data,
+            "documents": documents_serializer.data,
         }
 
     def get(self, treatment_history_slug: str, request: HttpRequest) -> JsonResponse:
@@ -67,7 +77,6 @@ class BaseTreatmentHistoryService(IsUserExistMixin):
             treatments_histories = self.treatment_history_repository.list(
                 patient_slug=patient_slug,
             )
-
         treatments_histories = [
             self._get_response_data(treatment_history, request)
             for treatment_history in treatments_histories
