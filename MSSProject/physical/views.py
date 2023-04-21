@@ -5,10 +5,7 @@ from .services.physical_parameters_service import PhysicalParametersSservice
 
 
 class PhysicalParametersView(GenericViewSet):
-    permission_classes = (
-        IsDoctor,
-        IsUserAuthenticated,
-    )
+    permission_classes = (IsUserAuthenticated,)
     service = PhysicalParametersSservice()
 
     def retrieve(self, request, slug):
