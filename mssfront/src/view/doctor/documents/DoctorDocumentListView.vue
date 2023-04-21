@@ -188,7 +188,7 @@ onMounted(() => {
             <section v-else class="flex justify-center items-center h-full">
                 <div class="flex gap-2">
                     <p class="text-3xl text-slate-400">Документов пока нет.</p>
-                    <a class="create-document__link text-3xl text-slate-400">Создать ?</a>
+                    <a class="create-document__link text-3xl text-slate-400" @click="addDocumentRedicrect">Создать ?</a>
                 </div>
             </section>
         </section>
