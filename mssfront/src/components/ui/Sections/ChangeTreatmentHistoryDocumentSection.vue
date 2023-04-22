@@ -46,7 +46,7 @@ const onClick = (documentSlug) => {
         </div>
         <div v-else>
             <div v-for="(document, index) in  documents" :key="document.slug" class="flex justify-between">
-                <p @click="onClick(document.slug)">{{ index + 1 }}. {{ document.name }}</p>
+                <p @click="onClick(document.slug)" class="cursor-pointer">{{ index + 1 }}. {{ document.name }}</p>
                 <button @click="deleteDocument(document.slug)"><i class="pi pi-times"></i></button>
             </div>
         </div>

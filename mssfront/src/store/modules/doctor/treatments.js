@@ -11,6 +11,12 @@ const getters = {
     getPatientInfo:(state)=>{
         return state.patientInfo
     },
+    getPhysicalParameters:(state)=>{
+        return state.patientInfo.physical_parameters
+    },
+    getLastPhysicalParameter:(state)=>{
+        return state.patientInfo.physical_parameters[state.patientInfo.physical_parameters.length-1]
+    },
     getTreatmentHistoryBySlug:(state)=>(slug)=>{
         return state.treatmentHistories.find(ts=>ts.treatment_history.slug==slug)
     },
@@ -102,6 +108,9 @@ const mutations = {
             }
         }
     },
+    addPhysicalParameter:(state,ph)=>{
+        state.patientInfo.physical_parameters.push(ph)
+    }
 }
 export default {
     namespaced: true,

@@ -24,7 +24,7 @@ const onClick = (documentSlug) => {
         </div>
         <div v-else>
             <div v-for="(document, index) in  documents" :key="document.slug" @click="onClick(document.slug)">
-                <p>{{ index + 1 }}. {{ document.name }}</p>
+                <p class="cursor-pointer">{{ index + 1 }}. {{ document.name }}</p>
             </div>
         </div>
         <Dialog v-model:visible="dialog" modal :header="'Документ'" :style="{ width: '70vw' }">

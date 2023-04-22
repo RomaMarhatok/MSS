@@ -5,5 +5,8 @@ class PhysicalService extends RequestService {
         .then(response=>cb(response.data.physical_parameters))
         .catch(error=>errorCb(error))
     }
+    async createPhysicalParameters(data){
+        return await this.post(`/physical/create/`,data)
+    }
 }
 export default PhysicalService

@@ -10,7 +10,7 @@ import Menu from 'primevue/menu'
 import HeaderLayout from '@/components/layout/HeaderLayout.vue';
 import AddTreatmentHistoryDialog from '@/components/ui/Dialogs/addTreatmentHistoryDialog.vue'
 import SingleTreatmentHistorySection from "@/components/ui/Sections/SingleTreatmentHistorySection.vue"
-
+import PhysicalParametersSectionList from "@/components/ui/Sections/PhysicalParametersSectionList.vue";
 const store = useStore()
 const treatmentHistoryIsSelected = ref(false)
 const selectedTSSlug = ref("")
@@ -18,9 +18,7 @@ const selectedAppointment = computed(() => store.getters["appointment/getSelecte
 const treatmentHistories = computed(() => {
     return store.getters["treatments/getTreatmentsHistories"]
 })
-const patientPersonalInfo = computed(() => {
-    return store.getters["treatments/getPatientInfo"]
-})
+const patientPersonalInfo = computed(() => store.getters["treatments/getPatientInfo"])
 const selectTreatementHistory = (tsSlug, IsSelected) => {
     selectedTSSlug.value = tsSlug
     treatmentHistoryIsSelected.value = IsSelected
@@ -138,6 +136,9 @@ const swap = () => {
                         :swap-on-change-form="swapOnChangeForm" @onChangeTreatmentHistory="swap" />
                 </div>
             </section>
+        </div>
+        <div class="bg__section flex flex-col gap-2 p-2">
+            <PhysicalParametersSectionList />
         </div>
     </main>
 </template>
