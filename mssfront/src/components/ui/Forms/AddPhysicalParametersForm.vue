@@ -7,7 +7,6 @@ import { Field } from 'vee-validate'
 import { reactive, onBeforeMount, defineEmits } from 'vue'
 import { useStore } from 'vuex'
 import { useToast } from 'primevue/usetoast'
-import Toast from 'primevue/toast'
 import PhysicalService from '@/../services/PhysicalService'
 const store = useStore()
 const toast = useToast()
@@ -34,7 +33,6 @@ onBeforeMount(() => {
 })
 </script>
 <template>
-    <Toast />
     <BaseForm :schema="validationSchema" @submit-form="submit" class="w-full">
         <FormInputPayload label-text="Вес" id="weight">
             <Field id="weight" type='number' class="base" name="weight" v-model="data.weight" />
