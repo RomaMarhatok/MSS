@@ -13,6 +13,7 @@ from ...serializers import TreatmentHistorySerializer, ImageForAnlyzeSerializer
 from user.services.mixins.is_user_exist_mixin import IsUserExistMixin
 from document.repositories import DocumentRepository
 from document.serializers import DocumentSerializer
+from physical.repositories import PhysicalParametersRepository
 
 
 class BaseTreatmentHistoryService(IsUserExistMixin):
@@ -30,6 +31,7 @@ class BaseTreatmentHistoryService(IsUserExistMixin):
             TreatmentHistoryDocumentRepository()
         )
         self.document_repository = DocumentRepository()
+        self.physical_parameters_repository = PhysicalParametersRepository()
 
     def _get_response_data(self, treatment_history: TreatmentHistory, request) -> dict:
         image_for_analyzes = self.image_for_analyzes_repository.list(

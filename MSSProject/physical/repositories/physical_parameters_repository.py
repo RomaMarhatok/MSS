@@ -15,7 +15,7 @@ class PhysicalParametersRepository(AbstractRepository):
         return self.qs.get(slug=slug)
 
     def list(self, **kwargs):
-        patient_slug = kwargs.get("patient_slug")
+        patient_slug = kwargs.get("patient_slug", None)
         return self.qs.filter(user__slug=patient_slug)
 
     def delete(self, **kwargs):
