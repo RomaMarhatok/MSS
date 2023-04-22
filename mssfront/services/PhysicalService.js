@@ -8,5 +8,8 @@ class PhysicalService extends RequestService {
     async createPhysicalParameters(data){
         return await this.post(`/physical/create/`,data)
     }
+    async deletePhysicalParameters(data){
+        return await this.post(`/physical/delete/`,data)
+    }
 }
 export default PhysicalService

@@ -110,6 +110,9 @@ const mutations = {
     },
     addPhysicalParameter:(state,ph)=>{
         state.patientInfo.physical_parameters.push(ph)
+    },
+    deletePhysicalParameter:(state,phSlug)=>{
+        state.patientInfo.physical_parameters = state.patientInfo.physical_parameters.filter(ph=>ph.slug!=phSlug)
     }
 }
 export default {
