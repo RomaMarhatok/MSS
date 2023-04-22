@@ -47,10 +47,10 @@ const deleteImage = (imgSlug) => {
 </script>
 <template>
     <Toast />
-    <div class="p-2">
+    <div class="p-2 w-full">
         <p>Прилогающиеся изображения</p>
         <div v-if="!images.length">
-            <p>НЕТ</p>
+            <p>Нет прилогающихся изображений</p>
         </div>
         <div v-else v-for="(img, index) in images" :key="img.slug" class="flex justify-between">
             <p @click="selectImage(img.slug)" class="cursor-pointer">{{ index + 1 }}.{{ img.description }}</p>

@@ -46,7 +46,7 @@ onBeforeMount(() => {
         <FormInputPayload label-text="Документ" id="document_slug">
             <Field name="document_slug" v-slot="{ value, handleChange }" v-model="documentSlug">
                 <Dropdown editable @update:model-value="handleChange" :model-value="value" :options="documents"
-                    optionLabel="name" optionValue="slug" placeholder="Выберите пациента" />
+                    optionLabel="name" optionValue="slug" placeholder="Выберите документ" />
             </Field>
         </FormInputPayload>
         <FormSubmitButton :button-text="'Добавить документ'" />

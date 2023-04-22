@@ -35,8 +35,11 @@ const selectedTreatmentHistoryData = computed(() => store.getters["treatments/ge
                     <p>{{ selectedTreatmentHistoryData.treatment_history.conclusion }}</p>
                 </div>
             </div>
-            <TreatmentHistoryImageListSection :images="selectedTreatmentHistoryData.images_for_analyzes" />
-            <TreatmentHistoryDocumentListSection :documents="selectedTreatmentHistoryData.documents" />
+            <div class="flex gap-4 justify-between">
+                <TreatmentHistoryImageListSection :images="selectedTreatmentHistoryData.images_for_analyzes" />
+                <TreatmentHistoryDocumentListSection :documents="selectedTreatmentHistoryData.documents" />
+            </div>
+
         </div>
         <div v-else class="flex flex-col w-full">
             <ChangeTreatmentHistoryForm :treatment-history="selectedTreatmentHistoryData.treatment_history"
@@ -46,10 +49,13 @@ const selectedTreatmentHistoryData = computed(() => store.getters["treatments/ge
                     <addImageDialog :treatment-history-slug="selectedTreatmentHistoryData.treatment_history.slug" />
                     <addDocumentDialog :treatment-history-slug="selectedTreatmentHistoryData.treatment_history.slug" />
                 </div>
-                <ChangeTreatmentHistoryImageSection
-                    :treatment-history-slug="selectedTreatmentHistoryData.treatment_history.slug" />
-                <ChangeTreatmentHistoryDocumentSection
-                    :treatment-history-slug="selectedTreatmentHistoryData.treatment_history.slug" />
+                <div class="flex gap-4 justify-between">
+                    <ChangeTreatmentHistoryImageSection
+                        :treatment-history-slug="selectedTreatmentHistoryData.treatment_history.slug" />
+                    <ChangeTreatmentHistoryDocumentSection
+                        :treatment-history-slug="selectedTreatmentHistoryData.treatment_history.slug" />
+                </div>
+
             </div>
         </div>
     </div>
