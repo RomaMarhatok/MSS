@@ -12,9 +12,7 @@ const getters = {
         return state.patientInfo
     },
     getTreatmentHistoryBySlug:(state)=>(slug)=>{
-        return state.treatmentHistories.filter(ts=>{
-            return ts.treatment_history.slug==slug
-        })[0]
+        return state.treatmentHistories.find(ts=>ts.treatment_history.slug==slug)
     },
     getImageForAnalyzes:(state)=>(treatmentHistorySlug)=>{
         for(let tsIndex in state.treatmentHistories){
@@ -44,6 +42,7 @@ const actions = {
             patientSlug,
             doctorSpecializationSlug
         )
+        console.log(state.treatmentHistories)
     },
 }
 const mutations = {
@@ -98,7 +97,6 @@ const mutations = {
     deleteDocument:(state,{documentSlug,treatmentHistorySlug})=>{
         for(let tsIndex in state.treatmentHistories){
             if(state.treatmentHistories[tsIndex].treatment_history.slug == treatmentHistorySlug){
-                console.log("IF")
                 state.treatmentHistories[tsIndex].documents = state.treatmentHistories[tsIndex].documents.filter(d=>d.slug!=documentSlug)
                 break
             }
