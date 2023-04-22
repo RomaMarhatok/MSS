@@ -9,7 +9,6 @@ from user.models import User, Role
 
 # doctor app imports
 from doctor.serializers import DoctorSerializer
-from doctor.models import Doctor
 
 
 @pytest.mark.django_db

@@ -40,7 +40,6 @@ def test_treatment_history_slug(
         "HTTP_AUTHORIZATION": "Bearer " + token,
     }
     response = client.post(url, data, **headers)
-    print(response.json())
     assert response.status_code == 404
     assert TreatmentHistory.objects.count() == 1
     assert Document.objects.count() == 1
@@ -59,7 +58,6 @@ def test_document_slug(factory_treatment_history_fixture, factory_document_fixtu
         "HTTP_AUTHORIZATION": "Bearer " + token,
     }
     response = client.post(url, data, **headers)
-    print(response.json())
     assert response.status_code == 404
     assert TreatmentHistory.objects.count() == 1
     assert Document.objects.count() == 1

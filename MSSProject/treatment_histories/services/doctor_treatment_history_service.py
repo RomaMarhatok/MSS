@@ -1,4 +1,5 @@
-from django.http import JsonResponse, HttpResponse
+import os
+from django.http import JsonResponse
 from django.db import transaction
 from rest_framework import exceptions
 from ..serializers import TreatmentHistorySerializer, ImageForAnlyzeSerializer
@@ -13,14 +14,12 @@ class DoctorTreatmentHistoryService(BaseTreatmentHistoryService):
         self, patient_slug: str, doctor_specialization_slug: str, request=None
     ) -> JsonResponse:
         if self.is_user_exist(patient_slug):
-            print("USER EXIST")
             user = self.user_repository.get(slug=patient_slug)
         treatments_histories = self.list(
             patient_slug,
             doctor_specialization_slug=doctor_specialization_slug,
             request=request,
         )
-        print(treatments_histories)
         patient_info = (
             UserPersonalInfoSerializer(instance=user.userpersonalinfo).data
             if hasattr(user, "userpersonalinfo")
@@ -105,6 +104,10 @@ class DoctorTreatmentHistoryService(BaseTreatmentHistoryService):
         treatment_history_image_for_analyzes = (
             self.treatment_history_image_for_analyzes_repository.get(**data)
         )
+        image_for_analyzes = treatment_history_image_for_analyzes.image_for_analyzes
+        if image_for_analyzes.image.storage.exists(image_for_analyzes.image.name):
+            os.remove(image_for_analyzes.image.path)
+        treatment_history_image_for_analyzes.image_for_analyzes.image.delete(save=False)
         treatment_history_image_for_analyzes.image_for_analyzes.delete()
         return JsonResponse(
             data={
