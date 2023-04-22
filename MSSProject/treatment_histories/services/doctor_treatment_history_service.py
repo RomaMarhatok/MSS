@@ -13,14 +13,12 @@ class DoctorTreatmentHistoryService(BaseTreatmentHistoryService):
         self, patient_slug: str, doctor_specialization_slug: str, request=None
     ) -> JsonResponse:
         if self.is_user_exist(patient_slug):
-            print("USER EXIST")
             user = self.user_repository.get(slug=patient_slug)
         treatments_histories = self.list(
             patient_slug,
             doctor_specialization_slug=doctor_specialization_slug,
             request=request,
         )
-        print(treatments_histories)
         patient_info = (
             UserPersonalInfoSerializer(instance=user.userpersonalinfo).data
             if hasattr(user, "userpersonalinfo")
