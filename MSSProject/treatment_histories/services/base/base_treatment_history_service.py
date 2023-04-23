@@ -1,6 +1,6 @@
 from django.http import JsonResponse, HttpRequest
 from rest_framework import exceptions
-from user.repositories import UserRepository, UserPersonalInfoRepository
+from user.repositories import UserRepository
 from ...models import TreatmentHistory
 from ...repositories import (
     TreatmentHistoryRepository,
@@ -22,7 +22,6 @@ class BaseTreatmentHistoryService(IsUserExistMixin):
             TreatmentHistoryRepository()
         )
         self.user_repository: UserRepository = UserRepository()
-        self.user_personal_info_repository = UserPersonalInfoRepository()
         self.image_for_analyzes_repository = ImageForAnalyzesRepository()
         self.treatment_history_image_for_analyzes_repository = (
             TreatmentHistoryImageForAnalyzesRepository()

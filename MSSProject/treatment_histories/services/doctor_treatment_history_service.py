@@ -26,13 +26,17 @@ class DoctorTreatmentHistoryService(BaseTreatmentHistoryService):
             if hasattr(user, "userpersonalinfo")
             else {}
         )
-        physical_parameters = self.physical_parameters_repository.list(
+        physical_parameters_serailizer = self.physical_parameters_repository.list(
             patient_slug=user.slug
         )
-        physical_parameters = PhysicalParametersSerializer(
-            instance=physical_parameters, many=True
-        ).data
-        patient_info.update({"physical_parameters": physical_parameters})
+        physical_parameters_serailizer = PhysicalParametersSerializer(
+            instance=physical_parameters_serailizer, many=True
+        )
+        patient_info.update(
+            {
+                "physical_parameters": physical_parameters_serailizer.data,
+            }
+        )
         return JsonResponse(
             data={
                 "patient_info": patient_info,
