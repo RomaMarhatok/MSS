@@ -106,11 +106,4 @@ const onDocumentRightClick = (event) => {
     justify-content: center;
     gap: 1rem;
 }
-
-.content {
-    border-radius: 10px;
-    padding: 20px;
-    margin-top: 10px;
-    text-align: justify;
-}
 </style>

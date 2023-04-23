@@ -1,4 +1,6 @@
+import random
 import re
+import string
 import exrex
 import hashlib
 from random import shuffle
@@ -28,3 +30,8 @@ def generate_slug_from_str(string: str):
     string = [i for i in string if re.match("^[a-zA-Z0-9_]*$", i)]
     shuffle(string)
     return slugify("".join(string))
+
+
+def generate_random_string():
+    letters = string.ascii_lowercase
+    return "".join(random.choice(letters) for i in range(20))

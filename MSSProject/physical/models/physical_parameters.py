@@ -1,6 +1,6 @@
 from django.db import models
 from user.models import User
-from common.utils.string_utils import generate_slug_from_str
+from common.utils.string_utils import generate_slug_from_str, generate_random_string
 
 
 class PhysicalParameters(models.Model):
@@ -15,5 +15,5 @@ class PhysicalParameters(models.Model):
         db_table = "physical_parameters"
 
     def save(self, *args, **kwargs):
-        self.slug = generate_slug_from_str(self.user.slug)
+        self.slug = generate_slug_from_str(generate_random_string())
         return super().save(*args, **kwargs)

@@ -25,7 +25,7 @@ const selectedImage = computed(() => {
 })
 </script>
 <template>
-    <div class="p-2">
+    <div class="p-2 bg-white rounded-md w-full">
         <p>Прилогающиеся изображения</p>
         <div v-if="!props.images.length">
             <p>Нет прилогающихся изображений</p>

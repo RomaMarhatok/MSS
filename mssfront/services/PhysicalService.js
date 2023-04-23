@@ -5,5 +5,11 @@ class PhysicalService extends RequestService {
         .then(response=>cb(response.data.physical_parameters))
         .catch(error=>errorCb(error))
     }
+    async createPhysicalParameters(data){
+        return await this.post(`/physical/create/`,data)
+    }
+    async deletePhysicalParameters(data){
+        return await this.post(`/physical/delete/`,data)
+    }
 }
 export default PhysicalService
