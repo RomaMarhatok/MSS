@@ -27,7 +27,7 @@ const onClick = (documentSlug) => {
                 <p class="cursor-pointer">{{ index + 1 }}. {{ document.name }}</p>
             </div>
         </div>
-        <Dialog v-model:visible="dialog" modal :header="'Документ'" :style="{ width: '70vw' }">
+        <Dialog v-model:visible="dialog" modal :style="{ width: '70vw' }">
             <div class="document-header">
                 <div class="content-container">
                     <div class="header-container">
@@ -43,9 +43,7 @@ const onClick = (documentSlug) => {
                                 }} в {{ selectedDocument.parsed_date.hours + ":" + selectedDocument.parsed_date.minutes }}
                             </p>
                         </div>
-
                     </div>
-
                 </div>
             </div>
             <div class="main">

@@ -4,6 +4,7 @@ import { useStore } from 'vuex'
 import HeaderLayout from '@/components/layout/HeaderLayout.vue';
 import TabMenu from '@/components/ui/Menu/TabMenu.vue';
 import TreatmentHistoryImageListSection from "@/components/ui/Sections/TreatmentHistoryImageListSection.vue"
+import TreatmentHistoryDocumentListSection from '@/components/ui/Sections/TreatmentHistoryDocumentListSection.vue';
 import Panel from 'primevue/panel';
 const store = useStore()
 const slug = computed(() => store.state.user.slug)
@@ -42,6 +43,7 @@ onBeforeMount(() => {
                     </div>
                 </div>
                 <TreatmentHistoryImageListSection :images="ts.images_for_analyzes" />
+                <TreatmentHistoryDocumentListSection :documents="ts.documents" />
             </Panel>
         </div>
     </main>

@@ -111,7 +111,10 @@ const swap = () => {
                             </div>
                             <div>
                                 <p class="font-medium pb-2">{{ ts.treatment_history.title }}</p>
-                                <Tag :value="'кол-во изображений ' + ts.images_for_analyzes.length" severity="info" />
+                                <div class="flex gap-2">
+                                    <Tag :value="'кол-во изображений ' + ts.images_for_analyzes.length" severity="info" />
+                                    <Tag :value="'кол-во документов ' + ts.documents.length" severity="info" />
+                                </div>
                             </div>
                         </div>
                     </div>
