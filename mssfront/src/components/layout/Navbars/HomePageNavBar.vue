@@ -14,11 +14,11 @@ import { reactive } from "vue";
 //   link: "#/"
 // })
 const loginLink = reactive({
-  text: "SignUp",
+  text: "Зарегистрироваться",
   link: "#/registration/",
 })
 const signUp = reactive({
-  text: "Login",
+  text: "Войти",
   link: "#/authentication/"
 })
 </script>
