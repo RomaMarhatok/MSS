@@ -14,7 +14,6 @@ from rest_framework import exceptions
 
 # imports from apps
 from user.repositories import UserRepository
-from responses.errors import JsonResponseBadRequest
 
 
 @dataclass

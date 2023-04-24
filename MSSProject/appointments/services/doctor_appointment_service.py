@@ -1,7 +1,6 @@
 from datetime import datetime
 from django.http import JsonResponse
 from rest_framework import exceptions
-from responses.errors import JsonResponseBadRequest
 from user.repositories import UserRepository
 from user.services.mixins.is_user_exist_mixin import IsUserExistMixin
 

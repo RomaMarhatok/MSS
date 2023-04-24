@@ -3,7 +3,6 @@ from django.db import transaction
 from rest_framework import exceptions
 from ..repositories import DocumentRepository, DocumentTypeRepository
 from ..serializers import DocumentSerializer
-from responses.errors import JsonResponseBadRequest
 from user.services.mixins.is_user_exist_mixin import IsUserExistMixin
 from doctor.repositories import DoctorRepository
 

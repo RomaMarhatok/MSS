@@ -1,6 +1,5 @@
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from rest_framework import exceptions
-from responses.errors import JsonResponseBadRequest
 from ..models import UserLocation, UserPersonalInfo, Role
 from ..repositories import (
     UserLocationRepository,

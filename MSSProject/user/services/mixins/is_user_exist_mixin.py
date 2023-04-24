@@ -1,6 +1,5 @@
 from rest_framework import exceptions
 from user.repositories import UserRepository
-from responses.errors import JsonResponseBadRequest
 
 
 class IsUserExistMixin:

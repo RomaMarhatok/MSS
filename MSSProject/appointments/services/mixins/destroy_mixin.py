@@ -2,7 +2,6 @@ from django.db import transaction
 from django.http import JsonResponse
 from rest_framework import exceptions
 from ...repositories import AppointmentsRepository
-from responses.errors import JsonResponseBadRequest
 
 
 class DestroyAppointmentMixin:
