@@ -23,7 +23,7 @@ const signUp = reactive({
 })
 </script>
 <template>
-  <nav class="w-11/12 flex flex-row justify-end gap-4 max-[600px]:flex-col max-[600px]:items-center max-[600px]:w-full">
+  <nav class="nav-bar">
     <!-- <navBarLink :text="aboutLink.text" :link="aboutLink.link" />
       <navBarLink :text="contactsLink.text" :link="contactsLink.link" />
       <navBarLink :text="homeLink.text" :link="homeLink.link" /> -->
@@ -31,3 +31,22 @@ const signUp = reactive({
     <navBarLink :text="signUp.text" :link="signUp.link" />
   </nav>
 </template>
+<style lang="css" scoped>
+/**flex flex-row w-full justify-end gap-4 max-[600px]:flex-col max-[600px]:items-center */
+.nav-bar {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: flex-end;
+  gap: 1em;
+  padding-right: 1em;
+}
+
+@media screen and (max-width: 600px) {
+  .nav-bar {
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+}
+</style>

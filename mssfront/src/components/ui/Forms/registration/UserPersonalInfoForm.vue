@@ -52,7 +52,8 @@ const validationSchema = object(
 )
 </script>
 <template>
-    <BaseForm :schema="validationSchema" @SubmitForm="$emit('SubmitUserPersonalInfoForm', data)" :errors="errors">
+    <BaseForm :schema="validationSchema" @SubmitForm="$emit('SubmitUserPersonalInfoForm', data)" :errors="errors"
+        class="w-full">
         <div class="flex flex-row gap-2">
             <FormInputPayload label-text="Имя" id="first_name">
                 <Field id="first_name" type='text' class="base" name="first_name" v-model="data.first_name" />

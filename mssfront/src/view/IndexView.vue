@@ -1,15 +1,15 @@
 <script setup>
-import { ref } from "vue";
+// import { ref } from "vue";
 import BodyLayout from "@/components/layout/BodyLayout.vue";
 import FooterLayout from "@/components/layout/FooterLayout.vue";
 import HomePageNavBar from "@/components/layout/Navbars/HomePageNavBar.vue"
-import IndexViewCard from "@/components/common/Cards/IndexViewCard.vue"
-const title = ref("SOME TEXT")
-const text = ref("Lorem Ipsum is simply dummy text of the printing and typesetting industry.")
+// import IndexViewCard from "@/components/common/Cards/IndexViewCard.vue"
+// const title = ref("SOME TEXT")
+// const text = ref("Lorem Ipsum is simply dummy text of the printing and typesetting industry.")
 </script>
 <template>
-  <header>
-    <div class="flex flex-row pl-2">
+  <header class="">
+    <div class="header-media pl-2">
       <div class="items-center self-center">
         <span class="font-black underline text-black text-4xl">MSS</span>
       </div>
@@ -29,11 +29,11 @@ const text = ref("Lorem Ipsum is simply dummy text of the printing and typesetti
       </div>
       <img class="object-cover max-w-full max-h-full" src="@/assets/frontPageDoctorImage.svg" alt="doctor image" />
     </div>
-    <div class="card-container pt-5 pl-5 pr-5 flex flex-row justify-evenly">
+    <!-- <div class="card-container">
       <IndexViewCard :title="title" :text="text" />
       <IndexViewCard :title="title" :text="text" />
       <IndexViewCard :title="title" :text="text" />
-    </div>
+    </div> -->
   </BodyLayout>
   <FooterLayout>
     <div class="footer">
@@ -42,8 +42,22 @@ const text = ref("Lorem Ipsum is simply dummy text of the printing and typesetti
   </FooterLayout>
 </template>
 <style scoped>
+.header-media {
+  display: flex;
+  flex-direction: row;
+}
+
 .header-text {
   font-size: 3vw;
+}
+
+.card-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 1em;
+  gap: 2em;
 }
 
 .body-text {
@@ -66,22 +80,19 @@ const text = ref("Lorem Ipsum is simply dummy text of the printing and typesetti
 
 @media screen and (max-width: 600px) {
   .card-container {
-    display: grid;
+    display: flex;
+    flex-direction: column;
+    /* display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-auto-flow: row dense;
     justify-items: center;
-    row-gap: 1rem;
+    row-gap: 1rem; */
   }
 
-}
-
-@media screen and (max-width: 550px) {
-  .card-container {
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
-    grid-auto-flow: row dense;
-    justify-items: center;
+  .header-media {
+    display: flex;
+    flex-direction: column;
+    ;
   }
-
 }
 </style>

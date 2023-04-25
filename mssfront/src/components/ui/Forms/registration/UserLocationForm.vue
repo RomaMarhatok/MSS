@@ -146,7 +146,8 @@ const validationSchema = object(
 )
 </script>
 <template>
-    <BaseForm :schema="validationSchema" @SubmitForm="$emit('SubmitUserLocationForm', data)" :errors="errors">
+    <BaseForm :schema="validationSchema" @SubmitForm="$emit('SubmitUserLocationForm', data)" :errors="errors"
+        class="w-full">
         <FormInputPayload :label-text="'Город'" :id="'city'">
             <Field name="city" v-slot="{ value, errorMessage, handleChange }" v-model="data.city">
                 <Dropdown @update:model-value="handleChange" :model-value="value" :options="cities" optionLabel="label"
