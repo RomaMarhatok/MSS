@@ -11,6 +11,11 @@ from user.views import (
 
 urlpatterns = [
     path(
+        "profile/update/",
+        ProfileView.as_view({"post": "update"}),
+        name="update-user-profile",
+    ),
+    path(
         "profile/<str:user_slug>/",
         ProfileView.as_view({"get": "retrieve"}),
         name="user-profile",

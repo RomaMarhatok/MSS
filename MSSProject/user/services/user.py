@@ -40,6 +40,18 @@ class UserService(IsUserExistMixin):
             user_location = {}
         return JsonResponse(data={**user_personal_info, **user_location})
 
+    def update_user_info(self, data: dict):
+        user_slug = data.get("user_slug", None)
+        self.is_user_exist(user_slug)
+        user_personal_info = self.user_personal_info_repository.get(slug=user_slug)
+        updated_user_personal_info = self.user_personal_info_repository.update(
+            user_personal_info, data
+        )
+        user_personal_info_serializer = UserPersonalInfoSerializer(
+            instance=updated_user_personal_info
+        )
+        return JsonResponse(data=user_personal_info_serializer.data)
+
     def get_all_patients(self):
         users = self.user_repository.list()
         serializerd_patients = [
