@@ -62,10 +62,10 @@ class UpdateTreatmentHistoryView(APIView):
 
     class InputSerializer(serializers.Serializer):
         treatment_history_slug = serializers.SlugField()
-        title = serializers.CharField(allow_blank=True)
-        short_description = serializers.CharField(allow_blank=True)
-        description = serializers.CharField(allow_blank=True)
-        conclusion = serializers.CharField(allow_blank=True)
+        title = serializers.CharField()
+        short_description = serializers.CharField()
+        description = serializers.CharField()
+        conclusion = serializers.CharField()
 
     def post(self, request: HttpRequest):
         serializer = self.InputSerializer(data=request.data)
