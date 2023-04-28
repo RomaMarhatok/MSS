@@ -1,7 +1,5 @@
 <script setup>
 // import { ref } from "vue";
-import BodyLayout from "@/components/layout/BodyLayout.vue";
-import FooterLayout from "@/components/layout/FooterLayout.vue";
 import HomePageNavBar from "@/components/layout/Navbars/HomePageNavBar.vue"
 // import IndexViewCard from "@/components/common/Cards/IndexViewCard.vue"
 // const title = ref("SOME TEXT")
@@ -16,7 +14,7 @@ import HomePageNavBar from "@/components/layout/Navbars/HomePageNavBar.vue"
       <HomePageNavBar></HomePageNavBar>
     </div>
   </header>
-  <BodyLayout>
+  <main>
     <div class="relative w-full h-full pt-1">
       <div class="absolute text-center font-black left-10 top-10">
         <div class="header-text">MEDICINE<br />SYSTEM STORAGE</div>
@@ -34,12 +32,12 @@ import HomePageNavBar from "@/components/layout/Navbars/HomePageNavBar.vue"
       <IndexViewCard :title="title" :text="text" />
       <IndexViewCard :title="title" :text="text" />
     </div> -->
-  </BodyLayout>
-  <FooterLayout>
+  </main>
+  <footer>
     <div class="footer">
       <div class="footer__div"></div>
     </div>
-  </FooterLayout>
+  </footer>
 </template>
 <style scoped>
 .header-media {
