@@ -1,13 +1,17 @@
 <script setup>
 import { useStore } from 'vuex';
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { ref, computed } from 'vue';
+import DocumentService from '@/../services/DocumentService';
 import ContextMenu from 'primevue/contextmenu';
 import HeaderLayout from '@/components/layout/HeaderLayout.vue';
 import DoctorTabMenu from '@/components/ui/Menu/DoctorTabMenu.vue'
 import ChangeDocumentForm from '@/components/ui/Forms/documentForms/ChangeDocumentForm.vue';
 const store = useStore()
 const router = useRouter()
+const route = useRoute()
+const documentService = new DocumentService()
+const slug = computed(() => route.params.userSlug ? route.params.userSlug : store.state.user.slug)
 const redirectHref = ref(`#/doctor/documents/`)
 const document = computed(() => store.getters["doctorDocuments/getActiveDocument"])
 const contextMenu = ref()
@@ -20,14 +24,26 @@ const contextMenuOptions = ref([
             router.push("/doctor/change/document/")
         }
     },
-    // {
-    //     label: 'Delete',
-    //     icon: 'pi pi-fw pi-trash',
-    //     command: () => {
-    //         console.log("DELETE")
-    //     }
-    // }
+    {
+        label: 'Удалить',
+        icon: 'pi pi-fw pi-trash',
+        command: () => {
+            deleteDocument()
+        }
+    }
 ]);
+const deleteDocument = async () => {
+    const data = {
+        creator_slug: slug.value,
+        document_slug: document.value.slug
+    }
+    await documentService.deleteDocument(data)
+        .then(response => {
+            store.commit("doctorDocuments/deleteDocument", response.data.deleted_document_slug)
+        })
+        .catch(error => console.log(error))
+    router.push("/doctor/documents/")
+}
 const onDocumentRightClick = (event) => {
     contextMenu.value.show(event);
 };
