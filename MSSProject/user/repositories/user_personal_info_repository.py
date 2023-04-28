@@ -50,11 +50,11 @@ class UserPersonalInfoRepository(AbstractRepository):
         serializer = UserPersonalInfoSerializer(data=data)
         return serializer.is_valid(raise_exception=True)
 
-    def update(self, instance: UserPersonalInfo, data: dict):
+    def update(self, personal_info: UserPersonalInfo, data: dict):
         serializer = UserPersonalInfoSerializer(
-            instance=instance, data=data, partial=True
+            instance=personal_info, data=data, partial=True
         )
         if serializer.is_valid(raise_exception=True):
             count_of_chaged_rows = serializer.save()
             if count_of_chaged_rows == 1:
-                return self.get(slug=instance.user.slug)
+                return self.get(slug=personal_info.user.slug)

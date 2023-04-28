@@ -1,7 +1,7 @@
 import pytest
 from django.urls import reverse
 from django.test.client import Client
-from user.models import Role, User
+from user.models import Role, User, UserPersonalInfo
 from user.serializers import UserPersonalInfoSerializer
 from rest_framework.authtoken.models import Token
 
@@ -16,8 +16,10 @@ def test(factory_user_personal_info_fixture):
         "HTTP_AUTHORIZATION": "Bearer " + token,
     }
     data = serializer.data
-    print(data["user_slug"])
+    data["health_status"] = "test"
     url = reverse("update-user-profile")
     response = client.post(url, data, **headers)
     assert response.status_code == 200
     assert bool(response.json())
+    personal_info = UserPersonalInfo.objects.first()
+    assert personal_info.health_status == "test"

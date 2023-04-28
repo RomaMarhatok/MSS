@@ -78,12 +78,15 @@ def test_serialization_with_absolute_image_url(factory_user_personal_info_fixtur
 
 @pytest.mark.django_db
 def test_serialization_update(factory_user_personal_info_fixture):
+    assert factory_user_personal_info_fixture.health_status != "test"
     serialized_instance = UserPersonalInfoSerializer(
         instance=factory_user_personal_info_fixture
     ).data
     serialized_instance["health_status"] = "test"
     serializer = UserPersonalInfoSerializer(
-        instance=factory_user_personal_info_fixture, data=serialized_instance
+        instance=factory_user_personal_info_fixture,
+        data=serialized_instance,
+        partial=True,
     )
     assert serializer.is_valid(raise_exception=True)
     serializer.save()

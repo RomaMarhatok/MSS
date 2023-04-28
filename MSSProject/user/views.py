@@ -37,6 +37,7 @@ class ProfileView(GenericViewSet):
         email = serializers.CharField()
         gender = serializers.CharField()
         age = serializers.IntegerField()
+        health_status = serializers.CharField()
 
     def update(self, request: HttpRequest):
         serializer = self.UpdateInputSerializer(data=request.data)

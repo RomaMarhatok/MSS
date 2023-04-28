@@ -1,3 +1,4 @@
+from django.db import transaction
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from rest_framework import exceptions
 from ..models import UserLocation, UserPersonalInfo, Role
@@ -40,6 +41,7 @@ class UserService(IsUserExistMixin):
             user_location = {}
         return JsonResponse(data={**user_personal_info, **user_location})
 
+    @transaction.atomic
     def update_user_info(self, data: dict):
         user_slug = data.get("user_slug", None)
         self.is_user_exist(user_slug)
@@ -50,7 +52,7 @@ class UserService(IsUserExistMixin):
         user_personal_info_serializer = UserPersonalInfoSerializer(
             instance=updated_user_personal_info
         )
-        return JsonResponse(data=user_personal_info_serializer.data)
+        return JsonResponse(data={"personal_info": user_personal_info_serializer.data})
 
     def get_all_patients(self):
         users = self.user_repository.list()

@@ -40,10 +40,9 @@ class UserPersonalInfoSerializer(ModelSerializer):
         return value
 
     def update(self, instance: UserPersonalInfo, validated_data: OrderedDict):
-        if "user" in validated_data:
-            validated_data.pop("user")
+        validated_data["user"] = instance.user
         return UserPersonalInfo.objects.filter(user__slug=instance.user.slug).update(
-            user=instance.user, **validated_data
+            **validated_data
         )
 
     def to_representation(self, instance: UserPersonalInfo):
