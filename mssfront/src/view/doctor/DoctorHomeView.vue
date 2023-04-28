@@ -17,6 +17,7 @@ const onclick = (appointment) => {
 }
 
 onBeforeMount(() => {
+    store.dispatch("patients/fetchPatients")
     store.dispatch("doctorAppointments/fetchAppointments", store.state.user.slug)
 })
 
