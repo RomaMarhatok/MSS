@@ -3,7 +3,6 @@ import { useStore } from 'vuex';
 import { useRouter } from 'vue-router'
 import { ref, computed } from 'vue';
 import ContextMenu from 'primevue/contextmenu';
-import baseLink from '@/components/common/Links/Base/BaseLink.vue';
 import HeaderLayout from '@/components/layout/HeaderLayout.vue';
 import DoctorTabMenu from '@/components/ui/Menu/DoctorTabMenu.vue'
 import ChangeDocumentForm from '@/components/ui/Forms/documentForms/ChangeDocumentForm.vue';
@@ -42,9 +41,14 @@ const onDocumentRightClick = (event) => {
             <div class="main-container">
                 <div class="document-header">
                     <div class="content-container">
-                        <div class="header-container">
-                            <p>{{ document.document_type.name }}</p>
-                            <p>{{ document.name }}</p>
+                        <div class="flex">
+                            <div>
+                                <a :href="redirectHref"><i class="pi pi-arrow-left"></i></a>
+                            </div>
+                            <div class="header-container">
+                                <p>{{ document.document_type.name }}</p>
+                                <p>{{ document.name }}</p>
+                            </div>
                         </div>
                         <p>Создано
                             {{ document.parsed_date.day +
@@ -56,7 +60,6 @@ const onDocumentRightClick = (event) => {
                 <div class="main">
                     <p>{{ document.content }}</p>
                 </div>
-                <baseLink :text="'Back'" :href="redirectHref" />
             </div>
         </div>
         <div v-else>

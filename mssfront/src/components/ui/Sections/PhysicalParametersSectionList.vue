@@ -36,7 +36,7 @@ const deletePhysicalParameter = (physicalParameterSlug) => {
 }
 </script>
 <template>
-    <div class="bg__section flex flex-col gap-2 p-2">
+    <div class="flex flex-col gap-2 p-2 rounded-md">
         <div>
             <Toast />
             <addPhysicalParameterDialog />
@@ -52,10 +52,6 @@ const deletePhysicalParameter = (physicalParameterSlug) => {
     </div>
 </template>
 <style lang="css" scoped>
-.bg__section {
-    background-color: rgba(110, 131, 165, 0.103);
-}
-
 .grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
