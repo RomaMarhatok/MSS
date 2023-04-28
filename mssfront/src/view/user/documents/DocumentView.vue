@@ -1,7 +1,6 @@
 <script setup>
 import { useStore } from 'vuex';
 import { ref, computed } from 'vue';
-import baseLink from '@/components/common/Links/Base/BaseLink.vue';
 import HeaderLayout from '@/components/layout/HeaderLayout.vue';
 import BodyLayout from '@/components/layout/BodyLayout.vue';
 import TabMenu from '@/components/ui/Menu/TabMenu.vue'
@@ -18,10 +17,16 @@ const document = computed(() => store.getters["documents/getActiveDocument"])
             <div class="main-container">
                 <div class="document-header">
                     <div class="content-container">
-                        <div class="header-container">
-                            <p>{{ document.document_type.name }}</p>
-                            <p>{{ document.name }}</p>
+                        <div class="flex">
+                            <div>
+                                <a :href="redirectHref"><i class="pi pi-arrow-left"></i></a>
+                            </div>
+                            <div class="header-container">
+                                <p>{{ document.document_type.name }}</p>
+                                <p>{{ document.name }}</p>
+                            </div>
                         </div>
+
                         <p>Cоздатель {{ document.creator.full_name }}</p>
                         <p>Создано
                             {{ document.parsed_date.day +
@@ -33,7 +38,6 @@ const document = computed(() => store.getters["documents/getActiveDocument"])
                 <div class="main">
                     <p>{{ document.content }}</p>
                 </div>
-                <baseLink :text="'Back'" :href="redirectHref" />
             </div>
         </div>
     </BodyLayout>
