@@ -61,7 +61,7 @@ const mutations = {
         state.treatmentHistories.push(treatmentHistory)
     },
     setPatientInfo:(state,patientInfo)=>{
-        console.log("mutations setPatient",patientInfo)
+        console.log("mutations setPatientInfo",patientInfo)
         state.patientInfo = patientInfo
     },
     updateTreatmentHistory:(state,treatmentHistory)=>{
@@ -113,7 +113,7 @@ const mutations = {
     },
     deletePhysicalParameter:(state,phSlug)=>{
         state.patientInfo.physical_parameters = state.patientInfo.physical_parameters.filter(ph=>ph.slug!=phSlug)
-    }
+    },
 }
 export default {
     namespaced: true,
