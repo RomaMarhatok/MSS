@@ -5,7 +5,7 @@ import { useStore } from 'vuex';
 // import { useRouter } from 'vue-router'
 import { Field } from 'vee-validate'
 import { string, object, date } from 'yup'
-import { reactive, computed, ref, onBeforeMount } from 'vue'
+import { reactive, computed, ref, onBeforeMount, defineEmits } from 'vue'
 import BaseForm from './Base/BaseForm.vue';
 import FormSubmitButton from '../Buttons/FormSubmitButton.vue';
 import FormInputPayload from '@/components/ui/Payloads/FormInputPayload.vue'
@@ -14,6 +14,7 @@ import OverlayPanel from 'primevue/overlaypanel'
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import AppointmentService from '@/../services/AppointmentService';
+const emit = defineEmits(["onAddAppointment"])
 const appointmentService = new AppointmentService()
 const store = useStore()
 const selectedDoctor = ref({})
@@ -39,6 +40,7 @@ function submit() {
     console.log(data)
     appointmentService.createPatientAppointments(data).then(response => {
         store.commit("appointments/addAppointment", response.data.appointment)
+        emit("onAddAppointment")
     }).catch(error => console.log(error))
 }
 const toggle = (event) => {
@@ -58,7 +60,7 @@ onBeforeMount(() => {
             <FormInputPayload id="date" label-text="Дата">
                 <Field name="date" v-slot="{ value, handleChange }" v-model="data.date">
                     <v-date-picker @update:model-value="handleChange" :model-value="value" mode="dateTime" is24hr
-                        is-expanded />
+                        expanded />
                 </Field>
             </FormInputPayload>
             <FormInputPayload id="doctors" :label-text="'Доктора'">

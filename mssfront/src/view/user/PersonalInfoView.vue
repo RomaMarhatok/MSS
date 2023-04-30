@@ -52,6 +52,9 @@ const redirect = (documentSlug) => {
     })
     router.push(`/home/document/${documentSlug}/`)
 }
+const closeAppointmentForm = () => {
+    visible.value = false
+}
 onBeforeMount(() => {
     console.log("on mounted")
     store.dispatch("user/fetchUserPersonalInfo", slug.value)
@@ -171,7 +174,7 @@ onBeforeMount(() => {
             </section>
         </main>
         <Dialog v-model:visible="visible" header="Создать запись" :style="{ width: '50vw' }">
-            <AppointmentForm />
+            <AppointmentForm @on-add-appointment="closeAppointmentForm" />
         </Dialog>
     </main>
 </template>
