@@ -2,6 +2,9 @@ from django.contrib import admin
 from .models import User, UserLocation, UserPersonalInfo
 
 
+admin.site.site_header = "Панель админстрации MSS"
+admin.site.site_title = "Панель админстрации MSS"
+admin.site.index_title = "Панель админстрации MSS"
 # Start User Models
 
 
