@@ -8,6 +8,7 @@ const getters = {
         return state.physicalParameters
     },
     getChartsDataSet:(state)=>{
+        const labels = []
         const weightDataSet = {
             label:"Вес",
             data:[],
@@ -27,12 +28,14 @@ const getters = {
             tension: 0.4,
         }
         state.physicalParameters.filter(physicalParameter=>{
+            labels.push(physicalParameter.created_at)
             weightDataSet.data.push(physicalParameter.weight)
             heightDataSet.data.push(physicalParameter.height)
             pressureDataSet.data.push(physicalParameter.pressure)
         })
+        
         return{
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+            labels: labels,
             datasets: [weightDataSet, heightDataSet, pressureDataSet],
         }
     }
