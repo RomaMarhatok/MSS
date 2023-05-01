@@ -9,3 +9,5 @@ class DoctorSummary(models.Model):
 
     class Meta:
         db_table = "doctor_summary"
+        verbose_name = "Резюме Доктора"
+        verbose_name_plural = "Резюме Докторов"

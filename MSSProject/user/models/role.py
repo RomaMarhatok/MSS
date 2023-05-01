@@ -23,3 +23,5 @@ class Role(models.Model):
 
     class Meta:
         db_table = "role"
+        verbose_name = "Роль"
+        verbose_name_plural = "Роли"

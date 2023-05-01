@@ -19,3 +19,5 @@ class TreatmentHistoryDocument(models.Model):
 
     class Meta:
         db_table = "treatment_history_document"
+        verbose_name = "Прилогающийся документ"
+        verbose_name_plural = "Прилогающиеся документы"

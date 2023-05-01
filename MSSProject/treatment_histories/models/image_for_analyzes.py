@@ -36,6 +36,8 @@ class ImageForAnalyzes(models.Model):
 
     class Meta:
         db_table = "image_for_analyzes"
+        verbose_name = "Изображение для анализа"
+        verbose_name_plural = "Изображения для анализа"
 
     def __str__(self) -> str:
         return self.pk + " " + self.image.name

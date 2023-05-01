@@ -24,6 +24,8 @@ class Document(models.Model):
 
     class Meta:
         db_table = "user_document"
+        verbose_name = "Документ"
+        verbose_name_plural = "Документы"
 
     def save(self, *args, **kwargs):
         self.slug = generate_slug_from_str(unidecode(self.name))

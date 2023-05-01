@@ -12,6 +12,8 @@ class DoctorSpecialization(models.Model):
 
     class Meta:
         db_table = "doctor_specialization"
+        verbose_name = "Специализация доктора"
+        verbose_name_plural = "Специализации докторов"
 
     def __str__(self) -> str:
         return self.name

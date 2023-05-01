@@ -19,6 +19,8 @@ class Appointments(models.Model):
 
     class Meta:
         db_table = "appointments"
+        verbose_name = "Запись к врачу"
+        verbose_name_plural = "Записи к врачам"
 
     def __str__(self) -> str:
         full_name_patient = (

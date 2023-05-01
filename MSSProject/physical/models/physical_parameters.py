@@ -13,6 +13,8 @@ class PhysicalParameters(models.Model):
 
     class Meta:
         db_table = "physical_parameters"
+        verbose_name = "Физический параметр"
+        verbose_name_plural = "Физические параметры"
 
     def save(self, *args, **kwargs):
         self.slug = generate_slug_from_str(generate_random_string())

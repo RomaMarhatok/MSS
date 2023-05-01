@@ -19,3 +19,5 @@ class TreatmentHistoryImageForAnalyzes(models.Model):
 
     class Meta:
         db_table = "treatment_history_image_for_analyzes"
+        verbose_name = "Прилогающиеся изображение"
+        verbose_name_plural = "Прилогающиеся изображения"

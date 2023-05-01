@@ -15,3 +15,5 @@ class DoctorDoctorSpecialization(models.Model):
 
     class Meta:
         db_table = "doctor_doctor_specialization"
+        verbose_name = "Специализация доктора - Доктор"
+        verbose_name_plural = "Специализации докторов - Доктора"

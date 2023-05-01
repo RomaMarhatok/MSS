@@ -37,6 +37,8 @@ class TreatmentHistory(models.Model):
 
     class Meta:
         db_table = "treatment_history"
+        verbose_name = "История лечения"
+        verbose_name_plural = "Истории лечения"
 
     def __str__(self) -> str:
         try:

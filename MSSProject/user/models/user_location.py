@@ -10,6 +10,8 @@ class UserLocation(models.Model):
 
     class Meta:
         db_table = "user_location"
+        verbose_name = "Локация пользователя"
+        verbose_name_plural = "Локация пользователей"
 
     @property
     def location(self):
