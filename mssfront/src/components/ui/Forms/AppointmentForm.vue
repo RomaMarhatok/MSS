@@ -19,6 +19,11 @@ const appointmentService = new AppointmentService()
 const store = useStore()
 const selectedDoctor = ref({})
 const op = ref(false)
+const calendarRules = ref({
+    hours: [9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
+    seconds: 0,
+    milliseconds: 0,
+})
 const userSlug = computed(() => store.getters["user/getSlug"])
 const doctors = computed(() => store.getters["doctors/getAllDoctors"])
 const buttonLabel = computed(() => Object.hasOwn(selectedDoctor.value, "doctor_full_name") ? selectedDoctor.value.doctor_full_name : 'Выберите доктора')
@@ -60,7 +65,7 @@ onBeforeMount(() => {
             <FormInputPayload id="date" label-text="Дата">
                 <Field name="date" v-slot="{ value, handleChange }" v-model="data.date">
                     <v-date-picker @update:model-value="handleChange" :model-value="value" mode="dateTime" is24hr
-                        expanded />
+                        :rules="calendarRules" expanded />
                 </Field>
             </FormInputPayload>
             <FormInputPayload id="doctors" :label-text="'Доктора'">
