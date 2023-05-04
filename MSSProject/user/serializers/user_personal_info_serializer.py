@@ -54,4 +54,6 @@ class UserPersonalInfoSerializer(ModelSerializer):
             for field in self.context["not_necessary_fields"]:
                 if field in rep:
                     rep.pop(field)
+        if not instance.health_status:
+            rep["health_status"] = "Информации о вашем здоровье пока нет"
         return rep
