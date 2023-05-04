@@ -24,8 +24,10 @@ onBeforeMount(() => {
     <HeaderLayout>
         <TabMenu />
     </HeaderLayout>
-    <main class="bg__section m-2 p-2 rounded-lg">
-
+    <main v-if="!treatmentHistories.length" class="flex justify-center p-4">
+        <p class="text-3xl text-slate-400">Лечебных записей пока нет</p>
+    </main>
+    <main v-else class="bg__section m-2 p-2 rounded-lg">
         <div v-for="ts in treatmentHistories" :key="ts.treatment_history.slug" class="p-2">
             <Panel :header="ts.treatment_history.title + ' ' + panelHeader(ts)" toggleable collapsed>
                 <div class="flex flex-col gap-4">
