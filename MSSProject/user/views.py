@@ -119,3 +119,11 @@ class UserPersonalInfoValidationView(APIView):
         serializer = self.InputSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         return self.service.validate_personal_info(serializer.validated_data)
+
+
+class CitiesView(APIView):
+    permission_classes = [AllowAny]
+    service = UserService()
+
+    def get(self, request: HttpRequest):
+        return self.service.get_cities()

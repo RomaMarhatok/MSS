@@ -88,3 +88,12 @@ class UserService(IsUserExistMixin):
                 },
             )
         return HttpResponse()
+
+    def get_cities(self):
+        user_locations = self.user_location_repository.list()
+        cities = list(user_locations.values_list("city", flat=True))
+        return JsonResponse(
+            data={
+                "cities": cities,
+            }
+        )

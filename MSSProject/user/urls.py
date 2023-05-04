@@ -7,6 +7,7 @@ from user.views import (
     UserPersonalInfoValidationView,
     UserValidationView,
     PatientView,
+    CitiesView,
 )
 
 urlpatterns = [
@@ -39,5 +40,10 @@ urlpatterns = [
         "patients/",
         PatientView.as_view({"get": "list"}),
         name="patients-list",
+    ),
+    path(
+        "cities/",
+        CitiesView.as_view(),
+        name="cities-list",
     ),
 ]

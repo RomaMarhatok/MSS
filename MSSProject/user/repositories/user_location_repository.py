@@ -24,7 +24,7 @@ class UserLocationRepository(AbstractRepository):
         return UserLocation.objects.select_related("user", "user__role").get(**data)
 
     def list(self, **kwargs):
-        return super().list(**kwargs)
+        return UserLocation.objects.all()
 
     def create(self, data: dict) -> UserLocation:
         serializer = UserLocationSerializer(data=data)
