@@ -68,7 +68,7 @@ onBeforeMount(() => {
     </HeaderLayout>
     <main class="p-2 flex gap-2 flex-col">
         <section class="flex-media__section gap-8">
-            <section class="bg__section bordered__section p-4 rounded-2xl w-fit flex flex-col">
+            <section class="bg__section bordered__section p-4 rounded-2xl flex flex-col w-full">
                 <div>
                     <div class="p-4">
                         <p class="text-2xl font-bold text-center">
@@ -103,7 +103,8 @@ onBeforeMount(() => {
                     <p class="font-thin">{{ personalInfo.health_status }}</p>
                 </div>
             </section>
-            <section class="bordered__section flex-width__section document__section w-full p-4 flex flex-col gap-1">
+            <section
+                class="bordered__section flex-width__section document__section max-w-1/2 w-full p-4 flex flex-col gap-1">
                 <p class="text-2xl font-semibold text-left">Недавно добавленные документы</p>
                 <Tag value="New"></Tag>
                 <div v-for="(document, index) in newestDocuments" :key="index"
