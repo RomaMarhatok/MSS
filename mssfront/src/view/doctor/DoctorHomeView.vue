@@ -17,8 +17,8 @@ const onclick = (appointment) => {
 }
 
 onBeforeMount(() => {
-    store.dispatch("patients/fetchPatients")
     store.dispatch("doctorAppointments/fetchAppointments", store.state.user.slug)
+    store.dispatch("patients/fetchPatients")
 })
 
 </script>
@@ -27,7 +27,10 @@ onBeforeMount(() => {
         <DoctorTabMenu />
     </HeaderLayout>
     <main class="flex">
-        <section class="w-full">
+        <section v-if="!appointments.length" class="w-full flex justify-center">
+            <p class="text-3xl text-slate-400">Записей к вам пока нет.</p>
+        </section>
+        <section v-else class="w-full">
             <div>
                 <DataTable :value="appointments" @row-click="onclick">
                     <Column header="Пациент">
