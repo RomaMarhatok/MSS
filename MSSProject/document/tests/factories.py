@@ -8,7 +8,7 @@ from ..models import Document, DocumentType, FileDocument
 from user.tests.factories import UserFactory
 from doctor.tests.factories import DoctorFactory
 
-FAKER = Faker()
+FAKER = Faker(locale="ru_RU")
 FS_STORAGE = FileSystemStorage(root_path=settings.MEDIA_ROOT)
 
 

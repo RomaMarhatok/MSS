@@ -19,7 +19,7 @@ from doctor.models import Doctor
 
 from document.models import Document
 
-fake = Faker()
+fake = Faker(locale="ru_RU")
 
 
 class Command(BaseCommand):

@@ -9,6 +9,7 @@ from user.serializers.user_serializer import UserSerializer
 
 @pytest.mark.django_db
 def test_serialization(user_personal_info_fixture):
+    print(user_personal_info_fixture)
     role_serializer = RoleSerializer(data=user_personal_info_fixture["user"]["role"])
     assert role_serializer.is_valid()
     role_serializer.save()

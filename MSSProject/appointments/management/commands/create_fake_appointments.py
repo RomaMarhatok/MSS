@@ -11,7 +11,7 @@ from user.models import User, Role
 # doctor app imports
 from doctor.models import Doctor, DoctorDoctorSpecialization
 
-fake = Faker()
+fake = Faker(locale="ru_RU")
 
 
 class Command(BaseCommand):

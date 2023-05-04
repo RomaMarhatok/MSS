@@ -6,7 +6,7 @@ from .factories import DocumentTypeFactory, DocumentFactory, FileDocumentFactory
 from ..enums import BaseDocumentTypesEnum
 from faker import Faker
 
-FAKER = Faker()
+FAKER = Faker(locale="ru_RU")
 # factories
 
 

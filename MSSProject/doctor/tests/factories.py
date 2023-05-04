@@ -11,7 +11,7 @@ from faker import Faker
 # user app import
 from user.tests.factories import UserFactory
 
-fake = Faker()
+fake = Faker(locale="ru_RU")
 
 
 class DoctorFactory(DjangoModelFactory):

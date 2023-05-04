@@ -17,7 +17,7 @@ from doctor.tests.factories import DoctorFactory
 from user.tests.factories import UserFactory
 from document.tests.factories import DocumentFactory
 
-fake = Faker()
+fake = Faker(locale="ru_RU")
 
 
 class ImageForAnalyzesFactory(DjangoModelFactory):

@@ -6,14 +6,26 @@ from PIL import Image
 from io import BytesIO
 from dataclasses import dataclass
 from django.core.files.uploadedfile import InMemoryUploadedFile
+from faker import Faker
+
+fake = Faker()
 
 
 @dataclass
 class Client:
     @staticmethod
     def get(url):
-        with requests.get(url, stream=True) as resp:
-            return resp.content
+        status = None
+        content = None
+        while True:
+            with requests.get(url, stream=True) as resp:
+                status = resp.status_code
+                content = resp.content
+                if status == 200:
+                    break
+                else:
+                    url = fake.image_url()
+        return content
 
 
 @dataclass

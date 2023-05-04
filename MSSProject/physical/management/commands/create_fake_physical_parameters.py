@@ -5,7 +5,7 @@ from django.core.management.base import BaseCommand
 from ...test.factories import PhysicalParametersFactory
 from user.models import User, Role
 
-fake = Faker()
+fake = Faker(locale="ru_RU")
 
 
 class Command(BaseCommand):

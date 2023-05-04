@@ -14,7 +14,7 @@ from common.utils.image_utils import load_image_from_url
 from common.utils.string_utils import generate_valid_login, generate_valid_password
 
 
-fake = Faker()
+fake = Faker(locale="ru_RU")
 
 
 class Command(BaseCommand):

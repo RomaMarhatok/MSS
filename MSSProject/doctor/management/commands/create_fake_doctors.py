@@ -14,7 +14,7 @@ from ...tests.factories import (
 # user app imports
 from user.models import User, Role
 
-fake = Faker()
+fake = Faker(locale="ru_RU")
 
 
 class Command(BaseCommand):
