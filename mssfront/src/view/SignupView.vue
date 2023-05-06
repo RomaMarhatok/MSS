@@ -27,7 +27,7 @@ const userLocation = reactive({})
 const registrationService = new RegistrationService()
 const emailService = new EmailService()
 // hooks
-onMounted(() => store.commit("registration/clearErrors"))
+onMounted(async () => store.commit("registration/clearErrors"))
 
 
 // methods

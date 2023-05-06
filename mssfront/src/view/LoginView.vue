@@ -47,8 +47,7 @@ const submit = async (data) => {
 }
 const signUpRedirect = () => router.push("/registration/")
 // hooks
-onBeforeMount(() => {
-    console.log(1)
+onBeforeMount(async () => {
     store.commit("authentication/clearErrors")
 })
 </script>
