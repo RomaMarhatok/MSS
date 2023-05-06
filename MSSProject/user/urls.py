@@ -8,6 +8,8 @@ from user.views import (
     UserValidationView,
     PatientView,
     CitiesView,
+    VerifyAccountView,
+    SendEmailView,
 )
 
 urlpatterns = [
@@ -45,5 +47,15 @@ urlpatterns = [
         "cities/",
         CitiesView.as_view(),
         name="cities-list",
+    ),
+    path(
+        "verify/<str:token>/",
+        VerifyAccountView.as_view(),
+        name="verify-account",
+    ),
+    path(
+        "send/email/",
+        SendEmailView.as_view(),
+        name="send-email",
     ),
 ]

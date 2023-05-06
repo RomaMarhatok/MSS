@@ -4,6 +4,7 @@ import SignupView from "./src/view/SignupView"
 import LoginView from "./src/view/LoginView"
 import LogoutView from "./src/view/LogoutView"
 import NoPermissionView from './src/view/NoPermissionView'
+import VerifyAccountView from './src/view/VerifyAccountView'
 
 import PatinetPersonalInfoVIew from "./src/view/user/PersonalInfoView"
 import DocumentsListView from './src/view/user/documents/DocumentsListView'
@@ -40,6 +41,11 @@ const routes = [
         path:"/authentication/",
         name:"authentication-page",
         component:LoginView
+    },
+    {
+        path:"/verification/:token/",
+        name:"verify-page",
+        component:VerifyAccountView,
     },
     {
         path:"/home/",

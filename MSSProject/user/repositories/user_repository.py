@@ -49,3 +49,8 @@ class UserRepository(AbstractRepository):
     def is_valid(self, data: dict) -> bool:
         serializer = UserSerializer(data=data)
         return serializer.is_valid(raise_exception=True)
+
+    def verify_user(self, login: str) -> None:
+        user = self.get(login=login)
+        user.verified = True
+        user.save()

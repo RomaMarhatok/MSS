@@ -156,3 +156,6 @@ CORS_ORIGIN_WHITELIST = ["http://localhost:8080"]
 #     "handlers": {"console": {"class": "logging.StreamHandler"}},
 #     "loggers": {"django.db.backends": {"handlers": ["console"], "level": "DEBUG"}},
 # }
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_PORT = os.environ.get("EMAIL_PORT")

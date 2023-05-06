@@ -10,6 +10,8 @@ from .services import (
     LogOutService,
     RegistrationService,
     UserService,
+    VerificationService,
+    EmailService,
 )
 
 
@@ -127,3 +129,25 @@ class CitiesView(APIView):
 
     def get(self, request: HttpRequest):
         return self.service.get_cities()
+
+
+class VerifyAccountView(APIView):
+    permission_classes = [AllowAny]
+    service = VerificationService()
+
+    def get(self, request: HttpRequest, token):
+        return self.service.verify(token)
+
+
+class SendEmailView(APIView):
+    permission_classes = [AllowAny]
+    service = EmailService()
+
+    class InputSerializer(serializers.Serializer):
+        link = serializers.CharField()
+        email = serializers.EmailField()
+
+    def post(self, request: HttpRequest):
+        serializer = self.InputSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return self.service.send_verification_email(serializer.validated_data)
