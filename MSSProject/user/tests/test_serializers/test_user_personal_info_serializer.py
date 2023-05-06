@@ -9,6 +9,7 @@ from user.serializers.user_serializer import UserSerializer
 
 @pytest.mark.django_db
 def test_serialization(user_personal_info_fixture):
+    print(user_personal_info_fixture)
     role_serializer = RoleSerializer(data=user_personal_info_fixture["user"]["role"])
     assert role_serializer.is_valid()
     role_serializer.save()
@@ -68,15 +69,35 @@ def test_validation_error(user_personal_info_fixture):
 
 
 @pytest.mark.django_db
-def test_deserialization(factory_user_personal_info_fixture):
-    serializer = UserPersonalInfoSerializer(instance=factory_user_personal_info_fixture)
-    assert isinstance(serializer.data, dict)
-
-
-@pytest.mark.django_db
 def test_serialization_with_absolute_image_url(factory_user_personal_info_fixture):
     request = RequestFactory().request()
     serializer = UserPersonalInfoSerializer(
         instance=factory_user_personal_info_fixture, context={"request": request}
     )
+    assert isinstance(serializer.data, dict)
+
+
+@pytest.mark.django_db
+def test_serialization_update(factory_user_personal_info_fixture):
+    assert factory_user_personal_info_fixture.health_status != "test"
+    serialized_instance = UserPersonalInfoSerializer(
+        instance=factory_user_personal_info_fixture
+    ).data
+    serialized_instance["health_status"] = "test"
+    serializer = UserPersonalInfoSerializer(
+        instance=factory_user_personal_info_fixture,
+        data=serialized_instance,
+        partial=True,
+    )
+    assert serializer.is_valid(raise_exception=True)
+    serializer.save()
+    instance = UserPersonalInfo.objects.get(
+        user__slug=factory_user_personal_info_fixture.user.slug
+    )
+    assert instance.health_status == "test"
+
+
+@pytest.mark.django_db
+def test_deserialization(factory_user_personal_info_fixture):
+    serializer = UserPersonalInfoSerializer(instance=factory_user_personal_info_fixture)
     assert isinstance(serializer.data, dict)

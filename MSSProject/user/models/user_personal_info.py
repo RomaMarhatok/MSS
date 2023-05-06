@@ -15,6 +15,8 @@ class UserPersonalInfo(models.Model):
 
     class Meta:
         db_table = "user_personal_info"
+        verbose_name = "Персональная информация пользователя"
+        verbose_name_plural = "Персональная информация пользователей"
 
     def __str__(self) -> str:
         return self.first_name + " " + self.second_name + " " + self.patronymic

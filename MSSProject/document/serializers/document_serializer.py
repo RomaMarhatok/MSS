@@ -68,16 +68,24 @@ class DocumentSerializer(ModelSerializer):
         rep = super().to_representation(instance)
         if "repr" in self.context and self.context["repr"] == "list":
             rep.pop("content")
+
         rep["parsed_date"] = parse_date_to_dict(str(rep["created_at"]))
         rep["document_type"] = {
             "name": instance.document_type.name.lower().capitalize(),
             "slug": instance.document_type.slug,
         }
+        rep["document_type_name"] = rep["document_type"]["name"]
         rep["creator"] = {
             "creator_slug": instance.creator.user.slug,
         }
         if hasattr(instance.creator.user, "userpersonalinfo"):
             rep["creator"][
+                "full_name"
+            ] = instance.creator.user.userpersonalinfo.full_name
+
+        rep["patient"] = {"patient_slug": instance.user.slug}
+        if hasattr(instance.user, "userpersonalinfo"):
+            rep["patient"][
                 "full_name"
             ] = instance.creator.user.userpersonalinfo.full_name
         if "document_type_slug" in rep:

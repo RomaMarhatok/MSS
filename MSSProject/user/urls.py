@@ -7,9 +7,15 @@ from user.views import (
     UserPersonalInfoValidationView,
     UserValidationView,
     PatientView,
+    CitiesView,
 )
 
 urlpatterns = [
+    path(
+        "profile/update/",
+        ProfileView.as_view({"post": "update"}),
+        name="update-user-profile",
+    ),
     path(
         "profile/<str:user_slug>/",
         ProfileView.as_view({"get": "retrieve"}),
@@ -34,5 +40,10 @@ urlpatterns = [
         "patients/",
         PatientView.as_view({"get": "list"}),
         name="patients-list",
+    ),
+    path(
+        "cities/",
+        CitiesView.as_view(),
+        name="cities-list",
     ),
 ]

@@ -18,6 +18,7 @@ const onclick = (appointment) => {
 
 onBeforeMount(() => {
     store.dispatch("doctorAppointments/fetchAppointments", store.state.user.slug)
+    store.dispatch("patients/fetchPatients")
 })
 
 </script>
@@ -26,20 +27,22 @@ onBeforeMount(() => {
         <DoctorTabMenu />
     </HeaderLayout>
     <main class="flex">
-        <section></section>
-        <section class="p-4">
+        <section v-if="!appointments.length" class="w-full flex justify-center">
+            <p class="text-3xl text-slate-400">Записей к вам пока нет.</p>
+        </section>
+        <section v-else class="w-full">
             <div>
                 <DataTable :value="appointments" @row-click="onclick">
                     <Column header="Пациент">
                         <template #body="slotProps">
-                        <p>{{ slotProps.data.patient.full_name }}</p>
-                    </template>
-                </Column>
-                <Column header="Дата">
-                    <template #body="slotProps">
-                        <div class="flex flex-col justify-center">
-                            <div class="flex max-[900px]:justify-center gap-1">
-                                <p class="font-bold">{{ slotProps.data.parsed_date.day }}</p>
+                            <p>{{ slotProps.data.patient.full_name }}</p>
+                        </template>
+                    </Column>
+                    <Column header="Дата">
+                        <template #body="slotProps">
+                            <div class="flex flex-col justify-center">
+                                <div class="flex max-[900px]:justify-center gap-1">
+                                    <p class="font-bold">{{ slotProps.data.parsed_date.day }}</p>
                                     <p class="font-bold">{{ slotProps.data.parsed_date.mounth }}</p>
                                     <p class="font-bold">{{ slotProps.data.parsed_date.year }}</p>
                                     <p class="">{{ slotProps.data.parsed_date.hours }}:{{

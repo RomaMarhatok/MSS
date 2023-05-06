@@ -25,17 +25,17 @@ const selectedImage = computed(() => {
 })
 </script>
 <template>
-    <div class="p-2">
+    <div class="p-2 bg-white rounded-md w-full">
         <p>Прилогающиеся изображения</p>
         <div v-if="!props.images.length">
-            <p>НЕТ</p>
+            <p>Нет прилогающихся изображений</p>
         </div>
         <div v-else v-for="(img, index) in props.images" :key="img.slug">
             <p @click="selectImage(img.slug)" class="cursor-pointer">{{ index + 1 }}. {{ img.description }}</p>
         </div>
     </div>
     <Dialog v-model:visible="dialog" modal header="Изображение" :style="{ width: '70vw' }">
-        <p>{{ selectedImage.description }}</p>
+        <p>Текстовое описание {{ selectedImage.description }}</p>
         <Image :src="selectedImage.image" width="320" preview />
     </Dialog>
 </template>

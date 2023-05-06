@@ -25,6 +25,9 @@ module.exports = {
       borderWidth: {
         '1':'1px',
         '3': '3px',
+      },
+      maxWidth:{
+        '1/2':'50%'
       }
     },
   },

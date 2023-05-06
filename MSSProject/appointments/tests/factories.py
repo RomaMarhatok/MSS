@@ -10,7 +10,7 @@ from user.tests.factories import UserFactory
 # doctor app imports
 from doctor.tests.factories import DoctorFactory, DoctorSpecializationFactory
 
-fake = Faker()
+fake = Faker(locale="ru_RU")
 
 
 class AppointmentsFactory(DjangoModelFactory):

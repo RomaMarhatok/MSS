@@ -1,30 +1,40 @@
+from django.conf import settings
 from factory import SubFactory
-from factory.django import DjangoModelFactory
-from ..models import Document, DocumentType
 from faker import Faker
-
-# user app import
+from factory.django import DjangoModelFactory
+from faker_file.providers.docx_file import DocxFileProvider
+from faker_file.storages.filesystem import FileSystemStorage
+from ..models import Document, DocumentType, FileDocument
 from user.tests.factories import UserFactory
-
-# doctor app import
 from doctor.tests.factories import DoctorFactory
 
-fake = Faker()
+FAKER = Faker(locale="ru_RU")
+FS_STORAGE = FileSystemStorage(root_path=settings.MEDIA_ROOT)
 
 
 class DocumentTypeFactory(DjangoModelFactory):
     class Meta:
         model = DocumentType
 
-    name = fake.pystr()
+    name = FAKER.pystr()
 
 
 class DocumentFactory(DjangoModelFactory):
     class Meta:
         model = Document
 
-    content = fake.text(max_nb_chars=10000)
-    name = fake.pystr()
+    content = FAKER.text(max_nb_chars=10000)
+    name = FAKER.pystr()
     user = SubFactory(UserFactory)
     creator = SubFactory(DoctorFactory)
     document_type = SubFactory(DocumentTypeFactory)
+
+
+class FileDocumentFactory(DjangoModelFactory):
+    class Meta:
+        model = FileDocument
+
+    user = SubFactory(UserFactory)
+    creator = SubFactory(DoctorFactory)
+    document_type = SubFactory(DocumentTypeFactory)
+    document = DocxFileProvider(FAKER).docx_file(storage=FS_STORAGE)

@@ -4,7 +4,7 @@ from ..models import Appointments
 from .factories import AppointmentsFactory
 from faker import Faker
 
-fake = Faker()
+fake = Faker(locale="ru_RU")
 # factories
 
 

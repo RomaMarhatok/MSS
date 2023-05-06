@@ -29,7 +29,7 @@ def test_without_doctor_slug(factory_appointments_fixture):
         "HTTP_AUTHORIZATION": "Bearer " + token,
     }
     response = client.get(url, {"date": factory_appointments_fixture.date}, **headers)
-    assert response.status_code == 400
+    assert response.status_code == 404
     assert bool(response.json())
 
 
@@ -43,5 +43,6 @@ def test_without_patient_slug(factory_appointments_fixture):
         "HTTP_AUTHORIZATION": "Bearer " + token,
     }
     response = client.get(url, {"date": factory_appointments_fixture.date}, **headers)
-    assert response.status_code == 400
+    print(response.json())
+    assert response.status_code == 404
     assert bool(response.json())

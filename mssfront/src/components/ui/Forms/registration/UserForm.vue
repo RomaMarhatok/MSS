@@ -37,7 +37,7 @@ const validationSchema = object({
 })
 </script>
 <template>
-    <BaseForm :schema="validationSchema" @SubmitForm="$emit('SubmitUserForm', data)" :errors="errors">
+    <BaseForm :schema="validationSchema" @SubmitForm="$emit('SubmitUserForm', data)" :errors="errors" class="w-full">
         <FormInputPayload :label-text="'Логин'" :id="'login'">
             <Field id="login" type='text' class="base" name="login" v-model="data.login" />
         </FormInputPayload>

@@ -29,6 +29,21 @@ class ProfileView(GenericViewSet):
     def retrieve(self, request: HttpRequest, user_slug=None):
         return self.service.get_user_info(user_slug, request=request)
 
+    class UpdateInputSerializer(serializers.Serializer):
+        user_slug = serializers.SlugField()
+        first_name = serializers.CharField()
+        second_name = serializers.CharField()
+        patronymic = serializers.CharField()
+        email = serializers.CharField()
+        gender = serializers.CharField()
+        age = serializers.IntegerField()
+        health_status = serializers.CharField()
+
+    def update(self, request: HttpRequest):
+        serializer = self.UpdateInputSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return self.service.update_user_info(serializer.validated_data)
+
 
 class AuthenticationView(APIView):
     permission_classes = [AllowAny]
@@ -104,3 +119,11 @@ class UserPersonalInfoValidationView(APIView):
         serializer = self.InputSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         return self.service.validate_personal_info(serializer.validated_data)
+
+
+class CitiesView(APIView):
+    permission_classes = [AllowAny]
+    service = UserService()
+
+    def get(self, request: HttpRequest):
+        return self.service.get_cities()

@@ -1,6 +1,6 @@
 from datetime import datetime
 from django.http import JsonResponse
-from responses.errors import JsonResponseBadRequest
+from rest_framework import exceptions
 from user.repositories import UserRepository
 from user.services.mixins.is_user_exist_mixin import IsUserExistMixin
 from ..repositories import AppointmentsRepository
@@ -17,9 +17,7 @@ class PatientAppointmentsService(
         self.user_repository: UserRepository = UserRepository()
 
     def get_patient_appointments(self, patient_slug: str) -> JsonResponse:
-        response = self.user_exist(patient_slug)
-        if response.status_code == 400:
-            return response
+        self.is_user_exist(patient_slug)
         appointments_qs = self.appointments_repository.list(
             patient_slug=patient_slug,
         )
@@ -35,8 +33,8 @@ class PatientAppointmentsService(
         if not self.appointments_repository.is_exist(
             patient_slug=patient_slug, doctor_slug=doctor_slug, date=date
         ):
-            return JsonResponseBadRequest(
-                data={
+            raise exceptions.NotFound(
+                detail={
                     "message": "Не валидныйе данные в запросе",
                     "description": "Запись к доктору с такими данными не существует",
                 }

@@ -10,22 +10,72 @@ import Menu from 'primevue/menu'
 import HeaderLayout from '@/components/layout/HeaderLayout.vue';
 import AddTreatmentHistoryDialog from '@/components/ui/Dialogs/addTreatmentHistoryDialog.vue'
 import SingleTreatmentHistorySection from "@/components/ui/Sections/SingleTreatmentHistorySection.vue"
-
+import PhysicalParametersSectionList from "@/components/ui/Sections/PhysicalParametersSectionList.vue";
+import ChangeHealthStatusForm from "@/components/ui/Forms/ChangeHealthStatusForm.vue";
 const store = useStore()
-const treatmentHistoryIsSelected = ref(false)
-const selectedTSSlug = ref("")
 const selectedAppointment = computed(() => store.getters["appointment/getSelectedAppointment"])
 const treatmentHistories = computed(() => {
     return store.getters["treatments/getTreatmentsHistories"]
 })
-const patientPersonalInfo = computed(() => {
-    return store.getters["treatments/getPatientInfo"]
-})
+const patientPersonalInfo = computed(() => store.getters["treatments/getPatientInfo"])
+
+const treatmentHistoryIsSelected = ref(false)
+const selectedTSSlug = ref("")
+const swapOnChangeTSForm = ref(false)
+
 const selectTreatementHistory = (tsSlug, IsSelected) => {
     selectedTSSlug.value = tsSlug
     treatmentHistoryIsSelected.value = IsSelected
-    swapOnChangeForm.value = false
+    swapOnChangeTSForm.value = false
 }
+
+const menuChangeTSLabel = computed(() => !swapOnChangeTSForm.value ? "Изменить" : "Отмена")
+const menuChangeTSIcon = computed(() => !swapOnChangeTSForm.value ? 'pi pi-plus' : 'pi pi-minus')
+const changeTSMenu = ref()
+const changeMenuTSOptions = ref([
+    {
+        label: "Действия",
+        items: [
+            {
+                label: menuChangeTSLabel,
+                icon: menuChangeTSIcon,
+                command: () => {
+                    swapOnChangeTSForm.value = !swapOnChangeTSForm.value
+                }
+            }
+        ]
+    }
+])
+const toggleMenu = (event) => {
+    changeTSMenu.value.toggle(event)
+}
+const swapTSOnForm = () => {
+    swapOnChangeTSForm.value = false
+}
+const changeHealthMenu = ref()
+const swapOnChangeHealthForm = ref(false)
+
+const swapChangeHealth = (event) => {
+    changeHealthMenu.value.toggle(event)
+}
+const closeChangeHealthForm = () => {
+    swapOnChangeHealthForm.value = false
+}
+const chnageMenuHealthOptions = ref([
+    {
+        label: "Действия",
+        items: [
+            {
+                label: "Изменить",
+                icon: "pi pi-plus",
+                command: () => {
+                    swapOnChangeHealthForm.value = !swapOnChangeHealthForm.value
+                }
+            }
+        ]
+    }
+])
+
 onBeforeMount(() => {
     store.dispatch("treatments/fetchTreatmentsHistories",
         {
@@ -34,29 +84,6 @@ onBeforeMount(() => {
         }
     )
 })
-
-const menuLabel = computed(() => !swapOnChangeForm.value ? "Изменить" : "Отмена")
-const menuIcon = computed(() => !swapOnChangeForm.value ? 'pi pi-plus' : 'pi pi-minus')
-const swapOnChangeForm = ref(false)
-const menu = ref(false)
-const menuOptions = ref([
-    {
-        label: "Действия",
-        items: [
-            {
-                label: menuLabel,
-                icon: menuIcon,
-                command: () => {
-                    swapOnChangeForm.value = !swapOnChangeForm.value
-                }
-            }
-        ]
-    }
-])
-const toggleMenu = (event) => {
-    menu.value.toggle(event)
-}
-
 </script>
 <template>
     <HeaderLayout>
@@ -81,11 +108,20 @@ const toggleMenu = (event) => {
                         <p class="pb-2 border-b-slate-200 border-b-2 font-thin">{{ patientPersonalInfo.age }}</p>
                     </div>
                 </div>
-                <div class="flex flex-col p-4">
-                    <div class="grid grid-cols-2 grid-rows-2 gap-9">
-                        <div class="col-span-2">
+                <div class="flex flex-col p-4 w-full">
+                    <div class="col-span-2">
+                        <div class="flex justify-between">
                             <p class="pb-4 text-slate-400 font-normal ">Здоровье</p>
-                            <p class="font-thin">{{ patientPersonalInfo.health_status }}</p>
+                            <button class="p-panel-header-icon p-link mr-2" @click="swapChangeHealth">
+                                <span class="pi pi-cog"></span>
+                            </button>
+                            <Menu ref="changeHealthMenu" :model="chnageMenuHealthOptions" id="config_change_health_menu"
+                                popup />
+                        </div>
+                        <p v-if="!swapOnChangeHealthForm" class="font-thin">{{ patientPersonalInfo.health_status }}</p>
+                        <div v-else>
+                            <ChangeHealthStatusForm :patient-slug="selectedAppointment.patient.slug"
+                                :personal-info="patientPersonalInfo" @on-update-user-profile="closeChangeHealthForm" />
                         </div>
                     </div>
                 </div>
@@ -98,20 +134,28 @@ const toggleMenu = (event) => {
                         <p class="text-2xl font-bold text-center">Истории лечения</p>
                         <AddTreatmentHistoryDialog />
                     </div>
-                    <div v-for="(ts, index) in treatmentHistories" :key="index" class="treatment_history__item bg-white"
-                        @click="selectTreatementHistory(ts.treatment_history.slug, true)">
-                        <div class="flex justify-between">
-                            <div class="flex gap-1 text-sm font-medium justify-end max-[470px]:p-1">
-                                <Tag :value="'Создано ' + ts.treatment_history.string_date" severity="info" />
+                    <div v-if="treatmentHistories.length">
+                        <div v-for="(ts, index) in treatmentHistories" :key="index" class="treatment_history__item bg-white"
+                            @click="selectTreatementHistory(ts.treatment_history.slug, true)">
+                            <div class="flex justify-between">
+                                <div class="flex gap-1 text-sm font-medium justify-end max-[470px]:p-1">
+                                    <Tag :value="'Создано ' + ts.treatment_history.string_date" severity="info" />
+                                </div>
+                                <div class="flex gap-1 text-sm font-medium justify-end max-[470px]:p-1">
+                                    <Tag :value="'Создатель ' + ts.treatment_history.doctor.full_name" severity="success" />
+                                </div>
                             </div>
-                            <div class="flex gap-1 text-sm font-medium justify-end max-[470px]:p-1">
-                                <Tag :value="'Создатель ' + ts.treatment_history.doctor.full_name" severity="success" />
+                            <div>
+                                <p class="font-medium pb-2">{{ ts.treatment_history.title }}</p>
+                                <div class="flex gap-2">
+                                    <Tag :value="'кол-во изображений ' + ts.images_for_analyzes.length" severity="info" />
+                                    <Tag :value="'кол-во документов ' + ts.documents.length" severity="info" />
+                                </div>
                             </div>
                         </div>
-                        <div>
-                            <p class="font-medium pb-2">{{ ts.treatment_history.title }}</p>
-                            <Tag :value="'кол-во изображений ' + ts.images_for_analyzes.length" severity="info" />
-                        </div>
+                    </div>
+                    <div v-else class="flex justify-center">
+                        <p>Историй лечения у даннного типа врача пока нет</p>
                     </div>
                 </div>
             </section>
@@ -120,17 +164,19 @@ const toggleMenu = (event) => {
                     <p class="text-center">История лечения не выбрана</p>
                 </div>
                 <div v-else class="flex flex-col p-1 justify-start w-full">
-                    <div class="flex w-full">
+                    <div class="flex w-full p-2">
                         <button class="p-panel-header-icon p-link mr-2" @click="toggleMenu">
                             <span class="pi pi-cog"></span>
                         </button>
                     </div>
-
-                    <Menu ref="menu" :model="menuOptions" id="config_change_menu" popup />
+                    <Menu ref="changeTSMenu" :model="changeMenuTSOptions" id="config_change_menu" popup />
                     <SingleTreatmentHistorySection :treatment-history-slug="selectedTSSlug"
-                        :swap-on-change-form="swapOnChangeForm" />
+                        :swap-on-change-form="swapOnChangeTSForm" @onChangeTreatmentHistory="swapTSOnForm" />
                 </div>
             </section>
+        </div>
+        <div class="bg__section flex flex-col gap-2 p-2">
+            <PhysicalParametersSectionList />
         </div>
     </main>
 </template>

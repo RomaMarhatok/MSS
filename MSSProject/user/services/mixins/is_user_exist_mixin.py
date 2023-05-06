@@ -1,16 +1,15 @@
-from django.http import HttpResponse
+from rest_framework import exceptions
 from user.repositories import UserRepository
-from responses.errors import JsonResponseBadRequest
 
 
 class IsUserExistMixin:
-    def user_exist(self, slug) -> HttpResponse:
+    def is_user_exist(self, slug) -> bool:
         user_repository = UserRepository()
         if not user_repository.is_exist(slug=slug):
-            return JsonResponseBadRequest(
-                data={
+            raise exceptions.NotFound(
+                detail={
                     "message": "Не валидныйе данные в запросе",
                     "description": "Пользователья с таким slug не существует",
                 }
             )
-        return HttpResponse()
+        return True

@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "document",
     "treatment_histories",
     "appointments",
+    "physical",
     "data_generator",
 ]
 
@@ -63,7 +64,9 @@ MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
 ]
-
+# PASSWORD_HASHERS = [
+#     "django.contrib.auth.hashers.PBKDF2PasswordHasher",
+# ]
 ROOT_URLCONF = "MSSProject.urls"
 
 TEMPLATES = [

@@ -23,14 +23,14 @@ const activeDocumentSlug = ref("")
 const contextMenu = ref()
 const contextMenuOptions = ref([
     {
-        label: 'Change',
-        icon: 'pi pi-fw pi-search',
+        label: 'Изменить',
+        icon: 'pi pi-fw pi-file-edit',
         command: () => {
             router.push("/doctor/change/document/")
         }
     },
     {
-        label: 'Delete',
+        label: 'Удалить',
         icon: 'pi pi-fw pi-trash',
         command: () => {
             deleteDocument()
@@ -89,8 +89,10 @@ const addDocumentTypeFilter = (value) => {
 }
 
 const onDocumentRightClick = (event, documentSlug) => {
-    activeDocumentSlug.value = documentSlug
-    store.dispatch("doctorDocuments/fetchActiveDocument", { slug: slug.value, documentSlug: activeDocumentSlug.value })
+    if (activeDocumentSlug.value != documentSlug) {
+        activeDocumentSlug.value = documentSlug
+        store.dispatch("doctorDocuments/fetchActiveDocument", { slug: slug.value, documentSlug: activeDocumentSlug.value })
+    }
     contextMenu.value.show(event);
 };
 const deleteDocument = async () => {
@@ -105,8 +107,13 @@ const deleteDocument = async () => {
         })
         .catch(error => console.log(error))
 }
-const redirectAddDocument = () => {
+const addDocumentRedicrect = () => {
     router.push(`/doctor/add/document/`)
+}
+const showDocumentRedirect = (documentSlug) => {
+    store.dispatch("doctorDocuments/fetchActiveDocument", { slug: slug.value, documentSlug: documentSlug }).then(
+        () => router.push(`/doctor/document/`)
+    )
 }
 onMounted(() => {
     store.dispatch("doctorDocuments/fetchDocuments", slug.value)
@@ -148,14 +155,14 @@ onMounted(() => {
                     <RadioButton v-model="DOCUMENT_ORDER_FILTER" name="date_order" value="date" />
                 </div>
                 <div class="p-2">
-                    <button @click="redirectAddDocument">Добавить документ</button>
+                    <button @click="addDocumentRedicrect" class="add-document-button">Добавить документ</button>
                 </div>
             </section>
         </aside>
         <section class="w-full">
             <section v-if="filterDocuments.length" class="media-grid__section p-4 ">
                 <div v-for="(document, index) in filterDocuments" :key="index"
-                    @contextmenu="onDocumentRightClick($event, document.slug)">
+                    @contextmenu="onDocumentRightClick($event, document.slug)" @click="showDocumentRedirect(document.slug)">
                     <div class="shadow-container border-container flex">
                         <div class="flex p-4">
                             <font-awesome-icon :icon="['fas', 'file-medical']" size="3x" style="color: #265fba;" />
@@ -177,12 +184,11 @@ onMounted(() => {
                     </div>
                 </div>
                 <ContextMenu ref="contextMenu" :model="contextMenuOptions" />
-
             </section>
             <section v-else class="flex justify-center items-center h-full">
                 <div class="flex gap-2">
                     <p class="text-3xl text-slate-400">Документов пока нет.</p>
-                    <a class="create-document__link text-3xl text-slate-400">Создать ?</a>
+                    <a class="create-document__link text-3xl text-slate-400" @click="addDocumentRedicrect">Создать ?</a>
                 </div>
             </section>
         </section>
@@ -255,5 +261,56 @@ onMounted(() => {
 .create-document__link:hover {
     transition: 0.2s;
     color: rgba(19, 48, 94, 1);
+}
+
+.add-document-button {
+    appearance: none;
+    background-color: #38cf63;
+    border: 1px solid rgba(27, 31, 35, .15);
+    border-radius: 6px;
+    box-shadow: rgba(27, 31, 35, .1) 0 1px 0;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 20px;
+    padding: 6px 16px;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.add-document-button:focus:not(:focus-visible):not(.focus-visible) {
+    box-shadow: none;
+    outline: none;
+}
+
+.add-document-button:hover {
+    background-color: #2c974b;
+}
+
+.add-document-button:focus {
+    box-shadow: rgba(46, 164, 79, .4) 0 0 0 3px;
+    outline: none;
+}
+
+.add-document-button:disabled {
+    background-color: #94d3a2;
+    border-color: rgba(27, 31, 35, .1);
+    color: rgba(255, 255, 255, .8);
+    cursor: default;
+}
+
+.add-document-button:active {
+    background-color: #298e46;
+    box-shadow: rgba(20, 70, 32, .2) 0 1px 0 inset;
 }
 </style>

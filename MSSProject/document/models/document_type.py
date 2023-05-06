@@ -15,6 +15,8 @@ class DocumentType(models.Model):
 
     class Meta:
         db_table = "document_type"
+        verbose_name = "Тип документа"
+        verbose_name_plural = "Типы документа"
 
     def __str__(self) -> str:
         return self.name

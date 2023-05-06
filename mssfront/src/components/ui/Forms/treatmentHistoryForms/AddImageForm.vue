@@ -26,7 +26,7 @@ const imageUploader = async (event) => {
     data.image = file
 }
 const validationSchema = object({
-    description: string().required("Описание обязательно")
+    description: string().required("Описание обязательно"),
 })
 const submit = async () => {
     const formData = new FormData()
@@ -43,7 +43,9 @@ const submit = async () => {
     }).catch(error => {
         if (error.response.status == 400) {
             for (let key in error.response.data) {
-                errors.value.push(error.response.data[key])
+                if (errors.value.indexOf(error.response.data[key][0]) == -1) {
+                    console.log(errors.value.indexOf(error.response.data[key][0]))
+                }
             }
             errors.value = errors.value.flat(3)
         }
@@ -61,10 +63,14 @@ const submit = async () => {
                     <Textarea v-bind="field" name="description" />
                 </Field>
             </FormInputPayload>
-            <div class="flex flex-col">
-                <FileUpload mode="basic" accept="image/*" :maxFileSize="1000000" customUpload class="w-full"
-                    @select="imageUploader($event)" choose-label="Выберите изображение" />
-            </div>
+            <FormInputPayload id="image" label-text="Изображение">
+                <Field name="image" type="file" class="base" id="image" v-slot="{ field }" rules="image">
+                    <FileUpload v-bind="field" mode="basic" accept="image/*" :maxFileSize="1000000" customUpload
+                        class="w-full" @select="imageUploader($event)" choose-label="Выберите изображение" />
+                </Field>
+
+            </FormInputPayload>
+
             <FormSubmitButton :button-text="'Добавить'" class="mt-4" />
         </BaseForm>
     </div>

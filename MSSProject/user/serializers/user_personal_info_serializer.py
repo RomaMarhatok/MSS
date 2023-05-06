@@ -31,10 +31,19 @@ class UserPersonalInfoSerializer(ModelSerializer):
         return instance
 
     def validate_email(self, value):
-        if UserPersonalInfo.objects.filter(email=value).exists():
+        if (
+            UserPersonalInfo.objects.filter(email=value).exists()
+            and self.instance is None
+        ):
             message = "Пользователь с такой почтой уже существует"
             raise ValueError(message)
         return value
+
+    def update(self, instance: UserPersonalInfo, validated_data: OrderedDict):
+        validated_data["user"] = instance.user
+        return UserPersonalInfo.objects.filter(user__slug=instance.user.slug).update(
+            **validated_data
+        )
 
     def to_representation(self, instance: UserPersonalInfo):
         rep = super().to_representation(instance)
@@ -45,4 +54,6 @@ class UserPersonalInfoSerializer(ModelSerializer):
             for field in self.context["not_necessary_fields"]:
                 if field in rep:
                     rep.pop(field)
+        if not instance.health_status:
+            rep["health_status"] = "Информации о вашем здоровье пока нет"
         return rep

@@ -12,3 +12,6 @@ sessionStorage.clear()
 localStorage.clear()
 router.push("/")
 </script>
+<template>
+    <div>LOGOUT</div>
+</template>

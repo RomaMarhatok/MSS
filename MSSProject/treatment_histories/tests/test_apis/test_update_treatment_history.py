@@ -31,5 +31,4 @@ def test(factory_treatment_history_fixture):
     assert TreatmentHistory.objects.count() == 1
     ts = TreatmentHistory.objects.first()
     assert ts.conclusion == conclusion
-    print(ts.conclusion, ts.slug, factory_treatment_history_fixture.slug)
     assert ts.slug == factory_treatment_history_fixture.slug

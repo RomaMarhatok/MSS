@@ -1,12 +1,12 @@
 from datetime import datetime
 from django.db import transaction
 from django.http import JsonResponse
+from rest_framework import exceptions
 from ...repositories import AppointmentsRepository
 from ...serializers import AppointmentsSerializer
 from doctor.repositories import DoctorRepository
 from doctor.serializers import DoctorSerializer
 from user.repositories import UserRepository
-from responses.errors import JsonResponseBadRequest
 
 
 class CreateAppointmentMxin:
@@ -14,8 +14,8 @@ class CreateAppointmentMxin:
     def create(self, data: dict):
         appointment_date: datetime = data.get("date", None)
         if datetime.now().timestamp() > appointment_date.timestamp():
-            return JsonResponseBadRequest(
-                data={
+            raise exceptions.ValidationError(
+                detail={
                     "message": "Не валидные данные в запросе",
                     "description": "Нельзя создать запись к врачу в прошлом",
                 }
@@ -23,19 +23,18 @@ class CreateAppointmentMxin:
         user_repository = UserRepository()
         patient_slug = data.get("patient_slug", None)
         if not user_repository.is_exist(slug=patient_slug):
-            return JsonResponseBadRequest(
-                data={
+            raise exceptions.NotFound(
+                detail={
                     "message": "Не валидные данные в запросе",
                     "description": "Пользватель с таким slug не существует",
                 },
-                status=400,
             )
 
         doctor_repository = DoctorRepository()
         doctor_slug = data.get("doctor_slug", None)
         if not doctor_repository.is_exist(slug=doctor_slug):
-            return JsonResponseBadRequest(
-                data={
+            raise exceptions.NotFound(
+                detail={
                     "message": "Не валидные данные в запросе",
                     "description": "Доктора с таким slug не существует",
                 },

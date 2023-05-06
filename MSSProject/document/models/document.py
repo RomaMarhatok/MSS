@@ -1,3 +1,4 @@
+from unidecode import unidecode
 from django.db import models
 from .document_type import DocumentType
 from common.utils.string_utils import generate_slug_from_str
@@ -23,9 +24,11 @@ class Document(models.Model):
 
     class Meta:
         db_table = "user_document"
+        verbose_name = "Документ"
+        verbose_name_plural = "Документы"
 
     def save(self, *args, **kwargs):
-        self.slug = generate_slug_from_str(self.name)
+        self.slug = generate_slug_from_str(unidecode(self.name))
         return super(Document, self).save(*args, **kwargs)
 
     def __str__(self) -> str:

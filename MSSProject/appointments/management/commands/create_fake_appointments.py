@@ -11,7 +11,7 @@ from user.models import User, Role
 # doctor app imports
 from doctor.models import Doctor, DoctorDoctorSpecialization
 
-fake = Faker()
+fake = Faker(locale="ru_RU")
 
 
 class Command(BaseCommand):
@@ -21,7 +21,7 @@ class Command(BaseCommand):
         for user, doctor in zip(users, doctors):
             for _ in range(random.randint(1, 15)):
                 AppointmentsFactory(
-                    patient=user,
+                    patient=random.choice(users),
                     doctor=doctor,
                     date=fake.date_time_between(
                         start_date=datetime.now(),
@@ -31,6 +31,17 @@ class Command(BaseCommand):
                         self.get_doctor_specializations(doctor)
                     ),
                 )
+            AppointmentsFactory(
+                patient=user,
+                doctor=doctor,
+                date=fake.date_time_between(
+                    start_date=datetime.now(),
+                    end_date=datetime.now() + timedelta(days=300),
+                ),
+                doctor_specialization=random.choice(
+                    self.get_doctor_specializations(doctor)
+                ),
+            )
 
     def get_doctor_specializations(self, doctor: Doctor):
         specializations = [

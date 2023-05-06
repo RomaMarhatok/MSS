@@ -1,7 +1,7 @@
 from django.http import JsonResponse
+from rest_framework import exceptions
 from ..repositories import DocumentRepository, DocumentTypeRepository
 from ..serializers import DocumentSerializer
-from responses.errors import JsonResponseBadRequest
 from user.services.mixins.is_user_exist_mixin import IsUserExistMixin
 from doctor.repositories import DoctorRepository
 
@@ -15,15 +15,12 @@ class DocumentService(IsUserExistMixin):
     def get_patient_document(
         self, document_slug: str, patient_slug: str
     ) -> JsonResponse:
-        response = self.user_exist(patient_slug)
-        if response.status_code == 400:
-            return response
-
+        self.is_user_exist(patient_slug)
         if not self.document_repository.is_exist(
             slug=document_slug, patient_slug=patient_slug
         ):
-            return JsonResponseBadRequest(
-                data={
+            raise exceptions.NotFound(
+                detail={
                     "message": "Документ не найден",
                     "description": "Документ с такими параметрами не существует",
                 }
@@ -37,9 +34,7 @@ class DocumentService(IsUserExistMixin):
         return JsonResponse(data={"document": documents})
 
     def get_patient_document_list(self, patient_slug: str) -> JsonResponse:
-        response = self.user_exist(patient_slug)
-        if response.status_code == 400:
-            return response
+        self.is_user_exist(patient_slug)
         documents_qs = self.document_repository.list(patient_slug=patient_slug)
         documents = DocumentSerializer(
             instance=documents_qs, many=True, context={"repr": "list"}
@@ -47,10 +42,7 @@ class DocumentService(IsUserExistMixin):
         return JsonResponse(data={"user_documents": documents})
 
     def get_patient_newest_documents(self, patient_slug: str):
-        response = self.user_exist(patient_slug)
-        if response.status_code == 400:
-            return response
-
+        self.is_user_exist(patient_slug)
         documents_qs = self.document_repository.list(
             patient_slug=patient_slug
         ).order_by("created_at")[:5]

@@ -1,5 +1,10 @@
 from django.contrib import admin
-from .models import TreatmentHistory, TreatmentHistoryImageForAnalyzes, ImageForAnalyzes
+from .models import (
+    TreatmentHistory,
+    TreatmentHistoryImageForAnalyzes,
+    ImageForAnalyzes,
+    TreatmentHistoryDocument,
+)
 
 # Start Treatment History Models
 
@@ -57,5 +62,22 @@ admin.site.register(
     TreatmentHistoryImageForAnalyzes, AdminTreatmentHistoryImageForAnalyzes
 )
 
+
+class AdminTreatmentHistoryDocument(admin.ModelAdmin):
+    list_display = (
+        "treatment_history",
+        "document",
+    )
+    search_fields = (
+        "treatment_history",
+        "document",
+    )
+    list_display_links = (
+        "treatment_history",
+        "document",
+    )
+
+
+admin.site.register(TreatmentHistoryDocument, AdminTreatmentHistoryDocument)
 
 # End Treatment History Models

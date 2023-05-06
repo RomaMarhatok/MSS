@@ -5,6 +5,9 @@ class UserService extends RequestService {
         .then(response=>cb(response.data))
         .catch(error=>errorCb(error))
     }
+    async updateUserPersonalInfo(data){
+        return await this.post(`/user/profile/update/`,data)
+    }
     async getPatients(cb,errorCb){
         return await this.get("/user/patients/")
         .then(response=>cb(response.data.patients))

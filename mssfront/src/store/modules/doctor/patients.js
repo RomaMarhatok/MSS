@@ -23,6 +23,9 @@ const mutations = {
         console.log("mutation patients",patients)
         state.patients = patients
     },
+    setPatientsPersonalInfo:(state,{patientSlug,personalInfo})=>{
+        state.patients.find(p=>p.slug==patientSlug).personal_info = personalInfo
+    }
 }
 export default {
     namespaced: true,

@@ -13,6 +13,7 @@ import SelectButton from "primevue/selectbutton";
 import HeaderLayout from '@/components/layout/HeaderLayout.vue'
 import TabMenu from '@/components/ui/Menu/TabMenu.vue'
 import AppointmentForm from '@/components/ui/Forms/AppointmentForm.vue'
+import PhysicalParametersSection from "@/components/ui/Sections/PhysicalParametersSection.vue";
 const store = useStore()
 const route = useRoute()
 const router = useRouter()
@@ -30,6 +31,10 @@ const options = ref([
     {
         name: "Календарь",
         value: "calendar",
+    },
+    {
+        name: "Физ. параметры",
+        value: "physical"
     }
 ])
 const personalInfo = computed(() => store.getters["user/getPersonalInfo"])
@@ -47,6 +52,9 @@ const redirect = (documentSlug) => {
     })
     router.push(`/home/document/${documentSlug}/`)
 }
+const closeAppointmentForm = () => {
+    visible.value = false
+}
 onBeforeMount(() => {
     console.log("on mounted")
     store.dispatch("user/fetchUserPersonalInfo", slug.value)
@@ -60,7 +68,7 @@ onBeforeMount(() => {
     </HeaderLayout>
     <main class="p-2 flex gap-2 flex-col">
         <section class="flex-media__section gap-8">
-            <section class="bg__section bordered__section p-4 rounded-2xl w-fit flex flex-col">
+            <section class="bg__section bordered__section p-4 rounded-2xl flex flex-col w-full">
                 <div>
                     <div class="p-4">
                         <p class="text-2xl font-bold text-center">
@@ -95,7 +103,8 @@ onBeforeMount(() => {
                     <p class="font-thin">{{ personalInfo.health_status }}</p>
                 </div>
             </section>
-            <section class="bordered__section flex-width__section document__section w-full p-4 flex flex-col gap-1">
+            <section
+                class="bordered__section flex-width__section document__section max-w-1/2 w-full p-4 flex flex-col gap-1">
                 <p class="text-2xl font-semibold text-left">Недавно добавленные документы</p>
                 <Tag value="New"></Tag>
                 <div v-for="(document, index) in newestDocuments" :key="index"
@@ -122,7 +131,7 @@ onBeforeMount(() => {
                     </div>
                 </header>
                 <section class="bordered__section bg__section">
-                    <div v-if="select != 'calendar'" class="flex flex-col m-4 p-4 gap-3">
+                    <div v-if="select != 'calendar' && select != 'physical'" class="flex flex-col m-4 p-4 gap-3">
                         <div v-if="!getAppointments.length">
                             <p class="text-2xl font-bold text-center">Записей пока нет</p>
                         </div>
@@ -156,14 +165,17 @@ onBeforeMount(() => {
                             </div>
                         </div>
                     </div>
+                    <div v-else-if="select == 'physical'" class="p-4">
+                        <PhysicalParametersSection />
+                    </div>
                     <div v-else>
-                        <v-calendar show-weeknumbers="right" :attributes="calendarAppointments" is-expanded />
+                        <v-calendar show-weeknumbers="right" :attributes="calendarAppointments" expanded />
                     </div>
                 </section>
             </section>
         </main>
         <Dialog v-model:visible="visible" header="Создать запись" :style="{ width: '50vw' }">
-            <AppointmentForm />
+            <AppointmentForm @on-add-appointment="closeAppointmentForm" />
         </Dialog>
     </main>
 </template>

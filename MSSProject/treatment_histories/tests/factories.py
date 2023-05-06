@@ -7,6 +7,7 @@ from ..models import (
     ImageForAnalyzes,
     TreatmentHistory,
     TreatmentHistoryImageForAnalyzes,
+    TreatmentHistoryDocument,
 )
 
 # doctor app imports
@@ -14,8 +15,9 @@ from doctor.tests.factories import DoctorFactory
 
 # user app imports
 from user.tests.factories import UserFactory
+from document.tests.factories import DocumentFactory
 
-fake = Faker()
+fake = Faker(locale="ru_RU")
 
 
 class ImageForAnalyzesFactory(DjangoModelFactory):
@@ -47,3 +49,11 @@ class TreatmentHistoryImageForAnalyzesFactory(DjangoModelFactory):
 
     treatment_history = SubFactory(TreatmentHistoryFactory)
     image_for_analyzes = SubFactory(ImageForAnalyzesFactory)
+
+
+class TreatmentHistoryDocumentFactory(DjangoModelFactory):
+    class Meta:
+        model = TreatmentHistoryDocument
+
+    treatment_history = SubFactory(TreatmentHistoryFactory)
+    document = SubFactory(DocumentFactory)

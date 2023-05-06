@@ -73,8 +73,8 @@ const redirect = (documentSlug) => {
     store.dispatch("documents/fetchDocument", {
         slug: slug.value,
         document_slug: documentSlug
-    })
-    router.push(`/home/document/${documentSlug}/`)
+    }).then(() => router.push(`/home/document/${documentSlug}/`))
+
 }
 onMounted(() => {
     store.dispatch("documents/fetchDocuments", slug.value)
@@ -119,7 +119,7 @@ onMounted(() => {
             </section>
         </aside>
         <section class="w-full">
-            <section class="media-grid__section p-4 ">
+            <section v-if="filterDocuments.length" class="media-grid__section p-4 ">
                 <div v-for="(document, index) in filterDocuments" :key="index" @click="redirect(document.slug)">
                     <div class="shadow-container border-container flex">
                         <div class="flex p-4">
@@ -145,6 +145,11 @@ onMounted(() => {
                             </div>
                         </div>
                     </div>
+                </div>
+            </section>
+            <section v-else class="flex justify-center items-center h-full">
+                <div class="flex gap-2">
+                    <p class="text-3xl text-slate-400">Документов пока нет.</p>
                 </div>
             </section>
         </section>

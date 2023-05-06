@@ -50,6 +50,7 @@ const actions = {
         console.log("actions doctor documents",state.documents)
     },
     async fetchActiveDocument({commit,state},{slug,documentSlug}){
+        console.log(documentSlug)
         await documentService.getDoctorDocument(slug,documentSlug).then(
             response=>{
                 commit("setActiveDocument",response.data.doctor_document)

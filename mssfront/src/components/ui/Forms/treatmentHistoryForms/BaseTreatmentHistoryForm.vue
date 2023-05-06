@@ -6,7 +6,7 @@ import BaseForm from '@/components/ui/Forms/Base/BaseForm.vue'
 import Toast from 'primevue/toast';
 
 const props = defineProps({
-    submit: Function
+    submit: Function,
 })
 
 const validationSchema = object({

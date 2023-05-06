@@ -17,6 +17,7 @@ import DoctorAppointmentView from './src/view/doctor/appointments/AppointmentVie
 import DoctorDocumentListView from './src/view/doctor/documents/DoctorDocumentListView'
 import AddDocumentView from './src/view/doctor/documents/AddDocumentView'
 import ChangeDocumentView from './src/view/doctor/documents/ChangeDocumentView'
+import DoctorDocumentView from './src/view/doctor/documents/DocumentView'
 import ROLES from "./roles/roles"
 const routes = [
     {
@@ -87,19 +88,28 @@ const routes = [
         children:[
             {
                 path:"",
+                name:"doctor-home-page",
                 meta:{authorize:[ROLES.Doctor]},
                 component:DoctorHomeView,
             },
             {
                 path:"appointment/",
+                name:"doctor-appointment-page",
                 component:DoctorAppointmentView,
                 meta:{authorize:[ROLES.Doctor]},
             },
             {
                 path:"documents/",
+                name:"doctor-documents-page",
                 component:DoctorDocumentListView,
                 meta:{authorize:[ROLES.Doctor]},
                 
+            },
+            {
+                path:"document/",
+                name:"doctor-document-page",
+                component:DoctorDocumentView,
+                meta:{authorize:[ROLES.Doctor]},
             },
             {
                 path:"add/document/",
@@ -109,7 +119,7 @@ const routes = [
             },
             {
                 path:"change/document/",
-                name:"add-doctor-document",
+                name:"change-doctor-document",
                 component:ChangeDocumentView,
                 meta:{authorize:[ROLES.Doctor]},
             }

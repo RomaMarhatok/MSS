@@ -4,7 +4,7 @@ from factory.django import DjangoModelFactory
 from ..models import Role, User, UserLocation, UserPersonalInfo
 from common.utils.string_utils import generate_valid_login, generate_valid_password
 
-fake = Faker()
+fake = Faker(locale="ru_RU")
 
 
 class RoleFactory(DjangoModelFactory):

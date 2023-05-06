@@ -32,16 +32,16 @@ const validationSchema = object(
     {
         first_name: string()
             .required("Имя не может быть пустым")
-            .matches(/^[a-zA-Z]{1,}$/, "Может содержать только буквы"),
+            .matches(/^[\u0400-\u04FF]+$/, "Может содержать только буквы"),
         second_name: string()
             .required("Фамилия не может быть пустым")
-            .matches(/^[a-zA-Z]{1,}$/, "Может содержать только буквы"),
+            .matches(/^[\u0400-\u04FF]+$/, "Может содержать только буквы"),
         patronymic: string()
             .required("Отчество не может быть пустым")
-            .matches(/^[a-zA-Z]{1,}$/, "Может содержать только буквы"),
+            .matches(/^[\u0400-\u04FF]+$/, "Может содержать только буквы"),
         email: string()
             .required("Почта не может быть пустой")
-            .email("Нея является строкой типа test@example.com"),
+            .email("Не является строкой типа test@example.com"),
         gender: string()
             .required("Пол не может быть пустым"),
         age: number()
@@ -52,7 +52,8 @@ const validationSchema = object(
 )
 </script>
 <template>
-    <BaseForm :schema="validationSchema" @SubmitForm="$emit('SubmitUserPersonalInfoForm', data)" :errors="errors">
+    <BaseForm :schema="validationSchema" @SubmitForm="$emit('SubmitUserPersonalInfoForm', data)" :errors="errors"
+        class="w-full">
         <div class="flex flex-row gap-2">
             <FormInputPayload label-text="Имя" id="first_name">
                 <Field id="first_name" type='text' class="base" name="first_name" v-model="data.first_name" />

@@ -11,7 +11,7 @@ from .factories import (
     UserPersonalInfoFactory,
 )
 
-fake = Faker()
+fake = Faker(locale="ru_RU")
 
 # factories
 

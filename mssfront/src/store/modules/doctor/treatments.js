@@ -11,15 +11,26 @@ const getters = {
     getPatientInfo:(state)=>{
         return state.patientInfo
     },
+    getPhysicalParameters:(state)=>{
+        return state.patientInfo.physical_parameters
+    },
+    getLastPhysicalParameter:(state)=>{
+        return state.patientInfo.physical_parameters[state.patientInfo.physical_parameters.length-1]
+    },
     getTreatmentHistoryBySlug:(state)=>(slug)=>{
-        return state.treatmentHistories.filter(ts=>{
-            return ts.treatment_history.slug==slug
-        })[0]
+        return state.treatmentHistories.find(ts=>ts.treatment_history.slug==slug)
     },
     getImageForAnalyzes:(state)=>(treatmentHistorySlug)=>{
         for(let tsIndex in state.treatmentHistories){
             if(state.treatmentHistories[tsIndex].treatment_history.slug == treatmentHistorySlug){
                return state.treatmentHistories[tsIndex].images_for_analyzes
+            }
+        }
+    },
+    getTreatmentHistoryDocuments:(state)=>(treatmentHistorySlug)=>{
+        for(let tsIndex in state.treatmentHistories){
+            if(state.treatmentHistories[tsIndex].treatment_history.slug == treatmentHistorySlug){
+               return state.treatmentHistories[tsIndex].documents
             }
         }
     }
@@ -37,6 +48,7 @@ const actions = {
             patientSlug,
             doctorSpecializationSlug
         )
+        console.log(state.treatmentHistories)
     },
 }
 const mutations = {
@@ -49,7 +61,7 @@ const mutations = {
         state.treatmentHistories.push(treatmentHistory)
     },
     setPatientInfo:(state,patientInfo)=>{
-        console.log("mutations setPatient",patientInfo)
+        console.log("mutations setPatientInfo",patientInfo)
         state.patientInfo = patientInfo
     },
     updateTreatmentHistory:(state,treatmentHistory)=>{
@@ -79,6 +91,28 @@ const mutations = {
                 break
             }
         }
+    },
+    addDocument:(state,{document,treatmentHistorySlug})=>{
+        for(let tsIndex in state.treatmentHistories){
+            if(state.treatmentHistories[tsIndex].treatment_history.slug == treatmentHistorySlug){
+                state.treatmentHistories[tsIndex].documents.push(document)
+                break
+            }
+        }
+    },
+    deleteDocument:(state,{documentSlug,treatmentHistorySlug})=>{
+        for(let tsIndex in state.treatmentHistories){
+            if(state.treatmentHistories[tsIndex].treatment_history.slug == treatmentHistorySlug){
+                state.treatmentHistories[tsIndex].documents = state.treatmentHistories[tsIndex].documents.filter(d=>d.slug!=documentSlug)
+                break
+            }
+        }
+    },
+    addPhysicalParameter:(state,ph)=>{
+        state.patientInfo.physical_parameters.push(ph)
+    },
+    deletePhysicalParameter:(state,phSlug)=>{
+        state.patientInfo.physical_parameters = state.patientInfo.physical_parameters.filter(ph=>ph.slug!=phSlug)
     },
 }
 export default {

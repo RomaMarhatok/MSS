@@ -16,3 +16,5 @@ class Command(BaseCommand):
         call_command("create_fake_treatment_histories")
         print("________create_fake_appointments________")
         call_command("create_fake_appointments")
+        print("________create_physical_parameters________")
+        call_command("create_fake_physical_parameters")

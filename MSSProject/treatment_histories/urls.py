@@ -6,6 +6,7 @@ from treatment_histories.views import (
     DeleteImageForAnalyzesView,
     CreateTreatmentHistoryView,
     UpdateTreatmentHistoryView,
+    DocumentTreatmentHistoryView,
 )
 
 urlpatterns = [
@@ -35,6 +36,11 @@ urlpatterns = [
         name="treatment-history-create",
     ),
     path(
+        "update/",
+        UpdateTreatmentHistoryView.as_view(),
+        name="update-treatment-history",
+    ),
+    path(
         "create/image/",
         CreateImageForAnalyzesView.as_view(),
         name="create-image-for-analyzes",
@@ -45,8 +51,13 @@ urlpatterns = [
         name="delete-image-for-analyzes",
     ),
     path(
-        "update/",
-        UpdateTreatmentHistoryView.as_view(),
-        name="update-treatment-history",
+        "delete/document/",
+        DocumentTreatmentHistoryView.as_view({"post": "delete"}),
+        name="delete-document-treatment_history",
+    ),
+    path(
+        "add/document/",
+        DocumentTreatmentHistoryView.as_view({"post": "create"}),
+        name="add-document-treatment_history",
     ),
 ]

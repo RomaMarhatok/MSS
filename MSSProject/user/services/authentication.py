@@ -10,10 +10,10 @@ from django.db import transaction
 
 # Third-party app import
 from rest_framework.authtoken.models import Token
+from rest_framework import exceptions
 
 # imports from apps
 from user.repositories import UserRepository
-from responses.errors import JsonResponseBadRequest
 
 
 @dataclass
@@ -37,8 +37,8 @@ class AuthenticationService:
                     "slug": user.slug,
                 },
             )
-        return JsonResponseBadRequest(
-            data={
+        raise exceptions.NotFound(
+            detail={
                 "message": "Не валидные данные в запросе",
                 "description": "Пользователь с такими данными не существует",
             }
