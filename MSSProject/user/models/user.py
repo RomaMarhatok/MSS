@@ -11,6 +11,7 @@ class User(AbstractUser):
     login = models.CharField("user login", max_length=100, unique=True)
     password = models.CharField("user password", max_length=100)
     role = models.ForeignKey(Role, on_delete=models.SET_NULL, null=True)
+    verified = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         self.slug = generate_slug_from_str(self.login)

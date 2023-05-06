@@ -32,6 +32,7 @@ class Command(BaseCommand):
             login=generate_valid_login(),
             password=generate_valid_password(),
             role=role,
+            verified=fake.pybool(),
         )
 
     def generate_user_info(self, user: User) -> None:

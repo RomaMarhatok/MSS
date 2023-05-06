@@ -1,5 +1,4 @@
 import pytest
-from common.utils.image_utils import load_image_from_url_to_file
 from common.utils.string_utils import generate_valid_login, generate_valid_password
 from faker import Faker
 
@@ -32,6 +31,7 @@ def factory_user_with_role_patient_fixture(factory_patient_role_fixture) -> User
         login=generate_valid_login(),
         password=generate_valid_password(),
         role=factory_patient_role_fixture,
+        verified=fake.pybool(),
     )
 
 
@@ -75,6 +75,7 @@ def patient_fixture(patient_role_fixture) -> dict:
         "login": generate_valid_login(),
         "password": generate_valid_password(),
         "role": patient_role_fixture,
+        "verified": fake.pybool(),
     }
 
 

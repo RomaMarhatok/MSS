@@ -7,7 +7,6 @@ from django.http import (
     JsonResponse,
 )
 from django.db import transaction
-
 # Third-party app import
 from rest_framework.authtoken.models import Token
 from rest_framework import exceptions
@@ -28,6 +27,13 @@ class AuthenticationService:
             login is not None or password is not None
         ) and self.user_repository.is_exist(login=login, password=password):
             user = self.user_repository.get(login=login)
+            if not user.verified:
+                raise exceptions.AuthenticationFailed(
+                    detail={
+                        "message": "",
+                        "description": "Пользователь не верефицирован",
+                    }
+                )
             token, _ = Token.objects.get_or_create(user=user)
             return JsonResponse(
                 data={

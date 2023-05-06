@@ -39,6 +39,7 @@ def test(user_personal_info_fixture, user_location_fixture, patient_fixture):
     response = client.post(url, data)
     assert response.status_code == 200
     assert User.objects.count() == 2
+    assert User.objects.last().verified
     assert UserLocation.objects.count() == 2
     assert UserPersonalInfo.objects.count() == 2
 
