@@ -64,7 +64,9 @@ MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
 ]
-
+# PASSWORD_HASHERS = [
+#     "django.contrib.auth.hashers.PBKDF2PasswordHasher",
+# ]
 ROOT_URLCONF = "MSSProject.urls"
 
 TEMPLATES = [
