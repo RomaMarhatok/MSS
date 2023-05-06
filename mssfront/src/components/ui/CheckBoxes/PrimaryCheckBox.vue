@@ -13,7 +13,7 @@ const props = defineProps({
 <template>
     <div class="flex items-end">
         <div class="p-1">
-            <Checkbox v-model="check" :value="props.slug" @change="$emit('filter', check)" />
+            <Checkbox v-model="check" :value="props.slug" @change="$emit('filter', props.slug)" />
         </div>
         <p class="text-base font">{{ props.name }}</p>
     </div>

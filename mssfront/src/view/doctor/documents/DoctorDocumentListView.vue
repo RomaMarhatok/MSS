@@ -79,12 +79,12 @@ const filterDocuments = computed(() => {
     return documents
 })
 
-const addDocumentTypeFilter = (value) => {
-    if (DOCUMENT_TYPE_FILTER.value.indexOf(value[0]) === -1 && value[0]) {
-        DOCUMENT_TYPE_FILTER.value.push(value[0])
+const addDocumentTypeFilter = (documentTypeSlug) => {
+    if (DOCUMENT_TYPE_FILTER.value.indexOf(documentTypeSlug) === -1 && documentTypeSlug) {
+        DOCUMENT_TYPE_FILTER.value.push(documentTypeSlug)
     }
     else {
-        DOCUMENT_TYPE_FILTER.value.splice(value[0], 1)
+        DOCUMENT_TYPE_FILTER.value = DOCUMENT_TYPE_FILTER.value.filter((dtSlug) => dtSlug != documentTypeSlug)
     }
 }
 

@@ -16,22 +16,22 @@ import CheckBoxPayload from "@/components/ui/CheckBoxes/PrimaryCheckBox.vue";
 const store = useStore()
 const route = useRoute()
 const router = useRouter()
-const documentTypeFilter = ref([])
-const documentDateFilter = ref(null)
-const documentNameFilter = ref("")
-const documentOrder = ref("")
+const DOCUMENT_TYPE_FILTER = ref([])
+const DOCUMENT_DATE_FILTER = ref(null)
+const DOCUMENT_NAME_FILTER = ref("")
+const DOCUMENT_ORDER_FILTER = ref("")
 
 const documentsTypes = computed(() => store.getters["documents/getDocumentTypes"])
 const slug = computed(() => route.params.userSlug ? route.params.userSlug : store.state.user.slug)
 const filterDocuments = computed(() => {
     let documents = store.getters["documents/getDocuments"]
 
-    if (documentTypeFilter.value.length) {
-        documents = documents.filter((document) => documentTypeFilter.value.indexOf(document.document_type.slug) != -1)
+    if (DOCUMENT_TYPE_FILTER.value.length) {
+        documents = documents.filter((document) => DOCUMENT_TYPE_FILTER.value.indexOf(document.document_type.slug) != -1)
     }
 
-    if (documentDateFilter.value != null && documentDateFilter.value != "") {
-        const compareDate = new Date(documentDateFilter.value)
+    if (DOCUMENT_DATE_FILTER.value != null && DOCUMENT_DATE_FILTER.value != "") {
+        const compareDate = new Date(DOCUMENT_DATE_FILTER.value)
         documents = documents.filter((document) => {
             const documentDate = new Date(document.created_at)
             return compareDate.getDate() == documentDate.getDate()
@@ -40,17 +40,17 @@ const filterDocuments = computed(() => {
         })
     }
 
-    if (documentNameFilter.value) {
-        documents = documents.filter((document) => document.name.toLowerCase().includes(documentNameFilter.value.toLowerCase()))
+    if (DOCUMENT_NAME_FILTER.value) {
+        documents = documents.filter((document) => document.name.toLowerCase().includes(DOCUMENT_NAME_FILTER.value.toLowerCase()))
     }
-    if (documentOrder.value != "") {
-        if (documentOrder.value == "name") {
+    if (DOCUMENT_ORDER_FILTER.value != "") {
+        if (DOCUMENT_ORDER_FILTER.value == "name") {
             documents.sort((a, b) => {
                 return a.name.localeCompare(b.name)
             })
         }
 
-        if (documentOrder.value == "date") {
+        if (DOCUMENT_ORDER_FILTER.value == "date") {
             documents.sort((a, b) => {
                 return new Date(b.created_at) - new Date(a.created_at);
             })
@@ -61,12 +61,12 @@ const filterDocuments = computed(() => {
     return documents
 })
 
-const addDocumentTypeFilter = (value) => {
-    if (documentTypeFilter.value.indexOf(value[0]) === -1 && value[0]) {
-        documentTypeFilter.value.push(value[0])
+const addDocumentTypeFilter = async (documentTypeSlug) => {
+    if (DOCUMENT_TYPE_FILTER.value.indexOf(documentTypeSlug) === -1 && documentTypeSlug) {
+        DOCUMENT_TYPE_FILTER.value.push(documentTypeSlug)
     }
     else {
-        documentTypeFilter.value.splice(value[0], 1)
+        DOCUMENT_TYPE_FILTER.value = DOCUMENT_TYPE_FILTER.value.filter((dtSlug) => dtSlug != documentTypeSlug)
     }
 }
 const redirect = (documentSlug) => {
@@ -76,7 +76,7 @@ const redirect = (documentSlug) => {
     }).then(() => router.push(`/home/document/${documentSlug}/`))
 
 }
-onMounted(() => {
+onMounted(async () => {
     store.dispatch("documents/fetchDocuments", slug.value)
     store.dispatch("documents/fetchDocumentsTypes")
 })
@@ -96,25 +96,25 @@ onMounted(() => {
             <section>
                 <div class="p-2">
                     <Field name="name" type='text' placeholder="Название документа" class="base"
-                        v-model="documentNameFilter" />
+                        v-model="DOCUMENT_NAME_FILTER" />
                 </div>
                 <div class="p-2">
                     <div class="flex flex-col">
                         <p class="text-sm">Дата создания</p>
-                        <Field type='date' class="base" name="created_date" v-model="documentDateFilter" />
+                        <Field type='date' class="base" name="created_date" v-model="DOCUMENT_DATE_FILTER" />
                     </div>
                 </div>
                 <div class="p-2 flex gap-2">
                     <p class="text-sm">Сортировать по дате</p>
-                    <RadioButton v-model="documentOrder" name="name_order" value="name" />
+                    <RadioButton v-model="DOCUMENT_ORDER_FILTER" name="name_order" value="name" />
                 </div>
                 <div class="p-2 flex gap-2">
                     <p class="text-sm">Сортировать по алфавиту</p>
-                    <RadioButton v-model="documentOrder" name="date_order" value="date" />
+                    <RadioButton v-model="DOCUMENT_ORDER_FILTER" name="date_order" value="date" />
                 </div>
                 <div class="p-2 flex gap-2">
                     <p class="text-sm">Не сортировать</p>
-                    <RadioButton v-model="documentOrder" name="none_order" value="" />
+                    <RadioButton v-model="DOCUMENT_ORDER_FILTER" name="none_order" value="" />
                 </div>
             </section>
         </aside>
