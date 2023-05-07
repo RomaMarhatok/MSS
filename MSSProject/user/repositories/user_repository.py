@@ -56,3 +56,7 @@ class UserRepository(AbstractRepository):
         if PasswordResetTokenGenerator().check_token(user, token):
             user.verified = True
             user.save()
+
+    def change_password(self, user: User, password):
+        user.set_password(password)
+        user.save()

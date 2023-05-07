@@ -87,7 +87,7 @@ const submitUserLocationForm = async (data) => {
     <main class="flex flex-col justify-center items-center min-h-3/4 w-full">
         <header class="flex flex-col gap-3 mb-5">
             <div class="text-5xl font-black underline decoration-2">MSS</div>
-            <div class="text-lg font-black">Nice to meet you in our medical system! {{ step }}/4</div>
+            <div class="text-lg font-black">Добро пожаловать в нашу медицинскую систему! {{ step }}/4</div>
         </header>
 
         <section class="w-4/5">

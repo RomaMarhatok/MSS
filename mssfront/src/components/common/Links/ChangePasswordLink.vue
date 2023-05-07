@@ -1,12 +1,11 @@
 <script setup>
-import { defineProps } from 'vue'
-const props = defineProps({
-    link: String
-})
+import { useRouter } from 'vue-router'
+const router = useRouter()
+const redirect = () => router.push({ name: "pre-reset-password-page" })
 </script>
 <template>
     <footer class="flex justify-center mt-7">
-        <a :href="props.link" class="footer__link">Forgot your password ?</a>
+        <a @click="redirect" class="footer__link">Забыли свой пароль ?</a>
     </footer>
 </template>
 <style scoped>

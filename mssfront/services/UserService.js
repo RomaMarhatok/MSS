@@ -16,5 +16,9 @@ class UserService extends RequestService {
     async verifyUser(uid,token){
         return await this.get(`user/verify/${uid}/${token}/`)
     }
+    async resetPassword(data){
+        return await this.post(`user/reset/`,data)
+    }
+
 }
 export default UserService

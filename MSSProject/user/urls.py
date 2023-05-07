@@ -10,6 +10,7 @@ from user.views import (
     CitiesView,
     VerifyAccountView,
     SendEmailView,
+    ResetPasswordView,
 )
 
 urlpatterns = [
@@ -57,5 +58,10 @@ urlpatterns = [
         "send/email/",
         SendEmailView.as_view(),
         name="send-email",
+    ),
+    path(
+        "reset/",
+        ResetPasswordView.as_view(),
+        name="reset-password",
     ),
 ]

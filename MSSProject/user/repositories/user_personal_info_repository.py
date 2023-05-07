@@ -26,6 +26,10 @@ class UserPersonalInfoRepository(AbstractRepository):
         )
 
     def get(self, **kwargs) -> UserPersonalInfo:
+        if "email" in kwargs:
+            return UserPersonalInfo.objects.select_related("user", "user__role").get(
+                email=kwargs["email"]
+            )
         slug = kwargs.get("slug", None)
         return UserPersonalInfo.objects.select_related("user", "user__role").get(
             user__slug=slug

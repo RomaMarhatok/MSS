@@ -100,8 +100,7 @@ onBeforeMount(() => {
                     <p class="text-slate-400 font-thin text-center">{{ patientPersonalInfo.email }}</p>
                     <div class="flex flex-col">
                         <p class="pb-4 text-slate-400 font-normal">Пол</p>
-                        <p class="pb-2 border-b-slate-200 border-b-2 font-thin">{{ patientPersonalInfo.gender }}ale
-                        </p>
+                        <p class="pb-2 border-b-slate-200 border-b-2 font-thin">{{ patientPersonalInfo.gender }}</p>
                     </div>
                     <div class="flex flex-col">
                         <p class="pb-4 text-slate-400 font-normal">Возраст</p>
