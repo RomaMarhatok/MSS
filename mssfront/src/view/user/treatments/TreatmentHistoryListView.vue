@@ -16,7 +16,7 @@ const panelHeader = (ts) => {
         + ts.treatment_history.parsed_date.minutes + " "
         + ts.treatment_history.parsed_date.year
 }
-onBeforeMount(() => {
+onBeforeMount(async () => {
     store.dispatch('patientTreatments/fetchTreatmentsHistories', slug.value)
 })
 </script>

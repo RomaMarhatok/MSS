@@ -24,7 +24,7 @@ class Command(BaseCommand):
         for _ in range(25):
             patient = self.generate_user(patient_role)
             self.generate_user_info(patient)
-            doctor = self.generate_user(doctor_role)
+            doctor = self.generate_verified_user(doctor_role)
             self.generate_user_info(doctor)
 
     def generate_user(self, role: Role) -> User:
@@ -32,6 +32,15 @@ class Command(BaseCommand):
             login=generate_valid_login(),
             password=generate_valid_password(),
             role=role,
+            verified=fake.pybool(),
+        )
+
+    def generate_verified_user(self, role: Role):
+        return UserFactory(
+            login=generate_valid_login(),
+            password=generate_valid_password(),
+            role=role,
+            verified=True,
         )
 
     def generate_user_info(self, user: User) -> None:

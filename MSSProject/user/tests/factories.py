@@ -22,6 +22,7 @@ class UserFactory(DjangoModelFactory):
     login = generate_valid_login()
     password = generate_valid_password()
     role = SubFactory(RoleFactory)
+    verified = fake.pybool()
 
 
 class UserPersonalInfoFactory(DjangoModelFactory):

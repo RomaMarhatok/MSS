@@ -45,18 +45,17 @@ const newestDocuments = computed(() => store.getters["documents/getNewestDocumen
 const calendarAppointments = computed(() => store.getters["appointments/getAllAppointmentsForCalendar"])
 const slug = computed(() => store.state.user.slug ? store.state.user.slug : route.params.userSlug)
 
-const redirect = (documentSlug) => {
+const redirect = async (documentSlug) => {
     store.dispatch("documents/fetchDocument", {
         slug: slug.value,
         document_slug: documentSlug
-    })
-    router.push(`/home/document/${documentSlug}/`)
+    }).then(() => router.push(`/home/document/${documentSlug}/`))
+
 }
 const closeAppointmentForm = () => {
     visible.value = false
 }
-onBeforeMount(() => {
-    console.log("on mounted")
+onBeforeMount(async () => {
     store.dispatch("user/fetchUserPersonalInfo", slug.value)
     store.dispatch("appointments/fetchAppointments", slug.value)
     store.dispatch("documents/fetchNewestDocument", slug.value)

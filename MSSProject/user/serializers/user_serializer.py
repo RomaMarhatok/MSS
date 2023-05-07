@@ -11,7 +11,6 @@ from rest_framework.serializers import (
 
 # app imports
 from ..models import Role, User
-from ..serializers import RoleSerializer
 from common.validators.login_validator import LoginValidator
 from common.validators.password_validator import PasswordValidator
 
@@ -29,6 +28,7 @@ class UserSerializer(ModelSerializer):
         fields = (
             "login",
             "password",
+            "verified",
             "slug",
             "role",
         )
