@@ -49,7 +49,7 @@ urlpatterns = [
         name="cities-list",
     ),
     path(
-        "verify/<str:token>/",
+        "verify/<str:uid>/<str:token>/",
         VerifyAccountView.as_view(),
         name="verify-account",
     ),

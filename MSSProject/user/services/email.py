@@ -24,7 +24,6 @@ class EmailService:
         )
 
     def get_yandex_connection(self):
-        print(os.environ.get("YANDEX_MAIL"))
         yandex_username = os.environ.get("YANDEX_MAIL")
         yandex_password = os.environ.get("YANDEX_PASSWORD")
         return self._get_smtp_connection(

@@ -135,8 +135,8 @@ class VerifyAccountView(APIView):
     permission_classes = [AllowAny]
     service = VerificationService()
 
-    def get(self, request: HttpRequest, token):
-        return self.service.verify(token)
+    def get(self, request: HttpRequest, uid, token):
+        return self.service.verify(uid, token)
 
 
 class SendEmailView(APIView):

@@ -1,3 +1,4 @@
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from rest_framework import serializers
 from common.repository.base_repository import AbstractRepository
 from user.serializers import UserSerializer
@@ -50,7 +51,8 @@ class UserRepository(AbstractRepository):
         serializer = UserSerializer(data=data)
         return serializer.is_valid(raise_exception=True)
 
-    def verify_user(self, login: str) -> None:
+    def verify_user(self, login: str, token: str) -> None:
         user = self.get(login=login)
-        user.verified = True
-        user.save()
+        if PasswordResetTokenGenerator().check_token(user, token):
+            user.verified = True
+            user.save()

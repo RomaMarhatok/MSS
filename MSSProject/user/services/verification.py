@@ -9,8 +9,7 @@ class VerificationService:
         self.user_repository = UserRepository()
 
     @transaction.atomic
-    def verify(self, token):
-        login = urlsafe_base64_decode(token).decode()
-        print(login)
-        self.user_repository.verify_user(login)
+    def verify(self, uid, token):
+        login = urlsafe_base64_decode(uid).decode()
+        self.user_repository.verify_user(login, token)
         return HttpResponse()

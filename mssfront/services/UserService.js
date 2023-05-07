@@ -13,8 +13,8 @@ class UserService extends RequestService {
         .then(response=>cb(response.data.patients))
         .catch(error=>errorCb(error))
     }
-    async verifyUser(token){
-        return await this.get(`user/verify/${token}/`)
+    async verifyUser(uid,token){
+        return await this.get(`user/verify/${uid}/${token}/`)
     }
 }
 export default UserService

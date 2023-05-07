@@ -71,7 +71,8 @@ const submitUserLocationForm = async (data) => {
     Object.assign(requestData, user, userPersonalInfo, userLocation)
     await registrationService.registrate(requestData).then(response => {
         if (response.status == 200) {
-            const redirectLink = `${window.origin}/#/verification/${response.data.token}/`
+            console.log(response.data)
+            const redirectLink = `${window.origin}/#/verification/${response.data.uid}/${response.data.token}/`
             emailService.sendEmail({
                 "link": redirectLink,
                 "email": response.data.email,

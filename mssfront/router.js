@@ -43,7 +43,7 @@ const routes = [
         component:LoginView
     },
     {
-        path:"/verification/:token/",
+        path:"/verification/:uid/:token/",
         name:"verify-page",
         component:VerifyAccountView,
     },

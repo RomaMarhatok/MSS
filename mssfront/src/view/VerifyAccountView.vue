@@ -4,12 +4,12 @@ import UserService from '@/../services/UserService'
 const route = useRoute()
 const router = useRouter()
 const token = route.params.token
-console.log(token)
+const uid = route.params.uid
 const userService = new UserService()
-userService.verifyUser(token)
-router.push({
+userService.verifyUser(uid, token).then(() => router.push({
     name: "authentication-page"
-})
+}))
+
 </script>
 <template>
     <p>Verify</p>
