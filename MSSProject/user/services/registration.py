@@ -28,10 +28,6 @@ class RegistrationService:
         user_personal_info = self.user_personal_info_repository.create(data)
 
         self.user_location_repository.create(data)
-        if "email_message" in data:
-            self.email_service.send_verification_email(
-                user_personal_info.email, data["email_message"]
-            )
         return JsonResponse(
             data={
                 "message": "Пользователь зарегистрирован",
