@@ -41,3 +41,8 @@ def parse_date_to_dict(string, short: bool = False) -> dict:
         "minutes": dt.minute if len(str(dt.minute)) == 2 else "0" + str(dt.minute),
         "year": dt.year,
     }
+
+
+def parse_date_to_str(date: datetime):
+    dict_date = parse_date_to_dict(str(date))
+    return f"{dict_date['hours']}:{dict_date['minutes']} {dict_date['day']} {dict_date['mounth']} {dict_date['year']}г"
