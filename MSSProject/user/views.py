@@ -12,6 +12,7 @@ from .services import (
     UserService,
     VerificationService,
     EmailService,
+    ResetPasswordService,
 )
 
 
@@ -146,8 +147,23 @@ class SendEmailView(APIView):
     class InputSerializer(serializers.Serializer):
         link = serializers.CharField()
         email = serializers.EmailField()
+        is_reset_password = serializers.BooleanField(default=False)
 
     def post(self, request: HttpRequest):
         serializer = self.InputSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        return self.service.send_verification_email(serializer.validated_data)
+        return self.service.send(serializer.validated_data)
+
+
+class ResetPasswordView(APIView):
+    service = ResetPasswordService()
+
+    class InputSerializer(serializers.Serializer):
+        uid = serializers.CharField()
+        password = serializers.CharField()
+        token = serializers.CharField()
+
+    def post(self, request: HttpRequest):
+        serializer = self.InputSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return self.service.reset_password(serializer.validated_data)

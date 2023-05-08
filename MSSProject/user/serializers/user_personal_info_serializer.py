@@ -56,4 +56,8 @@ class UserPersonalInfoSerializer(ModelSerializer):
                     rep.pop(field)
         if not instance.health_status:
             rep["health_status"] = "Информации о вашем здоровье пока нет"
+        if rep["gender"] == "M":
+            rep["gender"] = "Мужчина"
+        if rep["gender"] == "F":
+            rep["gender"] = "Женщина"
         return rep

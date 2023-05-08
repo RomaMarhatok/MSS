@@ -79,7 +79,7 @@ onBeforeMount(async () => {
                         <div class="grid grid-cols-2 grid-rows-2 gap-9">
                             <div class="flex flex-col">
                                 <p class="pb-4 text-slate-400 font-normal">Пол</p>
-                                <p class="pb-2 border-b-slate-200 border-b-2 font-thin">{{ personalInfo.gender }}ale</p>
+                                <p class="pb-2 border-b-slate-200 border-b-2 font-thin">{{ personalInfo.gender }}</p>
                             </div>
                             <div class="flex flex-col">
                                 <p class="pb-4 text-slate-400 font-normal">Возраст</p>
@@ -87,7 +87,7 @@ onBeforeMount(async () => {
                             </div>
                             <div class="flex flex-col">
                                 <p class="pb-4 text-slate-400 font-normal">Город</p>
-                                <p class="pb-2 border-b-slate-200 border-b-2 font-thin h-full">{{ personalInfo.city }}ale
+                                <p class="pb-2 border-b-slate-200 border-b-2 font-thin h-full">{{ personalInfo.city }}
                                 </p>
                             </div>
                             <div class="flex flex-col">

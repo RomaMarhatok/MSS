@@ -8,6 +8,7 @@ import { onBeforeMount } from "vue";
 import AuthenticationService from "@/../services/AuthenticationService";
 // components
 import LoginAsAdminLink from '@/components/common/Links/LoginAsAdminLink.vue';
+import ChangePasswordLink from "@/components/common/Links/ChangePasswordLink.vue";
 import AuthenticationFrom from '@/components/ui/Forms/authentication/AuthenticationForm.vue'
 import Divider from 'primevue/divider'
 
@@ -63,6 +64,7 @@ onBeforeMount(async () => {
             <div class="inner__wrapper">
                 <AuthenticationFrom @SubmitLoginFrom="submit"></AuthenticationFrom>
                 <footer>
+                    <ChangePasswordLink />
                     <LoginAsAdminLink />
                 </footer>
             </div>
