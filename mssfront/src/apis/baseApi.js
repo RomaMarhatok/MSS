@@ -2,7 +2,7 @@ import axios from "axios";
 
 const getBaseApi = axios.create({
     baseURL:"http://127.0.0.1:8000",
-    timeout:2000
+    timeout:5000
 })
 getBaseApi.interceptors.request.use(function(config){
     console.log("authorization interceptors")
