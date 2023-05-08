@@ -43,7 +43,22 @@ class CreateAppointmentMxin:
         data["doctor"] = DoctorSerializer(instance=doctor).data
 
         appointments_repository = AppointmentsRepository()
-
+        if appointments_repository.is_exist(**data):
+            raise exceptions.ValidationError(
+                detail={
+                    "message": "Не валидные данные в запросе",
+                    "description": "Запись на данное время у данного врача уже существует",
+                },
+            )
+        if appointments_repository.is_exist(
+            patient_slug=data["patient_slug"], date=data["date"]
+        ):
+            raise exceptions.ValidationError(
+                detail={
+                    "message": "Не валидные данные в запросе",
+                    "description": "У вас уже есть запись на это время",
+                },
+            )
         appointment = appointments_repository.create(data)
         serialized_appointment = AppointmentsSerializer(instance=appointment).data
         return JsonResponse(
