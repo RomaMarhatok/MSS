@@ -65,8 +65,3 @@ class AppointmentNotificationService(EmailService):
                         [email],
                         connection,
                     )
-
-    def foo(self):
-        print("FOO")
-        data = {"link": "Test", "email": "r.marhatok@yandex.by"}
-        EmailService().send(data)
