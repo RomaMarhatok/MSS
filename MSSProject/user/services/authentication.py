@@ -30,7 +30,7 @@ class AuthenticationService:
             if not user.verified:
                 raise exceptions.AuthenticationFailed(
                     detail={
-                        "message": "",
+                        "message": "Пользователь не верефицирован",
                         "description": "Пользователь не верефицирован",
                     }
                 )
