@@ -10,6 +10,8 @@ class VerificationService:
 
     @transaction.atomic
     def verify(self, uid, token):
+        # декодирование логина
         login = urlsafe_base64_decode(uid).decode()
+        # верификация пользователя
         self.user_repository.verify_user(login, token)
         return HttpResponse()

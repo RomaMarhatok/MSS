@@ -21,12 +21,16 @@ class AuthenticationService:
 
     @transaction.atomic
     def authenticate(self, data: dict) -> HttpResponse:
+        # формирование данных
         login = data.get("login", None)
         password = data.get("password", None)
+        # проверка существования пользователя
         if (
             login is not None or password is not None
         ) and self.user_repository.is_exist(login=login, password=password):
+            # получение данных пользователя
             user = self.user_repository.get(login=login)
+            # если пользователь не верифицирован то вызвать исключение
             if not user.verified:
                 raise exceptions.AuthenticationFailed(
                     detail={
@@ -34,7 +38,9 @@ class AuthenticationService:
                         "description": "Пользователь не верефицирован",
                     }
                 )
+            # создать токен аутентификации
             token, _ = Token.objects.get_or_create(user=user)
+            # отправка запроса
             return JsonResponse(
                 data={
                     "message": "Пользователь авторизирован",
@@ -43,6 +49,7 @@ class AuthenticationService:
                     "slug": user.slug,
                 },
             )
+        # если пользователь не найден то вызвать исключение
         raise exceptions.NotFound(
             detail={
                 "message": "Не валидные данные в запросе",
