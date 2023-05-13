@@ -25,7 +25,7 @@ const redirect = async () => {
 </script>
 <template>
     <main class="flex w-full h-screen gap-4 justify-center items-center">
-        <p class="text-5xl text-slate-400">К данной странице нет доступа.</p>
+        <p class="text-5xl text-slate-400">Страница не найдена.</p>
         <a class="link text-5xl text-slate-400" @click="redirect">На главную ?</a>
     </main>
 </template>

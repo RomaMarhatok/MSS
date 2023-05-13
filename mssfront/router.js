@@ -1,4 +1,5 @@
 import {createRouter,createWebHashHistory} from "vue-router";
+
 import IndexView from "./src/view/IndexView"
 import SignupView from "./src/view/SignupView"
 import LoginView from "./src/view/LoginView"
@@ -7,6 +8,7 @@ import NoPermissionView from './src/view/NoPermissionView'
 import VerifyAccountView from './src/view/VerifyAccountView'
 import PreResetPasswordView from './src/view/PreResetPasswordView'
 import ResetPasswordView from './src/view/ResetPasswordView'
+import NotFoundView from './src/view/NotFoundView'
 
 import PatinetPersonalInfoVIew from "./src/view/user/PersonalInfoView"
 import DocumentsListView from './src/view/user/documents/DocumentsListView'
@@ -22,12 +24,14 @@ import AddDocumentView from './src/view/doctor/documents/AddDocumentView'
 import ChangeDocumentView from './src/view/doctor/documents/ChangeDocumentView'
 import DoctorDocumentView from './src/view/doctor/documents/DocumentView'
 import ROLES from "./roles/roles"
+
+import store from "@/store/index/";
 const routes = [
     {
         path:"/logout/",
         name:"logut page",
         component:LogoutView,
-        meta:{authorize:[]}
+        meta:{authorize:[ROLES.Doctor,ROLES.Patient]}
     },
     {
         path:"/",
@@ -61,7 +65,7 @@ const routes = [
     },
     {
         path:"/home/",
-        meta:{authorize:[]},
+        meta:{authorize:[ROLES.Patient]},
         children:[
             {
                 path:"",
@@ -149,6 +153,11 @@ const routes = [
         name:"no-permission-page",
         component:NoPermissionView
     },
+    {
+        path:"/:pathMatch(.*)*",
+        name:"not-found",
+        component:NotFoundView,
+    },
 ]
 const router = createRouter({
     history:createWebHashHistory(),
@@ -156,19 +165,30 @@ const router = createRouter({
 })
 //need much fixes
 // TODO fix error with logout page
-// router.beforeEach((to,from,next)=>{
-//     const { authorize } = to.meta
-//     if(authorize){
-//         if(authorize.length && authorize.includes(store.state.user.role)){
-//             next()
-//         }
-//         else{
-//             console.log(authorize.length,authorize.includes(store.state.user.role))
-//             next("/nopermission/")
-//         }
-//     }
-//     else{
-//         next()
-//     }
-// })
+router.beforeEach((to,from,next)=>{
+    const { authorize } = to.meta
+    if(authorize){
+        const token = localStorage.getItem("auth_token")
+        if(token === null){
+            next("/nopermission/")
+        }
+        else{
+            const userRole = store.state.user.role
+            if(authorize.length && authorize.includes(userRole)){
+                next()
+            }
+            else{
+                console.log(to.path)
+                console.log(store.state.user.role)
+                console.log(authorize)
+                console.log(authorize.length,authorize.includes(store.state.user.role))
+                next("/nopermission/")
+            }
+        }
+        
+    }
+    else{
+        next()
+    }
+})
 export default router
