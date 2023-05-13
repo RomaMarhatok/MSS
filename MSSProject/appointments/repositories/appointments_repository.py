@@ -1,7 +1,8 @@
+from django.db.models import Q, QuerySet
+from datetime import datetime
 from ..models import Appointments
 from ..serializers.appointments_serializer import AppointmentsSerializer
 from common.repository.base_repository import AbstractRepository
-from django.db.models import Q, QuerySet
 
 
 class AppointmentsRepository(AbstractRepository):
@@ -61,10 +62,18 @@ class AppointmentsRepository(AbstractRepository):
         patient_slug = kwargs.get("patient_slug", None)
         doctor_slug = kwargs.get("doctor_slug", None)
         date = kwargs.get("date", None)
-        if patient_slug is None or doctor_slug is None or date is None:
+        if patient_slug is None or date is None:
             return None
+        if doctor_slug is None:
+            return Appointments.objects.filter(
+                Q(patient__slug=patient_slug) & Q(date=date)
+            ).exists()
         return Appointments.objects.filter(
             Q(patient__slug=patient_slug)
             & Q(doctor__user__slug=doctor_slug)
             & Q(date=date)
         ).exists()
+
+    def get_appointment_by_date(self, end_date: datetime) -> QuerySet[Appointments]:
+        now = datetime.now()
+        return self.__init_query.filter(date__range=(now, end_date))

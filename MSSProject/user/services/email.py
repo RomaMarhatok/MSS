@@ -34,24 +34,27 @@ class EmailService:
             EmailHost.GMAIL_HOST.value, gmail_username, gmail_password
         )
 
-    def get_yandex_connection(self):
+    def get_yandex_connection(self) -> EmailBackend | None:
         yandex_username = os.environ.get("YANDEX_MAIL")
         yandex_password = os.environ.get("YANDEX_PASSWORD")
         return self._get_smtp_connection(
             EmailHost.YANDEX_HOST.value, yandex_username, yandex_password
         )
 
-    def get_email_connection(self, email: str):
+    def get_email_connection(self, email: str, fail_silently=False):
         if "yandex" in email:
             return self.get_yandex_connection()
         if "gmail" in email:
             return self.get_gmail_connection()
-        raise exceptions.ValidationError(
-            detail={
-                "message": "Не валидные данные в запросе",
-                "description": "Этот сервис не поддерживается (поддерживаются почты yandex,gmail)",
-            }
-        )
+        if not fail_silently:
+            raise exceptions.ValidationError(
+                detail={
+                    "message": "Не валидные данные в запросе",
+                    "description": "Этот сервис не поддерживается (поддерживаются почты yandex,gmail)",
+                }
+            )
+        else:
+            return None
 
     def _get_message(self, to_email, redirect_link, is_reset_password=False):
         base_message = (
@@ -94,6 +97,24 @@ class EmailService:
                 }
             )
 
+    def _send(
+        self,
+        mail_subject: str,
+        message: str,
+        from_email: str,
+        to_email: list[str],
+        connection: EmailBackend,
+        fail_silently=False,
+    ) -> None:
+        send_mail(
+            mail_subject,
+            message,
+            from_email,
+            to_email,
+            connection=connection,
+            fail_silently=fail_silently,
+        )
+
     def send(self, data: dict) -> None:
         redirect_link = data.get("link", None)
         is_reset_password = data.get("is_reset_password", False)
@@ -105,13 +126,5 @@ class EmailService:
         mail_subject = self._get_mail_subject(is_reset_password=is_reset_password)
         message = self._get_message(to_email, redirect_link, is_reset_password)
         from_email = self._get_from_email(conn)
-
-        send_mail(
-            mail_subject,
-            message,
-            from_email,
-            [to_email],
-            connection=conn,
-            fail_silently=False,
-        )
+        self._send(mail_subject, message, from_email, [to_email], conn)
         return HttpResponse()

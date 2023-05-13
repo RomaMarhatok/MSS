@@ -18,14 +18,15 @@ import HomePageNavBar from "@/components/layout/Navbars/HomePageNavBar.vue"
     <div class="relative w-full h-full pt-1">
       <div class="absolute text-center font-black left-10 top-10">
         <div class="header-text">MEDICINE<br />SYSTEM STORAGE</div>
-        <div class="body-text text-custom-dark-aqua">
+        <p class="body-text text-custom-dark-aqua">
           Lorem Ipsum is simply dummy<br />
           text of the<br />
           printing and<br />
           typesetting industry.
-        </div>
+        </p>
       </div>
       <img class="object-cover max-w-full max-h-full" src="@/assets/frontPageDoctorImage.svg" alt="doctor image" />
+
     </div>
     <!-- <div class="card-container">
       <IndexViewCard :title="title" :text="text" />

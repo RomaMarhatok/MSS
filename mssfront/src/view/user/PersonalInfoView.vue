@@ -5,15 +5,19 @@ import "primevue/resources/primevue.min.css"
 import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router';
 import { onBeforeMount, computed, ref } from 'vue';
+import { useToast } from 'primevue/usetoast';
 
 import Tag from 'primevue/tag';
 import Dialog from 'primevue/dialog';
 import SelectButton from "primevue/selectbutton";
+import Toast from 'primevue/toast'
 
 import HeaderLayout from '@/components/layout/HeaderLayout.vue'
 import TabMenu from '@/components/ui/Menu/TabMenu.vue'
 import AppointmentForm from '@/components/ui/Forms/AppointmentForm.vue'
 import PhysicalParametersSection from "@/components/ui/Sections/PhysicalParametersSection.vue";
+
+const toast = useToast()
 const store = useStore()
 const route = useRoute()
 const router = useRouter()
@@ -53,6 +57,7 @@ const redirect = async (documentSlug) => {
 
 }
 const closeAppointmentForm = () => {
+    toast.add({ severity: 'success', summary: 'Успех', detail: 'Запись добавлена', life: 3000 });
     visible.value = false
 }
 onBeforeMount(async () => {
@@ -62,6 +67,7 @@ onBeforeMount(async () => {
 })
 </script>
 <template>
+    <Toast />
     <HeaderLayout>
         <TabMenu />
     </HeaderLayout>
