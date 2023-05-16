@@ -1,3 +1,4 @@
+from unidecode import unidecode
 from django.db import models
 from common.utils.string_utils import generate_slug_from_str
 
@@ -7,7 +8,7 @@ class DoctorSpecialization(models.Model):
     name = models.CharField("doctor profession name", max_length=100, unique=True)
 
     def save(self, *args, **kwargs):
-        self.slug = generate_slug_from_str(self.name)
+        self.slug = generate_slug_from_str(unidecode(self.name))
         return super(DoctorSpecialization, self).save(*args, **kwargs)
 
     class Meta:
