@@ -1,12 +1,13 @@
 # stdlib imports
+import os
 from dataclasses import dataclass
-
 # core django imports
 from django.http import (
     HttpResponse,
     JsonResponse,
 )
 from django.db import transaction
+from django.contrib.auth.hashers import make_password
 # Third-party app import
 from rest_framework.authtoken.models import Token
 from rest_framework import exceptions
@@ -24,10 +25,12 @@ class AuthenticationService:
         # формирование данных
         login = data.get("login", None)
         password = data.get("password", None)
+        salt = os.environ.get("HASHER_SALT", None)
+        hashed_password = make_password(password, salt)
         # проверка существования пользователя
         if (
             login is not None or password is not None
-        ) and self.user_repository.is_exist(login=login, password=password):
+        ) and self.user_repository.is_exist(login=login, password=hashed_password):
             # получение данных пользователя
             user = self.user_repository.get(login=login)
             # если пользователь не верифицирован то вызвать исключение

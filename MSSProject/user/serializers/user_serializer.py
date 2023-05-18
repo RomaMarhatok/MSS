@@ -1,6 +1,7 @@
 # stdlib imports
+import os
 from typing import OrderedDict
-
+from django.contrib.auth.hashers import make_password
 # Third-party app imports
 from rest_framework.serializers import (
     ModelSerializer,
@@ -64,6 +65,9 @@ class UserSerializer(ModelSerializer):
         if "role" in validated_data:
             validated_data.pop("role")
         role = Role.objects.get(name=Role.PATIENT)
+        if "password" in validated_data:
+            salt = os.environ.get("HASHER_SALT", None)
+            validated_data["password"] = make_password(validated_data["password"], salt)
         instance = User.objects.create(**validated_data, role=role)
         return instance
 

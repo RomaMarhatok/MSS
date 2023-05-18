@@ -26,7 +26,6 @@ const data = reactive(
         gender: "",
     }
 )
-
 //schemas
 const validationSchema = object(
     {
@@ -41,7 +40,8 @@ const validationSchema = object(
             .matches(/^[\u0400-\u04FF]+$/, "Может содержать только буквы"),
         email: string()
             .required("Почта не может быть пустой")
-            .email("Не является строкой типа test@example.com"),
+            .email("Не является строкой типа test@example.com")
+            .matches(/^[\w-\\._\\+%]+@(gmail|yandex)\./, "Поддерживается почта только от Yandex и Gmail"),
         gender: string()
             .required("Пол не может быть пустым"),
         age: number()

@@ -1,3 +1,4 @@
+from rest_framework import exceptions
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
@@ -26,7 +27,13 @@ class RegistrationService:
         user = self.user_repository.create(data)
 
         data.update({"user_slug": user.slug})
-
+        # if ('yandex' not in data["email"]) or ('gmail' not in data["email"]):
+        #     raise exceptions.ValidationError(
+        #         detail={
+        #             "message": "Не валидные данные в запросе",
+        #             "description": "Данная почта не поддерживается",
+        #         },
+        #     )
         user_personal_info = self.user_personal_info_repository.create(data)
 
         self.user_location_repository.create(data)
