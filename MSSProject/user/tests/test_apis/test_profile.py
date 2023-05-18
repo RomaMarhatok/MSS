@@ -18,7 +18,9 @@ def test(user_personal_info_fixture, user_location_fixture, patient_fixture):
     url = reverse("user-registration")
     response = client.post(url, data)
     assert response.status_code == 200
-
+    user = User.objects.first()
+    user.verified = True
+    user.save()
     authentication_data = {
         "login": data.get("login", None),
         "password": data.get("password", None),
@@ -48,7 +50,9 @@ def test_bad(user_personal_info_fixture, user_location_fixture, patient_fixture)
     url = reverse("user-registration")
     response = client.post(url, data)
     assert response.status_code == 200
-
+    user = User.objects.first()
+    user.verified = True
+    user.save()
     authentication_data = {
         "login": data.get("login", None),
         "password": data.get("password", None),

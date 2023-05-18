@@ -1,8 +1,7 @@
 from django.db import models
-from datetime import datetime
 from django.contrib.auth.models import AbstractUser
-from .role import Role
 
+from .role import Role
 from common.utils.string_utils import generate_slug_from_str
 
 

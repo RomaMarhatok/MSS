@@ -1,4 +1,6 @@
+import os
 import pytest
+from django.contrib.auth.hashers import make_password
 from common.utils.string_utils import generate_valid_login, generate_valid_password
 from rest_framework.serializers import ValidationError
 from user.models import Role, User
@@ -97,5 +99,7 @@ def test_filter(patient_fixture):
     assert serializer.is_valid(raise_exception=True)
     serializer.save()
     patient_fixture.pop("role")
+    salt = os.environ.get("HASHER_SALT", None)
+    patient_fixture["password"] = make_password(patient_fixture["password"], salt)
     assert User.objects.filter(**patient_fixture).exists()
     assert bool(User.objects.get(**patient_fixture))
