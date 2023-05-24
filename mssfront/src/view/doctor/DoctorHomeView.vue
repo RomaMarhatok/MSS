@@ -31,43 +31,32 @@ onBeforeMount(() => {
             <p class="text-3xl text-slate-400">Записей к вам пока нет.</p>
         </section>
         <section v-else class="w-full">
-            <div>
-                <DataTable :value="appointments" @row-click="onclick">
-                    <Column header="Пациент">
-                        <template #body="slotProps">
-                            <p>{{ slotProps.data.patient.full_name }}</p>
-                        </template>
-                    </Column>
-                    <Column header="Дата">
-                        <template #body="slotProps">
-                            <div class="flex flex-col justify-center">
-                                <div class="flex max-[900px]:justify-center gap-1">
-                                    <p class="font-bold">{{ slotProps.data.parsed_date.day }}</p>
-                                    <p class="font-bold">{{ slotProps.data.parsed_date.mounth }}</p>
-                                    <p class="font-bold">{{ slotProps.data.parsed_date.year }}</p>
-                                    <p class="">{{ slotProps.data.parsed_date.hours }}:{{
-                                        slotProps.data.parsed_date.minutes
-                                    }}</p>
-                                </div>
+            <DataTable :value="appointments" @row-click="onclick" paginator rows="10" :rowsPerPageOptions="[5, 10, 20, 50]">
+                <Column field="patient.slug" header="Пациент" sortable>
+                    <template #body="slotProps">
+                        <p>{{ slotProps.data.patient.full_name }}</p>
+                    </template>
+                </Column>
+                <Column field="date" header="Дата" sortable>
+                    <template #body="slotProps">
+                        <div class="flex flex-col justify-center">
+                            <div class="flex max-[900px]:justify-center gap-1">
+                                <p class="font-bold">{{ slotProps.data.parsed_date.day }}</p>
+                                <p class="font-bold">{{ slotProps.data.parsed_date.mounth }}</p>
+                                <p class="font-bold">{{ slotProps.data.parsed_date.year }}</p>
+                                <p class="">{{ slotProps.data.parsed_date.hours }}:{{
+                                    slotProps.data.parsed_date.minutes
+                                }}</p>
                             </div>
-                        </template>
-                    </Column>
-                    <Column header="Тип доктора">
-                        <template #body="slotProps">
-                            <div>{{ slotProps.data.doctor_specialization.name }}</div>
-                        </template>
-                    </Column>
-                    <!-- <Column header="Options">
-                            <template #body>
-                                <Toolbar>
-                                    <template #end>
-                                        <button class="delete-button"><i class="pi pi-times"></i></button>
-                                    </template>
-                                </Toolbar>
-                            </template>
-                        </Column> -->
-                </DataTable>
-            </div>
+                        </div>
+                    </template>
+                </Column>
+                <Column field="doctor_specialization.name" header="Тип доктора" sortable>
+                    <template #body="slotProps">
+                        <div>{{ slotProps.data.doctor_specialization.name }}</div>
+                    </template>
+                </Column>
+            </DataTable>
         </section>
     </main>
 </template>
