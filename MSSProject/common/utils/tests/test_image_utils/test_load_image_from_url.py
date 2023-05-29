@@ -3,8 +3,6 @@ import os
 import pytest
 from common.utils.image_utils import FolderController, load_image_from_url
 from faker import Faker
-
-# from treatment.models import UserPersonalInfo
 from treatment_histories.models import ImageForAnalyzes
 
 fake = Faker()
