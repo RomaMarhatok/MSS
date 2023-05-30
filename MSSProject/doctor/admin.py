@@ -18,13 +18,13 @@ class AdminDoctor(admin.ModelAdmin):
 admin.site.register(Doctor, AdminDoctor)
 
 
-class AdminDoctorSummary(admin.ModelAdmin):
-    search_fields = ("doctor",)
-    list_display = ("doctor",)
-    list_display_links = ("doctor",)
+# class AdminDoctorSummary(admin.ModelAdmin):
+#     search_fields = ("doctor",)
+#     list_display = ("doctor",)
+#     list_display_links = ("doctor",)
 
 
-admin.site.register(DoctorSummary, AdminDoctorSummary)
+# admin.site.register(DoctorSummary, AdminDoctorSummary)
 
 
 class AdminDoctorSpecialization(admin.ModelAdmin):
