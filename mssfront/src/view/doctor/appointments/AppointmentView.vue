@@ -29,26 +29,26 @@ const selectTreatementHistory = (tsSlug, IsSelected) => {
     swapOnChangeTSForm.value = false
 }
 
-// const menuChangeTSLabel = computed(() => !swapOnChangeTSForm.value ? "Изменить" : "Отмена")
-// const menuChangeTSIcon = computed(() => !swapOnChangeTSForm.value ? 'pi pi-plus' : 'pi pi-minus')
-// const changeTSMenu = ref()
-// const changeMenuTSOptions = ref([
-//     {
-//         label: "Действия",
-//         items: [
-//             {
-//                 label: menuChangeTSLabel,
-//                 icon: menuChangeTSIcon,
-//                 command: () => {
-//                     swapOnChangeTSForm.value = !swapOnChangeTSForm.value
-//                 }
-//             }
-//         ]
-//     }
-// ])
-// const toggleMenu = (event) => {
-//     changeTSMenu.value.toggle(event)
-// }
+const menuChangeTSLabel = computed(() => !swapOnChangeTSForm.value ? "Изменить" : "Отмена")
+const menuChangeTSIcon = computed(() => !swapOnChangeTSForm.value ? 'pi pi-plus' : 'pi pi-minus')
+const changeTSMenu = ref()
+const changeMenuTSOptions = ref([
+    {
+        label: "Действия",
+        items: [
+            {
+                label: menuChangeTSLabel,
+                icon: menuChangeTSIcon,
+                command: () => {
+                    swapOnChangeTSForm.value = !swapOnChangeTSForm.value
+                }
+            }
+        ]
+    }
+])
+const toggleMenu = (event) => {
+    changeTSMenu.value.toggle(event)
+}
 const swapTSOnForm = () => {
     swapOnChangeTSForm.value = false
 }
@@ -133,7 +133,7 @@ onBeforeMount(() => {
                         <p class="text-2xl font-bold text-center">Истории лечения</p>
                         <AddTreatmentHistoryDialog />
                     </div>
-                    <div v-if="treatmentHistories.length">
+                    <div v-if="treatmentHistories.length" class="flex flex-col gap-1">
                         <div v-for="(ts, index) in treatmentHistories" :key="index" class="treatment_history__item bg-white"
                             @click="selectTreatementHistory(ts.treatment_history.slug, true)">
                             <div class="flex justify-between">
@@ -163,12 +163,12 @@ onBeforeMount(() => {
                     <p class="text-center">История лечения не выбрана</p>
                 </div>
                 <div v-else class="flex flex-col p-1 justify-start w-full">
-                    <!-- <div class="flex w-full p-2">
+                    <div class="flex w-full p-2">
                         <button class="p-panel-header-icon p-link mr-2" @click="toggleMenu">
                             <span class="pi pi-cog"></span>
                         </button>
                     </div>
-                    <Menu ref="changeTSMenu" :model="changeMenuTSOptions" id="config_change_menu" popup /> -->
+                    <Menu ref="changeTSMenu" :model="changeMenuTSOptions" id="config_change_menu" popup />
                     <SingleTreatmentHistorySection :treatment-history-slug="selectedTSSlug"
                         :swap-on-change-form="swapOnChangeTSForm" @onChangeTreatmentHistory="swapTSOnForm" />
                 </div>
