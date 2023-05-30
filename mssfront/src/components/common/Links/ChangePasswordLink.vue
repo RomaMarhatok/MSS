@@ -4,7 +4,7 @@ const router = useRouter()
 const redirect = () => router.push({ name: "pre-reset-password-page" })
 </script>
 <template>
-    <footer class="flex justify-center mt-7">
+    <footer class="flex justify-center mt-2">
         <a @click="redirect" class="footer__link">Забыли свой пароль ?</a>
     </footer>
 </template>
