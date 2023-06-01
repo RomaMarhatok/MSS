@@ -9,7 +9,8 @@ import VerifyAccountView from './src/view/VerifyAccountView'
 import PreResetPasswordView from './src/view/PreResetPasswordView'
 import ResetPasswordView from './src/view/ResetPasswordView'
 import NotFoundView from './src/view/NotFoundView'
-
+import AboutProgramView from './src/view/AboutProgramView'
+import AboutView from './src/view/AboutView'
 import PatinetPersonalInfoVIew from "./src/view/user/PersonalInfoView"
 import DocumentsListView from './src/view/user/documents/DocumentsListView'
 import DocumentView from "./src/view/user/documents/DocumentView"
@@ -62,6 +63,16 @@ const routes = [
         path:"/reset/:uid/:token/",
         name:"reset-password-page",
         component:ResetPasswordView,
+    },
+    {
+        path:"/about-program/",
+        name:"about-program-view",
+        component:AboutProgramView,
+    },
+    {
+        path:"/about/",
+        name:"about-view",
+        component: AboutView
     },
     {
         path:"/home/",
