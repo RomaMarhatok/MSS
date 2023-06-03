@@ -56,11 +56,15 @@ class UserService(IsUserExistMixin):
 
     def get_all_patients(self):
         users = self.user_repository.list()
-        serializerd_patients = [
-            UserSerializer(instance=user).data
-            for user in users
-            if user.role.name == Role.PATIENT
-        ]
+        serializerd_patients = []
+        for user in users:
+            if user.role is not None and user.role.name == Role.PATIENT:
+                serializerd_patients.append(UserSerializer(instance=user).data)
+        # serializerd_patients = [
+        #     UserSerializer(instance=user).data
+        #     for user in users
+        #     if user.role.name == Role.PATIENT
+        # ]
         return JsonResponse(
             data={
                 "patients": serializerd_patients,
