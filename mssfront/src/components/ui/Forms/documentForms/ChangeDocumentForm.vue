@@ -32,10 +32,11 @@ const validationSchema = object({
     document_type_slug: string().required("Тип документа обязателен"),
     user_slug: string().required("Пациент обязателен"),
 })
-const submit = async () => {
+const submit = () => {
     data.creator_slug = userSlug.value
     data.document_slug = props.document.slug
-    await documentService.updateDocument(data)
+    console.log("CHANGE", data)
+    documentService.updateDocument(data)
         .then(response => {
             if (response.status == 200) {
                 store.commit("doctorDocuments/changeDocument", response.data.document)

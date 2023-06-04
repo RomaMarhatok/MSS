@@ -27,14 +27,14 @@ const getters = {
             fill:false,
             tension: 0.4,
         }
-        state.physicalParameters.filter(physicalParameter=>{
+        state.physicalParameters.forEach(physicalParameter=>{
             labels.push(physicalParameter.created_at)
             weightDataSet.data.push(physicalParameter.weight)
             heightDataSet.data.push(physicalParameter.height)
             pressureDataSet.data.push(physicalParameter.pressure)
         })
         
-        return{
+        return {
             labels: labels,
             datasets: [weightDataSet, heightDataSet, pressureDataSet],
         }

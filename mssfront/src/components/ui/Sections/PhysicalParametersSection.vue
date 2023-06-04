@@ -12,7 +12,7 @@ onBeforeMount(() => {
 </script>
 <template>
     <main>
-        <div v-if="!chartData.length" class="flex justify-center bg-white p-4">
+        <div v-if="!chartData.labels.length" class="flex justify-center bg-white p-4">
             <p class="text-3xl text-slate-400">Информации о физ. параметрах пока нет.</p>
         </div>
         <div v-else class="bg-white p-4">
