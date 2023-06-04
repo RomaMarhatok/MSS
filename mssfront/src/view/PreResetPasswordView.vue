@@ -31,7 +31,6 @@ const submit = async () => {
         if (response.status == 200) {
             toast.add({ severity: 'success', summary: 'Успех', detail: 'Сообщение отправлено на почту', life: 3000 });
             errors.value = []
-            router.push({ name: "site-home-page" })
         }
     }).catch(error => {
         const errorsObj = error.response.data
