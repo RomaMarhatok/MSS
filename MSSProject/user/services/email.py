@@ -119,6 +119,13 @@ class EmailService:
         redirect_link = data.get("link", None)
         is_reset_password = data.get("is_reset_password", False)
         to_email = data.get("email", None)
+        if not self.user_personal_info_repository.is_exist(email=to_email):
+            raise exceptions.NotFound(
+                detail={
+                    "message": "Пользователь не найден",
+                    "description": "Пользователь с такой почтой не существует",
+                }
+            )
         if is_reset_password:
             redirect_link = self._get_reset_password_link(to_email, redirect_link)
 
