@@ -6,7 +6,7 @@ import HomePageNavBar from "@/components/layout/Navbars/HomePageNavBar.vue"
 // const text = ref("Lorem Ipsum is simply dummy text of the printing and typesetting industry.")
 </script>
 <template>
-  <header class="">
+  <header>
     <div class="header-media pl-2">
       <div class="items-center self-center">
         <span class="font-black underline text-black text-4xl">MSS</span>

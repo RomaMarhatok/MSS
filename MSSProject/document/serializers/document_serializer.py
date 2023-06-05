@@ -60,8 +60,11 @@ class DocumentSerializer(ModelSerializer):
         return instance
 
     def update(self, instance: Document, validated_data):
+        dt = DocumentType.objects.get(slug=validated_data["document_type"]["slug"])
         return Document.objects.filter(slug=instance.slug).update(
-            name=validated_data["name"], content=validated_data["content"]
+            name=validated_data["name"],
+            content=validated_data["content"],
+            document_type=dt,
         )
 
     def to_representation(self, instance: Document):

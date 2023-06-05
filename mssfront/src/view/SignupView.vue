@@ -1,7 +1,7 @@
 <script setup>
 // libraries
 import { useStore } from 'vuex';
-// import { useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 import { reactive, onMounted, ref } from 'vue'
 
 // services
@@ -16,7 +16,7 @@ import EmailSendComponent from '@/components/layout/EmailSendComponent.vue';
 const store = useStore()
 
 // router
-// const router = useRouter()
+const router = useRouter()
 
 // refs
 const step = ref(1)
@@ -81,12 +81,13 @@ const submitUserLocationForm = async (data) => {
     })
 }
 
+const homeRedirect = () => router.push({ name: "site-home-page" })
 
 </script>
 <template>
     <main class="flex flex-col justify-center items-center min-h-3/4 w-full">
         <header class="flex flex-col gap-3 mb-5">
-            <div class="text-5xl font-black underline decoration-2">MSS</div>
+            <div class="text-5xl font-black underline decoration-2 hover:cursor-pointer" @click="homeRedirect">MSS</div>
             <div class="text-lg font-black">Добро пожаловать в нашу медицинскую систему! {{ step }}/4</div>
         </header>
 

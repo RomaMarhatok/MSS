@@ -64,6 +64,7 @@ class DoctorDocumentView(GenericViewSet):
         content = serializers.CharField()
         document_slug = serializers.SlugField()
         creator_slug = serializers.SlugField()
+        document_type_slug = serializers.SlugField()
 
     def update(self, request):
         serializer = self.UpdateInputSerializer(data=request.data)
