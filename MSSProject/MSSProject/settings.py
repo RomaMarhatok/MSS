@@ -151,7 +151,7 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 CORS_ORIGIN_ALLOW_ALL = False
-CORS_ORIGIN_WHITELIST = ["http://localhost:8080"]
+CORS_ORIGIN_WHITELIST = ["http://localhost:8000", "http://localhost:8080"]
 
 # LOGGING = {
 #     "version": 1,
