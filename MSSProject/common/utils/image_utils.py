@@ -2,7 +2,7 @@ import requests
 import os
 import shutil
 from django.core.files.images import ImageFile
-from PIL import Image
+from PIL import Image, UnidentifiedImageError
 from io import BytesIO
 from dataclasses import dataclass
 from django.core.files.uploadedfile import InMemoryUploadedFile
@@ -75,7 +75,11 @@ def load_image_from_url_to_file(
 
 def load_image_from_url(image_url) -> InMemoryUploadedFile:
     resp_content = Client.get(image_url)
-    pil_image = Image.open(BytesIO(resp_content)).convert("RGB")
+    try:
+        pil_image = Image.open(BytesIO(resp_content)).convert("RGB")
+    except UnidentifiedImageError:
+        resp_content = Client.get(fake.image_url())
+        pil_image = Image.open(BytesIO(resp_content)).convert("RGB")
     img_io = BytesIO()
     pil_image.save(img_io, format="JPEG")
     img_io.seek(0)
