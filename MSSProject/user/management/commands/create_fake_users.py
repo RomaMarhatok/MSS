@@ -10,7 +10,7 @@ from ...tests.factories import (
     RoleFactory,
 )
 
-from common.utils.image_utils import load_image_from_url
+
 from common.utils.string_utils import generate_valid_login, generate_valid_password
 
 
@@ -26,6 +26,7 @@ class Command(BaseCommand):
             self.generate_user_info(patient)
             doctor = self.generate_verified_user(doctor_role)
             self.generate_user_info(doctor)
+        self.create_super_user()
 
     def generate_user(self, role: Role) -> User:
         return UserFactory(
@@ -60,3 +61,13 @@ class Command(BaseCommand):
             city=fake.city(),
             address=fake.address(),
         )
+
+    def create_super_user(self):
+        if not User.objects.filter(is_superuser=True).exists():
+            super_user = User.objects.create(
+                login="admin",
+                password="admin"
+            )
+            super_user.set_password(super_user.password)
+            super_user.is_superuser = True
+            super_user.save()
