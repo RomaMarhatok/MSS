@@ -35,6 +35,7 @@ class Command(BaseCommand):
         doctor.user.login = "doctor"
         doctor.user.set_password("12345678")
         doctor.user.verified = True
+        doctor.user.save()
         doctor.save()
 
     def generate_doctor_specializations(self, doctor: Doctor):

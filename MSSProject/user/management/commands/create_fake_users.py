@@ -31,6 +31,7 @@ class Command(BaseCommand):
         user.login = "user"
         user.set_password("12345678")
         user.verified = True
+        user.role = patient_role
         user.save()
 
     def generate_user(self, role: Role) -> User:
