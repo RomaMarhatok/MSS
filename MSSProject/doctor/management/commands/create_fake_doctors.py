@@ -31,6 +31,11 @@ class Command(BaseCommand):
                 summary=fake.text(max_nb_chars=1000),
             )
             self.generate_doctor_specializations(doctor)
+        doctor = Doctor.objects.last()
+        doctor.user.login = "doctor"
+        doctor.user.set_password("12345678")
+        doctor.user.verified = True
+        doctor.save()
 
     def generate_doctor_specializations(self, doctor: Doctor):
         doctor_specialization = random.choice(DoctorSpecialization.objects.all())
