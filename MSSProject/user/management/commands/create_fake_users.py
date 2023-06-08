@@ -27,6 +27,11 @@ class Command(BaseCommand):
             doctor = self.generate_verified_user(doctor_role)
             self.generate_user_info(doctor)
         self.create_super_user()
+        user = User.objects.last()
+        user.login = "user"
+        user.set_password("12345678")
+        user.verified = True
+        user.save()
 
     def generate_user(self, role: Role) -> User:
         return UserFactory(
