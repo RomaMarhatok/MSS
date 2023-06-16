@@ -17,6 +17,7 @@ def test(factory_document_fixture):
     serializer = DocumentSerializer(instance=factory_document_fixture)
     data = {
         "document_slug": factory_document_fixture.slug,
+        "document_type_slug": factory_document_fixture.document_type.slug,
         "name": serializer.data["name"],
         "content": "test",
         "creator_slug": serializer.data["creator"]["creator_slug"],
@@ -24,6 +25,7 @@ def test(factory_document_fixture):
     url = reverse("update-user-document")
     response = client.post(url, data, **headers)
     document = Document.objects.first()
+    print(response.json())
     assert response.status_code == 200
     assert bool(response.json())
     assert Document.objects.count() == 1
