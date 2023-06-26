@@ -26,8 +26,9 @@ class Command(BaseCommand):
     def handle(self, *args: Any, **options: Any) -> Optional[str]:
         users = User.objects.filter(role__name=Role.PATIENT)
         doctors = Doctor.objects.all()
-        for user, doctor in zip(users, doctors):
+        for user in users:
             for _ in range(random.randint(1, 2)):
+                doctor = random.choice(doctors)
                 treatment_history = TreatmentHistoryFactory(
                     title=fake.text(max_nb_chars=100),
                     short_description=fake.text(max_nb_chars=100),

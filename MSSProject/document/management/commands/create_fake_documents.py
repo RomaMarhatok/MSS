@@ -19,13 +19,13 @@ class Command(BaseCommand):
         document_types = self.generate_document_types()
         users = User.objects.filter(role__name=Role.PATIENT)
         doctors = Doctor.objects.all()
-        for user, doctor in zip(users, doctors):
+        for user in users:
             for _ in range(15):
                 DocumentFactory(
                     name=fake.pystr(),
                     content=fake.text(max_nb_chars=1000),
                     user=user,
-                    creator=doctor,
+                    creator=random.choice(doctors),
                     document_type=random.choice(document_types),
                 )
 
