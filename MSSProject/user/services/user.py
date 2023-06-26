@@ -13,6 +13,8 @@ from ..serializers import (
     UserPersonalInfoSerializer,
 )
 from .mixins.is_user_exist_mixin import IsUserExistMixin
+from physical.repositories import PhysicalParametersRepository
+from physical.serializers import PhysicalParametersSerializer
 
 
 class UserService(IsUserExistMixin):
@@ -22,6 +24,7 @@ class UserService(IsUserExistMixin):
             UserPersonalInfoRepository()
         )
         self.user_location_repository: UserLocationRepository = UserLocationRepository()
+        self.physical_parameters_repository = PhysicalParametersRepository()
 
     def get_user_info(self, slug, request: HttpRequest) -> HttpResponse:
         if self.is_user_exist(slug):
@@ -43,7 +46,7 @@ class UserService(IsUserExistMixin):
 
     @transaction.atomic
     def update_user_info(self, data: dict):
-        user_slug = data.get("user_slug", None)
+        user_slug = data.get("user_slug")
         self.is_user_exist(user_slug)
         user_personal_info = self.user_personal_info_repository.get(slug=user_slug)
         updated_user_personal_info = self.user_personal_info_repository.update(
@@ -52,7 +55,19 @@ class UserService(IsUserExistMixin):
         user_personal_info_serializer = UserPersonalInfoSerializer(
             instance=updated_user_personal_info
         )
-        return JsonResponse(data={"personal_info": user_personal_info_serializer.data})
+        physical_parameters_serailizer = self.physical_parameters_repository.list(
+            patient_slug=user_slug
+        )
+        physical_parameters_serailizer = PhysicalParametersSerializer(
+            instance=physical_parameters_serailizer, many=True
+        )
+        user_personal_info = user_personal_info_serializer.data
+        user_personal_info.update(
+            {
+                "physical_parameters": physical_parameters_serailizer.data,
+            }
+        )
+        return JsonResponse(data={"personal_info": user_personal_info})
 
     def get_all_patients(self):
         users = self.user_repository.list()
@@ -72,7 +87,7 @@ class UserService(IsUserExistMixin):
         )
 
     def validate_user(self, data: dict) -> JsonResponse:
-        login = data.get("login", None)
+        login = data.get("login")
         if self.user_repository.is_exist(login=login):
             raise exceptions.ValidationError(
                 detail={
@@ -83,7 +98,7 @@ class UserService(IsUserExistMixin):
         return HttpResponse()
 
     def validate_personal_info(self, data: dict) -> JsonResponse:
-        email = data.get("email", None)
+        email = data.get("email")
         if self.user_personal_info_repository.is_exist(email=email):
             raise exceptions.ValidationError(
                 detail={
