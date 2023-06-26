@@ -31,7 +31,7 @@ onBeforeMount(() => {
             <p class="text-3xl text-slate-400">Записей к вам пока нет.</p>
         </section>
         <section v-else class="w-full">
-            <DataTable :value="appointments" @row-click="onclick" paginator rows=10 :rowsPerPageOptions="[5, 10, 20, 50]">
+            <DataTable :value="appointments" @row-click="onclick" paginator :rows=10 :rowsPerPageOptions="[5, 10, 20, 50]">
                 <Column field="patient.slug" header="Пациент" sortable>
                     <template #body="slotProps">
                         <p>{{ slotProps.data.patient.full_name }}</p>
