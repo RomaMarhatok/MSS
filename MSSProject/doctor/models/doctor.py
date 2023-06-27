@@ -10,3 +10,6 @@ class Doctor(models.Model):
     class Meta:
         verbose_name = "Доктор"
         verbose_name_plural = "Доктора"
+
+    def __str__(self) -> str:
+        return self.user.login
