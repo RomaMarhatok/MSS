@@ -27,8 +27,7 @@ class UserRepository(AbstractRepository):
         )
 
     def is_exist(self, **kwargs) -> bool:
-        data = self._validate_kwargs(kwargs)
-        return User.objects.filter(**data).exists()
+        return User.objects.filter(**kwargs).exists()
 
     def get(self, **kwargs) -> User:
         qs = User.objects.select_related("role", "userpersonalinfo", "userlocation")
