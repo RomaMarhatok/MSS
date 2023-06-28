@@ -1,7 +1,7 @@
 from faker import Faker
 from typing import Any, Optional
 from django.core.management.base import BaseCommand
-
+from django.contrib.auth.hashers import make_password
 from ...models import Role, User
 from ...tests.factories import (
     UserFactory,
@@ -28,7 +28,8 @@ class Command(BaseCommand):
             self.generate_user_info(doctor)
         user = User.objects.last()
         user.login = "user"
-        user.set_password("12345678")
+        hashed_password = make_password("12345678")
+        user.password = hashed_password
         user.verified = True
         user.role = patient_role
         user.save()

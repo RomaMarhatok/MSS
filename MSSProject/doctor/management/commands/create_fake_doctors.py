@@ -10,6 +10,7 @@ from ...tests.factories import (
     DoctorSpecializationFactory,
     DoctorDoctorSpecializationFactory,
 )
+from django.contrib.auth.hashers import make_password
 
 
 # user app imports
@@ -33,7 +34,8 @@ class Command(BaseCommand):
             self.generate_doctor_specializations(doctor)
         doctor = Doctor.objects.last()
         doctor.user.login = "doctor"
-        doctor.user.set_password("12345678")
+        hashed_password = make_password("12345678")
+        doctor.user.password = hashed_password
         doctor.user.verified = True
         doctor.user.save()
         doctor.save()

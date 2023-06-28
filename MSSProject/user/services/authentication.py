@@ -23,10 +23,11 @@ class AuthenticationService:
     @transaction.atomic
     def authenticate(self, data: dict) -> HttpResponse:
         # формирование данных
-        login = data.get("login", None)
-        password = data.get("password", None)
-        salt = os.environ.get("HASHER_SALT", None)
-        hashed_password = make_password(password, salt)
+        login = data.get("login")
+        password = data.get("password")
+        hashed_password = make_password(password)
+        print(self.user_repository.get(login="doctor").password)
+        print(hashed_password)
         # проверка существования пользователя
         if (
             login is not None or password is not None
