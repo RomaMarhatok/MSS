@@ -1,7 +1,9 @@
+import os
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from rest_framework import serializers
 from common.repository.base_repository import AbstractRepository
 from user.serializers import UserSerializer
+from django.contrib.auth.hashers import make_password
 
 from ..models import User
 
@@ -57,5 +59,7 @@ class UserRepository(AbstractRepository):
             user.save()
 
     def change_password(self, user: User, password):
-        user.set_password(password)
+        salt = os.environ.get("HASHER_SALT", None)
+        hashed_password = make_password(password, salt=salt)
+        user.password = hashed_password
         user.save()

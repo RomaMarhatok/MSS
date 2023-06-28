@@ -1,3 +1,4 @@
+import os
 from faker import Faker
 from typing import Any, Optional
 from django.core.management.base import BaseCommand
@@ -28,7 +29,8 @@ class Command(BaseCommand):
             self.generate_user_info(doctor)
         user = User.objects.last()
         user.login = "user"
-        hashed_password = make_password("12345678")
+        salt = os.environ.get("HASHER_SALT", None)
+        hashed_password = make_password("12345678", salt=salt)
         user.password = hashed_password
         user.verified = True
         user.role = patient_role

@@ -3,6 +3,7 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from user.repositories import UserPersonalInfoRepository
 from user.repositories import UserRepository
 from django.utils.http import urlsafe_base64_decode
+from rest_framework import exceptions
 
 
 class ResetPasswordService:
@@ -20,3 +21,9 @@ class ResetPasswordService:
         if self.reset_password_token_generator.check_token(user, token):
             self.user_repository.change_password(user, password)
             return HttpResponse()
+        raise exceptions.AuthenticationFailed(
+            detail={
+                "message": "Пользователь не верефицирован",
+                "description": "Ссылка истекла",
+            }
+        )

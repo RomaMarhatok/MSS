@@ -35,7 +35,11 @@ const submit = async () => {
                 treatmentHistorySlug: props.treatmentHistorySlug
             })
         emit("onAddDocument")
-    }).catch(error => errors.value.push(error.response.data.description))
+    }).catch(error => {
+        if (errors.value.indexOf(error.response.data.description) == -1) {
+            errors.value.push(error.response.data.description)
+        }
+    })
 }
 onBeforeMount(() => {
     store.dispatch("doctorDocuments/fetchDocuments", slug.value)

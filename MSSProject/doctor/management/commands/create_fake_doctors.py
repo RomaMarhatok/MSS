@@ -1,4 +1,5 @@
 import random
+import os
 from faker import Faker
 from ..providers.doctor_specialization_provider import DoctorSpecializationProvider
 from typing import Any, Optional
@@ -34,7 +35,8 @@ class Command(BaseCommand):
             self.generate_doctor_specializations(doctor)
         doctor = Doctor.objects.last()
         doctor.user.login = "doctor"
-        hashed_password = make_password("12345678")
+        salt = os.environ.get("HASHER_SALT", None)
+        hashed_password = make_password("12345678", salt=salt)
         doctor.user.password = hashed_password
         doctor.user.verified = True
         doctor.user.save()

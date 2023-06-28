@@ -49,6 +49,9 @@ const submit = async () => {
         .then(() => router.push({
             name: "authentication-page"
         }))
+        .catch(error => {
+            toast.add({ severity: 'error', summary: 'Ошибка', detail: error.response.data.description, life: 3000 });
+        })
 }
 </script>
 <template>
